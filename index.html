@@ -149,7 +149,12 @@ h2{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mu
 .kpi b small{font-family:var(--body);font-size:.85rem;font-weight:600;color:var(--ink);margin-left:3px}
 .kpi em{font-style:normal;font-size:.78rem;color:var(--muted)}
 /* választható kijelzők */
-.viz{cursor:pointer;-webkit-user-select:none;user-select:none}
+.viz{cursor:pointer;-webkit-user-select:none;user-select:none;touch-action:pan-y}
+.viz.in-next{animation:vzNext .28s ease-out}
+.viz.in-prev{animation:vzPrev .28s ease-out}
+@keyframes vzNext{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes vzPrev{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.viz.in-next,.viz.in-prev{animation:none}}
 .vizdots{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:-8px;font-size:.72rem;color:var(--muted)}
 .vizdots i{width:7px;height:7px;border-radius:50%;background:var(--line);display:block}
 .vizdots i.on{background:var(--water);width:18px;border-radius:4px}
@@ -554,7 +559,7 @@ body.advanced .adv.grid{display:grid}
     </section>
     <section>
       <h4>Hatféle kijelző</h4>
-      <p>A mennyiséget hatféleképpen nézheted: <b>Mérőpohár</b>, <b>Gyűrű</b>, <b>Kulacs</b>, <b>Pohársor</b> (2 dl-es poharakban számolva), <b>Idővonal</b> (a nap grafikonja a tervhez képest) és <b>Akvárium</b>. A rajzra koppintva a következőre vált, a beállítások „Kijelző” részében pedig közvetlenül választhatsz. A pontok a rajz alatt mutatják, melyiknél jársz.</p>
+      <p>A mennyiséget hatféleképpen nézheted: <b>Mérőpohár</b>, <b>Gyűrű</b>, <b>Kulacs</b>, <b>Pohársor</b> (2 dl-es poharakban számolva), <b>Idővonal</b> (a nap grafikonja a tervhez képest) és <b>Akvárium</b>. A rajzot balra húzva a következőre, jobbra húzva az előzőre vált (koppintással is lapozhatsz), a beállítások „Kijelző” részében pedig közvetlenül választhatsz. A pontok a rajz alatt mutatják, melyiknél jársz.</p>
     </section>
     <section>
       <h4>Javaslat a nap hátralévő részére</h4>
@@ -632,7 +637,7 @@ body.advanced .adv.grid{display:grid}
     </section>
     <section>
       <h4>Six display styles</h4>
-      <p>You can view your progress six ways: <b>Measuring glass</b>, <b>Ring</b>, <b>Bottle</b>, <b>Glasses</b> (counted in 2 dl glasses), <b>Timeline</b> (your day charted against the plan) and <b>Aquarium</b>. Tap the drawing to switch to the next one, or pick one directly under “Display” in Settings. The dots below the drawing show which one you’re on.</p>
+      <p>You can view your progress six ways: <b>Measuring glass</b>, <b>Ring</b>, <b>Bottle</b>, <b>Glasses</b> (counted in 2 dl glasses), <b>Timeline</b> (your day charted against the plan) and <b>Aquarium</b>. Swipe the drawing left for the next one or right for the previous one (a tap also moves on), or pick one directly under “Display” in Settings. The dots below the drawing show which one you’re on.</p>
     </section>
     <section>
       <h4>Suggestion for the rest of the day</h4>
@@ -693,7 +698,7 @@ hu:{
   today:'Ma', tapToEdit:'Koppints egy sorra a javításhoz.', last7:'Utolsó 7 nap',
   streak:'Sorozat', hits30:'30 napból sikeres', avg7:'Heti átlag', avg30:'Havi átlag', avg7Note:'utolsó 7 nap', avg30Note:'utolsó 30 nap', dayU:'nap',
   display:'Kijelző', vGlass:'Mérőpohár', vRing:'Gyűrű', vBottle:'Kulacs', vCups:'Pohársor', vLine:'Idővonal', vTank:'Akvárium',
-  displayNote:'Így látod a mai mennyiséget. A főképernyőn a rajzra koppintva is válthatsz.', tapSwitch:'koppints a váltáshoz',
+  displayNote:'Így látod a mai mennyiséget. A főképernyőn a rajzot oldalra húzva vagy rákoppintva is válthatsz.', tapSwitch:'húzd oldalra vagy koppints',
   ofGoal:a=>'a mai '+a+'ből', leftShort:a=>'még '+a+' a célig', bottleCap:a=>'kulacs: '+a, planNow:a=>'terv most: '+a,
   cupsCount:(n,m)=>n+' / '+m+' pohár', cupSize:a=>'egy pohár = '+a, cupsLeft:n=>'még '+n+' pohár', nextCup:'a következő',
   lgDrank:'amit ittál', lgPlan:'egyenletes terv', lgRest:'innen a célig', nowLbl:'most', aheadBy:a=>'+'+a+' előny', overBy:a=>'+'+a+' a cél felett',
@@ -761,7 +766,7 @@ en:{
   today:'Today', tapToEdit:'Tap a row to edit it.', last7:'Last 7 days',
   streak:'Streak', hits30:'Goal met (30 days)', avg7:'Weekly average', avg30:'Monthly average', avg7Note:'last 7 days', avg30Note:'last 30 days', dayU:'days',
   display:'Display', vGlass:'Measuring glass', vRing:'Ring', vBottle:'Bottle', vCups:'Glasses', vLine:'Timeline', vTank:'Aquarium',
-  displayNote:'How you see today’s amount. On the main screen you can also tap the drawing to switch.', tapSwitch:'tap to switch',
+  displayNote:'How you see today’s amount. On the main screen you can also swipe or tap the drawing to switch.', tapSwitch:'swipe or tap',
   ofGoal:a=>'of today’s '+a, leftShort:a=>a+' to go', bottleCap:a=>'bottle: '+a, planNow:a=>'plan now: '+a,
   cupsCount:(n,m)=>n+' / '+m+' glasses', cupSize:a=>'one glass = '+a, cupsLeft:n=>n+(n===1?' glass':' glasses')+' to go', nextCup:'next',
   lgDrank:'what you drank', lgPlan:'even plan', lgRest:'to the goal', nowLbl:'now', aheadBy:a=>a+' ahead', overBy:a=>a+' over goal',
@@ -1099,8 +1104,17 @@ function stats(now){
 /* --- választható kijelzők --- */
 const VIEWS=['glass','ring','bottle','cups','line','tank'];
 function curView(){return VIEWS.includes(state.view)?state.view:'glass'}
-function cycleView(){state.view=VIEWS[(VIEWS.indexOf(curView())+1)%VIEWS.length];render();writeSettings()}
-$('hero').addEventListener('click',cycleView);$('vizAlt').addEventListener('click',cycleView);
+function stepView(dir){
+  state.view=VIEWS[(VIEWS.indexOf(curView())+dir+VIEWS.length)%VIEWS.length];render();writeSettings();
+  const el=curView()==='glass'?$('hero'):$('vizAlt');el.classList.remove('in-next','in-prev');void el.offsetWidth;el.classList.add(dir>0?'in-next':'in-prev');
+}
+let swX=null,swY=null,swiped=false;
+function swStart(e){swX=e.clientX;swY=e.clientY;swiped=false}
+function swEnd(e){if(swX==null)return;const dx=e.clientX-swX,dy=e.clientY-swY;swX=null;
+  if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.3){swiped=true;stepView(dx<0?1:-1)}}
+function swClick(){if(swiped){swiped=false;return}stepView(1)}
+['hero','vizAlt'].forEach(id=>{const el=$(id);el.addEventListener('pointerdown',swStart);el.addEventListener('pointerup',swEnd);
+  el.addEventListener('pointercancel',()=>{swX=null});el.addEventListener('click',swClick)});
 function esc(x){return String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function dcol(type,adv){return drinkOf(adv?type:'water').c}
 function drinkAt(es,x){let acc=0;for(const e of es){if(x<acc+e.dl)return e.type;acc+=e.dl}return es.length?es[es.length-1].type:'water'}
