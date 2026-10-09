@@ -119,7 +119,7 @@ body.unit-l .add b{font-size:1.7rem;letter-spacing:-.01em}
 .add:active{transform:translateY(3px);box-shadow:none}
 #b1{background:var(--b1)}#b2{background:var(--b2)}#b3{background:var(--b3)}#b5{background:var(--b4)}
 .add b{font-family:var(--display);font-weight:800;font-size:2.2rem;line-height:1}
-.add span{font-size:.8rem;font-weight:600;opacity:.92}
+.add span{font-size:clamp(.6rem,3.2vw,.72rem);font-weight:600;opacity:.92;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;padding-inline:2px}
 .custom{width:100%;height:46px;border-radius:12px;border:1.5px dashed var(--water);background:none;color:var(--water-deep);font:700 .95rem var(--body);cursor:pointer}
 button:focus-visible,input:focus-visible{outline:3px solid var(--water-deep);outline-offset:2px}
 
@@ -1040,7 +1040,7 @@ function render(){
   $('date').textContent=Ld.dateFmt(now.getDate(),Ld.months[now.getMonth()],Ld.days[now.getDay()]);
   $('date').style.whiteSpace='pre-line';
   $('total').firstChild.nodeValue=uv(tot);$('total').lastChild.textContent=longU(tot);
-  document.querySelectorAll('.add').forEach(b=>{b.querySelector('b').textContent='+'+uv(+b.dataset.dl);b.querySelector('span').textContent=U()});
+  document.querySelectorAll('.add').forEach(b=>{b.querySelector('b').textContent='+'+uv(+b.dataset.dl);b.querySelector('span').textContent=longU(+b.dataset.dl)});
 
   const fill=$('fill');fill.textContent='';fill.style.height=Math.min(tot/g,1)*100+'%';
   let lastColor='var(--water)';
