@@ -148,6 +148,43 @@ h2{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mu
 .kpi b{font-family:var(--display);font-weight:800;font-size:1.9rem;line-height:1;font-variant-numeric:tabular-nums;color:var(--water-deep)}
 .kpi b small{font-family:var(--body);font-size:.85rem;font-weight:600;color:var(--ink);margin-left:3px}
 .kpi em{font-style:normal;font-size:.78rem;color:var(--muted)}
+/* választható kijelzők */
+.viz{cursor:pointer;-webkit-user-select:none;user-select:none}
+.vizdots{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:-8px;font-size:.72rem;color:var(--muted)}
+.vizdots i{width:7px;height:7px;border-radius:50%;background:var(--line);display:block}
+.vizdots i.on{background:var(--water);width:18px;border-radius:4px}
+.vizdots span{margin-left:6px}
+.alt{display:flex;flex-direction:column;gap:12px;align-items:center}
+.vsum{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.vnum{font-family:var(--display);font-weight:800;font-stretch:condensed;font-size:4.2rem;line-height:.85;color:var(--water-deep);font-variant-numeric:tabular-nums}
+.vnum small{display:block;font-family:var(--body);font-size:1rem;font-weight:700;color:var(--ink);margin-top:4px}
+.vgoal{font-size:.9rem;color:var(--muted)}
+.vleft{font-size:.95rem}
+.ring{position:relative;width:240px;height:240px}
+.ring .in{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.ring .vnum{font-size:3.3rem}
+.ring .vnum small{font-size:.85rem}
+.ring .vgoal,.ring .vleft{font-size:.78rem;max-width:150px}
+.bottle-wrap{display:flex;gap:16px;align-items:flex-end}
+.bottle{display:flex;flex-direction:column;align-items:center}
+.bottle .cap{width:50px;height:20px;border-radius:8px 8px 3px 3px;background:var(--water-deep)}
+.bottle .neck{width:70px;height:20px;box-sizing:border-box;border:3px solid var(--ink);border-bottom:none;border-radius:6px 6px 0 0;background:var(--surface)}
+.bottle .body{position:relative;width:140px;height:240px;box-sizing:border-box;border:3px solid var(--ink);border-radius:38px 38px 32px 32px;background:var(--surface);overflow:hidden}
+.wfill{position:absolute;left:0;right:0;bottom:0;background:var(--water);transition:height .5s}
+.wave{position:absolute;left:0;width:100%;height:18px;transition:bottom .5s}
+.bub{position:absolute;border-radius:50%;border:2px solid #fff;opacity:.55}
+.bline{position:absolute;left:0;right:0;border-top:2px dashed var(--warn)}
+.bscale{display:flex;flex-direction:column;justify-content:space-between;height:240px;font-size:.72rem;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.cups{display:grid;gap:10px 6px;justify-items:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 12px;width:100%;box-sizing:border-box}
+.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;font-size:.75rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{display:block;width:16px}
+.chartbox{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px 6px 6px;box-sizing:border-box}
+.chartbox svg{display:block;width:100%;height:auto}
+.tank{position:relative;width:100%;height:300px;border-radius:24px;overflow:hidden;background:var(--surface);border:1px solid var(--line)}
+.tank .top{position:absolute;left:20px;top:18px;display:flex;flex-direction:column;gap:2px;z-index:2}
+.tank .bottom{position:absolute;left:18px;right:18px;bottom:16px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px;font-size:.88rem;font-weight:600;z-index:2}
+.tank .tag{position:absolute;right:12px;font-size:.7rem;font-weight:700;color:#fff;background:var(--warn);padding:2px 8px;border-radius:999px;z-index:2}
 .note{font-size:.8rem;color:var(--muted);text-align:center;margin:0}
 .adv{display:none}
 body.advanced .adv{display:revert}
@@ -234,7 +271,7 @@ body.advanced .adv.grid{display:grid}
 
   <p class="greet" id="greet" hidden></p>
 
-  <section class="hero" data-ta="todaySummary">
+  <section class="hero viz" id="hero" data-ta="todaySummary">
     <div class="glass" aria-hidden="true"><div class="fill" id="fill"></div><div class="ticks" id="ticks"></div><div class="expect" id="expect" hidden></div></div>
     <div class="stats">
       <div class="big" id="total">0<small>deciliter</small></div>
@@ -242,6 +279,9 @@ body.advanced .adv.grid{display:grid}
       <div class="goalinfo" id="goalinfo"></div>
     </div>
   </section>
+
+  <section class="alt viz" id="vizAlt" hidden></section>
+  <div class="vizdots" id="vizDots" aria-hidden="true"></div>
 
   <section class="pace" aria-live="polite">
     <div class="head"><span id="paceHead"></span><span class="pill" id="pacePill"></span></div>
@@ -315,6 +355,19 @@ body.advanced .adv.grid{display:grid}
     <div>
       <h2><label for="nameSet" data-t="nameQ"></label></h2>
       <input class="text" type="text" id="nameSet" maxlength="30" autocomplete="given-name" data-tp="namePhOpt">
+    </div>
+
+    <div>
+      <h2 data-t="display"></h2>
+      <div class="opt3">
+        <button class="chip" data-view="glass" data-t="vGlass"></button>
+        <button class="chip" data-view="ring" data-t="vRing"></button>
+        <button class="chip" data-view="bottle" data-t="vBottle"></button>
+        <button class="chip" data-view="cups" data-t="vCups"></button>
+        <button class="chip" data-view="line" data-t="vLine"></button>
+        <button class="chip" data-view="tank" data-t="vTank"></button>
+      </div>
+      <p class="small" style="margin-top:8px" data-t="displayNote"></p>
     </div>
 
     <div>
@@ -500,6 +553,10 @@ body.advanced .adv.grid{display:grid}
       <p>Haladó módban előbb válaszd ki fent, mit iszol; a gombok azzal az itallal rögzítenek. A kávé, a tea és a többi ital is beszámít a napi célba.</p>
     </section>
     <section>
+      <h4>Hatféle kijelző</h4>
+      <p>A mennyiséget hatféleképpen nézheted: <b>Mérőpohár</b>, <b>Gyűrű</b>, <b>Kulacs</b>, <b>Pohársor</b> (2 dl-es poharakban számolva), <b>Idővonal</b> (a nap grafikonja a tervhez képest) és <b>Akvárium</b>. A rajzra koppintva a következőre vált, a beállítások „Kijelző” részében pedig közvetlenül választhatsz. A pontok a rajz alatt mutatják, melyiknél jársz.</p>
+    </section>
+    <section>
       <h4>Javaslat a nap hátralévő részére</h4>
       <p>A pohár alatti kártya megmondja, hogy jó tempóban vagy-e, és mennyit érdemes inni a nap hátralévő részében (pl. „kb. 50 percenként egy 2 dl-es pohár”).</p>
       <p>A pohárban a narancssárga szaggatott vonal mutatja, hol kéne most tartanod, ha a napi célt egyenletesen osztanád el a napi időszakra.</p>
@@ -574,6 +631,10 @@ body.advanced .adv.grid{display:grid}
       <p>In advanced mode, first pick what you’re drinking at the top; the buttons log that drink. Coffee, tea and other drinks also count towards your daily goal.</p>
     </section>
     <section>
+      <h4>Six display styles</h4>
+      <p>You can view your progress six ways: <b>Measuring glass</b>, <b>Ring</b>, <b>Bottle</b>, <b>Glasses</b> (counted in 2 dl glasses), <b>Timeline</b> (your day charted against the plan) and <b>Aquarium</b>. Tap the drawing to switch to the next one, or pick one directly under “Display” in Settings. The dots below the drawing show which one you’re on.</p>
+    </section>
+    <section>
       <h4>Suggestion for the rest of the day</h4>
       <p>The card below the glass tells you whether you’re on pace and how much to drink for the rest of the day (e.g. “about one 2 dl glass every 50 minutes”).</p>
       <p>The orange dashed line in the glass shows where you should be right now if you spread your goal evenly across your daily window.</p>
@@ -631,6 +692,11 @@ hu:{
   drinkType:'Italtípus', whatDrink:'Mit iszol?', logDrink:'Ivás rögzítése', customBtn:'+ Egyéni mennyiség vagy korábbi időpont',
   today:'Ma', tapToEdit:'Koppints egy sorra a javításhoz.', last7:'Utolsó 7 nap',
   streak:'Sorozat', hits30:'30 napból sikeres', avg7:'Heti átlag', avg30:'Havi átlag', avg7Note:'utolsó 7 nap', avg30Note:'utolsó 30 nap', dayU:'nap',
+  display:'Kijelző', vGlass:'Mérőpohár', vRing:'Gyűrű', vBottle:'Kulacs', vCups:'Pohársor', vLine:'Idővonal', vTank:'Akvárium',
+  displayNote:'Így látod a mai mennyiséget. A főképernyőn a rajzra koppintva is válthatsz.', tapSwitch:'koppints a váltáshoz',
+  ofGoal:a=>'a mai '+a+'ből', leftShort:a=>'még '+a+' a célig', bottleCap:a=>'kulacs: '+a, planNow:a=>'terv most: '+a,
+  cupsCount:(n,m)=>n+' / '+m+' pohár', cupSize:a=>'egy pohár = '+a, cupsLeft:n=>'még '+n+' pohár', nextCup:'a következő',
+  lgDrank:'amit ittál', lgPlan:'egyenletes terv', lgRest:'innen a célig', nowLbl:'most', aheadBy:a=>'+'+a+' előny', overBy:a=>'+'+a+' a cél felett',
   language:'Nyelv', nameQ:'Hogyan szólíthatlak?', namePhOpt:'Keresztnév (nem kötelező)', namePh:'Keresztnév',
   mode:'Mód', simple:'Egyszerű', advanced:'Haladó', modeNote:'A haladó mód italtípust, egyéni mennyiséget, javítást, részletes tempót és statisztikát is mutat.',
   unit:'Mértékegység', unitDl:'Deciliter (dl)', unitL:'Liter (l)', unitNote:'1 liter = 10 deciliter. Csak a kijelzés változik, a naplód ugyanaz marad.',
@@ -694,6 +760,11 @@ en:{
   drinkType:'Drink type', whatDrink:'What are you drinking?', logDrink:'Log a drink', customBtn:'+ Custom amount or earlier time',
   today:'Today', tapToEdit:'Tap a row to edit it.', last7:'Last 7 days',
   streak:'Streak', hits30:'Goal met (30 days)', avg7:'Weekly average', avg30:'Monthly average', avg7Note:'last 7 days', avg30Note:'last 30 days', dayU:'days',
+  display:'Display', vGlass:'Measuring glass', vRing:'Ring', vBottle:'Bottle', vCups:'Glasses', vLine:'Timeline', vTank:'Aquarium',
+  displayNote:'How you see today’s amount. On the main screen you can also tap the drawing to switch.', tapSwitch:'tap to switch',
+  ofGoal:a=>'of today’s '+a, leftShort:a=>a+' to go', bottleCap:a=>'bottle: '+a, planNow:a=>'plan now: '+a,
+  cupsCount:(n,m)=>n+' / '+m+' glasses', cupSize:a=>'one glass = '+a, cupsLeft:n=>n+(n===1?' glass':' glasses')+' to go', nextCup:'next',
+  lgDrank:'what you drank', lgPlan:'even plan', lgRest:'to the goal', nowLbl:'now', aheadBy:a=>a+' ahead', overBy:a=>a+' over goal',
   language:'Language', nameQ:'What should I call you?', namePhOpt:'First name (optional)', namePh:'First name',
   mode:'Mode', simple:'Simple', advanced:'Advanced', modeNote:'Advanced mode adds drink types, custom amounts, editing, detailed pace and statistics.',
   unit:'Unit', unitDl:'Deciliters (dl)', unitL:'Liters (l)', unitNote:'1 liter = 10 deciliters. Only the display changes, your log stays the same.',
@@ -768,7 +839,7 @@ function iconEl(id,cls){const d=drinkOf(id),w=document.createElement('span');w.c
   w.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICON[d.id]+'</svg>';return w}
 
 /* days: {'2026-10-09': {entries:[{t,dl,type}], act:0|3|6, hot:bool}} */
-let state={goal:20,weight:80,mode:'system',accent:'ocean',name:'',onboarded:false,lang:null,unit:'dl',ui:'simple',start:'07:00',end:'22:00',drink:'water',days:{}};
+let state={goal:20,weight:80,mode:'system',accent:'ocean',name:'',onboarded:false,lang:null,unit:'dl',view:'glass',ui:'simple',start:'07:00',end:'22:00',drink:'water',days:{}};
 let col=null;
 const $=id=>document.getElementById(id);
 const root=document.documentElement;
@@ -919,6 +990,7 @@ $('openSet').onclick=()=>{$('kg').value=state.weight;$('nameSet').value=state.na
 $('openHelp').onclick=()=>openSheet('helpScrim');
 $('nameSet').oninput=()=>{state.name=cleanName($('nameSet').value);render();writeSettings()};
 document.querySelectorAll('[data-lang-btn]').forEach(b=>b.onclick=()=>{state.lang=b.dataset.langBtn;applyLang();renderSettings();render();writeSettings()});
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{state.view=b.dataset.view;renderSettings();render();writeSettings()});
 document.querySelectorAll('[data-ui]').forEach(b=>b.onclick=()=>{state.ui=b.dataset.ui;applyTheme();renderSettings();render();writeSettings()});
 document.querySelectorAll('[data-unit]').forEach(b=>b.onclick=()=>{state.unit=b.dataset.unit;applyTheme();buildEditor();renderSettings();render();writeSettings()});
 document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;applyTheme();renderSettings();writeSettings()});
@@ -936,6 +1008,7 @@ $('goalMinus').onclick=()=>{if(state.goal>5){state.goal--;render();renderSetting
 $('goalPlus').onclick=()=>{if(state.goal<60){state.goal++;render();renderSettings();writeSettings()}};
 function renderSettings(){
   document.querySelectorAll('[data-lang-btn]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.langBtn===(state.lang||'hu')));
+  document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===(state.view||'glass')));
   document.querySelectorAll('[data-ui]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.ui===state.ui));
   document.querySelectorAll('[data-unit]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.unit===state.unit));
   document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===state.mode));
@@ -1023,6 +1096,105 @@ function stats(now){
   return {streak,todayHit:hit(tk),w:span(7),m:span(30)};
 }
 
+/* --- választható kijelzők --- */
+const VIEWS=['glass','ring','bottle','cups','line','tank'];
+function curView(){return VIEWS.includes(state.view)?state.view:'glass'}
+function cycleView(){state.view=VIEWS[(VIEWS.indexOf(curView())+1)%VIEWS.length];render();writeSettings()}
+$('hero').addEventListener('click',cycleView);$('vizAlt').addEventListener('click',cycleView);
+function esc(x){return String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function dcol(type,adv){return drinkOf(adv?type:'water').c}
+function drinkAt(es,x){let acc=0;for(const e of es){if(x<acc+e.dl)return e.type;acc+=e.dl}return es.length?es[es.length-1].type:'water'}
+function vsum(tot,g){const left=r1(g-tot);
+  return '<div class="vsum"><div class="vnum">'+esc(uv(tot))+'<small>'+esc(longU(tot))+'</small></div><div class="vgoal">'+esc(t('ofGoal',amtL(g)))+'</div>'+
+    '<div class="vleft">'+(left>0?esc(t('leftShort',amt(left))):'<b class="done">'+esc(t('done'))+(left<0?' · '+esc(t('overBy',amt(-left))):'')+'</b>')+'</div></div>'}
+function vRing(d,tot,g,p,adv){
+  const r=100,C=2*Math.PI*r;let arcs='';
+  if(adv&&tot>0){let acc=0;for(const e of d.entries){if(acc>=g)break;const part=Math.min(e.dl,g-acc);
+      arcs+='<circle cx="120" cy="120" r="'+r+'" fill="none" style="stroke:'+dcol(e.type,true)+'" stroke-width="22" stroke-dasharray="'+(part/g*C).toFixed(1)+' '+C.toFixed(1)+'" stroke-dashoffset="'+(-acc/g*C).toFixed(1)+'" transform="rotate(-90 120 120)"></circle>';acc+=part}}
+  else if(tot>0){arcs='<circle cx="120" cy="120" r="'+r+'" fill="none" style="stroke:var(--water)" stroke-width="22" stroke-linecap="round" stroke-dasharray="'+(Math.min(tot/g,1)*C).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 120 120)"></circle>'}
+  let tick='';if(p.exp!=null&&p.exp>0&&p.exp<g&&tot<g){const a=p.exp/g*2*Math.PI-Math.PI/2,x1=120+(r-14)*Math.cos(a),y1=120+(r-14)*Math.sin(a),x2=120+(r+14)*Math.cos(a),y2=120+(r+14)*Math.sin(a);
+    tick='<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" style="stroke:var(--warn)" stroke-width="4" stroke-linecap="round"></line>'}
+  return '<div class="ring"><svg width="240" height="240" viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="'+r+'" fill="none" style="stroke:var(--water-soft)" stroke-width="22"></circle>'+arcs+tick+'</svg><div class="in">'+vsum(tot,g)+'</div></div>'+
+    (tick?'<div class="legend"><span><i style="border-top:4px solid var(--warn);width:10px"></i>'+esc(t('planNow',amt(half(p.exp))))+'</span></div>':'')
+}
+function vBottle(d,tot,g,p){
+  const f=Math.min(tot/g,1)*100,lbl=[1,.75,.5,.25].map(k=>esc(uv(g*k)+' '+U()));
+  const ex=(p.exp!=null&&p.exp>0&&p.exp<g&&tot<g)?'<div class="bline" style="bottom:'+(p.exp/g*100).toFixed(1)+'%"></div>':'';
+  const wave=f>0&&f<100?'<svg class="wave" viewBox="0 0 140 18" preserveAspectRatio="none" style="bottom:calc('+f.toFixed(1)+'% - 6px)" aria-hidden="true"><path d="M0 9 Q 17.5 0 35 9 T 70 9 T 105 9 T 140 9 V 18 H 0 Z" style="fill:var(--water)"></path></svg>':'';
+  const bubs=f>15?'<i class="bub" style="left:22px;bottom:'+(f*.3).toFixed(0)+'%;width:9px;height:9px"></i><i class="bub" style="left:52px;bottom:'+(f*.6).toFixed(0)+'%;width:6px;height:6px"></i><i class="bub" style="right:26px;bottom:'+(f*.15).toFixed(0)+'%;width:11px;height:11px"></i>':'';
+  return '<div class="bottle-wrap"><div class="bottle"><div class="cap"></div><div class="neck"></div><div class="body"><div class="wfill" style="height:'+f.toFixed(1)+'%"></div>'+wave+bubs+ex+'</div></div>'+
+    '<div class="bscale"><span>'+lbl[0]+'</span><span>'+lbl[1]+'</span><span>'+lbl[2]+'</span><span>'+lbl[3]+'</span><span></span></div></div>'+vsum(tot,g)+
+    (ex?'<div class="legend"><span><i style="border-top:2px dashed var(--warn)"></i>'+esc(t('planNow',amt(half(p.exp))))+'</span></div>':'')
+}
+function vCups(d,tot,g,adv){
+  const cs=2,n=Math.max(1,Math.ceil(g/cs)),cols=n<=10?5:n<=21?7:10,w=n<=10?50:n<=21?38:28,h=Math.round(w*1.38);
+  let html='',nextDone=false;
+  for(let i=0;i<n;i++){
+    const f=Math.max(0,Math.min(tot-i*cs,cs))/cs,col=f>0?dcol(drinkAt(d.entries,i*cs+f*cs/2),adv):'none';
+    const next=!nextDone&&f<1;if(next)nextDone=true;
+    const path='M'+(w*.12).toFixed(1)+' 3 H'+(w*.88).toFixed(1)+' L'+(w*.78).toFixed(1)+' '+(h-3)+' H'+(w*.22).toFixed(1)+' Z';
+    const fillH=(h-6)*f;
+    html+='<svg width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'" aria-hidden="true"><clipPath id="cg'+i+'"><path d="'+path+'"></path></clipPath>'+
+      '<path d="'+path+'" style="fill:var(--surface)"></path>'+(f>0?'<rect x="0" y="'+(h-3-fillH).toFixed(1)+'" width="'+w+'" height="'+fillH.toFixed(1)+'" clip-path="url(#cg'+i+')" style="fill:'+col+'"></rect>':'')+
+      '<path d="'+path+'" fill="none" style="stroke:'+(f>=1?'var(--ink)':next?'var(--water)':'var(--line)')+'" stroke-width="2.5" stroke-linejoin="round"'+(next&&f<1?' stroke-dasharray="5 4"':'')+'></path></svg>';
+  }
+  const full=Math.floor(Math.min(tot,g)/cs),left=Math.max(0,Math.ceil(r1(g-tot)/cs));
+  return '<div class="vsum"><div class="vnum" style="font-size:2.9rem;white-space:nowrap">'+esc(t('cupsCount',full,n))+'</div><div class="vgoal">'+esc(t('cupSize',amt(cs)))+' · '+esc(amtL(tot))+'</div>'+
+    '<div class="vleft">'+(left>0?esc(t('cupsLeft',left)):'<b class="done">'+esc(t('done'))+'</b>')+'</div></div>'+
+    '<div class="cups" style="grid-template-columns:repeat('+cols+',minmax(0,1fr))">'+html+'</div>'+
+    '<div class="legend"><span><i style="border:2px dashed var(--water);width:10px;height:10px;border-radius:3px;box-sizing:border-box"></i>'+esc(t('nextCup'))+'</span></div>'
+}
+function vLine(d,tot,g,now,adv){
+  const S=mins(state.start)??420,E=mins(state.end)??1320,N=now.getHours()*60+now.getMinutes();
+  const X0=30,X1=332,ymax=Math.max(g,tot)*1.08,Y=v=>190-v/ymax*176,Xm=m=>X0+Math.max(0,Math.min(1,(m-S)/(E-S)))*(X1-X0);
+  const mOf=tm=>{const x=new Date(tm);return x.getHours()*60+x.getMinutes()};
+  let v=0,path='M'+X0+' '+Y(0).toFixed(1),dots='';const nowX=Xm(Math.min(N,E));
+  const es=d.entries.slice().sort((a,b)=>a.t-b.t);
+  for(const e of es){const m=mOf(e.t);if(m<S){v+=e.dl;continue}}
+  path='M'+X0+' '+Y(v).toFixed(1);
+  for(const e of es){const m=mOf(e.t);if(m<S)continue;const x=Xm(m);v=r1(v+e.dl);path+=' H'+x.toFixed(1)+' V'+Y(v).toFixed(1);
+    dots+='<circle cx="'+x.toFixed(1)+'" cy="'+Y(v).toFixed(1)+'" r="4.5" style="fill:'+dcol(e.type,adv)+';stroke:var(--surface)" stroke-width="2"></circle>'}
+  if(N>S)path+=' H'+nowX.toFixed(1);
+  const area=N>S?'<path d="'+path+' V190 H'+X0+' Z" style="fill:var(--water-soft)" opacity=".8"></path>':'';
+  let labels='';const h0=Math.ceil(S/60),h1=Math.floor(E/60),step=(h1-h0)>9?3:2;
+  for(let h=h0;h<=h1;h+=step)labels+='<text x="'+Xm(h*60).toFixed(1)+'" y="206" font-size="11" text-anchor="middle" style="fill:var(--muted)">'+h+'</text>';
+  const nowLine=N>S&&N<E?'<rect x="'+nowX.toFixed(1)+'" y="10" width="'+(X1-nowX).toFixed(1)+'" height="180" style="fill:var(--bg)" opacity=".5"></rect><line x1="'+nowX.toFixed(1)+'" y1="10" x2="'+nowX.toFixed(1)+'" y2="190" style="stroke:var(--ink)" stroke-width="1.2"></line><text x="'+nowX.toFixed(1)+'" y="8" font-size="10" font-weight="700" text-anchor="middle" style="fill:var(--ink)">'+esc(t('nowLbl'))+'</text>':'';
+  const rest=N>S&&N<E&&tot<g?'<line x1="'+nowX.toFixed(1)+'" y1="'+Y(tot).toFixed(1)+'" x2="'+X1+'" y2="'+Y(g).toFixed(1)+'" style="stroke:var(--water)" stroke-width="2" stroke-dasharray="2 5" stroke-linecap="round"></line>':'';
+  const svg='<svg viewBox="0 0 340 214" role="img" aria-label="'+esc(t('vLine'))+'">'+
+    '<line x1="'+X0+'" y1="190" x2="'+X1+'" y2="190" style="stroke:var(--line)"></line><line x1="'+X0+'" y1="'+Y(g).toFixed(1)+'" x2="'+X1+'" y2="'+Y(g).toFixed(1)+'" style="stroke:var(--line)" stroke-dasharray="2 3"></line>'+
+    '<text x="'+(X0-6)+'" y="194" font-size="11" text-anchor="end" style="fill:var(--muted)">0</text><text x="'+(X0-6)+'" y="'+(Y(g)+4).toFixed(1)+'" font-size="11" text-anchor="end" style="fill:var(--muted)">'+esc(uv(g))+'</text>'+
+    nowLine+'<line x1="'+X0+'" y1="190" x2="'+X1+'" y2="'+Y(g).toFixed(1)+'" style="stroke:var(--warn)" stroke-width="2" stroke-dasharray="5 5"></line>'+
+    area+'<path d="'+path+'" fill="none" style="stroke:var(--water)" stroke-width="3" stroke-linejoin="round"></path>'+rest+dots+
+    '<circle cx="'+X1+'" cy="'+Y(g).toFixed(1)+'" r="5" style="fill:var(--surface);stroke:var(--water-deep)" stroke-width="2"></circle>'+labels+'</svg>';
+  return vsum(tot,g)+'<div class="chartbox">'+svg+'</div><div class="legend"><span><i style="border-top:3px solid var(--water)"></i>'+esc(t('lgDrank'))+'</span><span><i style="border-top:2px dashed var(--warn)"></i>'+esc(t('lgPlan'))+'</span><span><i style="border-top:2px dotted var(--water)"></i>'+esc(t('lgRest'))+'</span></div>'
+}
+function vTank(d,tot,g,p){
+  const f=Math.min(tot/g,1)*100,left=r1(g-tot);
+  const wave=f>0&&f<100?'<svg class="wave" viewBox="0 0 358 18" preserveAspectRatio="none" style="bottom:calc('+f.toFixed(1)+'% - 6px)" aria-hidden="true"><path d="M0 9 Q 45 0 90 9 T 179 9 T 269 9 T 358 9 V 18 H 0 Z" style="fill:var(--water)"></path></svg>'+
+    '<svg class="wave" viewBox="0 0 358 18" preserveAspectRatio="none" style="bottom:calc('+f.toFixed(1)+'% - 10px);opacity:.45" aria-hidden="true"><path d="M0 9 Q 45 18 90 9 T 179 9 T 269 9 T 358 9 V 18 H 0 Z" style="fill:var(--water-deep)"></path></svg>':'';
+  const deep=f>0?'<div class="wfill" style="height:'+(f*.4).toFixed(1)+'%;background:var(--water-deep);opacity:.35"></div>':'';
+  const bubs=f>20?'<i class="bub" style="left:40px;bottom:'+(f*.35).toFixed(0)+'%;width:12px;height:12px"></i><i class="bub" style="left:66px;bottom:'+(f*.6).toFixed(0)+'%;width:7px;height:7px"></i><i class="bub" style="right:44px;bottom:'+(f*.2).toFixed(0)+'%;width:14px;height:14px"></i><i class="bub" style="right:30px;bottom:'+(f*.5).toFixed(0)+'%;width:6px;height:6px"></i>':'';
+  const ex=(p.exp!=null&&p.exp>0&&p.exp<g&&tot<g)?'<div class="bline" style="bottom:'+(p.exp/g*100).toFixed(1)+'%;border-color:var(--warn);left:auto;width:42%"></div><span class="tag" style="bottom:calc('+(p.exp/g*100).toFixed(1)+'% + 6px)">'+esc(t('planNow',amt(half(p.exp))))+'</span>':'';
+  const onWater=f>16,bc=onWater?'#fff':'var(--ink)';
+  return '<div class="tank"><div class="wfill" style="height:'+f.toFixed(1)+'%"></div>'+deep+wave+bubs+ex+
+    '<div class="top"><span class="vnum" style="font-size:3.8rem">'+esc(amt(tot))+'</span><span style="font-weight:700">'+esc(t('ofGoal',amtL(g)))+'</span></div>'+
+    '<div class="bottom" style="color:'+bc+'"><span>'+(left>0?esc(t('leftShort',amt(left))):esc(t('done')))+'</span>'+
+    (p.exp!=null&&left>0&&tot-p.exp>=1?'<span style="font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.22)">'+esc(t('aheadBy',amt(half(tot-p.exp))))+'</span>':'')+'</div></div>'
+}
+function renderViz(now,d,tot,g,p,adv){
+  const v=curView(),alt=$('vizAlt');
+  $('hero').hidden=v!=='glass';alt.hidden=v==='glass';
+  if(v==='ring')alt.innerHTML=vRing(d,tot,g,p,adv);
+  else if(v==='bottle')alt.innerHTML=vBottle(d,tot,g,p);
+  else if(v==='cups')alt.innerHTML=vCups(d,tot,g,adv);
+  else if(v==='line')alt.innerHTML=vLine(d,tot,g,now,adv);
+  else if(v==='tank')alt.innerHTML=vTank(d,tot,g,p);
+  else alt.textContent='';
+  const dots=$('vizDots');dots.textContent='';
+  VIEWS.forEach(x=>{const i=document.createElement('i');if(x===v)i.className='on';dots.appendChild(i)});
+  const s=document.createElement('span');s.textContent=t('v'+v.charAt(0).toUpperCase()+v.slice(1))+' · '+t('tapSwitch');dots.appendChild(s);
+}
+
 /* --- megjelenítés --- */
 let lastTickGoal=null;
 function drawTicks(g){
@@ -1064,6 +1236,7 @@ function render(){
   if(d.act||d.hot)gi.append(t('goalParts',uv(state.goal),d.act?uv(d.act):0,d.hot?uv(5):''));
 
   const p=pace(now,d,tot,g);
+  renderViz(now,d,tot,g,p,adv);
   $('paceHead').textContent=p.head;$('pacePill').textContent=p.pill;$('pacePill').className='pill '+(p.cls||'');
   $('paceTip').textContent=p.tip;$('paceMotto').textContent=p.motto;
   const ex=$('expect');if(p.exp!=null&&tot<g&&p.exp>0&&p.exp<g){ex.hidden=false;ex.style.bottom=(p.exp/g*100)+'%'}else ex.hidden=true;
