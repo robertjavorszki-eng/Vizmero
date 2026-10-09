@@ -1,5 +1,5 @@
 // Vízmérő – offline működés. A verziót minden kiadásnál emeld, így a telefonok frissítenek.
-const VERSION = 'vizmero-v8.1';
+const VERSION = 'vizmero-v8.2';
 const FILES = [
   './',
   './index.html',
@@ -11,8 +11,16 @@ const FILES = [
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(VERSION).then((cache) => cache.addAll(FILES)));
-  self.skipWaiting();
+  event.waitUntil(
+    caches.open(VERSION)
+      .then((cache) => cache.addAll(FILES.map((f) => new Request(f, { cache: 'reload' }))))
+      .then(() => self.skipWaiting())
+  );
+});
+
+// Az oldal kérésére az új verzió azonnal átveszi az irányítást.
+self.addEventListener('message', (event) => {
+  if (event.data === 'skipWaiting') self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
@@ -29,7 +37,7 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
   if (req.mode === 'navigate') {
     event.respondWith(
-      fetch(req)
+      fetch(req, { cache: 'no-store' })
         .then((res) => {
           const copy = res.clone();
           caches.open(VERSION).then((c) => c.put('./index.html', copy));

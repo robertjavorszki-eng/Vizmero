@@ -723,7 +723,7 @@ hu:{
   priv1:'Senkivel nem osztom meg, amit beírsz.', priv2:'Más, aki ugyanezt a linket használja, nem látja a naplódat.', priv3:'Nincs reklám, nincs regisztráció.',
   privMore:'Részletek a súgóban, a kérdőjeles gomb alatt.', start2:'Kezdjük',
   drinks:{water:'Víz',tea:'Tea',coffee:'Kávé',juice:'Gyümölcslé',milk:'Tej',other:'Egyéb'},
-  tDeleted:(a,dr,t)=>a+' '+dr.toLowerCase()+' törölve ('+t+')', tLogged:(a,dr,t)=>a+' '+dr.toLowerCase()+' rögzítve ('+t+')', tEdited:'Javítva',
+  tDeleted:(a,dr,t)=>a+' '+dr.toLowerCase()+' törölve ('+t+')', tLogged:(a,dr,t)=>a+' '+dr.toLowerCase()+' rögzítve ('+t+')', tEdited:'Javítva', tUpdated:'Frissítve a legújabb változatra.',
   tSaveFail:'Nem sikerült menteni. Ellenőrizd a netet.', tWindow:'A napi időszak legyen legalább 2 óra, és a vége a kezdés után legyen.',
   tBase:a=>'Alapcél: '+a, tExported:f=>'Mentés kész: '+f, tExportFail:'A mentés nem sikerült ezen az eszközön.',
   tBadFile:'Ez nem Vízmérő-mentés. Válaszd a .json fájlt, amit az app mentett.',
@@ -791,7 +791,7 @@ en:{
   priv1:'I don’t share anything you enter with anyone.', priv2:'Others using the same link can’t see your log.', priv3:'No ads, no sign-up.',
   privMore:'More details in Help, under the question mark button.', start2:'Let’s start',
   drinks:{water:'Water',tea:'Tea',coffee:'Coffee',juice:'Juice',milk:'Milk',other:'Other'},
-  tDeleted:(a,dr,t)=>a+' '+dr.toLowerCase()+' deleted ('+t+')', tLogged:(a,dr,t)=>a+' '+dr.toLowerCase()+' logged ('+t+')', tEdited:'Updated',
+  tDeleted:(a,dr,t)=>a+' '+dr.toLowerCase()+' deleted ('+t+')', tLogged:(a,dr,t)=>a+' '+dr.toLowerCase()+' logged ('+t+')', tEdited:'Updated', tUpdated:'Updated to the latest version.',
   tSaveFail:'Couldn’t save. Check your connection.', tWindow:'The daily window must be at least 2 hours, and the end must come after the start.',
   tBase:a=>'Base goal: '+a, tExported:f=>'Saved: '+f, tExportFail:'Saving didn’t work on this device.',
   tBadFile:'This isn’t a Vízmérő backup. Pick the .json file the app saved.',
@@ -1308,7 +1308,36 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}
+/* új verzió keresése: ha a szerveren újabb van, betöltjük */
+const APP_VERSION='8.2';
+function checkVersion(){
+  fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
+    if(!j||!j.v||j.v===APP_VERSION)return;
+    if(new URLSearchParams(location.search).get('v')===j.v)return;
+    try{sessionStorage.setItem('vizmero.updated','1')}catch(e){}
+    location.replace(location.pathname+'?v='+encodeURIComponent(j.v));
+  }).catch(()=>{});
+}
+if(!('serviceWorker' in navigator))document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkVersion()});
+if('serviceWorker' in navigator){
+  const hadController=!!navigator.serviceWorker.controller;let reloading=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(!hadController||reloading)return;reloading=true;
+    try{sessionStorage.setItem('vizmero.updated','1')}catch(e){}
+    location.reload();
+  });
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(reg=>{
+      const nudge=w=>{if(w&&navigator.serviceWorker.controller)w.postMessage('skipWaiting')};
+      nudge(reg.waiting);
+      reg.addEventListener('updatefound',()=>{const w=reg.installing;if(w)w.addEventListener('statechange',()=>{if(w.state==='installed')nudge(w)})});
+      const check=()=>{reg.update().catch(()=>{});checkVersion()};
+      document.addEventListener('visibilitychange',()=>{if(!document.hidden)check()});
+      setInterval(check,30*60*1000);
+    }).catch(()=>{});
+  });
+}
+try{if(sessionStorage.getItem('vizmero.updated')){sessionStorage.removeItem('vizmero.updated');setTimeout(()=>toast(t('tUpdated')),400)}}catch(e){}
 </script>
 
 </body>

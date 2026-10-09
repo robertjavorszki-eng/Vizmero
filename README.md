@@ -20,5 +20,14 @@ Egyszerű, reklámmentes vízivás-napló magyarul. Telefonon a kezdőképernyő
 | `manifest.webmanifest` | Név, ikon, színek, hogy a telefon appként kezelje |
 | `sw.js` | Offline működés (service worker) |
 | `icons/` | App-ikonok |
+| `version.json` | Az aktuális verziószám; ebből veszi észre az app, hogy van újabb |
 
-Frissítéskor a `sw.js` elején a `VERSION` értékét emelni kell, hogy a telefonok letöltsék az új változatot.
+## Új verzió kiadása
+
+Három helyen kell ugyanarra emelni a verziót:
+
+1. `version.json` → `{"v":"8.3"}`
+2. `index.html` → `const APP_VERSION='8.3';`
+3. `sw.js` → `const VERSION = 'vizmero-v8.3';`
+
+A megnyitott app az előtérbe hozáskor (és félóránként) megnézi a `version.json`-t, és ha újabb verziót talál, magától betölti, majd kiírja: „Frissítve a legújabb változatra.”
