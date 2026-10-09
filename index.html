@@ -318,6 +318,15 @@ body.advanced .adv.grid{display:grid}
     </div>
 
     <div>
+      <h2>Mértékegység</h2>
+      <div class="opt2">
+        <button class="chip" id="unit-dl" data-unit="dl">Deciliter (dl)</button>
+        <button class="chip" id="unit-l" data-unit="l">Liter (l)</button>
+      </div>
+      <p class="small" style="margin-top:8px">1 liter = 10 deciliter. Csak a kijelzés változik, a naplód ugyanaz marad.</p>
+    </div>
+
+    <div>
       <h2>Napi időszak</h2>
       <div class="times">
         <label>Kezdés<input class="time" type="time" id="tStart" value="07:00"></label>
@@ -516,7 +525,7 @@ body.advanced .adv.grid{display:grid}
 
     <section>
       <h4>Megjelenés és név</h4>
-      <p>A beállításokban megadhatod vagy átírhatod a keresztneved, ezzel köszönt az app. Választhatsz <b>Nappali</b> vagy <b>Éjszakai</b> módot, vagy a <b>Rendszer</b> beállítást, ami a telefonod világos vagy sötét módját követi, és négy szín közül is: Óceán, Menta, Korall, Levendula.</p>
+      <p>A beállításokban megadhatod vagy átírhatod a keresztneved, ezzel köszönt az app. A <b>mértékegységet</b> is itt választhatod: deciliter vagy liter. Választhatsz <b>Nappali</b> vagy <b>Éjszakai</b> módot, vagy a <b>Rendszer</b> beállítást, ami a telefonod világos vagy sötét módját követi, és négy szín közül is: Óceán, Menta, Korall, Levendula.</p>
     </section>
   </div>
 </div>
@@ -550,7 +559,7 @@ function iconEl(id,cls){const d=drinkOf(id),w=document.createElement('span');w.c
   w.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICON[d.id]+'</svg>';return w}
 
 /* days: {'2026-10-09': {entries:[{t,dl,type}], act:0|3|6, hot:bool}} */
-let state={goal:20,weight:80,mode:'system',accent:'ocean',name:'',onboarded:false,ui:'simple',start:'07:00',end:'22:00',drink:'water',days:{}};
+let state={goal:20,weight:80,mode:'system',accent:'ocean',name:'',onboarded:false,unit:'dl',ui:'simple',start:'07:00',end:'22:00',drink:'water',days:{}};
 let col=null,synced=false,dlNS=null;
 const $=id=>document.getElementById(id);
 const root=document.documentElement;
@@ -559,6 +568,10 @@ function keyOf(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'
 function hhmm(t){const d=new Date(t);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
 function r1(x){return Math.round(x*10)/10}
 function fmt(dl){dl=r1(dl);return Number.isInteger(dl)?String(dl):dl.toFixed(1).replace('.',',')}
+function U(){return state.unit==='l'?'l':'dl'}
+function uv(dl){if(state.unit!=='l')return fmt(dl);const l=Math.round(dl*10)/100;return String(l).replace('.',',')}
+function amt(dl){return uv(dl)+' '+U()}
+function glassTxt(g){return state.unit==='l'?uv(g)+' literes pohár':g+' dl-es pohár'}
 function half(x){return Math.max(0,Math.round(x*2)/2)}
 function mins(s){const m=/^(\d{1,2}):(\d{2})$/.exec(s||'');return m?(+m[1])*60+(+m[2]):null}
 function dayOf(k){return state.days[k]||{entries:[],act:0,hot:false}}
@@ -603,7 +616,7 @@ let setTimer;
 function writeSettings(){
   saveLocal();if(!col)return;clearTimeout(setTimer);
   const s={goal:state.goal,weight:state.weight,mode:state.mode,accent:state.accent,name:state.name||'',onboarded:!!state.onboarded,
-    ui:state.ui,start:state.start,end:state.end,drink:state.drink};
+    unit:state.unit,ui:state.ui,start:state.start,end:state.end,drink:state.drink};
   setTimer=setTimeout(()=>queue('settings',()=>col.doc('settings').set(s)),600);
 }
 
@@ -620,7 +633,7 @@ function add(dl,type,t){const when=t||Date.now(),k=keyOf(new Date(when)),d=ensur
 let undo=null,toastTimer;
 function delEntry(k,i){
   const d=state.days[k];if(!d)return;const [e]=d.entries.splice(i,1);undo={k,e};render();writeDay(k);
-  toast(fmt(e.dl)+' dl '+drinkOf(e.type).name.toLowerCase()+' törölve ('+hhmm(e.t)+')',true);
+  toast(amt(e.dl)+' '+drinkOf(e.type).name.toLowerCase()+' törölve ('+hhmm(e.t)+')',true);
 }
 function toast(msg,withUndo){
   $('toastMsg').textContent=msg;$('toastBtn').hidden=!withUndo;$('toast').hidden=false;
@@ -646,12 +659,12 @@ function renderDrinkRow(){document.querySelectorAll('#drinkRow .chip').forEach(b
 let ed={mode:'new',k:null,i:-1,dl:2,type:'water'};
 const QUICK=[1.5,2.5,3.3,4,7.5,10];
 (function(){
-  const q=$('amQuick');QUICK.forEach(v=>{const b=document.createElement('button');b.className='chip';b.textContent=fmt(v)+' dl';b.onclick=()=>{ed.dl=v;renderEditor()};q.appendChild(b)});
+  const q=$('amQuick');QUICK.forEach(v=>{const b=document.createElement('button');b.className='chip';b.dataset.v=v;b.textContent=amt(v);b.onclick=()=>{ed.dl=v;renderEditor()};q.appendChild(b)});
   const g=$('drinkGrid');DRINKS.forEach(d=>{const b=document.createElement('button');b.className='chip';b.style.setProperty('--dc',d.c);b.dataset.drink=d.id;
     b.append(iconEl(d.id),d.name);b.onclick=()=>{ed.type=d.id;renderEditor()};g.appendChild(b)});
 })();
 function renderEditor(){
-  $('amOut').firstChild.nodeValue=fmt(ed.dl);
+  $('amOut').firstChild.nodeValue=uv(ed.dl);$('amOut').lastChild.textContent=U();
   document.querySelectorAll('#drinkGrid .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.drink===ed.type));
   document.querySelectorAll('#amQuick .chip').forEach((b,i)=>b.setAttribute('aria-pressed',QUICK[i]===ed.dl));
 }
@@ -667,7 +680,7 @@ $('amMinus').onclick=()=>{ed.dl=Math.max(.5,r1(ed.dl-.5));renderEditor()};
 $('amPlus').onclick=()=>{ed.dl=Math.min(20,r1(ed.dl+.5));renderEditor()};
 function timeOnDay(k,hm){const [y,mo,da]=k.split('-').map(Number),m=mins(hm);if(m==null)return null;return new Date(y,mo-1,da,Math.floor(m/60),m%60,0).getTime()}
 $('amSave').onclick=()=>{
-  if(ed.mode==='new'){const k=keyOf(new Date()),t=timeOnDay(k,$('amTime').value)||Date.now();closeSheet('entryScrim');add(ed.dl,ed.type,t);toast(fmt(ed.dl)+' dl '+drinkOf(ed.type).name.toLowerCase()+' rögzítve ('+hhmm(t)+')')}
+  if(ed.mode==='new'){const k=keyOf(new Date()),t=timeOnDay(k,$('amTime').value)||Date.now();closeSheet('entryScrim');add(ed.dl,ed.type,t);toast(amt(ed.dl)+' '+drinkOf(ed.type).name.toLowerCase()+' rögzítve ('+hhmm(t)+')')}
   else{const d=state.days[ed.k],e=d&&d.entries[ed.i];if(!e){closeSheet('entryScrim');return}
     e.dl=ed.dl;e.type=ed.type;const t=timeOnDay(ed.k,$('amTime').value);if(t)e.t=t;d.entries.sort((a,b)=>a.t-b.t);
     closeSheet('entryScrim');render();writeDay(ed.k);toast('Javítva')}
@@ -692,6 +705,7 @@ $('openSet').onclick=()=>{$('kg').value=state.weight;$('nameSet').value=state.na
 $('openHelp').onclick=()=>openSheet('helpScrim');
 $('nameSet').oninput=()=>{state.name=cleanName($('nameSet').value);render();writeSettings()};
 document.querySelectorAll('[data-ui]').forEach(b=>b.onclick=()=>{state.ui=b.dataset.ui;applyTheme();renderSettings();render();writeSettings()});
+document.querySelectorAll('[data-unit]').forEach(b=>b.onclick=()=>{state.unit=b.dataset.unit;renderSettings();render();writeSettings()});
 document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;applyTheme();renderSettings();writeSettings()});
 document.querySelectorAll('[data-accent]').forEach(b=>b.onclick=()=>{state.accent=b.dataset.accent;applyTheme();renderSettings();writeSettings()});
 function onTimes(){
@@ -702,23 +716,24 @@ function onTimes(){
 }
 $('tStart').onchange=onTimes;$('tEnd').onchange=onTimes;
 $('kg').oninput=()=>{state.weight=+$('kg').value;renderSettings();writeSettings()};
-$('useSugg').onclick=()=>{state.goal=suggested(state.weight);render();renderSettings();writeSettings();toast('Alapcél: '+state.goal+' dl')};
+$('useSugg').onclick=()=>{state.goal=suggested(state.weight);render();renderSettings();writeSettings();toast('Alapcél: '+amt(state.goal))};
 $('goalMinus').onclick=()=>{if(state.goal>5){state.goal--;render();renderSettings();writeSettings()}};
 $('goalPlus').onclick=()=>{if(state.goal<60){state.goal++;render();renderSettings();writeSettings()}};
 function renderSettings(){
   document.querySelectorAll('[data-ui]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.ui===state.ui));
+  document.querySelectorAll('[data-unit]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.unit===state.unit));
   document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===state.mode));
   document.querySelectorAll('[data-accent]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.accent===state.accent));
   const w=state.weight,s=suggested(w);
-  $('kgOut').textContent=w+' kg';$('sugg').textContent=s+' dl';
-  $('suggExpl').textContent=w+' kg × 30 ml = '+fmt(w*0.3)+' dl teljes vízigény, ennek kb. 80%-a jön italból.';
-  $('goalOut').textContent=state.goal+' dl';
+  $('kgOut').textContent=w+' kg';$('sugg').textContent=amt(s);
+  $('suggExpl').textContent=w+' kg × 30 ml = '+amt(w*0.3)+' teljes vízigény, ennek kb. 80%-a jön italból.';
+  $('goalOut').textContent=amt(state.goal);
 }
 
 /* export / import */
 $('exportBtn').onclick=async()=>{
   const data=JSON.stringify({app:'vizmero',version:6,exported:new Date().toISOString(),
-    settings:{goal:state.goal,weight:state.weight,name:state.name,start:state.start,end:state.end},days:state.days},null,1);
+    settings:{goal:state.goal,weight:state.weight,name:state.name,unit:state.unit,start:state.start,end:state.end},days:state.days},null,1);
   const fname='vizmero-mentes-'+keyOf(new Date())+'.json';
   try{
     const file=new File([data],fname,{type:'application/json'});
@@ -755,7 +770,7 @@ function pace(now,d,tot,g){
   const res={head:'',pill:'',cls:'',tip:'',motto:'',exp:null,proj:null};
   const remaining=r1(g-tot);
   if(remaining<=0){
-    res.head='Megvan a mai cél';res.pill=tot>g?'+'+fmt(tot-g)+' dl':'kész';res.cls='ok';
+    res.head='Megvan a mai cél';res.pill=tot>g?'+'+amt(tot-g):'kész';res.cls='ok';
     res.tip='Ha szomjas vagy, igyál nyugodtan még, de a mai adag megvan.';
     res.motto=pick(['Szép munka, ez a nap rendben van.','Kész a napi adag. A tested hálás érte.','Cél teljesítve. Holnap ugyanígy?'],seed);
     res.exp=g;return res;
@@ -767,7 +782,7 @@ function pace(now,d,tot,g){
     res.exp=0;return res;
   }
   if(N>=E){
-    res.head='Véget ért a mai időszak';res.pill=fmt(remaining)+' dl hiányzik';res.cls='behind';
+    res.head='Véget ért a mai időszak';res.pill=amt(remaining)+' hiányzik';res.cls='behind';
     res.tip='Lefekvés előtt nem kell bepótolni mindent, egy pohár még belefér, ha jólesik.';
     res.motto=pick(['Holnap új nap. Kezdd reggel egy pohárral.','Ma nem jött össze, holnap jobban beosztod.'],seed);
     res.exp=g;return res;
@@ -780,19 +795,19 @@ function pace(now,d,tot,g){
   if(every<25){glass=5;every=glass/perHour*60}
   const ev=every>=90?fmt(Math.round(every/30)/2)+' óránként':Math.max(10,Math.round(every/5)*5)+' percenként';
   res.tip=perHour>4
-    ?'Még '+fmt(remaining)+' dl van hátra, ezt '+state.end+'-ig már nem érdemes egyszerre behozni. Igyál még 1–2 pohárral, a többi holnapra marad.'
-    :'Még '+fmt(remaining)+' dl van hátra '+state.end+'-ig: kb. '+ev+' egy '+glass+' dl-es pohár.';
+    ?'Még '+amt(remaining)+' van hátra, ezt '+state.end+'-ig már nem érdemes egyszerre behozni. Igyál még 1–2 pohárral, a többi holnapra marad.'
+    :'Még '+amt(remaining)+' van hátra '+state.end+'-ig: kb. '+ev+' egy '+glassTxt(glass)+'.';
   if(tot===0&&N-S<120){
-    res.head='Indul a nap';res.pill='0 dl';
+    res.head='Indul a nap';res.pill=amt(0);
     res.motto=pick(['Kezdd egy pohár vízzel, a többi könnyebben megy.','Reggeli pohár: a legkönnyebb dl a napban.','Egy pohár most, és már úton vagy.'],seed);
   }else if(diff>=1){
-    res.head='Előrébb jársz a tervnél';res.pill='+'+fmt(half(diff))+' dl';res.cls='ok';
+    res.head='Előrébb jársz a tervnél';res.pill='+'+amt(half(diff));res.cls='ok';
     res.motto=pick(['Jó előnyben vagy, nyugodtan lassíthatsz egy kicsit.','Ügyes vagy, csak egyenletesen tovább.','Ez a tempó bőven elég.'],seed);
   }else if(diff>-1){
     res.head='Jó tempóban vagy';res.pill='terv szerint';res.cls='ok';
     res.motto=pick(['Szép tempó, csak így tovább.','Pont jó ütemben haladsz.','Egyenletesen, ahogy kell.'],seed);
   }else{
-    res.head='Kicsit le vagy maradva';res.pill='−'+fmt(Math.max(.5,half(-diff)))+' dl';res.cls='behind';
+    res.head='Kicsit le vagy maradva';res.pill='−'+amt(Math.max(.5,half(-diff)));res.cls='behind';
     res.motto=pick(['Nem nagy a lemaradás, egy pohár most sokat számít.','Tegyél egy pohár vizet magad elé, az emlékeztet.','Kis kortyokban is összejön.'],seed);
   }
   if(sinceMin!=null&&sinceMin>=120){const h=Math.floor(sinceMin/60);res.motto='Már '+h+' órája nem ittál, itt az ideje egy pohárnak.'}
@@ -813,11 +828,11 @@ function stats(now){
 /* --- megjelenítés --- */
 let lastTickGoal=null;
 function drawTicks(g){
-  if(lastTickGoal===g)return;lastTickGoal=g;const box=$('ticks');box.textContent='';
+  if(lastTickGoal===g+U())return;lastTickGoal=g+U();const box=$('ticks');box.textContent='';
   for(let i=1;i<=g;i++){
     const t=document.createElement('div'),major=i%5===0;
     t.className='tick'+(major?' major':'');t.style.bottom=(i/g*100)+'%';
-    if(major){const s=document.createElement('span');s.textContent=i;t.appendChild(s)}
+    if(major){const s=document.createElement('span');s.textContent=uv(i);t.appendChild(s)}
     box.appendChild(t);
   }
 }
@@ -826,7 +841,9 @@ function render(){
   const now=new Date(),k=keyOf(now),d=dayOf(k),tot=sum(d),g=goalOf(d),adv=state.ui==='advanced';
   $('date').textContent=HONAP[now.getMonth()]+' '+now.getDate()+'.\n'+NAPOK[now.getDay()];
   $('date').style.whiteSpace='pre-line';
-  $('total').firstChild.nodeValue=fmt(tot);
+  $('total').firstChild.nodeValue=uv(tot);$('total').lastChild.textContent=U();
+  document.querySelectorAll('.add').forEach(b=>{b.querySelector('b').textContent='+'+uv(+b.dataset.dl);b.querySelector('span').textContent=U()});
+  document.querySelectorAll('#amQuick .chip').forEach(b=>b.textContent=amt(+b.dataset.v));
 
   /* pohár töltése italtípus szerint */
   const fill=$('fill');fill.textContent='';fill.style.height=Math.min(tot/g,1)*100+'%';
@@ -838,8 +855,8 @@ function render(){
   drawTicks(g);
 
   const left=r1(g-tot),sub=$('sub');sub.textContent='';
-  if(left>0){sub.append('Még ');const b=document.createElement('b');b.textContent=fmt(left)+' dl';sub.append(b,' a célig')}
-  else{const s=document.createElement('span');s.className='done';s.textContent='Cél teljesítve'+(left<0?' (+'+fmt(-left)+' dl)':'');sub.append(s)}
+  if(left>0){sub.append('Még ');const b=document.createElement('b');b.textContent=amt(left);sub.append(b,' a célig')}
+  else{const s=document.createElement('span');s.className='done';s.textContent='Cél teljesítve'+(left<0?' (+'+amt(-left)+')':'');sub.append(s)}
 
   const gr=$('greet');
   if(state.name){const h=now.getHours();
@@ -847,15 +864,15 @@ function render(){
     gr.textContent=hello;const sp=document.createElement('span');sp.textContent=state.name;gr.append(sp,'!');gr.hidden=false}
   else gr.hidden=true;
 
-  const gi=$('goalinfo');gi.textContent='Mai cél: ';const gb=document.createElement('b');gb.textContent=g+' dl';gi.append(gb);
+  const gi=$('goalinfo');gi.textContent='Mai cél: ';const gb=document.createElement('b');gb.textContent=amt(g);gi.append(gb);
   if(d.act||d.hot){let p=' (alap '+state.goal;if(d.act)p+=' + mozgás '+d.act;if(d.hot)p+=' + meleg 5';gi.append(p+')')}
 
   const p=pace(now,d,tot,g);
   $('paceHead').textContent=p.head;$('pacePill').textContent=p.pill;$('pacePill').className='pill '+(p.cls||'');
   $('paceTip').textContent=p.tip;$('paceMotto').textContent=p.motto;
   const ex=$('expect');if(p.exp!=null&&tot<g&&p.exp>0&&p.exp<g){ex.hidden=false;ex.style.bottom=(p.exp/g*100)+'%'}else ex.hidden=true;
-  $('fExp').textContent=p.exp!=null?fmt(half(p.exp))+' dl':'–';
-  $('fProj').textContent=p.proj!=null?fmt(half(p.proj))+' dl':'–';
+  $('fExp').textContent=p.exp!=null?amt(half(p.exp)):'–';
+  $('fProj').textContent=p.proj!=null?amt(half(p.proj)):'–';
   $('fLast').textContent=d.entries.length?hhmm(d.entries[d.entries.length-1].t):'–';
 
   ['act0','act3','act6'].forEach(id=>$(id).setAttribute('aria-pressed',+$(id).dataset.act===(d.act||0)));
@@ -867,12 +884,12 @@ function render(){
   d.entries.map((e,i)=>({e,i})).reverse().forEach(({e,i})=>{
     const li=document.createElement('li');
     const t=document.createElement('span');t.className='t';t.textContent=hhmm(e.t);
-    const a=document.createElement('span');a.className='a';a.textContent=fmt(e.dl)+' dl';
+    const a=document.createElement('span');a.className='a';a.textContent=amt(e.dl);
     if(adv||(e.type&&e.type!=='water')){const sm=document.createElement('small');sm.textContent=drinkOf(e.type).name;a.appendChild(sm)}
-    const x=document.createElement('button');x.className='del';x.textContent='×';x.setAttribute('aria-label','Törlés: '+hhmm(e.t)+', '+fmt(e.dl)+' dl');
+    const x=document.createElement('button');x.className='del';x.textContent='×';x.setAttribute('aria-label','Törlés: '+hhmm(e.t)+', '+amt(e.dl));
     x.onclick=ev=>{ev.stopPropagation();delEntry(k,i)};
     li.append(t,iconEl(e.type),a,x);
-    if(adv){li.className='tap';li.tabIndex=0;li.setAttribute('role','button');li.setAttribute('aria-label','Javítás: '+hhmm(e.t)+', '+fmt(e.dl)+' dl');
+    if(adv){li.className='tap';li.tabIndex=0;li.setAttribute('role','button');li.setAttribute('aria-label','Javítás: '+hhmm(e.t)+', '+amt(e.dl));
       li.onclick=()=>openEditor(k,i);li.onkeydown=ev=>{if(ev.key==='Enter'&&ev.target===li)openEditor(k,i)}}
     ul.appendChild(li);
   });
@@ -883,8 +900,8 @@ function render(){
   const line=document.createElement('div');line.className='goalline';line.style.bottom=(10+21+state.goal/max*plot)+'px';wk.appendChild(line);
   vals.forEach((x,i)=>{
     const c=document.createElement('div');c.className='day'+(i===6?' today':'');
-    const v=document.createElement('span');v.className='v';v.textContent=x.v?fmt(x.v):'';
-    const bar=document.createElement('div');bar.className='bar'+(x.v>=x.g&&x.v>0?' hit':'');bar.style.height=(x.v/max*plot)+'px';bar.title=fmt(x.v)+' / '+x.g+' dl';
+    const v=document.createElement('span');v.className='v';v.textContent=x.v?uv(x.v):'';
+    const bar=document.createElement('div');bar.className='bar'+(x.v>=x.g&&x.v>0?' hit':'');bar.style.height=(x.v/max*plot)+'px';bar.title=uv(x.v)+' / '+amt(x.g);
     const w=document.createElement('span');w.className='w';w.textContent=i===6?'ma':ROVID[x.dt.getDay()];
     c.append(v,bar,w);wk.appendChild(c);
   });
@@ -892,7 +909,7 @@ function render(){
   if(adv){const st=stats(now);
     setKpi('kStreak',st.streak,'nap');$('kStreakNote').textContent=st.streak?(st.todayHit?'a mai nappal együtt':'ma is jöhet a következő'):'ma kezdődhet';
     setKpi('kHits',st.m.hits,'nap');$('kHitsNote').textContent=st.m.cnt?st.m.cnt+' rögzített napból':'még nincs adat';
-    setKpi('kAvg7',st.w.avg!=null?fmt(st.w.avg):'–','dl');setKpi('kAvg30',st.m.avg!=null?fmt(st.m.avg):'–','dl');
+    setKpi('kAvg7',st.w.avg!=null?uv(st.w.avg):'–',U());setKpi('kAvg30',st.m.avg!=null?uv(st.m.avg):'–',U());
   }
   if(!$('onb2').hidden)$('onbPriv').textContent=privText();
   $('note').textContent='Ezen az eszközön mentve. Biztonsági mentés: beállítások → Adatok.';

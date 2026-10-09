@@ -1,5 +1,5 @@
 // Vízmérő – offline működés. A verziót minden kiadásnál emeld, így a telefonok frissítenek.
-const VERSION = 'vizmero-v6.0';
+const VERSION = 'vizmero-v6.1';
 const FILES = [
   './',
   './index.html',
