@@ -443,14 +443,19 @@ body.modal{overflow:hidden}
 .onbbtns{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;margin-top:4px}
 .privlist{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
 
-.help{gap:20px}
+.help{gap:8px}
 
 .help h4{margin:0 0 6px;font-size:1rem;color:var(--water-deep)}
 .help p{margin:0 0 8px;max-width:62ch}
 .help p:last-child{margin-bottom:0}
 .help ul{margin:0 0 8px;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
-.help section{border-top:1px solid var(--line);padding-top:14px}
-.help section:first-of-type{border-top:none;padding-top:0}
+.hsec{flex-shrink:0;border:1px solid var(--line);border-radius:14px;background:var(--bg);overflow:hidden}
+.hsec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:13px 14px;font-weight:700;font-size:1rem;color:var(--ink);-webkit-tap-highlight-color:transparent}
+.hsec>summary::-webkit-details-marker{display:none}
+.hsec>summary::after{content:"";margin-left:auto;flex-shrink:0;width:9px;height:9px;border-right:2.5px solid var(--water);border-bottom:2.5px solid var(--water);transform:rotate(45deg);transition:transform .2s}
+.hsec[open]>summary::after{transform:rotate(-135deg)}
+.hsec[open]>summary{color:var(--water-deep)}
+.hbody{padding:0 14px 14px}
 .tag{display:inline-block;font-size:.7rem;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--water-soft);color:var(--water-deep);vertical-align:2px;margin-left:4px}
 
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:10px 10px 10px 16px;border-radius:12px;display:flex;gap:12px;align-items:center;font-size:.92rem;max-width:calc(100% - 32px);z-index:30}
@@ -829,26 +834,22 @@ body.modal{overflow:hidden}
     <header><h3 id="helpTitle" data-t="help"></h3><button class="icon" data-close="helpScrim" data-ta="close">✕</button></header>
 
     <div data-lang="hu" style="display:contents">
-    <section>
-      <h4>Mire jó a Lefety?</h4>
+    <details class="hsec"><summary>Mire jó a Lefety?</summary><div class="hbody">
       <p>Segít nyomon követni, mennyi folyadékot iszol egy nap. Minden alkalommal, amikor iszol, egy koppintással rögzíted, és mindig látod, hol tartasz a napi célodhoz képest, és hogyan érdemes beosztani a nap hátralévő részét.</p>
-    </section>
-    <section>
-      <h4>Tedd ki ikonként a telefonra</h4>
+    </div></details>
+    <details class="hsec"><summary>Tedd ki ikonként a telefonra</summary><div class="hbody">
       <ul>
         <li><b>Android (Chrome):</b> jobb felül ⋮ menü, majd „Hozzáadás a kezdőképernyőhöz”.</li>
         <li><b>iPhone (Safari):</b> alul a Megosztás gomb, majd „Főképernyőhöz adás”.</li>
       </ul>
       <p>Így egy koppintással megnyílik, mint egy app.</p>
-    </section>
-    <section>
-      <h4>Hová mentődnek az adatok?</h4>
+    </div></details>
+    <details class="hsec"><summary>Hová mentődnek az adatok?</summary><div class="hbody">
       <p>A naplód <b>csak ezen a telefonon</b> tárolódik. Az app nem küldi el sehova, senkivel nem osztja meg, nincs fiók, nincs reklám. Első megnyitás után internet nélkül is működik.</p>
       <p>Mivel az adatok a telefonon vannak, érdemes néha <b>biztonsági mentést</b> készíteni: beállítások → Mód: Haladó → Adatok → Mentés fájlba. Új telefonon ugyanitt a „Betöltés fájlból” hozza vissza.</p>
       <p>Ha törlöd a böngésző adatait vagy az ikont, a napló is törlődhet, ezért jó, ha van mentésed.</p>
-    </section>
-    <section>
-      <h4>Egyszerű és haladó mód</h4>
+    </div></details>
+    <details class="hsec"><summary>Egyszerű és haladó mód</summary><div class="hbody">
       <p>Az app <b>egyszerű</b> módban indul: pohár, javaslat, négy gomb, mai lista és heti grafikon. A beállításokban bármikor átválthatsz <b>haladó</b> módra, ami ezeket is tudja:</p>
       <ul>
         <li>italtípus választása ikonnal (víz, tea, kávé, gyümölcslé, tej, egyéb),</li>
@@ -858,55 +859,45 @@ body.modal{overflow:hidden}
         <li>statisztika: sorozat, sikeres napok, heti és havi átlag,</li>
         <li>mentés fájlba és visszatöltés.</li>
       </ul>
-    </section>
-    <section>
-      <h4>Ivás rögzítése</h4>
+    </div></details>
+    <details class="hsec"><summary>Ivás rögzítése</summary><div class="hbody">
       <p>Koppints a <b>+1</b>, <b>+2</b>, <b>+3</b> vagy <b>+5 dl</b> gombra (literben +0,1 / +0,2 / +0,3 / +0,5 l). Egy átlagos pohár kb. 2–2,5 dl, egy bögre kb. 3 dl, egy kis üveg víz 5 dl.</p>
       <p>Haladó módban előbb válaszd ki fent, mit iszol; a gombok azzal az itallal rögzítenek. A kávé, a tea és a többi ital is beszámít a napi célba.</p>
-    </section>
-    <section>
-      <h4>Italaim és saját gombok</h4>
+    </div></details>
+    <details class="hsec"><summary>Italaim és saját gombok</summary><div class="hbody">
       <p>A beállításokban az <b>Italaim szerkesztése</b> gombbal választhatod ki, mely italok jelenjenek meg (pl. szénsavas víz, gyógytea, tejeskávé, növényi tej, kakaó, leves, sportital, alkoholmentes sör). A kapcsolóval mutatod vagy elrejted, a nyilakkal rendezed, a névre koppintva átnevezheted, és ikont, színt adhatsz neki. A <b>+ Saját ital</b> gombbal teljesen újat is felvehetsz. Minden ital beszámít a napi célba.</p>
       <p>A <b>Gombok</b> részben a négy gyorsgomb mennyiségét és italát állíthatod, pl. „2 dl tejeskávé”. Ha egy gombhoz italt rendelsz, kis ikon jelzi rajta, és mindig azzal rögzít. A „kiválasztott ital” beállítású gomb haladó módban a „Mit iszol?” sorban kijelölt italt rögzíti, egyszerű módban vizet.</p>
       <p>Tejes kávénál nem kell külön felvenni a tejet: rögzítsd az egész csészét egyben. A kávé és a tea is beszámít a folyadékbevitelbe.</p>
-    </section>
-    <section>
-      <h4>Kedvenc: kisállat vagy jármű</h4>
+    </div></details>
+    <details class="hsec"><summary>Kedvenc: kisállat vagy jármű</summary><div class="hbody">
       <p>A főoldalon egy kis kedvenc társalog veled: pislog, lélegzik, csóválja a farkát, és a helyzet szerint viselkedik. Ha jó a tempó, vidám; ha lemaradtál vagy régóta nem ittál, szomjas, és odatolja az üres tálját; a napi időszakon kívül alszik; ha megvan a cél, ünnepel. Ital hozzáadásakor ő is ugrik egyet, és ha megsimogatod (rákoppintasz), szívecskéket küld.</p>
       <p>A beállítások <b>Kedvenc</b> részében 20 állat közül választhatsz (köztük dínó, cápa, farkas, sárkány és tigris is), nevet adhatsz neki, öltöztetheted (fejre: baseballsapka, kötött sapka, korona, cilinder, masni; szemre: napszemüveg vagy szemüveg; nyakba: csokornyakkendő, sál, nyakörv; plusz fejhallgató, mindez kombinálható), és kikapcsolhatod a szövegbuborékot vagy az egész kedvencet.</p>
       <p>Állat helyett <b>jármű</b> is lehet: autó, versenyautó, markoló, traktor, tűzoltóautó, busz, mozdony, repülő, rakéta vagy kukásautó, 9 szín közül választva. A jármű tankja mutatja, mennyit ittál ma: ha lemaradtál, villog a tanklámpa („Tankolj!”), este lekapcsolja a lámpáit és alszik, a célnál dudál és ünnepel.</p>
       <p><b>Trükkök:</b> koppints a kedvencedre, és mutat valamit: az állatok pörögnek, szaltóznak, ugranak, táncolnak; a járművek egykerekeznek, driftelnek, a repülő és a rakéta bukfencet ír le. Minden trükknek saját vicces hangja van.</p>
       <p>Mindegyik állatnak saját hangja van: a kutya vakkant, a cica nyávog, a madárka csiripel, a dínó és a sárkány bömböl, a farkas vonyít, a cápa csattog. A járművek dudálnak, berregnek, szirénáznak, a mozdony fütyül. A <b>Hangja</b> résznél választhatod, hogy soha, csak koppintásra, eseményeknél is (ital hozzáadása, cél teljesítése), vagy néha magától is megszólaljon.</p>
-    </section>
-    <section>
-      <h4>Játékterem és napi kihívás</h4>
+    </div></details>
+    <details class="hsec"><summary>Játékterem és napi kihívás</summary><div class="hbody">
       <p>A kedvenced alatti <b>Napi kihívás</b> gomb a Játékterembe visz. Itt ügyességi játékok (pl. Cseppfogó, Feltörő) és fejtörők (pl. Csőszerelő, Színes italok) közül választhatsz. Mindegyikben a saját kedvenced szerepel, és a szintek egyre nehezebbek. A fejtörők ott folytatódnak, ahol abbahagytad, és van bennük visszalépés és újrakezdés.</p>
       <p>Minden nap más játékból jön a <b>napi kihívás</b>. Az ügyességi játékokban ez egy feladat (pl. „Kapj el 35 cseppet”), a fejtörőknél egy közös napi feladvány, ami mindenkinek ugyanaz. Így a családban össze lehet hasonlítani, ki hány lépésből oldotta meg. Ha teljesíted a kihívást, nő a <b>széria</b>. Ha kimarad egy nap, egy <b>szériabefagyasztó</b> ❄️ megmenti: az elején kapsz egyet, és minden 7 napos széria után még egyet (legfeljebb kettő lehet nálad). A játékok eredményei csak ezen a telefonon tárolódnak.</p>
-    </section>
-    <section>
-      <h4>Hangok és rezgés</h4>
+    </div></details>
+    <details class="hsec"><summary>Hangok és rezgés</summary><div class="hbody">
       <p>Az app rövid hangot ad ital hozzáadásakor, törléskor vagy visszavonáskor, és egy kis dallamot, amikor meglesz a napi cél. A beállítások <b>Hangok és rezgés</b> részében kikapcsolhatod, eseményenként is, választhatsz hangkészletet (Vízcsepp, Buborék, Dallam), állíthatod a hangerőt, és a lejátszás gombbal meg is hallgathatod.</p>
       <p>Alapból a napi időszakon kívül (pl. késő este) csendben marad. Androidon koppintáskor röviden rezeg is; iPhone-on ezt a böngésző nem engedi. iPhone-on a néma kapcsoló a hangokat is elnémítja.</p>
-    </section>
-    <section>
-      <h4>Hatféle kijelző</h4>
+    </div></details>
+    <details class="hsec"><summary>Hatféle kijelző</summary><div class="hbody">
       <p>A mennyiséget hatféleképpen nézheted: <b>Mérőpohár</b>, <b>Gyűrű</b>, <b>Kulacs</b>, <b>Pohársor</b> (2 dl-es poharakban számolva), <b>Idővonal</b> (a nap grafikonja a tervhez képest) és <b>Akvárium</b>. A rajzot balra húzva a következőre, jobbra húzva az előzőre vált (koppintással is lapozhatsz), a beállítások „Kijelző” részében pedig közvetlenül választhatsz. A pontok a rajz alatt mutatják, melyiknél jársz.</p>
-    </section>
-    <section>
-      <h4>Javaslat a nap hátralévő részére</h4>
+    </div></details>
+    <details class="hsec"><summary>Javaslat a nap hátralévő részére</summary><div class="hbody">
       <p>A pohár alatti kártya megmondja, hogy jó tempóban vagy-e, és mennyit érdemes inni a nap hátralévő részében (pl. „kb. 50 percenként egy 2 dl-es pohár”).</p>
       <p>A pohárban a narancssárga szaggatott vonal mutatja, hol kéne most tartanod, ha a napi célt egyenletesen osztanád el a napi időszakra.</p>
-    </section>
-    <section>
-      <h4>Napi időszak</h4>
+    </div></details>
+    <details class="hsec"><summary>Napi időszak</summary><div class="hbody">
       <p>A beállításokban megadhatod, mikor kezdődik és ér véget a napod (alapból 7:00 és 22:00). A tempó-javaslat erre az időszakra osztja el a célt. Ezen kívül is nyugodtan rögzítheted, amit iszol, az is beleszámít.</p>
-    </section>
-    <section>
-      <h4>Lista, törlés és javítás</h4>
+    </div></details>
+    <details class="hsec"><summary>Lista, törlés és javítás</summary><div class="hbody">
       <p>A „Ma” alatt minden ivás szerepel időponttal. A sor végén lévő <b>×</b> törli, utána néhány másodpercig a lap alján megjelenik a <b>Visszavonás</b> gomb. Haladó módban a sorra koppintva a mennyiséget, az italt és az időpontot is javíthatod.</p>
-    </section>
-    <section>
-      <h4>Mai nap: mozgás és meleg</h4>
+    </div></details>
+    <details class="hsec"><summary>Mai nap: mozgás és meleg</summary><div class="hbody">
       <ul>
         <li><b>Ülő:</b> nincs plusz</li>
         <li><b>Közepes:</b> +3 dl (séta, könnyebb munka)</li>
@@ -914,43 +905,36 @@ body.modal{overflow:hidden}
         <li><b>Meleg:</b> +5 dl (kánikula, sok izzadás)</li>
       </ul>
       <p>Ez csak az adott napra szól, másnap újra „Ülő”-ről indul.</p>
-    </section>
-    <section>
-      <h4>A napi cél</h4>
+    </div></details>
+    <details class="hsec"><summary>A napi cél</summary><div class="hbody">
       <p>A napi cél az <b>alapcél</b> plusz a mai mozgás és meleg. Az alapcélt a beállításokban adhatod meg: a <b>testsúlyod</b> alapján a program javasol egyet (testsúly × 30 ml, ennek kb. 80%-a italból, a többi az ételekből jön), vagy a <b>−</b> és <b>+</b> gombbal kézzel állíthatod.</p>
       <p>Jó visszajelzés a vizelet színe: a halvány szalmasárga megfelelő, a sötétsárga kevés folyadékot jelez. Ha valamilyen betegség miatt az orvosod korlátozta a folyadékot, az ő javaslata az irányadó.</p>
-    </section>
-    <section>
-      <h4>Utolsó 7 nap és statisztika</h4>
+    </div></details>
+    <details class="hsec"><summary>Utolsó 7 nap és statisztika</summary><div class="hbody">
       <p>Az oszlopok a napi mennyiséget mutatják. A színes, telt oszlop azt jelenti, hogy aznap meglett a cél. A szaggatott vonal az alapcél. Haladó módban alatta a <b>sorozat</b> (hány egymást követő napon lett meg a cél), a sikeres napok száma és az átlagok is látszanak. Az átlag csak azokat a napokat számolja, amikor rögzítettél valamit.</p>
-    </section>
-    <section>
-      <h4>Beállítások</h4>
+    </div></details>
+    <details class="hsec"><summary>Beállítások</summary><div class="hbody">
       <p>Itt választhatsz <b>nyelvet</b> (magyar vagy angol), megadhatod vagy átírhatod a keresztneved, ezzel köszönt az app, és itt állíthatod a <b>mértékegységet</b> is: deciliter vagy liter. A megjelenés lehet <b>Nappali</b>, <b>Éjszakai</b> vagy <b>Rendszer</b> (ez a telefonod világos vagy sötét módját követi), és hat szín közül választhatsz: Óceán, Menta, Korall, Levendula, a színes <b>Vidám</b>, és a mindig sötét, élénk <b>Neon</b>.</p>
-    </section>
+    </div></details>
     </div>
 
     <div data-lang="en" style="display:contents">
-    <section>
-      <h4>What is Slurp for?</h4>
+    <details class="hsec"><summary>What is Slurp for?</summary><div class="hbody">
       <p>It helps you keep track of how much you drink in a day. Every time you drink, log it with one tap. You always see where you are against your daily goal, and how to spread out the rest of the day.</p>
-    </section>
-    <section>
-      <h4>Add it to your home screen</h4>
+    </div></details>
+    <details class="hsec"><summary>Add it to your home screen</summary><div class="hbody">
       <ul>
         <li><b>Android (Chrome):</b> ⋮ menu at the top right, then “Add to Home screen”.</li>
         <li><b>iPhone (Safari):</b> the Share button at the bottom, then “Add to Home Screen”.</li>
       </ul>
       <p>Then it opens with one tap, just like an app.</p>
-    </section>
-    <section>
-      <h4>Where is my data stored?</h4>
+    </div></details>
+    <details class="hsec"><summary>Where is my data stored?</summary><div class="hbody">
       <p>Your log is stored <b>only on this phone</b>. The app doesn’t send it anywhere or share it with anyone. No account, no ads. After the first visit it also works offline.</p>
       <p>Because the data lives on your phone, make a <b>backup</b> now and then: Settings → Mode: Advanced → Data → Save to file. On a new phone, “Load from file” in the same place brings it back.</p>
       <p>If you clear your browser data or remove the icon, the log may be deleted too, so a backup is a good idea.</p>
-    </section>
-    <section>
-      <h4>Simple and advanced mode</h4>
+    </div></details>
+    <details class="hsec"><summary>Simple and advanced mode</summary><div class="hbody">
       <p>The app starts in <b>simple</b> mode: glass, suggestion, four buttons, today’s list and the weekly chart. You can switch to <b>advanced</b> mode in Settings at any time, which adds:</p>
       <ul>
         <li>drink type with an icon (water, tea, coffee, juice, milk, other),</li>
@@ -960,55 +944,45 @@ body.modal{overflow:hidden}
         <li>statistics: streak, successful days, weekly and monthly average,</li>
         <li>saving to a file and loading it back.</li>
       </ul>
-    </section>
-    <section>
-      <h4>Logging a drink</h4>
+    </div></details>
+    <details class="hsec"><summary>Logging a drink</summary><div class="hbody">
       <p>Tap <b>+1</b>, <b>+2</b>, <b>+3</b> or <b>+5 dl</b> (in liters: +0.1 / +0.2 / +0.3 / +0.5 l). An average glass is about 2–2.5 dl, a mug about 3 dl, a small bottle of water 5 dl. (1 dl = 100 ml.)</p>
       <p>In advanced mode, first pick what you’re drinking at the top; the buttons log that drink. Coffee, tea and other drinks also count towards your daily goal.</p>
-    </section>
-    <section>
-      <h4>My drinks and custom buttons</h4>
+    </div></details>
+    <details class="hsec"><summary>My drinks and custom buttons</summary><div class="hbody">
       <p>In Settings, <b>Edit my drinks</b> lets you choose which drinks appear (e.g. sparkling water, herbal tea, milk coffee, plant milk, cocoa, soup, sports drink, alcohol-free beer). Use the switch to show or hide one, the arrows to reorder, and tap a name to rename it and pick an icon and color. <b>+ Custom drink</b> adds a brand-new one. Every drink counts towards your daily goal.</p>
       <p>Under <b>Buttons</b> you can set the amount and drink of the four quick buttons, e.g. “2 dl milk coffee”. A button with a drink shows a small icon and always logs that drink. A button set to “selected drink” logs the drink chosen under “What are you drinking?” in advanced mode, and water in simple mode.</p>
       <p>For coffee with milk there’s no need to log the milk separately: log the whole cup at once. Coffee and tea count towards your fluid intake too.</p>
-    </section>
-    <section>
-      <h4>Buddy: pet or vehicle</h4>
+    </div></details>
+    <details class="hsec"><summary>Buddy: pet or vehicle</summary><div class="hbody">
       <p>A little pet keeps you company on the main screen: it blinks, breathes, wags its tail and reacts to how you’re doing. On pace it’s happy; if you’re behind or haven’t had a drink for a while, it’s thirsty and pushes its empty bowl towards you; outside your daily window it sleeps; when you reach your goal, it celebrates. It hops when you add a drink, and sends hearts when you pet it (tap it).</p>
       <p>Under <b>Buddy</b> in Settings you can pick from 20 animals (including a dino, shark, wolf, dragon and tiger), give it a name, dress it up (head: baseball cap, beanie, crown, top hat, bow; eyes: sunglasses or glasses; neck: bow tie, scarf, collar; plus headphones, all combinable), and turn off the speech bubble or the buddy altogether.</p>
       <p>Instead of an animal you can pick a <b>vehicle</b>: car, race car, digger, tractor, fire truck, bus, train, plane, rocket or garbage truck, in 9 colors. Its fuel tank shows how much you’ve drunk today: when you’re behind the fuel light blinks (“Fill me up!”), in the evening it turns its lights off and sleeps, and at your goal it honks and celebrates.</p>
       <p><b>Tricks:</b> tap your buddy and it shows off: animals spin, flip, jump and dance; vehicles pop wheelies and drift, and the plane and rocket loop the loop. Every trick has its own funny sound.</p>
       <p>Every animal has its own sound: the dog barks, the cat meows, the bird chirps, the dino and dragon roar, the wolf howls, the shark chomps. Vehicles honk, rev, wail their sirens, and the train whistles. Under <b>Its sound</b> choose whether it never makes a sound, only when tapped, on events too (adding a drink, reaching your goal), or now and then on its own.</p>
-    </section>
-    <section>
-      <h4>Arcade and daily challenge</h4>
+    </div></details>
+    <details class="hsec"><summary>Arcade and daily challenge</summary><div class="hbody">
       <p>The <b>Daily challenge</b> button under your buddy opens the Arcade, with action games (e.g. Drop Catcher, Brick Breaker) and puzzles (e.g. Pipe Fixer, Drink Sort). Your own buddy stars in each, and the levels get harder and harder. Puzzles continue where you left off and have undo and restart.</p>
       <p>Every day the <b>daily challenge</b> comes from a different game: a task in action games (e.g. “Catch 35 drops”), or a shared daily puzzle that is the same for everyone, so the family can compare who needed the fewest moves. Complete it to grow your <b>streak</b>. If you miss a day, a <b>streak freeze</b> ❄️ saves it: you start with one and earn another with every 7-day streak (you can hold two at most). Game results are stored only on this phone.</p>
-    </section>
-    <section>
-      <h4>Sounds and vibration</h4>
+    </div></details>
+    <details class="hsec"><summary>Sounds and vibration</summary><div class="hbody">
       <p>The app plays a short sound when you add a drink, delete or undo, and a little tune when you reach your daily goal. Under <b>Sounds and vibration</b> in Settings you can turn them off (per event too), pick a sound set (Water drop, Bubble, Melody), set the volume and preview each one with the play button.</p>
       <p>By default it stays quiet outside your daily window (e.g. late at night). On Android it also gives a short buzz when you tap; the browser doesn’t allow that on iPhone. On iPhone the silent switch also mutes the sounds.</p>
-    </section>
-    <section>
-      <h4>Six display styles</h4>
+    </div></details>
+    <details class="hsec"><summary>Six display styles</summary><div class="hbody">
       <p>You can view your progress six ways: <b>Measuring glass</b>, <b>Ring</b>, <b>Bottle</b>, <b>Glasses</b> (counted in 2 dl glasses), <b>Timeline</b> (your day charted against the plan) and <b>Aquarium</b>. Swipe the drawing left for the next one or right for the previous one (a tap also moves on), or pick one directly under “Display” in Settings. The dots below the drawing show which one you’re on.</p>
-    </section>
-    <section>
-      <h4>Suggestion for the rest of the day</h4>
+    </div></details>
+    <details class="hsec"><summary>Suggestion for the rest of the day</summary><div class="hbody">
       <p>The card below the glass tells you whether you’re on pace and how much to drink for the rest of the day (e.g. “about one 2 dl glass every 50 minutes”).</p>
       <p>The orange dashed line in the glass shows where you should be right now if you spread your goal evenly across your daily window.</p>
-    </section>
-    <section>
-      <h4>Daily window</h4>
+    </div></details>
+    <details class="hsec"><summary>Daily window</summary><div class="hbody">
       <p>In Settings you can set when your day starts and ends (7:00 and 22:00 by default). The pace suggestion spreads your goal across this window. You can still log drinks outside it, and they count too.</p>
-    </section>
-    <section>
-      <h4>List, delete and edit</h4>
+    </div></details>
+    <details class="hsec"><summary>List, delete and edit</summary><div class="hbody">
       <p>Every drink appears under “Today” with its time. The <b>×</b> at the end of a row deletes it, and an <b>Undo</b> button appears at the bottom for a few seconds. In advanced mode, tap a row to change the amount, the drink or the time.</p>
-    </section>
-    <section>
-      <h4>Today: activity and heat</h4>
+    </div></details>
+    <details class="hsec"><summary>Today: activity and heat</summary><div class="hbody">
       <ul>
         <li><b>Resting:</b> no extra</li>
         <li><b>Moderate:</b> +3 dl (walking, light work)</li>
@@ -1016,20 +990,17 @@ body.modal{overflow:hidden}
         <li><b>Hot:</b> +5 dl (heat wave, lots of sweating)</li>
       </ul>
       <p>This only applies to the current day; the next day starts again at “Resting”.</p>
-    </section>
-    <section>
-      <h4>Your daily goal</h4>
+    </div></details>
+    <details class="hsec"><summary>Your daily goal</summary><div class="hbody">
       <p>Your daily goal is your <b>base goal</b> plus today’s activity and heat. Set the base goal in Settings: the app suggests one from your <b>body weight</b> (weight × 30 ml, about 80% of which comes from drinks and the rest from food), or set it by hand with the <b>−</b> and <b>+</b> buttons.</p>
       <p>Urine color is a good check: pale straw yellow is fine, dark yellow means too little fluid. If a doctor has limited your fluid intake because of a medical condition, follow their advice.</p>
-    </section>
-    <section>
-      <h4>Last 7 days and statistics</h4>
+    </div></details>
+    <details class="hsec"><summary>Last 7 days and statistics</summary><div class="hbody">
       <p>The bars show the daily amount. A solid colored bar means you reached your goal that day. The dashed line is your base goal. In advanced mode you also see your <b>streak</b> (how many days in a row you hit your goal), the number of successful days and averages. Averages only count days on which you logged something.</p>
-    </section>
-    <section>
-      <h4>Settings</h4>
+    </div></details>
+    <details class="hsec"><summary>Settings</summary><div class="hbody">
       <p>Choose the <b>language</b> (Hungarian or English), enter or change your first name for the greeting, and pick the <b>unit</b>: deciliters or liters. Appearance can be <b>Light</b>, <b>Dark</b> or <b>System</b> (follows your phone’s light or dark mode), with six color themes: Ocean, Mint, Coral, Lavender, the colorful <b>Cheerful</b>, and the always-dark, vivid <b>Neon</b>.</p>
-    </section>
+    </div></details>
     </div>
   </div>
 </div>
@@ -1823,6 +1794,7 @@ function gSfx(kind,x){
     if(kind==='slide'){vnoise(c,t0,.2,v*.3,2600);tone(c,t0,700,500,.18,'sine',v*.2)}
     if(kind==='nope'){tone(c,t0,240,200,.12,'square',v*.3)}
     if(kind==='solve'){[659,784,988,1319].forEach((f,i)=>tone(c,t0+i*.09,f,0,.25,'triangle',v))}
+    if(kind==='vroom'){VOICES.vroom(c,t0,v)}
     if(kind==='flip'){tone(c,t0,800,1200,.06,'triangle',v*.4)}
   }catch(e){}
 }
@@ -1837,7 +1809,7 @@ function arcNew(id,opts){
   Object.assign(GM,{on:true,paused:false,t:0,score:0,lives:3,level:1,parts:[],texts:[],banner:null,inv:0,shake:0,st:{},
     ch:dc.game===id&&(dc.ty!=='daily'||opts.daily)?dc:null,chDone:gameDoneToday(),chHit:false,keys:{},lastWhy:null,earned:false,daily:!!opts.daily,rng:Math.random,hist:[]});
   if(opts.daily)GM.rng=seedRng(keyOf(new Date())+'#'+id);
-  gLoadImgs();$('gPanel').hidden=true;$('gTitle').textContent=t('gn_'+id);state.game.plays++;saveLocal();
+  gLoadImgs();$('gPanel').hidden=true;state.game.plays++;saveLocal();
   $('gTools').hidden=g.kind!=='puzzle';
   if(g.kind==='puzzle'){GM.level=opts.daily?(g.dailyLevel||6):Math.max(1,state.game.lv[id]||1);GM.st.solved=0}
   g.init();cancelAnimationFrame(GM.raf);GM.last=performance.now();GM.raf=requestAnimationFrame(gLoop);
@@ -2035,6 +2007,29 @@ Object.assign(I18N.en,{
   gh_sort:'Pour the colored drinks so each glass holds only one color. Tap a glass, then the one to pour into. You can only pour onto the same color or into an empty glass.',
   ch_catch_drops:n=>'Catch '+n+' drops in one game', ch_catch_level:n=>'Reach level '+n, ch_catch_gold:n=>'Catch '+n+' golden drops in one game', ch_catch_combo:n=>'Catch '+n+' drops in a row',
   ch_breakout_bricks:n=>'Break '+n+' blocks in one game', ch_breakout_water:n=>'Break '+n+' water blocks', ch_breakout_level:n=>'Reach level '+n
+});
+
+Object.assign(I18N.hu,{
+  gOver_full:'Leértek a buborékok!', gTapFly:'Koppints a repüléshez!', gPerfect:'Tökéletes! ⭐⭐⭐',
+  gJugGoal:n=>'Mérj ki pontosan '+n+' dl-t!', gJugGoalBowl:n=>'Tölts pontosan '+n+' dl-t a tálba!', gJugMin:n=>'Legkevesebb: '+n+' lépés', gFillBtn:'Tölt', gEmptyBtn:'Kiönt', gTapBowl:'koppints a tálra az öntéshez', gTooMuch:'Túl sok lenne!',
+  gJamGoal:'Juttasd ki a piros autót jobbra!',
+  gh_bubble:'Húzd az ujjad a célzáshoz, engedd el a lövéshez. Ha 3 vagy több egyforma szín összeér, kipukkannak. A vízbuborék plusz pontot ér, a szivárvány bármelyik színhez illik. Ha sokszor nem pukkan semmi, lejjebb jön a plafon.',
+  gh_fly:'Koppints, és a kedvenced felrepül. Repülj át a felhők között, és szedd össze a cseppeket! A 3. szinttől mérges viharfelhők is mozognak.',
+  gh_jugs:'Mérj ki pontosan annyi vizet, amennyit kér! „Tölt”: tele a kancsó, „Kiönt”: üres lesz. Koppints egy kancsóra, majd egy másikra az átöntéshez. A későbbi szinteken három kancsó és tál is van.',
+  gh_jam:'Csúsztasd az autókat előre-hátra (csak a saját irányukban), hogy a piros autó kijusson jobbra a dugóból!',
+  ch_bubble_pops:n=>'Pukkassz ki '+n+' buborékot egy játékban', ch_bubble_water:n=>'Pukkassz ki '+n+' vízbuborékot', ch_bubble_level:n=>'Juss el a '+n+'. szintig',
+  ch_fly_pass:n=>'Repülj át '+n+' felhőkapun egy játékban', ch_fly_drops:n=>'Szedj össze '+n+' cseppet repülés közben', ch_fly_level:n=>'Juss el a '+n+'. szintig'
+});
+Object.assign(I18N.en,{
+  gOver_full:'The bubbles reached the bottom!', gTapFly:'Tap to fly!', gPerfect:'Perfect! ⭐⭐⭐',
+  gJugGoal:n=>'Measure exactly '+n+' dl!', gJugGoalBowl:n=>'Pour exactly '+n+' dl into the bowl!', gJugMin:n=>'Fewest possible: '+n+' moves', gFillBtn:'Fill', gEmptyBtn:'Empty', gTapBowl:'tap the bowl to pour', gTooMuch:'That would be too much!',
+  gJamGoal:'Get the red car out to the right!',
+  gh_bubble:'Drag to aim, release to shoot. When 3 or more of the same color touch, they pop. Water bubbles are worth extra, rainbow matches any color. If nothing pops for a while, the ceiling comes down.',
+  gh_fly:'Tap and your buddy flies up. Fly through the gaps in the clouds and collect the drops! From level 3, grumpy storm clouds move up and down.',
+  gh_jugs:'Measure exactly the amount asked! “Fill” fills a jug, “Empty” empties it. Tap one jug, then another to pour. Later levels have three jugs and a bowl.',
+  gh_jam:'Slide the cars back and forth (only along their direction) so the red car can escape the jam to the right!',
+  ch_bubble_pops:n=>'Pop '+n+' bubbles in one game', ch_bubble_water:n=>'Pop '+n+' water bubbles', ch_bubble_level:n=>'Reach level '+n,
+  ch_fly_pass:n=>'Fly through '+n+' cloud gates in one game', ch_fly_drops:n=>'Collect '+n+' drops while flying', ch_fly_level:n=>'Reach level '+n
 });
 
 /* Cseppfogó */
@@ -2240,6 +2235,139 @@ ARC.breakout=(()=>{
   };
 })();
 
+/* Buborék lövő */
+ARC.bubble=(()=>{
+  const S={},COLS=9,BC=['#ff5f8f','#3fa9f5','#ffd23b','#4fd18b','#8a5cf6','#ff9f1c'];
+  const sh=r=>((r+S.off)%2)===1;
+  const pos=(r,c)=>({x:S.R+c*2*S.R+(sh(r)?S.R:0),y:S.y0+S.R+r*S.R*1.732});
+  const valid=(r,c)=>r>=0&&c>=0&&c<(sh(r)?COLS-1:COLS);
+  function nb(r,c){const o=sh(r)?[[0,-1],[0,1],[-1,0],[-1,1],[1,0],[1,1]]:[[0,-1],[0,1],[-1,-1],[-1,0],[1,-1],[1,0]];return o.map(([a,b])=>[r+a,c+b]).filter(([a,b])=>valid(a,b))}
+  const get=(r,c)=>S.g[r]&&S.g[r][c];
+  function nCol(){return Math.min(6,3+GM.level)}
+  function newRow(){const row=[];for(let c=0;c<COLS;c++)row.push(c<COLS-(sh(0)?1:0)?{c:Math.floor(Math.random()*nCol()),w:Math.random()<.08}:null);return row}
+  function board(){S.off=0;S.g=[];const rows=Math.min(9,4+GM.level);for(let r=0;r<rows;r++){S.g.push([]);for(let c=0;c<COLS;c++)S.g[r].push(valid(r,c)?{c:Math.floor(Math.random()*nCol()),w:Math.random()<.08}:null)}S.miss=0}
+  function colorsLeft(){const s=new Set();S.g.forEach(r=>r.forEach(b=>b&&s.add(b.c)));return [...s]}
+  function nextBall(){S.shots++;const cl=colorsLeft();if(S.shots%15===0)return {c:-1};return {c:cl.length?cl[Math.floor(Math.random()*cl.length)]:0}}
+  function pushRow(){S.off=(S.off+1)%2;const row=[];for(let c=0;c<COLS;c++)row.push(valid(0,c)?{c:Math.floor(Math.random()*nCol()),w:Math.random()<.08}:null);S.g.unshift(row);gSfx('slide');GM.shake=.2}
+  function place(fx,fy,col){
+    let best=null,bd=1e9;const maxR=S.g.length+1;
+    for(let r=0;r<=maxR;r++)for(let c=0;c<COLS;c++){if(!valid(r,c)||get(r,c))continue;
+      if(r>0&&!nb(r,c).some(([a,b])=>get(a,b)))continue;const p=pos(r,c),d=(p.x-fx)**2+(p.y-fy)**2;if(d<bd){bd=d;best=[r,c]}}
+    if(!best)return;const [r,c]=best;while(S.g.length<=r){S.g.push(new Array(COLS).fill(null))}
+    if(col<0){const n=nb(r,c).map(([a,b])=>get(a,b)).filter(Boolean);col=n.length?n[0].c:0}
+    S.g[r][c]={c:col,w:false};
+    const grp=[[r,c]],seen=new Set([r+','+c]);
+    for(let i=0;i<grp.length;i++)nb(...grp[i]).forEach(([a,b])=>{const k=a+','+b,x=get(a,b);if(!seen.has(k)&&x&&x.c===col){seen.add(k);grp.push([a,b])}});
+    if(grp.length>=3){
+      let pts=0;grp.forEach(([a,b])=>{const x=S.g[a][b],p=pos(a,b);if(x.w){GM.st.water++;pts+=50;gSplash(p.x,p.y,'#4fb8ff',10)}else gSplash(p.x,p.y,BC[x.c],6);pts+=10;S.g[a][b]=null});
+      GM.st.pops+=grp.length;gSfx('pop',grp.length);
+      /* lebegők lehullanak */
+      const keep=new Set(),q=[];for(let c2=0;c2<COLS;c2++)if(get(0,c2)){keep.add('0,'+c2);q.push([0,c2])}
+      for(let i=0;i<q.length;i++)nb(...q[i]).forEach(([a,b])=>{const k=a+','+b;if(!keep.has(k)&&get(a,b)){keep.add(k);q.push([a,b])}});
+      let fell=0;S.g.forEach((row,a)=>row.forEach((x,b)=>{if(x&&!keep.has(a+','+b)){const p=pos(a,b);S.falls.push({x:p.x,y:p.y,vy:-80,c:x.c,w:x.w});if(x.w)GM.st.water++;row[b]=null;fell++}}));
+      pts+=fell*20;GM.st.pops+=fell;GM.score+=pts;const p=pos(r,c);gText(p.x,p.y,'+'+pts,'#5b3fd6');if(grp.length+fell>=6)buzz(25);
+      while(S.g.length&&S.g[S.g.length-1].every(x=>!x))S.g.pop();
+      if(!S.g.length){GM.score+=300;gLevelUp();board();S.cur=nextBall();S.nxt=nextBall()}
+    }else{gSfx('bounce');S.miss++;if(S.miss>=Math.max(3,7-GM.level)){S.miss=0;pushRow()}}
+    /* leért? */
+    for(let a=0;a<S.g.length;a++)if(S.g[a].some(Boolean)&&pos(a,0).y+S.R>S.sy-S.R*1.6){arcOver('full');return}
+  }
+  function drawBall(c,x,y,col,w,r){
+    r=r||S.R;const g=c.createRadialGradient(x-r*.35,y-r*.35,r*.15,x,y,r);
+    if(col<0){g.addColorStop(0,'#fff');g.addColorStop(.3,'#ffd23b');g.addColorStop(.6,'#ff5f8f');g.addColorStop(1,'#8a5cf6')}else{g.addColorStop(0,'#ffffff');g.addColorStop(.25,BC[col]);g.addColorStop(1,shade(BC[col],-.25))}
+    c.fillStyle=g;c.beginPath();c.arc(x,y,r-1,0,7);c.fill();
+    if(w){gDrop(c,x,y+2,r*.36,'rgba(255,255,255,.9)',false)}
+  }
+  return {key:'bubble',kind:'action',icon:'🫧',col:'#8a5cf6',lives:false,chY:54,
+    chs:[{ty:'pops',ns:[40,60,90]},{ty:'water',ns:[5,8,12]},{ty:'level',ns:[2,3]}],
+    prog(ty){return ty==='pops'?GM.st.pops:ty==='water'?GM.st.water:GM.level},
+    resize(){S.R=GM.W/(COLS*2+1);S.y0=62;S.sy=GM.H-100;S.sx=GM.W/2},
+    init(){Object.assign(GM.st,{pops:0,water:0});this.resize();S.falls=[];S.fly=null;S.shots=0;S.aim=-Math.PI/2;S.aiming=false;board();S.cur=nextBall();S.nxt=nextBall()},
+    step(dt){
+      S.falls.forEach(f=>{f.vy+=900*dt;f.y+=f.vy*dt});S.falls=S.falls.filter(f=>f.y<GM.H+40);
+      const f=S.fly;if(!f)return;const n=Math.ceil(1100*dt/6);
+      for(let k=0;k<n;k++){
+        f.x+=f.vx*dt/n;f.y+=f.vy*dt/n;
+        if(f.x<S.R){f.x=S.R;f.vx=Math.abs(f.vx)}if(f.x>GM.W-S.R){f.x=GM.W-S.R;f.vx=-Math.abs(f.vx)}
+        let hit=f.y<=S.y0+S.R;
+        if(!hit)for(let r=0;r<S.g.length&&!hit;r++)for(let c=0;c<COLS;c++){if(!S.g[r][c])continue;const p=pos(r,c);if((p.x-f.x)**2+(p.y-f.y)**2<(S.R*1.75)**2){hit=true;break}}
+        if(hit){S.fly=null;place(f.x,f.y,f.c);if(GM.on){S.cur=S.nxt;S.nxt=nextBall()}return}
+      }
+    },
+    draw(c){
+      const W=GM.W,H=GM.H;gSky(c,265);
+      c.fillStyle='rgba(255,255,255,.35)';c.fillRect(0,S.y0,W,2);
+      const dl=S.sy-S.R*1.6;c.strokeStyle='rgba(224,64,58,.35)';c.setLineDash([6,6]);c.beginPath();c.moveTo(0,dl);c.lineTo(W,dl);c.stroke();c.setLineDash([]);
+      S.g.forEach((row,r)=>row.forEach((b,cc)=>{if(b){const p=pos(r,cc);drawBall(c,p.x,p.y,b.c,b.w)}}));
+      S.falls.forEach(f=>drawBall(c,f.x,f.y,f.c,f.w));
+      if(GM.on&&!S.fly&&S.aiming){
+        let x=S.sx,y=S.sy,vx=Math.cos(S.aim),vy=Math.sin(S.aim);c.fillStyle='rgba(91,63,214,.55)';
+        for(let i=0;i<40;i++){x+=vx*14;y+=vy*14;if(x<S.R||x>W-S.R)vx=-vx;if(y<S.y0+S.R)break;if(i%2)continue;c.beginPath();c.arc(x,y,3,0,7);c.fill()}
+      }
+      gPet(c,S.sx+S.R*2.6,H-46,70,GM.on?'happy':'thirsty');
+      if(S.cur&&!S.fly)drawBall(c,S.sx,S.sy,S.cur.c,false);
+      if(S.fly)drawBall(c,S.fly.x,S.fly.y,S.fly.c,false);
+      if(S.nxt){drawBall(c,S.sx-S.R*3,H-40,S.nxt.c,false,S.R*.7)}
+      c.strokeStyle='#5b3fd6';c.lineWidth=3;c.beginPath();c.arc(S.sx,S.sy,S.R+5,0,7);c.stroke();
+      const miss=Math.max(3,7-GM.level);c.fillStyle='#5f5699';for(let i=0;i<miss;i++){c.globalAlpha=i<S.miss?1:.25;c.beginPath();c.arc(W-16-i*12,40,4,0,7);c.fill()}c.globalAlpha=1;
+    },
+    down(x,y){this.move(x,y,true);S.aiming=true},
+    move(x,y,p){if(!p)return;let a=Math.atan2(y-S.sy,x-S.sx);if(a>0)a=a>Math.PI/2?-Math.PI+.17:-.17;S.aim=Math.max(-Math.PI+.17,Math.min(-.17,a))},
+    up(){if(!S.aiming)return;S.aiming=false;if(S.fly||!S.cur)return;S.fly={x:S.sx,y:S.sy,vx:Math.cos(S.aim)*1100,vy:Math.sin(S.aim)*1100,c:S.cur.c};S.cur=null;gSfx('flap')}
+  };
+})();
+
+/* Repkedő */
+ARC.fly=(()=>{
+  const S={};
+  function k(){return GM.H/800}
+  function gap(){return GM.H*Math.max(.21,.31-GM.level*.012)}
+  function spawn(x){
+    const g=gap(),m=GM.H*.12,gy=m+g/2+Math.random()*(GM.H-2*m-g-40);
+    const storm=GM.level>=3&&Math.random()<.35;
+    S.cols.push({x,gy,gy0:gy,g,storm,ph:Math.random()*6,passed:false,w:62});
+    if(Math.random()<.85)S.drops.push({x:x+31,y:gy,gold:Math.random()<.1});
+    if(Math.random()<.5)S.drops.push({x:x+31+S.space/2,y:m+Math.random()*(GM.H-2*m-60),gold:false});
+  }
+  function cloudCol(c,x,y0,y1,w,storm){
+    if(y1-y0<4)return;c.fillStyle=storm?'#8f95a8':'#ffffff';rr(c,x,y0,w,y1-y0,18);c.fill();
+    const ey=y0<10?y1:y0;c.beginPath();for(let i=0;i<3;i++)c.arc(x+10+i*21,ey,15,0,7);c.fill();
+    c.fillStyle=storm?'#767c90':'#e6edf7';rr(c,x+w-14,y0+(y0<10?0:16),10,Math.max(0,y1-y0-16),5);c.fill();
+    if(storm){gFace(c,x+w/2,ey+(y0<10?-18:18),18,'angry');if(Math.sin(GM.t*3+x)>.96){c.strokeStyle='#ffe14d';c.lineWidth=3;c.beginPath();c.moveTo(x+w/2,ey);c.lineTo(x+w/2-8,ey+(y0<10?24:-24));c.lineTo(x+w/2+4,ey+(y0<10?30:-30));c.stroke()}}
+  }
+  return {key:'fly',kind:'action',icon:'🪽',col:'#4fb8ff',lives:true,chY:54,
+    chs:[{ty:'pass',ns:[10,20,30]},{ty:'drops',ns:[10,20,30]},{ty:'level',ns:[2,3,4]}],
+    prog(ty){return ty==='pass'?GM.st.pass:ty==='drops'?GM.st.drops:GM.level},
+    resize(){S.px=GM.W*.28;S.ps=Math.min(80,GM.W*.19);S.space=Math.max(210,GM.W*.58)},
+    init(){Object.assign(GM.st,{pass:0,drops:0});this.resize();Object.assign(S,{y:GM.H*.45,vy:0,started:false,cols:[],drops:[]});spawn(GM.W+40);spawn(GM.W+40+S.space)},
+    step(dt){
+      const K=k(),sp=(150+GM.level*14)*Math.max(.9,GM.W/390);
+      if(!S.started){S.y=GM.H*.45+Math.sin(GM.t*3)*8;return}
+      S.vy+=1500*K*dt;S.y+=S.vy*dt;
+      const top=60,bot=GM.H-30,pr=S.ps*.3;
+      if(S.y<top+pr){S.y=top+pr;S.vy=Math.abs(S.vy)*.3}
+      if(S.y>bot-pr){S.y=bot-pr;S.vy=-520*K;if(!GM.inv){GM.lives--;GM.inv=1.5;gSfx('hit');buzz(60);GM.shake=.3}}
+      S.cols.forEach(cl=>{cl.x-=sp*dt;if(cl.storm){cl.ph+=dt;cl.gy=cl.gy0+Math.sin(cl.ph*1.6)*GM.H*.08}
+        if(!cl.passed&&cl.x+cl.w<S.px-pr){cl.passed=true;GM.st.pass++;GM.score+=10;gSfx('tick');if(GM.st.pass%10===0)gLevelUp()}
+        if(!GM.inv&&S.px+pr>cl.x+4&&S.px-pr<cl.x+cl.w-4&&(S.y-pr<cl.gy-cl.g/2||S.y+pr>cl.gy+cl.g/2)){GM.lives--;GM.inv=1.5;gSfx('hit');buzz(60);GM.shake=.3}});
+      S.drops.forEach(d=>{d.x-=sp*dt;if(!d.got&&Math.hypot(d.x-S.px,d.y-S.y)<pr+14){d.got=true;GM.st.drops++;const p=d.gold?50:15;GM.score+=p;gSfx(d.gold?'gold':'drop',GM.st.drops%12);gSplash(d.x,d.y,d.gold?'#ffc21a':'#4fb8ff');gText(d.x,d.y-12,'+'+p,'#1f8fc4')}});
+      S.drops=S.drops.filter(d=>!d.got&&d.x>-30);
+      if(S.cols.length&&S.cols[0].x<-80)S.cols.shift();
+      const last=S.cols[S.cols.length-1];if(last.x<GM.W+40)spawn(last.x+S.space);
+    },
+    draw(c){
+      const W=GM.W,H=GM.H;gSky(c,gLevelHue());
+      c.fillStyle='#7fd18b';c.fillRect(-10,H-30,W+20,40);
+      S.cols.forEach(cl=>{cloudCol(c,cl.x,-20,cl.gy-cl.g/2,cl.w,cl.storm);cloudCol(c,cl.x,cl.gy+cl.g/2,H-30,cl.w,cl.storm)});
+      S.drops.forEach(d=>{c.save();if(d.gold){c.shadowColor='#ffd23b';c.shadowBlur=12}gDrop(c,d.x,d.y,11,d.gold?'#ffc21a':'#3fa9f5');c.restore()});
+      gPet(c,S.px,S.y,S.ps,GM.inv>0||!GM.on?'thirsty':'happy',Math.max(-.5,Math.min(.6,S.vy/900)),GM.inv>0&&Math.floor(GM.inv*10)%2?.4:1);
+      if(GM.on&&!S.started){c.font='800 16px system-ui';c.fillStyle='#3b3566';c.textAlign='center';c.fillText(t('gTapFly'),W/2,H*.65)}
+    },
+    down(){if(!S.started)S.started=true;S.vy=-470*k();gSfx('flap')},
+    key(k2,d){if(d&&(k2===' '||k2==='ArrowUp'))this.down()}
+  };
+})();
+
 /* Csőszerelő */
 const DIRS=[[-1,0,1],[0,1,2],[1,0,4],[0,-1,8]];/* N E S W bitek */
 function rotMask(m){return ((m<<1)|(m>>3))&15}
@@ -2269,7 +2397,7 @@ ARC.pipe=(()=>{
         if((m[j]&op)&&!vis[j]){vis[j]=1;q.push(j)}}}
     const ti=(R-1)*C+S.tc;return {vis,order,ok:!!vis[ti]&&!!(m[ti]&4)};
   }
-  function layoutDims(){const ts=Math.floor(Math.min((GM.W-24)/S.C,(GM.H-260)/S.R,70));S.ts=ts;S.x0=(GM.W-ts*S.C)/2;S.y0=Math.max(110,(GM.H-ts*S.R-170)/2+50)}
+  function layoutDims(){const ts=Math.floor(Math.min((GM.W-24)/S.C,(GM.H-260)/S.R,70));S.ts=ts;S.x0=(GM.W-ts*S.C)/2;S.y0=Math.max(96,(GM.H-ts*S.R)/2-40)}
   return {key:'pipe',kind:'puzzle',icon:'🔧',col:'#14b8a6',dailyLevel:6,
     prog(){return GM.st.solved},
     resize(){layoutDims()},
@@ -2312,7 +2440,7 @@ ARC.pipe=(()=>{
       c.fillStyle='#8a7fd6';c.beginPath();c.moveTo(tx-30,ty+16);c.lineTo(tx+30,ty+16);c.quadraticCurveTo(tx+26,ty+34,tx,ty+34);c.quadraticCurveTo(tx-26,ty+34,tx-30,ty+16);c.fill();
       if(S.done&&S.anim>.9){c.fillStyle='#3fa9f5';c.beginPath();c.ellipse(tx,ty+18,26,5,0,0,7);c.fill()}
       const px=Math.max(50,Math.min(GM.W-50,tx+(tx>GM.W/2?-72:72)));
-      gPet(c,px,ty+40,Math.min(84,ts*1.4),S.done&&S.anim>.9?'party':'thirsty');
+      gPet(c,px,ty+12,Math.min(90,ts*1.4),S.done&&S.anim>.9?'party':'thirsty');
     },
     down(x,y){
       if(S.done||GM.busy)return;const {R,C,ts,x0,y0}=S,cc=Math.floor((x-x0)/ts),r=Math.floor((y-y0)/ts);if(cc<0||r<0||cc>=C||r>=R)return;
@@ -2326,7 +2454,7 @@ ARC.pipe=(()=>{
 
 /* Színes italok */
 ARC.sort=(()=>{
-  const S={},CAP=4,COL=['#3fa9f5','#ff9f1c','#ff5f8f','#7ed957','#8a5cf6','#8b5a3c','#ffe14d','#14b8a6','#e0403a','#1e3a8a'];
+  const S={},CAP=4,COL=['#3fa9f5','#ff9f1c','#ff5f8f','#7ed957','#8a5cf6','#8b5a3c','#ffe14d','#14b8a6','#e0403a','#f4f1ea'];
   function nColors(L){return [3,4,5,5,6,7,7,8,8,9][Math.min(L-1,9)]}
   const top=t=>t.length?t[t.length-1].c:-1;
   function canPour(a,b){const A=S.tubes[a],B=S.tubes[b];return a!==b&&A.length&&B.length<CAP&&(!B.length||top(B)===top(A))}
@@ -2349,13 +2477,13 @@ ARC.sort=(()=>{
   function layout(){
     const n=S.tubes.length,per=n>6?Math.ceil(n/2):n,rows=n>6?2:1;
     const tw=Math.min(54,(GM.W-20)/per-14),th=tw*3.3,gap=(GM.W-per*tw)/(per+1);
-    S.tw=tw;S.th=th;const totalH=rows*th+(rows-1)*50,y0=Math.max(110,(GM.H-totalH)/2-70);
+    S.tw=tw;S.th=th;const totalH=rows*th+(rows-1)*50,y0=Math.max(110,(GM.H-totalH)/2-50);
     S.pos=S.tubes.map((_,i)=>{const r=Math.floor(i/per),k=i%per,inRow=r===rows-1?n-per*(rows-1):per,g2=(GM.W-inRow*tw)/(inRow+1);return {x:g2+k*(tw+g2),y:y0+r*(th+50)}});
   }
   return {key:'sort',kind:'puzzle',icon:'🧃',col:'#ff5f8f',dailyLevel:6,
     prog(){return GM.st.solved},resize(){layout()},
     init(){
-      const L=GM.level,n=nColors(L),hidden=L>=8,cols=shuffleR(COL.slice()).slice(0,n);GM.st.moves=0;GM.hist=[];S.sel=-1;S.done=false;S.stream=null;
+      const L=GM.level,n=nColors(L),hidden=L>=7,cols=shuffleR(COL.slice()).slice(0,n);GM.st.moves=0;GM.hist=[];S.sel=-1;S.done=false;S.stream=null;
       let tubes;
       for(let tries=0;tries<60;tries++){
         const segs=[];cols.forEach((c,i)=>{for(let k=0;k<CAP;k++)segs.push(i)});shuffleR(segs);
@@ -2363,7 +2491,7 @@ ARC.sort=(()=>{
         if(tubes.some(t=>t.length===CAP&&t.every(x=>x===t[0])))continue;
         if(solvable(tubes))break;
       }
-      S.cols=cols;S.tubes=tubes.map(t=>t.map((c,k)=>({c,hid:hidden&&k<t.length-2})));S.t0=JSON.stringify(S.tubes);layout();
+      S.cols=cols;S.tubes=tubes.map(t=>t.map((c,k)=>({c,hid:hidden&&k<t.length-1})));S.t0=JSON.stringify(S.tubes);layout();
     },
     step(dt){if(S.stream){S.stream.t-=dt;if(S.stream.t<=0)S.stream=null}},
     draw(c){
@@ -2382,7 +2510,7 @@ ARC.sort=(()=>{
       });
       if(S.stream){const a=S.pos[S.stream.a],b=S.pos[S.stream.b];c.strokeStyle=S.cols[S.stream.c];c.lineWidth=6;c.lineCap='round';c.globalAlpha=Math.min(1,S.stream.t*4);
         c.beginPath();c.moveTo(a.x+tw/2,a.y-18);c.quadraticCurveTo((a.x+b.x)/2+tw/2,Math.min(a.y,b.y)-60,b.x+tw/2,b.y+6);c.stroke();c.globalAlpha=1}
-      gPet(c,GM.W/2,GM.H-112,80,S.done?'party':'happy');
+      gPet(c,GM.W/2,GM.H-60,90,S.done?'party':'happy');
     },
     down(x,y){
       if(S.done||GM.busy)return;const {tw,th}=S;let hit=-1;
@@ -2396,6 +2524,165 @@ ARC.sort=(()=>{
     },
     undo(){if(S.done||!GM.hist.length)return;S.tubes=JSON.parse(GM.hist.pop());S.sel=-1;GM.st.moves++},
     restart(){if(S.done)return;S.tubes=JSON.parse(S.t0);GM.hist=[];S.sel=-1}
+  };
+})();
+
+/* Kancsók */
+ARC.jugs=(()=>{
+  const S={};
+  function ops(st,caps,bowl){
+    const n=caps.length,out=[],a=st.a;
+    for(let i=0;i<n;i++){
+      if(a[i]<caps[i]){const b=a.slice();b[i]=caps[i];out.push({a:b,w:st.w})}
+      if(a[i]>0){const b=a.slice();b[i]=0;out.push({a:b,w:st.w})}
+      for(let j=0;j<n;j++){if(i===j||!a[i]||a[j]>=caps[j])continue;const m=Math.min(a[i],caps[j]-a[j]),b=a.slice();b[i]-=m;b[j]+=m;out.push({a:b,w:st.w})}
+      if(bowl!=null&&a[i]>0&&st.w+a[i]<=bowl){const b=a.slice();out.push({a:(b[i]=0,b),w:st.w+a[i]})}
+    }
+    return out;
+  }
+  function bfs(caps,bowl){
+    const start={a:caps.map(()=>0),w:0},key=s=>s.a.join(',')+'|'+s.w,dist=new Map([[key(start),0]]),q=[start],best={};
+    while(q.length){const s=q.shift(),d=dist.get(key(s));
+      if(bowl==null)s.a.forEach(v=>{if(v&&best[v]==null)best[v]=d});else if(best[s.w]==null)best[s.w]=d;
+      for(const n of ops(s,caps,bowl)){const k=key(n);if(!dist.has(k)){dist.set(k,d+1);q.push(n)}}
+      if(dist.size>15000)break}
+    return best;
+  }
+  function gen(){
+    const L=GM.level,three=L>=5,bowlMode=L>=6&&L%2===0,lo=Math.min(2+L,12),hi=lo+3+Math.floor(L/3);let pick=null,pd=-1;const t0=performance.now();
+    for(let tries=0;tries<200&&(tries<3||performance.now()-t0<250);tries++){
+      const mx=L<3?7:L<6?10:L<9?12:15,caps=[];const n=three?3:2;
+      while(caps.length<n){const c=2+Math.floor(GM.rng()*(mx-1));if(!caps.includes(c))caps.push(c)}caps.sort((x,y)=>x-y);
+      const bowl=bowlMode?caps[n-1]+2+Math.floor(GM.rng()*caps[n-1]):null;
+      const best=bfs(caps,bowl==null?null:bowl);
+      const cands=Object.entries(best).filter(([v,d])=>(bowl!=null?+v===bowl:!caps.includes(+v))&&d>=lo&&d<=hi);
+      if(cands.length){const [v,d]=cands[Math.floor(GM.rng()*cands.length)];return {caps,target:+v,min:d,bowl}}
+      Object.entries(best).forEach(([v,d])=>{if((bowl!=null?+v===bowl:!caps.includes(+v))&&d>pd&&d<=hi){pd=d;pick={caps,target:+v,min:d,bowl}}});
+    }
+    return pick||{caps:[3,5],target:4,min:6,bowl:null};
+  }
+  function layout(){
+    const n=S.caps.length,mx=Math.max(...S.caps),maxH=Math.min(250,GM.H*.32),jw=Math.min(90,(GM.W-40)/n-24);
+    S.jw=jw;S.unit=maxH/mx;S.base=Math.max(150+maxH,GM.H*.62);
+    S.jx=S.caps.map((_,i)=>(GM.W-(n*jw+(n-1)*26))/2+i*(jw+26));
+    S.bowlY=S.base+86;
+  }
+  function solvedNow(){return S.bowl!=null?S.w===S.target:S.a.includes(S.target)}
+  function act(fn){if(S.done||GM.busy)return;GM.hist.push(JSON.stringify({a:S.a,w:S.w}));fn();GM.st.moves++;S.sel=-1;
+    if(solvedNow()){S.done=true;if(GM.st.moves<=S.min)gBanner(t('gPerfect'),'#e09a00',1.4);arcSolved()}}
+  return {key:'jugs',kind:'puzzle',icon:'🫗',col:'#f08a1c',dailyLevel:7,
+    prog(){return GM.st.solved},resize(){layout()},
+    init(){const p=gen();Object.assign(S,p,{a:p.caps.map(()=>0),w:0,sel:-1,done:false,stream:null});GM.st.moves=0;GM.hist=[];layout()},
+    step(dt){if(S.stream){S.stream.t-=dt;if(S.stream.t<=0)S.stream=null}},
+    draw(c){
+      const W=GM.W;gSky(c,35,false);
+      c.textAlign='center';c.textBaseline='middle';c.fillStyle='#1d1a33';c.font='900 22px system-ui,sans-serif';
+      c.fillText(S.bowl!=null?t('gJugGoalBowl',S.target):t('gJugGoal',S.target),W/2,96);
+      c.font='700 12px system-ui';c.fillStyle='#5f5699';c.fillText(t('gJugMin',S.min),W/2,120);
+      S.caps.forEach((cap,i)=>{
+        const x=S.jx[i],h=cap*S.unit,y=S.base-h,jw=S.jw,sel=S.sel===i,lift=sel?-10:0;
+        c.save();c.translate(0,lift);
+        c.fillStyle='rgba(255,255,255,.6)';rr(c,x,y,jw,h,10);c.fill();
+        c.save();rr(c,x,y,jw,h,10);c.clip();const wh=S.a[i]*S.unit;c.fillStyle='#3fa9f5';c.fillRect(x,S.base-wh,jw,wh);
+        c.fillStyle='rgba(255,255,255,.3)';c.fillRect(x,S.base-wh,jw,3);c.restore();
+        c.strokeStyle=sel?'#5b3fd6':'rgba(70,60,110,.6)';c.lineWidth=3;rr(c,x,y,jw,h,10);c.stroke();
+        c.strokeStyle='rgba(70,60,110,.35)';c.lineWidth=1.5;for(let k=1;k<cap;k++){const ly=S.base-k*S.unit;c.beginPath();c.moveTo(x,ly);c.lineTo(x+(k%5===0?18:9),ly);c.stroke()}
+        c.strokeStyle=sel?'#5b3fd6':'rgba(70,60,110,.6)';c.lineWidth=4;c.beginPath();c.arc(x+jw+2,y+h*.35,Math.min(16,h*.2),-Math.PI/2,Math.PI/2);c.stroke();
+        c.fillStyle='#1d1a33';c.font='900 18px system-ui';c.fillText(S.a[i]+' / '+cap,x+jw/2,y-16);
+        c.restore();
+        const by=S.base+14;[['fill','gFillBtn','#1c86cf'],['empty','gEmptyBtn','#d26d08']].forEach(([k,lab,col],j)=>{
+          const bx=x+(j?jw/2+2:0),bw=jw/2-2;c.fillStyle=col;rr(c,bx,by,bw,30,10);c.fill();c.fillStyle='#fff';c.font='800 12px system-ui';c.fillText(t(lab),bx+bw/2,by+15)});
+      });
+      if(S.bowl!=null){const bx=W/2,by=S.bowlY;c.fillStyle='#8a7fd6';c.beginPath();c.moveTo(bx-60,by-14);c.lineTo(bx+60,by-14);c.quadraticCurveTo(bx+54,by+22,bx,by+22);c.quadraticCurveTo(bx-54,by+22,bx-60,by-14);c.fill();
+        if(S.w){c.fillStyle='#3fa9f5';c.beginPath();c.ellipse(bx,by-12,54,6,0,0,7);c.fill()}
+        c.fillStyle='#fff';c.font='900 15px system-ui';c.fillText(S.w+' / '+S.target+' dl',bx,by+5);
+        if(S.sel>=0){c.font='700 11px system-ui';c.fillStyle='#5f5699';c.fillText(t('gTapBowl'),bx,by+36)}}
+      if(S.stream){const a=S.stream.a,b=S.stream.b,ax=S.jx[a]+S.jw/2,ay=S.base-S.caps[a]*S.unit,bx=b<0?W/2:S.jx[b]+S.jw/2,by=b<0?S.bowlY-14:S.base-S.caps[b]*S.unit;
+        c.strokeStyle='#3fa9f5';c.lineWidth=6;c.lineCap='round';c.globalAlpha=Math.min(1,S.stream.t*4);c.beginPath();c.moveTo(ax,ay);c.quadraticCurveTo((ax+bx)/2,Math.min(ay,by)-60,bx,by);c.stroke();c.globalAlpha=1}
+      gPet(c,S.bowl!=null?W/2+100:W/2,S.bowlY+(S.bowl!=null?0:0),78,S.done?'party':'happy');
+    },
+    down(x,y){
+      if(S.done||GM.busy)return;const by=S.base+14;
+      for(let i=0;i<S.caps.length;i++){const jx=S.jx[i],jw=S.jw;
+        if(y>=by&&y<=by+34&&x>=jx&&x<=jx+jw){if(x<jx+jw/2){if(S.a[i]<S.caps[i]){act(()=>S.a[i]=S.caps[i]);gSfx('pour')}else gSfx('nope')}else{if(S.a[i]>0){act(()=>S.a[i]=0);gSfx('slide')}else gSfx('nope')}return}
+        const top=S.base-S.caps[i]*S.unit-30;
+        if(x>=jx-8&&x<=jx+jw+14&&y>=top&&y<=S.base+6){
+          if(S.sel<0){if(S.a[i]){S.sel=i;gSfx('tick')}else gSfx('nope');return}
+          if(S.sel===i){S.sel=-1;return}
+          const s=S.sel,m=Math.min(S.a[s],S.caps[i]-S.a[i]);if(!m){gSfx('nope');S.sel=S.a[i]?i:-1;return}
+          act(()=>{S.a[s]-=m;S.a[i]+=m});S.stream={a:s,b:i,t:.4};gSfx('pour');return}
+      }
+      if(S.bowl!=null&&S.sel>=0&&Math.abs(x-GM.W/2)<70&&Math.abs(y-S.bowlY)<40){const s=S.sel;if(S.w+S.a[s]>S.target){gSfx('nope');gText(GM.W/2,S.bowlY-30,t('gTooMuch'),'#e0403a');return}
+        act(()=>{S.w+=S.a[s];S.a[s]=0});S.stream={a:s,b:-1,t:.4};gSfx('pour');return}
+      S.sel=-1;
+    },
+    undo(){if(S.done||!GM.hist.length)return;const h=JSON.parse(GM.hist.pop());S.a=h.a;S.w=h.w;S.sel=-1;GM.st.moves++},
+    restart(){if(S.done)return;S.a=S.caps.map(()=>0);S.w=0;GM.hist=[];S.sel=-1}
+  };
+})();
+
+/* Dugó */
+ARC.jam=(()=>{
+  const S={},N=6,EXIT=2,CC=['#3fa9f5','#ffd23b','#4fd18b','#8a5cf6','#ff9f1c','#14b8a6','#ff7fd0','#8b5a3c','#1e3a8a','#9aa0b0'];
+  function occ(vs,skip){const g=new Int8Array(N*N).fill(-1);vs.forEach((v,i)=>{if(i===skip)return;for(let k=0;k<v.len;k++){const r=v.h?v.r:v.r+k,c=v.h?v.c+k:v.c;g[r*N+c]=i}});return g}
+  function range(vs,i){const v=vs[i],g=occ(vs,i);let lo=v.h?v.c:v.r,hi=lo;
+    while(lo-1>=0&&g[v.h?v.r*N+lo-1:(lo-1)*N+v.c]<0)lo--;
+    while(hi+v.len<N&&g[v.h?v.r*N+hi+v.len:(hi+v.len)*N+v.c]<0)hi++;return [lo,hi]}
+  function solve(vs){
+    const key=p=>p.join(','),start=vs.map(v=>v.h?v.c:v.r),seen=new Map([[key(start),0]]),q=[start];
+    while(q.length){const p=q.shift(),d=seen.get(key(p));if(p[0]===N-2)return d;if(seen.size>25000)return -1;
+      const cur=vs.map((v,i)=>v.h?{...v,c:p[i]}:{...v,r:p[i]});
+      for(let i=0;i<vs.length;i++){const [lo,hi]=range(cur,i);for(let x=lo;x<=hi;x++){if(x===p[i])continue;const np=p.slice();np[i]=x;const k=key(np);if(!seen.has(k)){seen.set(k,d+1);q.push(np)}}}}
+    return -1;
+  }
+  function gen(){
+    const L=GM.level,lo=Math.min(2+Math.floor(L*1.2),16),cnt=Math.min(13,6+L);let best=null,bd=-1;const t0=performance.now();
+    for(let tries=0;tries<400&&performance.now()-t0<220;tries++){
+      const vs=[{r:EXIT,c:Math.floor(GM.rng()*3),len:2,h:true,p:true}];
+      for(let a=0;a<120&&vs.length<cnt;a++){
+        const h=GM.rng()<.5,len=GM.rng()<.28?3:2,r=Math.floor(GM.rng()*(h?N:N-len+1)),c=Math.floor(GM.rng()*(h?N-len+1:N));
+        if(h&&r===EXIT)continue;const v={r,c,len,h};const g=occ(vs);let ok=true;for(let k=0;k<len;k++){if(g[(h?r:r+k)*N+(h?c+k:c)]>=0){ok=false;break}}if(ok)vs.push(v)}
+      const d=solve(vs);if(d<2)continue;
+      if(d>=lo&&d<=lo+5){best=vs;bd=d;break}
+      if(d>bd&&d<=lo+5){best=vs;bd=d}
+    }
+    if(!best){best=[{r:EXIT,c:0,len:2,h:true,p:true},{r:1,c:3,len:3,h:false}];bd=2}
+    best.forEach((v,i)=>{if(!v.p)v.col=CC[i%CC.length]});return {vs:best,min:bd};
+  }
+  function layout(){const cs=Math.floor(Math.min((GM.W-40)/N,(GM.H-260)/N,62));S.cs=cs;S.x0=(GM.W-cs*N)/2-6;S.y0=Math.max(120,(GM.H-cs*N)/2-40)}
+  return {key:'jam',kind:'puzzle',icon:'🚗',col:'#e0403a',dailyLevel:7,
+    prog(){return GM.st.solved},resize(){layout()},
+    init(){const g=gen();S.vs=g.vs;S.min=g.min;S.v0=JSON.stringify(S.vs);S.drag=null;S.done=false;S.out=0;GM.st.moves=0;GM.hist=[];layout()},
+    step(dt){if(S.done){S.out+=dt*6}},
+    draw(c){
+      const {cs,x0,y0}=S,W=GM.W;gSky(c,140,false);
+      c.textAlign='center';c.textBaseline='middle';c.fillStyle='#1d1a33';c.font='900 18px system-ui';c.fillText(t('gJamGoal'),W/2,92);
+      c.font='700 12px system-ui';c.fillStyle='#5f5699';c.fillText(t('gJugMin',S.min),W/2,112);
+      c.fillStyle='#4a4f5e';rr(c,x0-8,y0-8,cs*N+16,cs*N+16,16);c.fill();
+      c.fillStyle='#4a4f5e';c.fillRect(x0+cs*N,y0+EXIT*cs,30,cs);
+      c.strokeStyle='rgba(255,255,255,.12)';c.lineWidth=1;for(let i=1;i<N;i++){c.beginPath();c.moveTo(x0+i*cs,y0);c.lineTo(x0+i*cs,y0+cs*N);c.moveTo(x0,y0+i*cs);c.lineTo(x0+cs*N,y0+i*cs);c.stroke()}
+      c.fillStyle='#ffd23b';c.font='900 22px system-ui';c.fillText('›',x0+cs*N+18,y0+EXIT*cs+cs/2);
+      S.vs.forEach((v,i)=>{
+        let r=v.r,cc=v.c;if(S.drag&&S.drag.i===i){if(v.h)cc=S.drag.f;else r=S.drag.f}if(v.p&&S.done)cc+=S.out;
+        const x=x0+cc*cs+4,y=y0+r*cs+4,w=(v.h?v.len*cs:cs)-8,h=(v.h?cs:v.len*cs)-8,col=v.p?'#e0403a':v.col;
+        c.fillStyle='rgba(0,0,0,.25)';rr(c,x+2,y+4,w,h,12);c.fill();c.fillStyle=col;rr(c,x,y,w,h,12);c.fill();
+        c.fillStyle='rgba(191,230,255,.9)';if(v.h){rr(c,x+w*.62,y+6,w*.16,h-12,4);c.fill();rr(c,x+w*.18,y+6,w*.14,h-12,4);c.fill()}else{rr(c,x+6,y+h*.62,w-12,h*.16,4);c.fill();rr(c,x+6,y+h*.18,w-12,h*.14,4);c.fill()}
+        if(v.p)gPet(c,x+w*.42,y+h*.5,cs*.95,S.done?'party':'happy');
+      });
+    },
+    down(x,y){
+      if(S.done||GM.busy)return;const {cs,x0,y0}=S,cc=Math.floor((x-x0)/cs),r=Math.floor((y-y0)/cs);if(cc<0||r<0||cc>=N||r>=N)return;
+      const g=occ(S.vs),i=g[r*N+cc];if(i<0)return;const v=S.vs[i],[lo,hi]=range(S.vs,i);
+      S.drag={i,lo,hi,start:v.h?v.c:v.r,f:v.h?v.c:v.r,px:x,py:y};
+    },
+    move(x,y,p){if(!S.drag||!p)return;const d=S.drag,v=S.vs[d.i],delta=(v.h?x-d.px:y-d.py)/S.cs;d.f=Math.max(d.lo,Math.min(d.hi,d.start+delta))},
+    up(){
+      const d=S.drag;if(!d)return;S.drag=null;const v=S.vs[d.i],n=Math.round(d.f);
+      if(n!==d.start){GM.hist.push(JSON.stringify(S.vs));if(v.h)v.c=n;else v.r=n;GM.st.moves++;gSfx('slide');
+        if(v.p&&v.c===N-2){S.done=true;S.out=0;gSfx('vroom');if(GM.st.moves<=S.min)gBanner(t('gPerfect'),'#e09a00',1.4);arcSolved()}}
+    },
+    undo(){if(S.done||!GM.hist.length)return;S.vs=JSON.parse(GM.hist.pop());GM.st.moves++},
+    restart(){if(S.done)return;S.vs=JSON.parse(S.v0);GM.hist=[]}
   };
 })();
 
@@ -2701,7 +2988,8 @@ $('onbDone').onclick=()=>{state.onboarded=true;closeSheet('onbScrim');render();w
 
 /* --- beállítások --- */
 $('openSet').onclick=()=>{buildBtnCfg();renderSound();renderPetSettings();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderSettings();openSheet('setScrim')};
-$('openHelp').onclick=()=>openSheet('helpScrim');
+$('openHelp').onclick=()=>{document.querySelectorAll('#helpScrim details[open]').forEach(d=>d.open=false);openSheet('helpScrim')};
+document.querySelectorAll('#helpScrim details').forEach(d=>d.addEventListener('toggle',()=>{if(d.open){document.querySelectorAll('#helpScrim details[open]').forEach(o=>{if(o!==d)o.open=false});setTimeout(()=>d.scrollIntoView({block:'nearest',behavior:'smooth'}),30)}}));
 $('nameSet').oninput=()=>{state.name=cleanName($('nameSet').value);render();writeSettings()};
 document.querySelectorAll('[data-lang-btn]').forEach(b=>b.onclick=()=>{state.lang=b.dataset.langBtn;applyLang();renderSettings();render();writeSettings()});
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{state.view=b.dataset.view;renderSettings();render();writeSettings()});
@@ -3022,7 +3310,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='9.5';
+const APP_VERSION='9.6';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
