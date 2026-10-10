@@ -240,6 +240,22 @@ h2{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mu
 #setScrim .sheet>div{background:var(--surface);border-radius:18px;padding:14px}
 #setScrim .sheet>div>h2{display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:1rem;color:var(--ink);font-weight:800;margin:0 0 12px}
 #setScrim .sheet>div>h2 label{font:inherit;color:inherit}
+#setScrim .sheet{gap:10px}
+#setScrim .sheet>div.ssec{padding:0}
+#setScrim .sheet>div.ssec>h2{margin:0;padding:12px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+#setScrim .ssec>h2 label{pointer-events:none}
+#setScrim .ssec>h2 .cv{margin-left:auto;flex-shrink:0;width:9px;height:9px;border-right:2.5px solid var(--water);border-bottom:2.5px solid var(--water);transform:rotate(45deg);transition:transform .2s;margin-right:4px}
+#setScrim .ssec.open>h2 .cv{transform:rotate(-135deg)}
+#setScrim .ssec>.sbody{padding:0 14px 14px}
+#setScrim .ssec:not(.open)>.sbody{display:none}
+#setScrim .smove{display:none;margin-left:auto;gap:6px}
+#setScrim .smove button{width:36px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:1rem;cursor:pointer}
+#setScrim .sheet.reorder .smove{display:flex}#setScrim .sheet.reorder .ssec>h2 .cv{display:none}
+#setScrim .sheet.reorder .ssec>.sbody{display:none}
+#setScrim .sheet>div.stools{background:none;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.stools button{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:700 .85rem var(--body);cursor:pointer}
+.stools button[aria-pressed="true"]{background:var(--water);color:#fff;border-color:transparent}
+.stools p{flex-basis:100%;margin:2px 4px 0}
 .sic{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:#fff;flex:none;background:var(--sc)}
 .sic svg{width:18px;height:18px}
 #setScrim .calc{background:var(--bg)}
@@ -1021,7 +1037,7 @@ const I18N={
 hu:{
   dec:',', months:['január','február','március','április','május','június','július','augusztus','szeptember','október','november','december'],
   days:['vasárnap','hétfő','kedd','szerda','csütörtök','péntek','szombat'], short:['V','H','K','Sze','Cs','P','Szo'], todayShort:'ma',
-  dateFmt:(d,m,wd)=>m+' '+d+'.\n'+wd,
+  dateFmt:(d,m,wd,y)=>y+'. '+m+' '+d+'.\n'+wd,
   unitLong:(v,u)=>u==='l'?'liter':'deciliter',
   help:'Súgó', settings:'Beállítások', close:'Bezárás', todaySummary:'Mai összesítő', todayConditions:'Mai körülmények',
   factExp:'Most itt kéne', factProj:'Becsült esti', factLast:'Utolsó ivás',
@@ -1039,7 +1055,7 @@ hu:{
   unit:'Mértékegység', unitDl:'Deciliter (dl)', unitL:'Liter (l)', unitNote:'1 liter = 10 deciliter. Csak a kijelzés változik, a naplód ugyanaz marad.',
   window:'Napi időszak', start:'Kezdés', end:'Vége', windowNote:'Erre az időszakra osztja el a napi célt a tempó-javaslat. Ezen kívül is bármikor rögzítheted az ivást.',
   appearance:'Megjelenés', mSystem:'Rendszer', mLight:'Nappali', mDark:'Éjszakai',
-  color:'Szín', cOcean:'Óceán', cMint:'Menta', cCoral:'Korall', cLavender:'Levendula',
+  color:'Téma', sOpenAll:'Mind kinyit', sCloseAll:'Mind becsuk', sReorder:'Sorrend', sReorderDone:'Kész', sMoveUp:'Feljebb', sMoveDown:'Lejjebb', sReorderNote:'A nyilakkal rendezheted a részeket. A sorrendet megjegyzem.', cOcean:'Óceán', cMint:'Menta', cCoral:'Korall', cLavender:'Levendula',
   calcTitle:'Alapcél számítása', weight:'Testsúly', suggested:'Javasolt alapcél', useSugg:'Beállítom alapcélnak',
   suggExpl:(w,tot)=>w+' kg × 30 ml = '+tot+' teljes vízigény, ennek kb. 80%-a jön italból.',
   baseManual:'Alapcél kézzel', goalMinus:'Alapcél csökkentése', goalPlus:'Alapcél növelése',
@@ -1130,7 +1146,7 @@ hu:{
 en:{
   dec:'.', months:['January','February','March','April','May','June','July','August','September','October','November','December'],
   days:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], short:['Su','Mo','Tu','We','Th','Fr','Sa'], todayShort:'today',
-  dateFmt:(d,m,wd)=>m+' '+d+'\n'+wd,
+  dateFmt:(d,m,wd,y)=>m+' '+d+', '+y+'\n'+wd,
   unitLong:(v,u)=>(u==='l'?'liter':'deciliter')+(v==='1'?'':'s'),
   help:'Help', settings:'Settings', close:'Close', todaySummary:'Today’s summary', todayConditions:'Today’s conditions',
   factExp:'Should be at', factProj:'Evening estimate', factLast:'Last drink',
@@ -1148,7 +1164,7 @@ en:{
   unit:'Unit', unitDl:'Deciliters (dl)', unitL:'Liters (l)', unitNote:'1 liter = 10 deciliters. Only the display changes, your log stays the same.',
   window:'Daily window', start:'Start', end:'End', windowNote:'The pace suggestion spreads your daily goal across this window. You can log drinks outside it at any time.',
   appearance:'Appearance', mSystem:'System', mLight:'Light', mDark:'Dark',
-  color:'Color', cOcean:'Ocean', cMint:'Mint', cCoral:'Coral', cLavender:'Lavender',
+  color:'Theme', sOpenAll:'Expand all', sCloseAll:'Collapse all', sReorder:'Reorder', sReorderDone:'Done', sMoveUp:'Move up', sMoveDown:'Move down', sReorderNote:'Use the arrows to reorder sections. I’ll remember the order.', cOcean:'Ocean', cMint:'Mint', cCoral:'Coral', cLavender:'Lavender',
   calcTitle:'Calculate base goal', weight:'Body weight', suggested:'Suggested base goal', useSugg:'Use as base goal',
   suggExpl:(w,tot)=>w+' kg × 30 ml = '+tot+' total water need, about 80% of which comes from drinks.',
   baseManual:'Set base goal by hand', goalMinus:'Decrease base goal', goalPlus:'Increase base goal',
@@ -1349,6 +1365,38 @@ function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(state))}catch(e)
 
 /* --- beállítás-ikonok --- */
 const SET_ICONS={"petSec":["#d26d08","<circle cx=\"7\" cy=\"9\" r=\"2.2\"/><circle cx=\"11\" cy=\"5.5\" r=\"2.2\"/><circle cx=\"15.5\" cy=\"6.5\" r=\"2.2\"/><circle cx=\"18\" cy=\"11\" r=\"2.2\"/><path d=\"M8.5 16.5c0-2.6 2-4.5 4.2-4.5s4.3 1.9 4.3 4.3c0 2-1.5 3.2-3.4 3.2-1 0-1.6-.4-2.4-.4s-1.2.4-2 .4c-1.6 0-2.7-1.2-2.7-3z\"/>"],"language": ["#3fa9f5", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z\"/>"], "nameQ": ["#ff5f8f", "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5\"/>"], "display": ["#14b8a6", "<path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/>"], "mode": ["#8a5cf6", "<path d=\"M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12\"/><circle cx=\"16\" cy=\"6\" r=\"2\"/><circle cx=\"10\" cy=\"12\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>"], "drinksSec": ["#22a861", "<path d=\"M7 4h10l-1.2 16H8.2z\"/><path d=\"M7.5 9h9\"/>"], "buttonsSec": ["#f08a1c", "<rect x=\"3\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"13\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"3\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"13\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\"/>"], "unit": ["#3fa9f5", "<path d=\"M3 17L17 3l4 4L7 21z\"/><path d=\"M7 13l2 2M10 10l2 2M13 7l2 2\"/>"], "window": ["#14b8a6", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/>"], "soundSec": ["#f08a1c", "<path d=\"M4 9v6h4l5 4V5L8 9z\"/><path d=\"M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11\"/>"], "appearance": ["#ff5f8f", "<circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/>"], "color": ["#d946a8", "<path d=\"M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.9 1.8-1.8 0-1.3-1-1.5-1-2.6 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.7 17 3 12 3z\"/><circle cx=\"7.5\" cy=\"11\" r=\"1.2\"/><circle cx=\"10\" cy=\"7\" r=\"1.2\"/><circle cx=\"15\" cy=\"7\" r=\"1.2\"/>"], "calcTitle": ["#8a5cf6", "<path d=\"M5 20h14l-2-12H7z\"/><circle cx=\"12\" cy=\"5\" r=\"2\"/>"], "baseManual": ["#5b3fd6", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><circle cx=\"12\" cy=\"12\" r=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"1.3\"/>"], "data": ["#64748b", "<ellipse cx=\"12\" cy=\"5.5\" rx=\"7.5\" ry=\"2.5\"/><path d=\"M4.5 5.5v13c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-13M4.5 12c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5\"/>"]};
+function setSecKey(sec){const h=sec.querySelector(':scope>h2'),el=h&&(h.querySelector('[data-t]')||h);return el?el.dataset.t:''}
+function normSetUI(){const u=state.setUI&&typeof state.setUI==='object'?state.setUI:{};state.setUI={open:Array.isArray(u.open)?u.open:[],order:Array.isArray(u.order)?u.order:[]}}
+function initSetSections(){
+  const sh=document.querySelector('#setScrim .sheet');if(sh.dataset.secs)return;sh.dataset.secs='1';
+  const secs=[...sh.children].filter(x=>x.tagName==='DIV'&&x.querySelector(':scope>h2'));
+  secs.forEach(sec=>{const key=setSecKey(sec),h=sec.querySelector(':scope>h2');sec.dataset.sec=key;sec.classList.add('ssec');
+    const body=document.createElement('div');body.className='sbody';[...sec.children].forEach(ch=>{if(ch!==h)body.appendChild(ch)});sec.appendChild(body);
+    h.setAttribute('role','button');h.tabIndex=0;
+    const cv=document.createElement('span');cv.className='cv';cv.setAttribute('aria-hidden','true');h.appendChild(cv);
+    const mv=document.createElement('span');mv.className='smove';mv.innerHTML='<button type="button" data-mv="-1">▲</button><button type="button" data-mv="1">▼</button>';h.appendChild(mv);
+    mv.querySelectorAll('button').forEach(b=>b.onclick=e=>{e.stopPropagation();e.preventDefault();moveSec(sec,+b.dataset.mv)});
+    const tog=e=>{if(sh.classList.contains('reorder'))return;e.preventDefault();sec.classList.toggle('open');h.setAttribute('aria-expanded',sec.classList.contains('open'));saveSetUI()};
+    h.addEventListener('click',tog);h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')tog(e)});
+  });
+  const tb=document.createElement('div');tb.className='stools';
+  tb.innerHTML='<button type="button" id="sOpenAll" data-t="sOpenAll"></button><button type="button" id="sCloseAll" data-t="sCloseAll"></button><button type="button" id="sReorder" data-t="sReorder" aria-pressed="false"></button><p class="small" id="sReorderNote" data-t="sReorderNote" hidden></p>';
+  sh.querySelector(':scope>header').after(tb);tb.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.dataset.t));
+  $('sOpenAll').onclick=()=>{sh.querySelectorAll('.ssec').forEach(x=>{x.classList.add('open');x.querySelector('h2').setAttribute('aria-expanded','true')});saveSetUI()};
+  $('sCloseAll').onclick=()=>{sh.querySelectorAll('.ssec').forEach(x=>{x.classList.remove('open');x.querySelector('h2').setAttribute('aria-expanded','false')});saveSetUI()};
+  $('sReorder').onclick=()=>{const on=!sh.classList.contains('reorder');sh.classList.toggle('reorder',on);$('sReorder').setAttribute('aria-pressed',on);$('sReorder').textContent=t(on?'sReorderDone':'sReorder');$('sReorderNote').hidden=!on};
+  applySetUI();
+}
+function moveSec(sec,dir){const all=[...document.querySelectorAll('#setScrim .ssec')].filter(x=>getComputedStyle(x).display!=='none'),i=all.indexOf(sec),o=all[i+dir];if(!o)return;
+  if(dir<0)o.before(sec);else o.after(sec);sec.scrollIntoView({block:'nearest',behavior:'smooth'});saveSetUI()}
+function saveSetUI(){const secs=[...document.querySelectorAll('#setScrim .ssec')];state.setUI={order:secs.map(x=>x.dataset.sec),open:secs.filter(x=>x.classList.contains('open')).map(x=>x.dataset.sec)};saveLocal()}
+function applySetUI(){
+  normSetUI();const sh=document.querySelector('#setScrim .sheet'),secs=[...sh.querySelectorAll(':scope>.ssec')],by={};secs.forEach(x=>by[x.dataset.sec]=x);
+  let order=state.setUI.order.filter(k=>by[k]);const def=secs.map(x=>x.dataset.sec).filter(k=>k!=='language').concat(['language']);
+  def.forEach((k,i)=>{if(!order.includes(k)){const prev=def[i-1],pi=order.indexOf(prev);order.splice(pi>=0?pi+1:order.length,0,k)}});
+  order.forEach(k=>sh.appendChild(by[k]));
+  secs.forEach(x=>{const o=state.setUI.open.includes(x.dataset.sec);x.classList.toggle('open',o);x.querySelector('h2').setAttribute('aria-expanded',o)});
+}
 function decorateSettings(){
   document.querySelectorAll('#setScrim .sheet>div>h2').forEach(h=>{
     const el=h.querySelector('[data-t]')||h,key=el.dataset.t,ic=SET_ICONS[key];if(!ic||h.querySelector('.sic'))return;
@@ -1367,7 +1415,7 @@ function applyLang(){
   document.querySelectorAll('[data-lang]').forEach(el=>{el.hidden=el.dataset.lang!==(state.lang==='en'?'en':'hu')});
   document.querySelectorAll('[data-lang-btn]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.langBtn===(state.lang||'hu')));
   buildDrinkRow();buildEditor();buildBtnCfg();if(!$('drinksScrim').hidden)buildDrinkList();
-  decorateSettings();renderSound();buildPetGrid();buildVehGrid();renderPetSettings();petKey='';
+  decorateSettings();initSetSections();renderSound();buildPetGrid();buildVehGrid();renderPetSettings();petKey='';
 }
 
 /* --- téma --- */
@@ -3913,7 +3961,7 @@ function drawTicks(g){
 function setKpi(id,val,unit){const el=$(id);el.textContent=val;const s=document.createElement('small');s.textContent=unit;el.appendChild(s)}
 function render(){
   const now=new Date(),k=keyOf(now),d=dayOf(k),tot=sum(d),g=goalOf(d),adv=state.ui==='advanced',Ld=L();
-  $('date').textContent=Ld.dateFmt(now.getDate(),Ld.months[now.getMonth()],Ld.days[now.getDay()]);
+  $('date').textContent=Ld.dateFmt(now.getDate(),Ld.months[now.getMonth()],Ld.days[now.getDay()],now.getFullYear());
   $('date').style.whiteSpace='pre-line';
   $('total').firstChild.nodeValue=uv(tot);$('total').lastChild.textContent=longU(tot);
   renderButtons();
@@ -4000,7 +4048,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='9.9';
+const APP_VERSION='10.0';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
