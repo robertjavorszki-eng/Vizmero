@@ -377,6 +377,12 @@ body.advanced .adv.grid{display:grid}
 .gstats b{font-size:1.1rem;color:#1d1a33}
 .gpanel .gh{max-width:360px;color:#3b3566;margin:0}
 .gpanel .primary{width:100%;max-width:360px;flex-shrink:0;background:#5b3fd6}
+.ghelp{position:absolute;inset:0;z-index:5;background:rgba(29,26,51,.45);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
+.ghcard{background:#fff;color:#1d1a33;border-radius:22px;padding:18px 18px 16px;max-width:360px;width:100%;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 12px 40px rgba(0,0,0,.25);max-height:100%;overflow-y:auto;box-sizing:border-box}
+.ghcard h4{margin:0;font-size:1.25rem}.ghcard p{margin:0;color:#5f5699;font-weight:700}
+.ghcard ul{list-style:none;margin:4px 0;padding:0;display:flex;flex-direction:column;gap:8px;align-self:stretch}
+.ghcard li{background:#f3f0ff;border-radius:12px;padding:9px 12px;font-weight:600;line-height:1.35;font-size:.95rem}
+.ghcard .primary{width:100%;background:#5b3fd6;margin-top:4px}
 .gpanel .primary.alt{background:#1d8a5b}
 .gpanel .ghost{border:none;background:none;color:#5b3fd6;font:800 .95rem var(--body);padding:8px;cursor:pointer;flex-shrink:0}
 .gpanel>*{flex-shrink:0}
@@ -825,8 +831,8 @@ body.modal{overflow:hidden}
 <!-- Súgó / Help -->
 <div class="scrim game" id="gameScrim" hidden>
   <div class="sheet gsheet" role="dialog" aria-modal="true" aria-labelledby="gTitle">
-    <header><h3 id="gTitle" data-t="gTitle"></h3><button class="icon" data-close="gameScrim" data-ta="close">✕</button></header>
-    <div class="gwrap"><canvas id="gCan" aria-label="game"></canvas><div class="gtools" id="gTools" hidden><button id="gUndo"><span data-t="gUndo"></span></button><button id="gRestart"><span data-t="gRestart"></span></button><button id="gQuit"><span data-t="gQuit"></span></button></div><div class="gpanel" id="gPanel" hidden></div></div>
+    <header><h3 id="gTitle" data-t="gTitle"></h3><span style="display:flex;gap:8px"><button class="icon" id="gHelpBtn" data-ta="gHelpTitle" hidden style="font-weight:900">?</button><button class="icon" data-close="gameScrim" data-ta="close">✕</button></span></header>
+    <div class="gwrap"><canvas id="gCan" aria-label="game"></canvas><div class="gtools" id="gTools" hidden><button id="gUndo"><span data-t="gUndo"></span></button><button id="gRestart"><span data-t="gRestart"></span></button><button id="gQuit"><span data-t="gQuit"></span></button></div><div class="gpanel" id="gPanel" hidden></div><div class="ghelp" id="gHelpBox" hidden></div></div>
   </div>
 </div>
 <div class="scrim" id="helpScrim" hidden>
@@ -877,7 +883,7 @@ body.modal{overflow:hidden}
       <p>Mindegyik állatnak saját hangja van: a kutya vakkant, a cica nyávog, a madárka csiripel, a dínó és a sárkány bömböl, a farkas vonyít, a cápa csattog. A járművek dudálnak, berregnek, szirénáznak, a mozdony fütyül. A <b>Hangja</b> résznél választhatod, hogy soha, csak koppintásra, eseményeknél is (ital hozzáadása, cél teljesítése), vagy néha magától is megszólaljon.</p>
     </div></details>
     <details class="hsec"><summary>Játékterem és napi kihívás</summary><div class="hbody">
-      <p>A kedvenced alatti <b>Napi kihívás</b> gomb a Játékterembe visz. Itt ügyességi játékok (pl. Cseppfogó, Feltörő) és fejtörők (Csőszerelő, Színes italok, Kancsók, Dugó, Csúszós jég, Ládatologató, Cseppösszevonó, Italos sudoku) közül választhatsz. Az ügyességiek: Cseppfogó, Feltörő, Buborék lövő, Repkedő, Kacskaringós út, Csepp-futam, Felhőugró, Tizenegyes, Kosárdobó, Párkereső. Minden játék elején rövid leírás mondja el, hogyan kell játszani. Mindegyikben a saját kedvenced szerepel, és a szintek egyre nehezebbek. A fejtörők ott folytatódnak, ahol abbahagytad, és van bennük visszalépés és újrakezdés.</p>
+      <p>A kedvenced alatti <b>Napi kihívás</b> gomb a Játékterembe visz. Itt ügyességi játékok (pl. Cseppfogó, Feltörő) és fejtörők (Csőszerelő, Színes italok, Kancsók, Dugó, Csúszós jég, Ládatologató, Cseppösszevonó, Italos sudoku) közül választhatsz. Az ügyességiek: Cseppfogó, Feltörő, Buborék lövő, Repkedő, Kacskaringós út, Csepp-futam, Felhőugró, Tizenegyes, Kosárdobó, Párkereső. Minden játék első indításakor egy rövid útmutató mondja el, mit kell csinálni, és később is bármikor elolvashatod a fenti <b>?</b> gombbal (addig a játék megáll). Mindegyikben a saját kedvenced szerepel, és a szintek egyre nehezebbek. A fejtörők ott folytatódnak, ahol abbahagytad, és van bennük visszalépés és újrakezdés.</p>
       <p>Minden nap más játékból jön a <b>napi kihívás</b>. Az ügyességi játékokban ez egy feladat (pl. „Kapj el 35 cseppet”), a fejtörőknél egy közös napi feladvány, ami mindenkinek ugyanaz. Így a családban össze lehet hasonlítani, ki hány lépésből oldotta meg. Ha teljesíted a kihívást, nő a <b>széria</b>. Ha kimarad egy nap, egy <b>szériabefagyasztó</b> ❄️ megmenti: az elején kapsz egyet, és minden 7 napos széria után még egyet (legfeljebb kettő lehet nálad). A játékok eredményei csak ezen a telefonon tárolódnak.</p>
     </div></details>
     <details class="hsec"><summary>Hangok és rezgés</summary><div class="hbody">
@@ -962,7 +968,7 @@ body.modal{overflow:hidden}
       <p>Every animal has its own sound: the dog barks, the cat meows, the bird chirps, the dino and dragon roar, the wolf howls, the shark chomps. Vehicles honk, rev, wail their sirens, and the train whistles. Under <b>Its sound</b> choose whether it never makes a sound, only when tapped, on events too (adding a drink, reaching your goal), or now and then on its own.</p>
     </div></details>
     <details class="hsec"><summary>Arcade and daily challenge</summary><div class="hbody">
-      <p>The <b>Daily challenge</b> button under your buddy opens the Arcade, with action games (e.g. Drop Catcher, Brick Breaker) and puzzles (Pipe Fixer, Drink Sort, Jugs, Traffic Jam, Slippery Ice, Crate Pusher, Drop Merge, Drink Sudoku). Action games: Drop Catcher, Brick Breaker, Bubble Shooter, Flappy Flyer, Twisty Road, Drop Dash, Cloud Jumper, Penalty Kick, Hoop Shot, Memory. Each game starts with a short how-to. Your own buddy stars in each, and the levels get harder and harder. Puzzles continue where you left off and have undo and restart.</p>
+      <p>The <b>Daily challenge</b> button under your buddy opens the Arcade, with action games (e.g. Drop Catcher, Brick Breaker) and puzzles (Pipe Fixer, Drink Sort, Jugs, Traffic Jam, Slippery Ice, Crate Pusher, Drop Merge, Drink Sudoku). Action games: Drop Catcher, Brick Breaker, Bubble Shooter, Flappy Flyer, Twisty Road, Drop Dash, Cloud Jumper, Penalty Kick, Hoop Shot, Memory. Each game shows a short how-to the first time you play it, and you can reread it anytime with the <b>?</b> button at the top (the game pauses meanwhile). Your own buddy stars in each, and the levels get harder and harder. Puzzles continue where you left off and have undo and restart.</p>
       <p>Every day the <b>daily challenge</b> comes from a different game: a task in action games (e.g. “Catch 35 drops”), or a shared daily puzzle that is the same for everyone, so the family can compare who needed the fewest moves. Complete it to grow your <b>streak</b>. If you miss a day, a <b>streak freeze</b> ❄️ saves it: you start with one and earn another with every 7-day streak (you can hold two at most). Game results are stored only on this phone.</p>
     </div></details>
     <details class="hsec"><summary>Sounds and vibration</summary><div class="hbody">
@@ -1739,7 +1745,7 @@ function normalizeGame(){
   const lv=g.lv&&typeof g.lv==='object'?g.lv:{};
   state.game={streak:+g.streak||0,bestStreak:+g.bestStreak||0,last:typeof g.last==='string'?g.last:'',
     freezes:g.freezes==null?1:Math.max(0,Math.min(2,+g.freezes||0)),frozen:Array.isArray(g.frozen)?g.frozen.slice(-30):[],plays:+g.plays||0,
-    bests,lv,dailyMoves:g.dailyMoves&&g.dailyMoves.d===keyOf(new Date())?g.dailyMoves:null};
+    bests,lv,seen:g.seen&&typeof g.seen==='object'?g.seen:{},dailyMoves:g.dailyMoves&&g.dailyMoves.d===keyOf(new Date())?g.dailyMoves:null};
 }
 function dayDiff(a,b){const p=k=>{const x=k.split('-').map(Number);return Date.UTC(x[0],x[1]-1,x[2])};return Math.round((p(b)-p(a))/864e5)}
 function gameStreakCheck(){
@@ -1812,7 +1818,8 @@ function arcNew(id,opts){
   gLoadImgs();$('gPanel').hidden=true;$('gTitle').textContent=t('gn_'+id);state.game.plays++;saveLocal();
   $('gTools').hidden=g.kind!=='puzzle';
   if(g.kind==='puzzle'){GM.level=opts.daily?(g.dailyLevel||6):Math.max(1,state.game.lv[id]||1);GM.st.solved=0}
-  g.init();cancelAnimationFrame(GM.raf);GM.last=performance.now();GM.raf=requestAnimationFrame(gLoop);
+  g.init();$('gHelpBtn').hidden=false;if(!state.game.seen[id])gHelp(true);
+  cancelAnimationFrame(GM.raf);GM.last=performance.now();GM.raf=requestAnimationFrame(gLoop);
 }
 function gLoop(now){
   const dt=Math.min(.05,(now-GM.last)/1000);GM.last=now;
@@ -1853,7 +1860,7 @@ function arcSolved(){
   setTimeout(()=>{if(!GM.on||GM.id!==g.key)return;GM.busy=false;GM.level++;state.game.lv[g.key]=Math.max(state.game.lv[g.key]||1,GM.level);saveLocal();GM.hist=[];g.init();gBanner(t('gLevel',GM.level))},1500);
 }
 function arcOver(why){
-  if(!GM.on)return;GM.on=false;const g=ARC[GM.id];if(why!=='daily'&&why!=='quit')gSfx('over');
+  if(!GM.on)return;GM.on=false;gHelp(false);$('gHelpBtn').hidden=true;const g=ARC[GM.id];if(why!=='daily'&&why!=='quit')gSfx('over');
   const B=state.game.bests,val=g.kind==='puzzle'?Math.max(B[GM.id]||0,state.game.lv[GM.id]||1):GM.score,rec=g.kind!=='puzzle'&&GM.score>(B[GM.id]||0);
   B[GM.id]=g.kind==='puzzle'?val:Math.max(B[GM.id]||0,GM.score);saveLocal();
   GM.lastWhy=why;$('gTools').hidden=true;gDraw(0);gPanel('over',rec);
@@ -1956,11 +1963,19 @@ function gPanel(kind,rec,id){
   if($('gDailyGo'))$('gDailyGo').onclick=()=>{audio();arcNew(id,{daily:ARC[id].kind==='puzzle'})};
   $('gMenu').onclick=()=>gPanel('menu');
 }
+function gHelp(show){
+  const box=$('gHelpBox');if(!box)return;
+  if(!show){if(!box.hidden){box.hidden=true;if(GM.on){GM.paused=false;GM.last=performance.now()}}return}
+  const id=GM.id;if(!id)return;GM.paused=true;
+  box.innerHTML='<div class="ghcard">'+gIcon(id,true)+'<h4>'+esc(t('gn_'+id))+'</h4><p class="small">'+esc(t('gHelpTitle'))+'</p><ul>'+(L().gTips[id]||[]).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><button class="primary" id="gHelpOk">'+esc(t('gHelpOk'))+'</button></div>';
+  box.hidden=false;$('gHelpOk').onclick=()=>{state.game.seen[id]=1;saveLocal();gHelp(false)};
+}
 function openGame(){
-  gameStreakCheck();openSheet('gameScrim');GM.on=false;GM.id=null;GM.parts=[];GM.texts=[];GM.t=0;$('gTools').hidden=true;
+  gameStreakCheck();openSheet('gameScrim');$('gHelpBtn').hidden=true;$('gHelpBox').hidden=true;GM.on=false;GM.id=null;GM.parts=[];GM.texts=[];GM.t=0;$('gTools').hidden=true;
   requestAnimationFrame(()=>{gResize();gPanel('menu')});
 }
 function gameStop(){
+  $('gHelpBox').hidden=true;
   if(GM.on){const g=ARC[GM.id];GM.on=false;cancelAnimationFrame(GM.raf);if(g.kind!=='puzzle'&&GM.score>(state.game.bests[GM.id]||0)){state.game.bests[GM.id]=GM.score;saveLocal()}}
   renderGameBtn();if(GM.chHit)petSay(t('gPetWin'));
 }
@@ -2087,6 +2102,47 @@ Object.assign(I18N.en,{
   ch_soccer_goals:n=>'Score '+n+' goals in one game', ch_soccer_targets:n=>'Hit the target '+n+' times', ch_soccer_level:n=>'Reach level '+n,
   ch_hoops_baskets:n=>'Make '+n+' baskets in one game', ch_hoops_swish:n=>'Make '+n+' swishes', ch_hoops_level:n=>'Reach level '+n
 });
+
+Object.assign(I18N.hu,{gSwipeOnly:'húzd az ujjad fel, le, balra vagy jobbra',gHelpOk:'Értem, mehet!', gHelpTitle:'Hogyan kell játszani?', gTips:{
+  catch:['👆 Húzd az ujjad balra-jobbra, a kedvenced követi.','💧 Kapd el a cseppeket! Fent a víz-csík fogy, a cseppek töltik.','🪨 Kerüld a köveket és a méheket, a só kiszárít.','❤️ Szív, 🛡️ pajzs, 🧲 mágnes, ⏱️ lassítás: ezeket érdemes elkapni.'],
+  breakout:['👆 Húzd az ujjad: a kedvenced viszi az ütőt.','💧 Koppints az indításhoz, és pattintsd a cseppet a blokkokba.','🧊 A jég két ütésre törik, a kő sosem.','🫧 A buborékból bónusz pottyan, kapd el az ütővel!'],
+  bubble:['👆 Tartsd az ujjad a képernyőn és célozz, engedd el a lövéshez.','🎯 Ha 3 vagy több egyforma szín összeér, kipukkannak.','💧 A vízbuborék plusz pont, a 🌈 bármelyik színhez illik.','⬇️ Ha sokáig nem pukkan semmi, lejjebb jön a plafon.'],
+  fly:['👆 Koppints: a kedvenced felrepül. Ha nem koppintasz, esik.','☁️ Repülj át a felhők közötti réseken!','💧 Szedd össze a cseppeket.','⛈️ A 3. szinttől a viharfelhők mozognak.'],
+  road:['👆 Húzd az ujjad balra-jobbra a kormányzáshoz.','🛣️ Maradj az úton! Ha sokáig lemész róla, életet veszítesz.','🚧 Kerüld a bóját és az autókat, a pocsolyán megcsúszol.','💧 A cseppek töltik a víz-csíkot.'],
+  run:['👈👉 Húzd balra vagy jobbra: sávváltás.','👆 Húzd felfelé: ugrás az alacsony korlát fölött.','👇 Húzd lefelé: bebújás a magas sorompó alatt.','🚂 A vonatot csak kikerülni lehet!'],
+  jump:['👆 Húzd az ujjad balra-jobbra, a kedvenced magától ugrál.','☁️ Ugrálj felhőről felhőre egyre feljebb!','🌈 A rugó magasra dob, az esőfelhő egy ugrás után eltűnik.','🐝 A méhet felülről ráugorva legyőzöd, oldalról megcsíp.'],
+  soccer:['👆 Tedd az ujjad a labdára, és húzd a kapu felé.','↔️ Amerre húzod, oda megy a labda.','↕️ Hosszabb húzás = magasabb lövés (de ne a léc fölé!).','🧤 Lődd el a kapus mellett! 3 hiba és vége.'],
+  hoops:['👆 Húzd az ujjad felfelé, és engedd el.','⚪ A pöttyök mutatják, merre repül a labda.','💦 A palánk érintése nélküli „csobb” 3 pont.','⏱️ Minden kosár időt ad, a 2. szinttől mozog a palánk.'],
+  memo:['👆 Koppints egy kártyára, majd egy másikra.','🃏 Ha egyformák, ott maradnak, ha nem, visszafordulnak.','🧠 Jegyezd meg, mi hol volt!','⏱️ Találd meg az összes párt, mielőtt lejár az idő.'],
+  merge:['👆 Húzd az ujjad fel, le, balra vagy jobbra: minden lap arra csúszik.','➕ Két egyforma lap összeolvad: 💧+💧 = 🥄 kanál, 🥄+🥄 = 🥛 pohár…','🌊 Cél: minél nagyobbat építeni, egészen az óceánig!','⚠️ Minden lépés után új csepp jön. Ha betelik a tábla, vége.'],
+  pipe:['👆 Koppints egy csőre: elfordul.','💧 Vezesd el a vizet fent a csaptól lent a kedvenced táljáig.','🔵 A víz alatt lévő csövek kékek, így látod, meddig jut el.','↩️ A Vissza és az Újra gomb segít.'],
+  sort:['👆 Koppints egy pohárra (felemelkedik), majd oda, ahová önteni akarsz.','🎨 Csak azonos színre vagy üres pohárba lehet tölteni.','✅ Akkor kész, ha minden pohárban csak egy szín van.','❓ A 8. szinttől rejtett rétegek is vannak.'],
+  jugs:['🚰 „Tölt”: tele a kancsó. 🫗 „Kiönt”: üres lesz.','👆 Koppints egy kancsóra, majd egy másikra: átönti, amennyi belefér.','🎯 Mérj ki pontosan annyit, amennyit fent kér!','⭐ A legkevesebb lépésből tökéletes.'],
+  jam:['👆 Fogd meg és húzd az autókat.','↔️ Minden autó csak előre-hátra mehet a saját irányában.','🚗 Szabadítsd ki a piros autót (rajta ül a kedvenced) jobbra a kijáraton!','⭐ A legkevesebb lépésből tökéletes.'],
+  ice:['👆 Húzd az ujjad egy irányba (vagy koppints a kedvenced mellé).','🧊 A jégen addig csúszik, amíg falba vagy kőbe nem ütközik.','❄️ A hó megállítja.','🥣 Állj meg pont a tálnál!'],
+  soko:['👆 Húzd az ujjad abba az irányba, amerre lépni szeretnél.','🛢️ A hordókat csak tolni tudod, húzni nem.','🎯 Told mindet a szaggatott körökre!','⚠️ Sarokba tolt hordó ott ragad, ilyenkor jön jól a Vissza.'],
+  sudoku:['👆 Koppints egy üres mezőre, majd lent egy italra.','🧩 Minden sorban, oszlopban és vastag keretes dobozban minden ital egyszer szerepel.','🟥 Ha ütközik valamivel, pirosan látszik.','✕ Ezzel törölheted a mezőt.']
+}});
+Object.assign(I18N.en,{gSwipeOnly:'swipe up, down, left or right',gHelpOk:'Got it, let’s go!', gHelpTitle:'How to play', gTips:{
+  catch:['👆 Slide your finger left and right, your buddy follows.','💧 Catch the drops! The water bar drains, drops refill it.','🪨 Dodge rocks and bees, salt dries you out.','❤️ Heart, 🛡️ shield, 🧲 magnet, ⏱️ slow-mo: worth catching.'],
+  breakout:['👆 Slide your finger: your buddy carries the paddle.','💧 Tap to launch and bounce the drop into the blocks.','🧊 Ice takes two hits, stone never breaks.','🫧 Bubbles drop bonuses – catch them with the paddle!'],
+  bubble:['👆 Hold your finger to aim, let go to shoot.','🎯 When 3 or more of the same color touch, they pop.','💧 Water bubbles score extra, 🌈 matches any color.','⬇️ If nothing pops for a while, the ceiling comes down.'],
+  fly:['👆 Tap to fly up. If you don’t tap, you fall.','☁️ Fly through the gaps between the clouds!','💧 Collect the drops.','⛈️ From level 3, storm clouds move.'],
+  road:['👆 Slide your finger left and right to steer.','🛣️ Stay on the road! Too long off it and you lose a life.','🚧 Dodge cones and cars, puddles make you skid.','💧 Drops refill the water bar.'],
+  run:['👈👉 Swipe left or right: change lane.','👆 Swipe up: jump over low barriers.','👇 Swipe down: duck under high bars.','🚂 Trains can only be dodged!'],
+  jump:['👆 Slide your finger left and right, your buddy hops by itself.','☁️ Hop from cloud to cloud, higher and higher!','🌈 Springs launch you, rain clouds vanish after one hop.','🐝 Stomp bees from above, from the side they sting.'],
+  soccer:['👆 Put your finger on the ball and swipe toward the goal.','↔️ The ball goes where you swipe.','↕️ Longer swipe = higher shot (but not over the bar!).','🧤 Beat the keeper! Three misses and it’s over.'],
+  hoops:['👆 Swipe up and let go.','⚪ The dots show where the ball will fly.','💦 A swish (no rim) is worth 3.','⏱️ Every basket adds time; from level 2 the hoop moves.'],
+  memo:['👆 Tap one card, then another.','🃏 Matching cards stay, others flip back.','🧠 Remember where things were!','⏱️ Find all pairs before time runs out.'],
+  merge:['👆 Swipe up, down, left or right: every tile slides that way.','➕ Two equal tiles merge: 💧+💧 = 🥄 spoon, 🥄+🥄 = 🥛 glass…','🌊 Goal: build as big as you can, all the way to the ocean!','⚠️ A new drop appears after each move. Board full = game over.'],
+  pipe:['👆 Tap a pipe to rotate it.','💧 Lead the water from the tap at the top to your buddy’s bowl at the bottom.','🔵 Pipes with water turn blue, so you see how far it gets.','↩️ Undo and Restart help.'],
+  sort:['👆 Tap a glass (it lifts), then the one to pour into.','🎨 Pour only onto the same color or into an empty glass.','✅ Done when every glass holds just one color.','❓ From level 8 some layers are hidden.'],
+  jugs:['🚰 “Fill”: jug full. 🫗 “Empty”: jug empty.','👆 Tap one jug, then another: it pours as much as fits.','🎯 Measure exactly the amount asked at the top!','⭐ Fewest moves = perfect.'],
+  jam:['👆 Grab and drag the cars.','↔️ Each car moves only back and forth along its direction.','🚗 Free the red car (your buddy rides it) through the exit on the right!','⭐ Fewest moves = perfect.'],
+  ice:['👆 Swipe in a direction (or tap beside your buddy).','🧊 On ice it slides until it hits a wall or a rock.','❄️ Snow stops it.','🥣 Stop right on the bowl!'],
+  soko:['👆 Swipe the way you want to step.','🛢️ You can only push barrels, not pull.','🎯 Push them all onto the dashed circles!','⚠️ A barrel in a corner is stuck – that’s what Undo is for.'],
+  sudoku:['👆 Tap an empty cell, then a drink below.','🧩 Each drink once in every row, column and thick-bordered box.','🟥 Conflicts show in red.','✕ clears the cell.']
+}});
 
 /* Cseppfogó */
 ARC.catch=(()=>{
@@ -2624,7 +2680,7 @@ ARC.merge=(()=>{
     step(dt){S.pop=S.pop.map(v=>Math.max(0,v-dt*4))},
     draw(c){
       const {cs,x0,y0}=S,W=GM.W;gSky(c,205,false);
-      c.textAlign='center';c.textBaseline='middle';c.font='700 12px system-ui';c.fillStyle='#5f5699';c.fillText(t('gSwipe'),W/2,112);
+      c.textAlign='center';c.textBaseline='middle';c.font='700 12px system-ui';c.fillStyle='#5f5699';c.fillText(t('gSwipeOnly'),W/2,112);
       const nx=Math.min(GM.st.tier+1,13);c.font='800 14px system-ui';c.fillStyle='#1d1a33';c.fillText(t('gNextTier',L().tiers[nx-1]),W/2,92);
       c.fillStyle='rgba(91,63,214,.18)';rr(c,x0-8,y0-8,cs*N+16,cs*N+16,18);c.fill();
       for(let i=0;i<N*N;i++){const x=x0+(i%N)*cs,y=y0+Math.floor(i/N)*cs,v=S.g[i];
@@ -3340,6 +3396,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden&&GM.on&&ARC
 window.addEventListener('resize',()=>{if(!$('gameScrim').hidden)gResize()});
 $('gUndo').onclick=()=>{const g=GM.on&&ARC[GM.id];if(g&&g.undo&&!GM.busy){g.undo();gSfx('tick')}};
 $('gRestart').onclick=()=>{const g=GM.on&&ARC[GM.id];if(g&&g.restart&&!GM.busy){g.restart();gSfx('slide')}};
+$('gHelpBtn').onclick=()=>{if(GM.on)gHelp(true)};
 $('gQuit').onclick=()=>{if(GM.on)arcOver('quit')};
 {const _close=closeSheet;closeSheet=function(id){if(id==='gameScrim')gameStop();_close(id)}}
 /* @@ARC_END@@ */
@@ -3943,7 +4000,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='9.8';
+const APP_VERSION='9.9';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
