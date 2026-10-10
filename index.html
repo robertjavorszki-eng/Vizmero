@@ -353,6 +353,29 @@ body.advanced .adv{display:revert}
 body.advanced .adv.flex{display:flex}
 body.advanced .adv.grid{display:grid}
 
+/* játék */
+.gamebtn{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border-radius:999px;border:none;background:#5b3fd6;color:#fff;font:800 .85rem var(--body);cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.gamebtn b{background:rgba(255,255,255,.22);border-radius:999px;padding:2px 7px;font-size:.78rem}
+.gamebtn.done{background:#1d8a5b}
+.scrim.game{align-items:stretch}
+.sheet.gsheet{max-height:none;height:100%;border-radius:0;padding:0;gap:0;overflow:hidden;touch-action:none}
+.sheet.gsheet>header{margin:0;padding:12px 16px 10px;top:0}
+.gwrap{position:relative;flex:1 1 auto!important;min-height:0;overflow:hidden}
+#gCan{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none}
+.gpanel{position:absolute;inset:0;overflow-y:auto;touch-action:pan-y;display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 18px calc(18px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);color:#1d1a33;text-align:center;box-sizing:border-box}
+.gpanel .gpet svg{width:130px;height:122px}
+.gpanel h4{margin:0;font-size:1.3rem}
+.gpanel .gscore{margin:0;font:900 3rem var(--display);line-height:1;color:#5b3fd6}
+.gnote{margin:0;font-weight:700;padding:6px 12px;border-radius:12px;background:#ffe0ea;color:#7d1236}
+.gnote.ice{background:#dcefff;color:#0e4f80}.gnote.rec{background:#fff3b8;color:#5a4300}
+.gch{width:100%;max-width:360px;box-sizing:border-box;background:#fff;border:2px solid #e3ddf7;border-radius:16px;padding:10px 14px;display:flex;flex-direction:column;gap:2px}
+.gch b{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:#5f5699}.gch span{font-weight:700}.gch em{font-style:normal;font-weight:800;color:#5b3fd6;font-size:.9rem}
+.gch.ok{border-color:#4fd18b;background:#e6fbef}.gch.ok em{color:#1d8a5b}
+.gstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;max-width:360px}
+.gstats span{background:#fff;border-radius:14px;padding:8px 4px;font-size:.75rem;font-weight:600;color:#5f5699;display:flex;flex-direction:column;gap:2px}
+.gstats b{font-size:1.1rem;color:#1d1a33}
+.gpanel .gh{max-width:360px;color:#3b3566;margin:0}
+.gpanel .primary{width:100%;max-width:360px;flex-shrink:0;background:#5b3fd6}
 /* lapok */
 .scrim{position:fixed;inset:0;background:rgba(5,15,22,.45);display:flex;align-items:flex-end;justify-content:center;z-index:10}
 .scrim.center{align-items:center;padding:16px}
@@ -440,7 +463,7 @@ body.modal{overflow:hidden}
 
   <section class="petcard" id="petCard" hidden>
     <button class="petbox" id="petBox"><span id="petSvg"></span><span class="hearts" id="petHearts" aria-hidden="true"></span></button>
-    <div class="bubwrap"><p class="bubble" id="petBubble" aria-live="polite"></p><span class="petname" id="petNameLbl"></span></div>
+    <div class="bubwrap"><p class="bubble" id="petBubble" aria-live="polite"></p><span class="petname" id="petNameLbl"></span><button class="gamebtn" id="gameBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10.5v4M5 12.5h4"/><circle cx="15.5" cy="11.5" r="1" fill="currentColor"/><circle cx="18" cy="13.5" r="1" fill="currentColor"/></svg><span id="gameBtnTxt"></span><b id="gameStreak"></b></button></div>
   </section>
 
   <section class="hero viz" id="hero" data-ta="todaySummary">
@@ -781,6 +804,12 @@ body.modal{overflow:hidden}
 </div>
 
 <!-- Súgó / Help -->
+<div class="scrim game" id="gameScrim" hidden>
+  <div class="sheet gsheet" role="dialog" aria-modal="true" aria-labelledby="gTitle">
+    <header><h3 id="gTitle" data-t="gTitle"></h3><button class="icon" data-close="gameScrim" data-ta="close">✕</button></header>
+    <div class="gwrap"><canvas id="gCan" aria-label="game"></canvas><div class="gpanel" id="gPanel" hidden></div></div>
+  </div>
+</div>
 <div class="scrim" id="helpScrim" hidden>
   <div class="sheet help" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
     <header><h3 id="helpTitle" data-t="help"></h3><button class="icon" data-close="helpScrim" data-ta="close">✕</button></header>
@@ -834,6 +863,11 @@ body.modal{overflow:hidden}
       <p>Állat helyett <b>jármű</b> is lehet: autó, versenyautó, markoló, traktor, tűzoltóautó, busz, mozdony, repülő, rakéta vagy kukásautó, 9 szín közül választva. A jármű tankja mutatja, mennyit ittál ma: ha lemaradtál, villog a tanklámpa („Tankolj!”), este lekapcsolja a lámpáit és alszik, a célnál dudál és ünnepel.</p>
       <p><b>Trükkök:</b> koppints a kedvencedre, és mutat valamit: az állatok pörögnek, szaltóznak, ugranak, táncolnak; a járművek egykerekeznek, driftelnek, a repülő és a rakéta bukfencet ír le. Minden trükknek saját vicces hangja van.</p>
       <p>Mindegyik állatnak saját hangja van: a kutya vakkant, a cica nyávog, a madárka csiripel, a dínó és a sárkány bömböl, a farkas vonyít, a cápa csattog. A járművek dudálnak, berregnek, szirénáznak, a mozdony fütyül. A <b>Hangja</b> résznél választhatod, hogy soha, csak koppintásra, eseményeknél is (ital hozzáadása, cél teljesítése), vagy néha magától is megszólaljon.</p>
+    </section>
+    <section>
+      <h4>Napi kihívás játék</h4>
+      <p>A kedvenced alatti <b>Napi kihívás</b> gombbal indul egy kis játék: húzd az ujjad balra-jobbra, és kapd el a hulló cseppeket. A víz-csík folyamatosan apad, a cseppek töltik. Kerüld a mérges köveket és a méheket (életbe kerülnek), a sótartótól pedig kiszáradsz. Segítők: szívecske (+1 élet), pajzs, mágnes, lassító óra. Az aranycsepp sokat ér. Minden 12 csepp után új, gyorsabb szint jön, egyre több ellenféllel.</p>
+      <p>Minden nap más a kihívás (pl. „Kapj el 35 cseppet”). Ha teljesíted, nő a <b>széria</b>. Ha egy nap kimarad, egy <b>szériabefagyasztó</b> ❄️ megmenti a szériát: az elején kapsz egyet, és minden 7 napos széria után még egyet (egyszerre legfeljebb kettő lehet). A játék eredményei is csak ezen a telefonon tárolódnak.</p>
     </section>
     <section>
       <h4>Hangok és rezgés</h4>
@@ -931,6 +965,11 @@ body.modal{overflow:hidden}
       <p>Instead of an animal you can pick a <b>vehicle</b>: car, race car, digger, tractor, fire truck, bus, train, plane, rocket or garbage truck, in 9 colors. Its fuel tank shows how much you’ve drunk today: when you’re behind the fuel light blinks (“Fill me up!”), in the evening it turns its lights off and sleeps, and at your goal it honks and celebrates.</p>
       <p><b>Tricks:</b> tap your buddy and it shows off: animals spin, flip, jump and dance; vehicles pop wheelies and drift, and the plane and rocket loop the loop. Every trick has its own funny sound.</p>
       <p>Every animal has its own sound: the dog barks, the cat meows, the bird chirps, the dino and dragon roar, the wolf howls, the shark chomps. Vehicles honk, rev, wail their sirens, and the train whistles. Under <b>Its sound</b> choose whether it never makes a sound, only when tapped, on events too (adding a drink, reaching your goal), or now and then on its own.</p>
+    </section>
+    <section>
+      <h4>Daily challenge game</h4>
+      <p>The <b>Daily challenge</b> button under your buddy starts a little game: slide your finger left and right to catch the falling drops. The water bar keeps draining and drops refill it. Dodge the grumpy rocks and the bees (they cost a life), and salt dries you out. Helpers: heart (+1 life), shield, magnet, slow-mo clock. Golden drops are worth a lot. Every 12 drops a new, faster level begins with more enemies.</p>
+      <p>The challenge changes every day (e.g. “Catch 35 drops”). Complete it to grow your <b>streak</b>. If you miss a day, a <b>streak freeze</b> ❄️ saves it: you start with one and earn another with every 7-day streak (you can hold two at most). Game results are also stored only on this phone.</p>
     </section>
     <section>
       <h4>Sounds and vibration</h4>
@@ -1032,6 +1071,16 @@ hu:{
   petVoice:'Hangja', vOff:'Ki', vTap:'Koppintásra', vEvents:'Eseményeknél is', vRandom:'Néha magától is', petVoiceTry:'Meghallgatom',
   petVoiceNote:'A kutya vakkant, a cica nyávog, a tűzoltóautó szirénázik… Koppintásra trükköt is mutat. Eseményeknél: ital hozzáadásakor néha, és a cél teljesítésekor. A hangok a „Hangok és rezgés” beállításait követik (hangerő, csend a napi időszakon kívül).',
   petFriend:'barátom', petTapAria:'Simogasd meg', petNames:{"dog": "Kutya", "cat": "Cica", "racoon": "Mosómedve", "kangaroo": "Kenguru", "bunny": "Nyuszi", "hamster": "Hörcsög", "mouse": "Egér", "capy": "Kapibara", "bird": "Madárka", "lizard": "Gyík", "chick": "Csibe", "squirrel": "Mókus", "hedgehog": "Süni", "fox": "Róka", "bear": "Maci", "dino": "Dínó", "shark": "Cápa", "wolf": "Farkas", "dragon": "Sárkány", "tiger": "Tigris"},
+  gTitle:'Napi kihívás', gDaily:'Napi kihívás', gDoneShort:'Mára kész ✓', gStart:'Indulás!', gAgain:'Még egyet!',
+  gHello:n=>'Játsszunk, '+n+'!', gHow:'Húzd az ujjad balra-jobbra. Kapd el a cseppeket, hogy ne szomjazz ki! Kerüld a köveket és a méheket, a sótól kiszáradsz. A szívecske életet ad, a pajzs megvéd, a mágnes magához vonzza a cseppeket, az óra lelassít. Minden 12 csepp után nehezebb szint jön.',
+  gCh_drops:n=>'Kapj el '+n+' cseppet egy játékban', gCh_level:n=>'Juss el a '+n+'. szintig', gCh_gold:n=>'Kapj el '+n+' aranycseppet egy játékban', gCh_combo:n=>'Kapj el '+n+' cseppet egymás után, kihagyás nélkül',
+  gChShort:(a,b,ty)=>'Kihívás: '+a+' / '+b, gChProg:(a,b)=>'Most: '+a+' / '+b, gChDone:'Kihívás teljesítve!',
+  gStreak:'napos széria', gFreezes:'befagyasztó', gBest:'rekord', gRecord:'Új rekord!',
+  gFroze:n=>'Kimaradt '+n+' nap, de a befagyasztó megmentette a szériádat! ❄️', gLost:'Megszakadt a széria, de ma újrakezdheted!',
+  gEarned:'7 napos széria! Kaptál egy szériabefagyasztót ❄️',
+  gOverThirst:'Kiszáradtál!', gOverHit:'Elfogytak az életek!', gLevel:n=>n+'. szint!', gLvlShort:n=>n+'. szint', gWater:'víz',
+  gCombo:n=>n+'× sorozat!', gBlocked:'Védve!', gSalty:'Sós!', gMagnet:'Mágnes!', gShield:'Pajzs!', gSlow:'Lassítás!',
+  gPetWin:'Megvan a mai kihívás! Holnap is játszunk?',
   vehNames:{car:'Autó',racecar:'Versenyautó',digger:'Markoló',tractor:'Traktor',firetruck:'Tűzoltóautó',bus:'Busz',train:'Mozdony',plane:'Repülő',rocket:'Rakéta',garbage:'Kukásautó'},
   vehColNames:{red:'Piros',orange:'Narancs',yellow:'Sárga',green:'Zöld',blue:'Kék',purple:'Lila',pink:'Rózsaszín',black:'Fekete',white:'Fehér'},
   vehMsg:{
@@ -1141,6 +1190,16 @@ en:{
   petVoice:'Its sound', vOff:'Off', vTap:'When tapped', vEvents:'On events too', vRandom:'Now and then too', petVoiceTry:'Preview',
   petVoiceNote:'The dog barks, the cat meows, the fire truck wails… Tap it and it shows a trick too. On events: sometimes when you add a drink, and when you reach your goal. Sounds follow your “Sounds and vibration” settings (volume, quiet outside your daily window).',
   petFriend:'buddy', petTapAria:'Pet it', petNames:{"dog": "Dog", "cat": "Cat", "racoon": "Raccoon", "kangaroo": "Kangaroo", "bunny": "Bunny", "hamster": "Hamster", "mouse": "Mouse", "capy": "Capybara", "bird": "Bird", "lizard": "Lizard", "chick": "Chick", "squirrel": "Squirrel", "hedgehog": "Hedgehog", "fox": "Fox", "bear": "Bear", "dino": "Dino", "shark": "Shark", "wolf": "Wolf", "dragon": "Dragon", "tiger": "Tiger"},
+  gTitle:'Daily challenge', gDaily:'Daily challenge', gDoneShort:'Done today ✓', gStart:'Let’s go!', gAgain:'One more!',
+  gHello:n=>'Let’s play, '+n+'!', gHow:'Slide your finger left and right. Catch the drops so you don’t dry out! Dodge rocks and bees, and salt makes you thirsty. Hearts give a life, the shield protects you, the magnet pulls drops in, and the clock slows things down. Every 12 drops the next, harder level begins.',
+  gCh_drops:n=>'Catch '+n+' drops in one game', gCh_level:n=>'Reach level '+n, gCh_gold:n=>'Catch '+n+' golden drops in one game', gCh_combo:n=>'Catch '+n+' drops in a row without missing',
+  gChShort:(a,b,ty)=>'Challenge: '+a+' / '+b, gChProg:(a,b)=>'This game: '+a+' / '+b, gChDone:'Challenge complete!',
+  gStreak:'day streak', gFreezes:'freezes', gBest:'best', gRecord:'New record!',
+  gFroze:n=>'You missed '+n+' day(s), but a freeze saved your streak! ❄️', gLost:'Your streak was broken, but you can start again today!',
+  gEarned:'7-day streak! You earned a streak freeze ❄️',
+  gOverThirst:'You dried out!', gOverHit:'Out of lives!', gLevel:n=>'Level '+n+'!', gLvlShort:n=>'Level '+n, gWater:'water',
+  gCombo:n=>n+'× combo!', gBlocked:'Blocked!', gSalty:'Salty!', gMagnet:'Magnet!', gShield:'Shield!', gSlow:'Slow-mo!',
+  gPetWin:'Today’s challenge done! Play again tomorrow?',
   vehNames:{car:'Car',racecar:'Race car',digger:'Digger',tractor:'Tractor',firetruck:'Fire truck',bus:'Bus',train:'Train',plane:'Plane',rocket:'Rocket',garbage:'Garbage truck'},
   vehColNames:{red:'Red',orange:'Orange',yellow:'Yellow',green:'Green',blue:'Blue',purple:'Purple',pink:'Pink',black:'Black',white:'White'},
   vehMsg:{
@@ -1704,6 +1763,264 @@ document.querySelectorAll('[data-acc]').forEach(b=>b.onclick=()=>{state.pet.acc[
 $('petPhones').onchange=()=>{state.pet.acc.phones=$('petPhones').checked;render();writeSettings();petHop()};
 document.querySelectorAll('[data-pvoice]').forEach(b=>b.onclick=()=>{state.pet.voice=b.dataset.pvoice;renderPetSettings();writeSettings();if(state.pet.voice!=='off')petVoice(true)});
 $('petVoicePlay').onclick=()=>petVoice(true);
+/* --- napi kihívás: cseppfogó játék --- */
+function normalizeGame(){
+  const g=state.game&&typeof state.game==='object'?state.game:{};
+  state.game={best:+g.best||0,streak:+g.streak||0,bestStreak:+g.bestStreak||0,last:typeof g.last==='string'?g.last:'',
+    freezes:g.freezes==null?1:Math.max(0,Math.min(2,+g.freezes||0)),frozen:Array.isArray(g.frozen)?g.frozen.slice(-30):[],plays:+g.plays||0,topLevel:+g.topLevel||0};
+}
+function dayDiff(a,b){const p=k=>{const x=k.split('-').map(Number);return Date.UTC(x[0],x[1]-1,x[2])};return Math.round((p(b)-p(a))/864e5)}
+function gameStreakCheck(){
+  const G=state.game,today=keyOf(new Date());if(!G.last||!G.streak)return;
+  const miss=dayDiff(G.last,today)-1;if(miss<=0)return;
+  if(miss<=G.freezes){G.freezes-=miss;for(let i=1;i<=miss;i++){const d=new Date(G.last+'T12:00:00');d.setDate(d.getDate()+i);G.frozen.push(keyOf(d))}
+    const y=new Date();y.setDate(y.getDate()-1);G.last=keyOf(y);G.justFroze=miss}
+  else{G.streak=0;G.justLost=true}
+  saveLocal();
+}
+function dailyChallenge(){
+  const k=keyOf(new Date());let h=7;for(const ch of k+'slurp')h=(h*31+ch.charCodeAt(0))|0;h=Math.abs(h);
+  const ty=['drops','level','gold','combo'][h%4],n={drops:[25,35,45],level:[3,4,5],gold:[2,3,4],combo:[10,15,20]}[ty][(h>>4)%3];
+  return {ty,n};
+}
+function gameDoneToday(){return state.game.last===keyOf(new Date())}
+function renderGameBtn(){
+  const b=$('gameBtn');if(!b)return;const G=state.game,done=gameDoneToday();
+  b.classList.toggle('done',done);$('gameBtnTxt').textContent=done?t('gDoneShort'):t('gDaily');
+  $('gameStreak').textContent=G.streak>0?'🔥 '+G.streak:'';$('gameStreak').hidden=!G.streak;
+}
+
+const GM={on:false,paused:false,raf:0};
+let gImgs={};
+function gLoadImg(mood){
+  const P=state.pet,svg=compSVG(P.kind,mood,mood==='thirsty'?.2:.85).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" width="224" height="210" ');
+  const im=new Image();im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);return im;
+}
+function gSfx(kind,x){
+  const S=state.sound;if(!S.on)return;const c=audio();if(!c)return;const t0=c.currentTime+.01,v=S.vol*.4;
+  try{
+    if(kind==='drop'){const f=700+Math.min(x||0,20)*45;tone(c,t0,f,f*1.8,.09,'sine',v)}
+    if(kind==='gold'){[1047,1319,1568,2093].forEach((f,i)=>tone(c,t0+i*.05,f,0,.12,'triangle',v*.8))}
+    if(kind==='hit'){vtone(c,t0,300,90,.3,'square',v*.5,{lp:900});vnoise(c,t0,.15,v*.5,600,'lowpass')}
+    if(kind==='salt'){vnoise(c,t0,.35,v*.5,4000,'highpass');vtone(c,t0,900,300,.3,'sine',v*.3)}
+    if(kind==='power'){[660,880,1100,1320].forEach((f,i)=>tone(c,t0+i*.06,f,f*1.2,.1,'sine',v*.8))}
+    if(kind==='level'){[523,659,784,1047].forEach((f,i)=>tone(c,t0+i*.1,f,0,.22,'triangle',v))}
+    if(kind==='win'){[784,988,1175,1568,1175,1568].forEach((f,i)=>tone(c,t0+i*.11,f,0,.25,'triangle',v))}
+    if(kind==='over'){[523,440,349,262].forEach((f,i)=>tone(c,t0+i*.16,f,f*.97,.25,'triangle',v*.8))}
+    if(kind==='bee'){vtone(c,t0,220,240,.25,'sawtooth',v*.2,{lp:800,vib:40,vibAmt:20})}
+  }catch(e){}
+}
+function gResize(){
+  const cv=$('gCan'),r=cv.parentElement.getBoundingClientRect(),dpr=Math.min(2.5,window.devicePixelRatio||1);
+  GM.W=Math.max(200,r.width);GM.H=Math.max(300,r.height);cv.width=GM.W*dpr;cv.height=GM.H*dpr;GM.ctx=cv.getContext('2d');GM.ctx.setTransform(dpr,0,0,dpr,0,0);
+  GM.ps=Math.min(96,Math.max(66,GM.W*.22));GM.py=GM.H-GM.ps*.62-14;
+  if(GM.px==null||GM.px>GM.W)GM.px=GM.tx=GM.W/2;
+  if(!GM.on)gDraw(0);
+}
+function gNew(){
+  Object.assign(GM,{on:true,paused:false,t:0,score:0,lives:3,water:1,level:1,drops:0,gold:0,combo:0,maxCombo:0,hits:0,items:[],parts:[],texts:[],
+    spawnT:.6,inv:0,shield:0,magnet:0,slow:0,banner:null,px:GM.W/2,tx:GM.W/2,vx:0,ch:dailyChallenge(),chDone:gameDoneToday(),chHit:false,keys:{}});
+  gImgs={happy:gLoadImg('happy'),thirsty:gLoadImg('thirsty'),party:gLoadImg('party')};
+  $('gPanel').hidden=true;state.game.plays++;saveLocal();
+  cancelAnimationFrame(GM.raf);GM.last=performance.now();GM.raf=requestAnimationFrame(gLoop);
+}
+function gProgress(){const c=GM.ch;return c.ty==='drops'?GM.drops:c.ty==='level'?GM.level:c.ty==='gold'?GM.gold:GM.maxCombo}
+function gWinChallenge(){
+  const G=state.game,today=keyOf(new Date());
+  if(G.last!==today){G.streak=(G.last&&dayDiff(G.last,today)===1)?G.streak+1:1;G.last=today;G.bestStreak=Math.max(G.bestStreak,G.streak);
+    GM.earned=false;if(G.streak%7===0&&G.freezes<2){G.freezes++;GM.earned=true}saveLocal()}
+  GM.chDone=true;GM.chHit=true;GM.banner={txt:t('gChDone'),t:2.4,c:'#ffb000'};gSfx('win');buzz([30,40,30,40,80]);renderGameBtn();
+  for(let i=0;i<40;i++)GM.parts.push({x:GM.W/2,y:GM.H*.35,vx:(Math.random()-.5)*420,vy:-Math.random()*380-60,life:1.4,c:['#ff5f8f','#ffe36e','#4fe0c2','#3fa9f5','#8a5cf6'][i%5],r:4+Math.random()*3,g:1})
+}
+function gSpawn(){
+  const L=GM.level,w=[['drop',60],['gold',4+L*.5],['rock',14+L*2.5],['bee',L>=2?6+L*2:0],['salt',L>=3?6+L:0],
+    ['heart',GM.lives<3?2.2:0],['magnet',L>=2?2.4:0],['shield',2.4],['slow',L>=3?2:0]];
+  let sum=0;w.forEach(x=>sum+=x[1]);let r=Math.random()*sum,k='drop';for(const x of w){if((r-=x[1])<0){k=x[0];break}}
+  const sp=(120+L*20)*(GM.H/640)*(.85+Math.random()*.3)*(k==='salt'?1.25:k==='bee'?.8:1);
+  const R=k==='rock'?18+Math.random()*6:k==='bee'?17:k==='drop'?13:16;
+  GM.items.push({k,x:R+Math.random()*(GM.W-2*R),y:-30,r:R,vy:sp,ph:Math.random()*6,x0:0,wob:(L>=5&&k==='drop')?30:0,rot:(Math.random()-.5)*2});
+  const it=GM.items[GM.items.length-1];it.x0=it.x;
+}
+function gLoop(now){
+  const dt=Math.min(.05,(now-GM.last)/1000);GM.last=now;
+  if(!GM.paused&&GM.on)gStep(dt);
+  gDraw(dt);
+  if(GM.on)GM.raf=requestAnimationFrame(gLoop);
+}
+function gStep(dt){
+  GM.t+=dt;const sl=GM.slow>0?.5:1;
+  if(GM.keys.left)GM.tx=Math.max(0,GM.tx-520*dt);if(GM.keys.right)GM.tx=Math.min(GM.W,GM.tx+520*dt);
+  const nx=GM.px+(GM.tx-GM.px)*Math.min(1,dt*14);GM.vx=(nx-GM.px)/Math.max(dt,.001);GM.px=Math.max(GM.ps*.35,Math.min(GM.W-GM.ps*.35,nx));
+  GM.spawnT-=dt*sl;if(GM.spawnT<=0){gSpawn();GM.spawnT=Math.max(.32,1.05-GM.level*.07)*(.75+Math.random()*.5)}
+  GM.water-=dt*(.028+GM.level*.006);
+  ['inv','shield','magnet','slow'].forEach(k=>GM[k]=Math.max(0,GM[k]-dt));
+  const pr=GM.ps*.36,pcx=GM.px,pcy=GM.py+GM.ps*.05;
+  for(let i=GM.items.length-1;i>=0;i--){
+    const it=GM.items[i];it.y+=it.vy*dt*sl;it.ph+=dt;
+    if(it.k==='bee')it.x=it.x0+Math.sin(it.ph*2.6)*Math.min(70,GM.W*.18);
+    else if(it.wob)it.x=it.x0+Math.sin(it.ph*1.8)*it.wob;
+    if(GM.magnet>0&&(it.k==='drop'||it.k==='gold')){const dx=pcx-it.x,dy=pcy-it.y;if(Math.hypot(dx,dy)<GM.W*.55){it.x+=dx*dt*3.2;it.x0=it.x;it.y+=dy*dt*1.2}}
+    if(it.k==='bee'&&!it.buzzed&&it.y>GM.H*.3){it.buzzed=true;gSfx('bee')}
+    const dx=it.x-pcx,dy=it.y-pcy;
+    if(Math.abs(dx)<pr+it.r*.8&&Math.abs(dy)<pr*.9+it.r*.8){gCatch(it);GM.items.splice(i,1);continue}
+    if(it.y>GM.H+30){if(it.k==='drop'||it.k==='gold'){GM.combo=0}GM.items.splice(i,1)}
+  }
+  GM.parts.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=(p.g?700:300)*dt;p.life-=dt});GM.parts=GM.parts.filter(p=>p.life>0);
+  GM.texts.forEach(p=>{p.y-=50*dt;p.life-=dt});GM.texts=GM.texts.filter(p=>p.life>0);
+  if(GM.banner){GM.banner.t-=dt;if(GM.banner.t<=0)GM.banner=null}
+  if(!GM.chDone&&gProgress()>=GM.ch.n)gWinChallenge();
+  if(GM.water<=0){GM.water=0;gOver('thirst')}
+  if(GM.lives<=0)gOver('hit');
+}
+function gSplash(x,y,c,n){for(let i=0;i<(n||8);i++)GM.parts.push({x,y,vx:(Math.random()-.5)*220,vy:-Math.random()*220-40,life:.6,c,r:2.5+Math.random()*2.5})}
+function gText(x,y,s,c){GM.texts.push({x,y,s,c,life:.9})}
+function gCatch(it){
+  const k=it.k;
+  if(k==='drop'||k==='gold'){
+    GM.combo++;GM.maxCombo=Math.max(GM.maxCombo,GM.combo);GM.drops++;
+    const pts=k==='gold'?50:10+Math.min(GM.combo,20);GM.score+=pts;GM.water=Math.min(1,GM.water+(k==='gold'?.25:.085));
+    if(k==='gold')GM.gold++;gSfx(k==='gold'?'gold':'drop',GM.combo);gSplash(it.x,it.y,k==='gold'?'#ffc21a':'#4fb8ff');gText(it.x,it.y-10,'+'+pts,k==='gold'?'#e09a00':'#1f8fc4');
+    if(GM.combo>0&&GM.combo%10===0)gText(GM.px,GM.py-GM.ps*.7,t('gCombo',GM.combo),'#ff5f8f');
+    if(GM.drops%12===0){GM.level++;GM.banner={txt:t('gLevel',GM.level),t:1.6,c:'#5b3fd6'};gSfx('level');state.game.topLevel=Math.max(state.game.topLevel,GM.level)}
+    return;
+  }
+  if(k==='rock'||k==='bee'){
+    if(GM.shield>0){GM.shield=0;gSfx('power');gSplash(it.x,it.y,'#7fd3ff',12);gText(it.x,it.y,t('gBlocked'),'#1f8fc4');return}
+    if(GM.inv>0)return;
+    GM.lives--;GM.hits++;GM.combo=0;GM.inv=1.4;gSfx('hit');buzz(60);gSplash(it.x,it.y,k==='bee'?'#ffd23b':'#9aa0b0',12);GM.shake=.3;return;
+  }
+  if(k==='salt'){GM.water=Math.max(0,GM.water-.3);GM.combo=0;gSfx('salt');buzz(30);gSplash(it.x,it.y,'#ffffff',14);gText(it.x,it.y,t('gSalty'),'#c0392b');return}
+  gSfx('power');gSplash(it.x,it.y,'#ff8fd0',10);
+  if(k==='heart'){GM.lives=Math.min(3,GM.lives+1);gText(it.x,it.y,'+1 ♥','#ff3f7f')}
+  if(k==='magnet'){GM.magnet=7;gText(it.x,it.y,t('gMagnet'),'#e0403a')}
+  if(k==='shield'){GM.shield=8;gText(it.x,it.y,t('gShield'),'#1f8fc4')}
+  if(k==='slow'){GM.slow=6;gText(it.x,it.y,t('gSlow'),'#5b3fd6')}
+}
+function gOver(why){
+  GM.on=false;cancelAnimationFrame(GM.raf);gSfx('over');
+  const G=state.game,rec=GM.score>G.best;if(rec)G.best=GM.score;saveLocal();
+  GM.lastWhy=why;gDraw(0);gPanel('over',rec);
+}
+/* --- rajzolás --- */
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+function gFace(c,x,y,s,mood){
+  c.fillStyle='#2b2233';c.beginPath();c.arc(x-s*.35,y,s*.13,0,7);c.arc(x+s*.35,y,s*.13,0,7);c.fill();
+  c.strokeStyle='#2b2233';c.lineWidth=Math.max(1.4,s*.09);c.lineCap='round';c.beginPath();
+  if(mood==='angry'){c.moveTo(x-s*.55,y-s*.4);c.lineTo(x-s*.18,y-s*.22);c.moveTo(x+s*.55,y-s*.4);c.lineTo(x+s*.18,y-s*.22);c.stroke();c.beginPath();c.arc(x,y+s*.42,s*.18,Math.PI*1.15,Math.PI*1.85)}
+  else c.arc(x,y+s*.12,s*.22,.15*Math.PI,.85*Math.PI);
+  c.stroke();
+}
+function gDrawItem(c,it){
+  const x=it.x,y=it.y,r=it.r;c.save();
+  if(it.k==='drop'||it.k==='gold'){
+    const gold=it.k==='gold';
+    if(gold){c.shadowColor='#ffd23b';c.shadowBlur=14}
+    c.fillStyle=gold?'#ffc21a':'#3fa9f5';c.beginPath();c.moveTo(x,y-r*1.7);c.quadraticCurveTo(x+r*1.1,y-r*.4,x+r,y+r*.2);c.arc(x,y+r*.2,r,0,Math.PI);c.quadraticCurveTo(x-r*1.1,y-r*.4,x,y-r*1.7);c.fill();
+    c.shadowBlur=0;c.fillStyle='rgba(255,255,255,.75)';c.beginPath();c.ellipse(x-r*.4,y-r*.25,r*.2,r*.32,-.4,0,7);c.fill();
+    gFace(c,x+r*.05,y+r*.25,r*.75);
+  }else if(it.k==='rock'){
+    c.translate(x,y);c.rotate(it.rot*.3);c.fillStyle='#8f95a3';c.beginPath();
+    for(let i=0;i<8;i++){const a=i/8*Math.PI*2,rad=r*(.85+((i*37)%5)/20);c.lineTo(Math.cos(a)*rad,Math.sin(a)*rad)}c.closePath();c.fill();
+    c.fillStyle='#a9aebb';c.beginPath();c.ellipse(-r*.3,-r*.35,r*.3,r*.18,-.5,0,7);c.fill();gFace(c,0,r*.05,r*.6,'angry');
+  }else if(it.k==='bee'){
+    const fl=Math.sin(it.ph*40)*.4;c.translate(x,y);
+    c.fillStyle='rgba(255,255,255,.85)';c.strokeStyle='#b9c3d6';c.lineWidth=1.2;
+    c.beginPath();c.ellipse(-r*.35,-r*.7,r*.42,r*.28,-.6+fl,0,7);c.fill();c.stroke();c.beginPath();c.ellipse(r*.35,-r*.7,r*.42,r*.28,.6-fl,0,7);c.fill();c.stroke();
+    c.fillStyle='#ffd23b';c.beginPath();c.ellipse(0,0,r,r*.75,0,0,7);c.fill();
+    c.save();c.clip();c.fillStyle='#2b2233';[-.35,.25].forEach(o=>c.fillRect(-r+r*(o+.6),-r,r*.28,r*2));c.restore();
+    c.fillStyle='#2b2233';c.beginPath();c.moveTo(r*.95,0);c.lineTo(r*1.35,0);c.lineTo(r*.95,r*.2);c.fill();
+    gFace(c,-r*.45,-r*.05,r*.42,'angry');
+  }else if(it.k==='salt'){
+    c.translate(x,y);c.rotate(Math.sin(it.ph*5)*.25);
+    c.fillStyle='#f4f6fa';rr(c,-r*.7,-r*.6,r*1.4,r*1.6,r*.35);c.fill();c.strokeStyle='#c9cfdb';c.lineWidth=1.5;c.stroke();
+    c.fillStyle='#9aa0b0';rr(c,-r*.75,-r*1.05,r*1.5,r*.55,r*.25);c.fill();
+    c.fillStyle='#2b2233';[-.3,0,.3].forEach(o=>{c.beginPath();c.arc(r*o,-r*.8,1.4,0,7);c.fill()});
+    c.fillStyle='#e0403a';c.font='900 '+Math.round(r*.9)+'px system-ui,sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(state.lang==='en'?'S':'S',0,r*.25);
+  }else{
+    c.translate(x,y+Math.sin(it.ph*4)*2);c.fillStyle='#ffffff';c.shadowColor='rgba(0,0,0,.2)';c.shadowBlur=6;c.beginPath();c.arc(0,0,r*1.05,0,7);c.fill();c.shadowBlur=0;
+    if(it.k==='heart'){c.fillStyle='#ff4f86';c.beginPath();c.moveTo(0,r*.6);c.bezierCurveTo(-r*1.1,-r*.1,-r*.5,-r*.9,0,-r*.3);c.bezierCurveTo(r*.5,-r*.9,r*1.1,-r*.1,0,r*.6);c.fill()}
+    if(it.k==='magnet'){c.lineWidth=r*.38;c.strokeStyle='#e0403a';c.beginPath();c.arc(0,-r*.05,r*.45,Math.PI,0,true);c.stroke();c.fillStyle='#c9cfdb';c.fillRect(-r*.64,-r*.55,r*.38,r*.4);c.fillRect(r*.26,-r*.55,r*.38,r*.4)}
+    if(it.k==='shield'){c.fillStyle='#3fa9f5';c.beginPath();c.moveTo(0,-r*.7);c.lineTo(r*.6,-r*.45);c.quadraticCurveTo(r*.6,r*.4,0,r*.75);c.quadraticCurveTo(-r*.6,r*.4,-r*.6,-r*.45);c.closePath();c.fill();c.fillStyle='#bfe6ff';c.beginPath();c.arc(0,-r*.05,r*.2,0,7);c.fill()}
+    if(it.k==='slow'){c.strokeStyle='#5b3fd6';c.lineWidth=2.5;c.beginPath();c.arc(0,0,r*.62,0,7);c.stroke();c.beginPath();c.moveTo(0,0);c.lineTo(0,-r*.42);c.moveTo(0,0);c.lineTo(r*.3,r*.12);c.stroke()}
+  }
+  c.restore();
+}
+function gDraw(dt){
+  const c=GM.ctx;if(!c)return;const W=GM.W,H=GM.H,L=GM.level||1;
+  c.save();if(GM.shake>0){GM.shake-=dt;c.translate((Math.random()-.5)*8,(Math.random()-.5)*6)}
+  const hue=[200,190,170,260,320,30,215][(L-1)%7],g=c.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'hsl('+hue+',85%,82%)');g.addColorStop(1,'hsl('+((hue+30)%360)+',90%,94%)');c.fillStyle=g;c.fillRect(-10,-10,W+20,H+20);
+  c.fillStyle='rgba(255,255,255,.75)';const ct=(GM.t||0)*12;
+  [[.2,.12,1],[.7,.22,.8],[.45,.4,.6],[.9,.55,.7]].forEach(([fx,fy,s],i)=>{const x=((fx*W+ct*(i+1)*.6)%(W+120))-60,y=fy*H;c.beginPath();c.arc(x,y,22*s,0,7);c.arc(x+22*s,y-8*s,26*s,0,7);c.arc(x+48*s,y,20*s,0,7);c.fill()});
+  c.fillStyle='#7fd18b';c.fillRect(-10,H-16,W+20,30);c.fillStyle='#5fbf6f';for(let x=0;x<W+20;x+=18){c.beginPath();c.arc(x,H-16,10,Math.PI,0);c.fill()}
+  (GM.items||[]).forEach(it=>gDrawItem(c,it));
+  /* játékos */
+  if(GM.px!=null){
+    const s=GM.ps,mood=GM.on?(GM.inv>0?'thirsty':(GM.banner&&GM.chHit?'party':'happy')):(GM.lastWhy?'thirsty':'happy'),im=gImgs[mood]||gImgs.happy;
+    c.save();c.translate(GM.px,GM.py);c.rotate(Math.max(-.25,Math.min(.25,(GM.vx||0)*.0006)));
+    if(GM.inv>0&&Math.floor(GM.inv*10)%2)c.globalAlpha=.4;
+    if(im&&im.complete&&im.naturalWidth)c.drawImage(im,-s*.55,-s*.55,s*1.1,s*1.03);
+    c.globalAlpha=1;
+    if(GM.shield>0){c.strokeStyle='rgba(63,169,245,'+(GM.shield<2&&Math.floor(GM.shield*6)%2?.2:.7)+')';c.lineWidth=4;c.fillStyle='rgba(127,211,255,.18)';c.beginPath();c.arc(0,0,s*.62,0,7);c.fill();c.stroke()}
+    if(GM.magnet>0){c.strokeStyle='rgba(224,64,58,.35)';c.lineWidth=2;c.setLineDash([4,6]);c.beginPath();c.arc(0,0,s*.75+Math.sin(GM.t*8)*4,0,7);c.stroke();c.setLineDash([])}
+    c.restore();
+  }
+  (GM.parts||[]).forEach(p=>{c.globalAlpha=Math.max(0,Math.min(1,p.life*2));c.fillStyle=p.c;c.beginPath();c.arc(p.x,p.y,p.r,0,7);c.fill()});c.globalAlpha=1;
+  c.textAlign='center';c.textBaseline='middle';
+  (GM.texts||[]).forEach(p=>{c.globalAlpha=Math.min(1,p.life*2);c.font='900 18px system-ui,sans-serif';c.lineWidth=4;c.strokeStyle='#fff';c.strokeText(p.s,p.x,p.y);c.fillStyle=p.c;c.fillText(p.s,p.x,p.y)});c.globalAlpha=1;
+  if(GM.on||GM.lastWhy){
+    /* HUD */
+    c.textAlign='left';c.font='900 26px system-ui,sans-serif';c.lineWidth=5;c.strokeStyle='rgba(255,255,255,.9)';c.strokeText(GM.score,14,24);c.fillStyle='#1d1a33';c.fillText(GM.score,14,24);
+    c.font='800 13px system-ui,sans-serif';c.fillStyle='#3b3566';c.fillText(t('gLvlShort',GM.level),14,46);
+    for(let i=0;i<3;i++){const x=W-22-i*26,y=22;c.fillStyle=i<GM.lives?'#ff4f86':'rgba(0,0,0,.15)';c.beginPath();c.moveTo(x,y+9);c.bezierCurveTo(x-14,y-1,x-7,y-12,x,y-4);c.bezierCurveTo(x+7,y-12,x+14,y-1,x,y+9);c.fill()}
+    const bw=Math.min(180,W*.42),bx=(W-bw)/2,by=14;c.fillStyle='rgba(29,26,51,.25)';rr(c,bx,by,bw,14,7);c.fill();
+    c.fillStyle=GM.water<.25?'#ff5f5f':'#3fa9f5';rr(c,bx+2,by+2,Math.max(0,(bw-4)*GM.water),10,5);c.fill();
+    c.font='700 10px system-ui,sans-serif';c.fillStyle='#1d1a33';c.textAlign='center';c.fillText(t('gWater'),W/2,by+26);
+    const ch=GM.ch;if(ch&&!GM.chDone){c.font='700 11px system-ui,sans-serif';c.fillStyle='#3b3566';c.fillText(t('gChShort',Math.min(gProgress(),ch.n),ch.n,ch.ty),W/2,by+40)}
+  }
+  if(GM.banner){const b=GM.banner;c.globalAlpha=Math.min(1,b.t*2);c.font='900 28px system-ui,sans-serif';c.textAlign='center';c.lineWidth=7;c.strokeStyle='#fff';c.strokeText(b.txt,W/2,H*.32);c.fillStyle=b.c;c.fillText(b.txt,W/2,H*.32);c.globalAlpha=1}
+  if(GM.on&&GM.paused){c.fillStyle='rgba(29,26,51,.35)';c.fillRect(0,0,W,H)}
+  c.restore();
+}
+/* --- panelek --- */
+function gPanel(kind,rec){
+  const P=$('gPanel'),G=state.game,ch=dailyChallenge(),done=gameDoneToday();
+  const chTxt=t('gCh_'+ch.ty,ch.n),fz=G.freezes?'❄️'.repeat(G.freezes):'0';
+  let h='<div class="gpet">'+compSVG(state.pet.kind,kind==='over'&&!GM.chHit?'thirsty':'party',.9)+'</div>';
+  if(kind==='start'){
+    h+='<h4>'+esc(t('gHello',state.name||t('petFriend')))+'</h4>';
+    if(G.justFroze){h+='<p class="gnote ice">'+esc(t('gFroze',G.justFroze))+'</p>';G.justFroze=0}
+    if(G.justLost){h+='<p class="gnote">'+esc(t('gLost'))+'</p>';G.justLost=false}
+  }else{
+    h+='<h4>'+esc(GM.lastWhy==='thirst'?t('gOverThirst'):t('gOverHit'))+'</h4><p class="gscore">'+GM.score+'</p>'+(rec?'<p class="gnote rec">'+esc(t('gRecord'))+'</p>':'');
+    if(GM.earned)h+='<p class="gnote ice">'+esc(t('gEarned'))+'</p>';
+  }
+  h+='<div class="gch'+(done?' ok':'')+'"><b>'+esc(t('gDaily'))+'</b><span>'+esc(chTxt)+'</span><em>'+(done?esc(t('gDoneShort')):(kind==='over'?esc(t('gChProg',Math.min(gProgress(),ch.n),ch.n)):''))+'</em></div>';
+  h+='<div class="gstats"><span><b>🔥 '+G.streak+'</b>'+esc(t('gStreak'))+'</span><span><b>'+fz+'</b>'+esc(t('gFreezes'))+'</span><span><b>'+G.best+'</b>'+esc(t('gBest'))+'</span></div>';
+  if(kind==='start')h+='<p class="small gh">'+esc(t('gHow'))+'</p>';
+  h+='<button class="primary" id="gGo">'+esc(kind==='start'?t('gStart'):t('gAgain'))+'</button>';
+  P.innerHTML=h;P.hidden=false;$('gGo').onclick=()=>{audio();gNew()};
+}
+function openGame(){
+  gameStreakCheck();openSheet('gameScrim');GM.lastWhy=null;GM.items=[];GM.parts=[];GM.texts=[];GM.t=0;GM.on=false;GM.score=0;
+  gImgs={happy:gLoadImg('happy'),party:gLoadImg('party'),thirsty:gLoadImg('thirsty')};
+  requestAnimationFrame(()=>{gResize();gPanel('start')});
+}
+function gameStop(){
+  if(GM.on){GM.on=false;cancelAnimationFrame(GM.raf);if(GM.score>state.game.best){state.game.best=GM.score;saveLocal()}}
+  renderGameBtn();
+  if(GM.chHit)petSay(t('gPetWin'));
+}
+$('gameBtn').onclick=()=>openGame();
+{const cv=$('gCan');
+  const mv=e=>{if(!GM.on)return;const r=cv.getBoundingClientRect();GM.tx=e.clientX-r.left;if(GM.paused)GM.paused=false};
+  cv.addEventListener('pointerdown',e=>{mv(e);try{cv.setPointerCapture(e.pointerId)}catch(_){}});cv.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'||e.buttons||e.pressure)mv(e)});
+}
+document.addEventListener('keydown',e=>{if(!GM.on)return;if(e.key==='ArrowLeft'){GM.keys.left=true;e.preventDefault()}if(e.key==='ArrowRight'){GM.keys.right=true;e.preventDefault()}if(e.key===' '||e.key==='p'){GM.paused=!GM.paused;e.preventDefault()}});
+document.addEventListener('keyup',e=>{if(e.key==='ArrowLeft')GM.keys.left=false;if(e.key==='ArrowRight')GM.keys.right=false});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&GM.on)GM.paused=true;if(!document.hidden&&GM.on)GM.last=performance.now()});
+window.addEventListener('resize',()=>{if(!$('gameScrim').hidden)gResize()});
+{const _close=closeSheet;closeSheet=function(id){if(id==='gameScrim')gameStop();_close(id)}}
 
 /* --- hangok és rezgés --- */
 let actx=null;
@@ -2245,7 +2562,7 @@ function render(){
 
   const p=pace(now,d,tot,g);
   renderViz(now,d,tot,g,p,adv);
-  renderPet(now,d,tot,g,p);
+  renderPet(now,d,tot,g,p);renderGameBtn();
   $('paceHead').textContent=p.head;$('pacePill').textContent=p.pill;$('pacePill').className='pill '+(p.cls||'');
   $('paceTip').textContent=p.tip;$('paceMotto').textContent=p.motto;
   const ex=$('expect');if(p.exp!=null&&tot<g&&p.exp>0&&p.exp<g){ex.hidden=false;ex.style.bottom=(p.exp/g*100)+'%'}else ex.hidden=true;
@@ -2294,7 +2611,7 @@ function render(){
 }
 
 /* --- indulás --- */
-loadLocal();normalizeDrinks();normalizeSound();normalizePet();
+loadLocal();normalizeDrinks();normalizeSound();normalizePet();normalizeGame();gameStreakCheck();
 if(!state.lang&&state.onboarded)state.lang='hu';
 applyLang();applyTheme();render();
 if(!state.onboarded)startOnb();
@@ -2304,7 +2621,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='9.3';
+const APP_VERSION='9.4';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
