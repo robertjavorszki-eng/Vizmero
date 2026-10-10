@@ -235,8 +235,11 @@ body.advanced .adv.grid{display:grid}
 /* lapok */
 .scrim{position:fixed;inset:0;background:rgba(5,15,22,.45);display:flex;align-items:flex-end;justify-content:center;z-index:10}
 .scrim.center{align-items:center;padding:16px}
-.sheet{background:var(--surface);color:var(--ink);width:100%;max-width:480px;max-height:88%;overflow-y:auto;border-radius:22px 22px 0 0;padding:18px 16px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:22px}
-.sheet>header{display:flex;justify-content:space-between;align-items:center}
+.sheet{background:var(--surface);color:var(--ink);width:100%;max-width:480px;max-height:88%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;touch-action:pan-y;box-sizing:border-box;border-radius:22px 22px 0 0;padding:18px 16px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:22px}
+.sheet>header{display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:-18px;z-index:3;background:var(--surface);margin:-18px -16px 0;padding:14px 16px 10px;border-bottom:1px solid transparent}
+.sheet.scrolled>header{border-bottom-color:var(--line)}
+.sheet>*{min-width:0}
+.opt2 .chip,.opt3 .chip{white-space:normal;height:auto;min-height:42px;line-height:1.15;padding-block:6px;text-align:center}
 .sheet header h3{margin:0;font-size:1.15rem}
 .opt2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .opt3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -281,7 +284,7 @@ body.advanced .adv.grid{display:grid}
 .privlist{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
 
 .help{gap:20px}
-.help>header{position:sticky;top:-18px;background:var(--surface);padding-block:4px;margin-top:-4px;z-index:1}
+
 .help h4{margin:0 0 6px;font-size:1rem;color:var(--water-deep)}
 .help p{margin:0 0 8px;max-width:62ch}
 .help p:last-child{margin-bottom:0}
@@ -1055,6 +1058,7 @@ function writeSettings(){saveLocal()}
 
 /* --- lapok --- */
 const openStack=[];
+document.querySelectorAll('.sheet').forEach(sh=>sh.addEventListener('scroll',()=>sh.classList.toggle('scrolled',sh.scrollTop>4),{passive:true}));
 function openSheet(id,focusEl){openStack.push({id,back:document.activeElement});$(id).hidden=false;const sh=$(id).querySelector('.sheet');if(sh)sh.scrollTop=0;setTimeout(()=>(focusEl||$(id).querySelector('[data-close]')||sh).focus(),40)}
 function closeSheet(id){$(id).hidden=true;const i=openStack.map(x=>x.id).lastIndexOf(id);if(i>=0){const b=openStack[i].back;openStack.splice(i,1);if(b&&b.focus)b.focus()}}
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeSheet(b.dataset.close));
