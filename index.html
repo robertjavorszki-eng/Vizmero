@@ -270,6 +270,44 @@ html:root[data-accent="neon"] #b1{--bc:#4ff0ff;background:#10303a}html:root[data
 html:root[data-accent="neon"] #b3{--bc:#ffb84f;background:#3a2810}html:root[data-accent="neon"] #b5{--bc:#ff4fd8;background:#3a1035}
 html:root[data-accent="neon"] .add .bi{background:#120f24}
 html:root[data-accent="vidam"] .add{box-shadow:0 4px 0 rgba(0,0,0,.18)}
+/* kisállat */
+.petcard{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;margin-top:-4px}
+.petbox{position:relative;width:118px;height:112px;padding:0;border:none;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.petbox svg{width:118px;height:112px;display:block;overflow:visible}
+.petbox .breathe{transform-origin:112px 194px;animation:petBreathe 3.4s ease-in-out infinite}
+.petbox.sleep .breathe{animation-duration:5.5s}
+.petbox .blink{transform-box:fill-box;transform-origin:center;animation:petBlink 4.8s infinite}
+.petbox .wag{transform-origin:150px 158px;animation:petWag 1.3s ease-in-out infinite}
+.petbox.thirsty .wag,.petbox.sleep .wag{animation:none}
+.petbox.party .bounce{animation:petBounce .9s ease-in-out infinite}
+.petbox.sip .bounce{animation:petSip .7s ease-out}
+.petbox .zz,.petbox .float{animation:petZz 2.6s ease-in-out infinite}
+.petbox .confetti{animation:petConf 1.6s ease-in-out infinite}
+.hearts{position:absolute;inset:0;pointer-events:none}
+.hearts i{position:absolute;left:50%;top:40%;width:16px;height:16px;color:#ff5f8f;animation:petHeart 1.1s ease-out forwards}
+.hearts i svg{width:16px;height:16px;fill:currentColor}
+@keyframes petBreathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.02,.985)}}
+@keyframes petBlink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes petWag{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(8deg)}}
+@keyframes petBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes petSip{0%{transform:translateY(0)}30%{transform:translateY(-14px)}60%{transform:translateY(0) scale(1.04,.96)}100%{transform:none}}
+@keyframes petZz{0%,100%{transform:translateY(0);opacity:.9}50%{transform:translateY(-6px);opacity:.5}}
+@keyframes petConf{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+@keyframes petHeart{0%{opacity:0;transform:translate(-50%,0) scale(.4)}20%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),-70px) scale(1.2)}}
+.bubwrap{display:flex;flex-direction:column;gap:4px;min-width:0}
+.bubble{position:relative;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px 12px;font-weight:600;font-size:.95rem;line-height:1.35;color:var(--ink)}
+.bubble::before{content:"";position:absolute;left:-7px;top:50%;width:12px;height:12px;background:inherit;border-left:1px solid var(--line);border-bottom:1px solid var(--line);transform:translateY(-50%) rotate(45deg)}
+.bubble.pop{animation:bubPop .35s ease-out}
+@keyframes bubPop{0%{transform:scale(.92);opacity:.4}100%{transform:none;opacity:1}}
+html:root[data-accent="vidam"][data-dark="0"] .bubble{background:#fff3b8;border-color:transparent;color:#3f3200}
+html:root[data-accent="neon"] .bubble{background:#2a1a3d;border-color:#ff4fd8}
+.petname{font-size:.78rem;color:var(--muted);padding-left:4px}
+.petgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.petgrid button{border:1.5px solid var(--line);background:var(--bg);border-radius:14px;padding:2px 2px 6px;display:flex;flex-direction:column;align-items:center;gap:0;cursor:pointer;font:600 .72rem var(--body);color:var(--ink);min-width:0}
+.petgrid button svg{width:100%;height:64px}
+.petgrid button[aria-pressed="true"]{border:2.5px solid var(--water);background:var(--water-soft)}
+.petgrid span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+@media (prefers-reduced-motion: reduce){.petbox *,.hearts i,.bubble.pop{animation:none!important}}
 .note{font-size:.8rem;color:var(--muted);text-align:center;margin:0}
 .adv{display:none}
 body.advanced .adv{display:revert}
@@ -360,6 +398,11 @@ body.modal{overflow:hidden}
   </header>
 
   <p class="greet" id="greet" hidden></p>
+
+  <section class="petcard" id="petCard" hidden>
+    <button class="petbox" id="petBox"><span id="petSvg"></span><span class="hearts" id="petHearts" aria-hidden="true"></span></button>
+    <div class="bubwrap"><p class="bubble" id="petBubble" aria-live="polite"></p><span class="petname" id="petNameLbl"></span></div>
+  </section>
 
   <section class="hero viz" id="hero" data-ta="todaySummary">
     <div class="glass" aria-hidden="true"><div class="fill" id="fill"></div><div class="ticks" id="ticks"></div><div class="expect" id="expect" hidden></div></div>
@@ -458,6 +501,22 @@ body.modal{overflow:hidden}
         <button class="chip" data-view="tank" data-t="vTank"></button>
       </div>
       <p class="small" style="margin-top:8px" data-t="displayNote"></p>
+    </div>
+
+    <div>
+      <h2 data-t="petSec"></h2>
+      <div class="srow first"><span data-t="petOn"></span><label class="tg"><input type="checkbox" id="petOn"><i></i></label></div>
+      <div class="srow"><span data-t="petTalk"></span><label class="tg"><input type="checkbox" id="petTalk"><i></i></label></div>
+      <div class="srow"><label for="petNameIn" data-t="petNameLbl"></label><input class="text" type="text" id="petNameIn" maxlength="16" data-tp="petNamePh" style="width:55%;height:40px"></div>
+      <p class="small" style="margin:12px 0 6px;font-weight:700" data-t="petPick"></p>
+      <div class="petgrid" id="petGrid"></div>
+      <p class="small" style="margin:12px 0 6px;font-weight:700" data-t="petAcc"></p>
+      <div class="opt2" id="petAccRow">
+        <button class="chip" data-pacc="none"><span data-t="accNone"></span></button>
+        <button class="chip" data-pacc="glasses"><span data-t="accGlasses"></span></button>
+        <button class="chip" data-pacc="cap"><span data-t="accCap"></span></button>
+        <button class="chip" data-pacc="headphones"><span data-t="accPhones"></span></button>
+      </div>
     </div>
 
     <div>
@@ -715,6 +774,11 @@ body.modal{overflow:hidden}
       <p>Tejes kávénál nem kell külön felvenni a tejet: rögzítsd az egész csészét egyben. A kávé és a tea is beszámít a folyadékbevitelbe.</p>
     </section>
     <section>
+      <h4>Kisállat</h4>
+      <p>A főoldalon egy kis kedvenc társalog veled: pislog, lélegzik, csóválja a farkát, és a helyzet szerint viselkedik. Ha jó a tempó, vidám; ha lemaradtál vagy régóta nem ittál, szomjas, és odatolja az üres tálját; a napi időszakon kívül alszik; ha megvan a cél, ünnepel. Ital hozzáadásakor ő is ugrik egyet, és ha megsimogatod (rákoppintasz), szívecskéket küld.</p>
+      <p>A beállítások <b>Kisállat</b> részében 20 állat közül választhatsz (köztük dínó, cápa, farkas, sárkány és tigris is), nevet adhatsz neki, felteheted rá a napszemüveget, a sapkát vagy a fejhallgatót, és kikapcsolhatod a szövegbuborékot vagy az egész kisállatot.</p>
+    </section>
+    <section>
       <h4>Hangok és rezgés</h4>
       <p>Az app rövid hangot ad ital hozzáadásakor, törléskor vagy visszavonáskor, és egy kis dallamot, amikor meglesz a napi cél. A beállítások <b>Hangok és rezgés</b> részében kikapcsolhatod, eseményenként is, választhatsz hangkészletet (Vízcsepp, Buborék, Dallam), állíthatod a hangerőt, és a lejátszás gombbal meg is hallgathatod.</p>
       <p>Alapból a napi időszakon kívül (pl. késő este) csendben marad. Androidon koppintáskor röviden rezeg is; iPhone-on ezt a böngésző nem engedi. iPhone-on a néma kapcsoló a hangokat is elnémítja.</p>
@@ -802,6 +866,11 @@ body.modal{overflow:hidden}
       <p>In Settings, <b>Edit my drinks</b> lets you choose which drinks appear (e.g. sparkling water, herbal tea, milk coffee, plant milk, cocoa, soup, sports drink, alcohol-free beer). Use the switch to show or hide one, the arrows to reorder, and tap a name to rename it and pick an icon and color. <b>+ Custom drink</b> adds a brand-new one. Every drink counts towards your daily goal.</p>
       <p>Under <b>Buttons</b> you can set the amount and drink of the four quick buttons, e.g. “2 dl milk coffee”. A button with a drink shows a small icon and always logs that drink. A button set to “selected drink” logs the drink chosen under “What are you drinking?” in advanced mode, and water in simple mode.</p>
       <p>For coffee with milk there’s no need to log the milk separately: log the whole cup at once. Coffee and tea count towards your fluid intake too.</p>
+    </section>
+    <section>
+      <h4>Pet</h4>
+      <p>A little pet keeps you company on the main screen: it blinks, breathes, wags its tail and reacts to how you’re doing. On pace it’s happy; if you’re behind or haven’t had a drink for a while, it’s thirsty and pushes its empty bowl towards you; outside your daily window it sleeps; when you reach your goal, it celebrates. It hops when you add a drink, and sends hearts when you pet it (tap it).</p>
+      <p>Under <b>Pet</b> in Settings you can pick from 20 animals (including a dino, shark, wolf, dragon and tiger), give it a name, add sunglasses, a cap or headphones, and turn off the speech bubble or the pet altogether.</p>
     </section>
     <section>
       <h4>Sounds and vibration</h4>
@@ -896,6 +965,19 @@ hu:{
   priv1:'Senkivel nem osztom meg, amit beírsz.', priv2:'Más, aki ugyanezt a linket használja, nem látja a naplódat.', priv3:'Nincs reklám, nincs regisztráció.',
   privMore:'Részletek a súgóban, a kérdőjeles gomb alatt.', start2:'Kezdjük',
   drinks:{water:'Víz',sparkling:'Szénsavas víz',tea:'Tea',herbal:'Gyógytea',coffee:'Kávé',latte:'Tejeskávé',juice:'Gyümölcslé',lemonade:'Limonádé',smoothie:'Smoothie',milk:'Tej',plantmilk:'Növényi tej',kefir:'Kefir',cocoa:'Kakaó',soup:'Leves',isotonic:'Sportital',beer:'Alkoholmentes sör',other:'Egyéb'},
+  petSec:'Kisállat', petOn:'Kisállat a főoldalon', petTalk:'Beszél hozzád (buborék)', petNameLbl:'Neve', petNamePh:'pl. Bodri',
+  petPick:'Válassz kedvencet', petAcc:'Kiegészítő', accNone:'Semmi', accGlasses:'Napszemüveg', accCap:'Sapka', accPhones:'Fejhallgató',
+  petFriend:'barátom', petTapAria:'Simogasd meg', petNames:{"dog": "Kutya", "cat": "Cica", "racoon": "Mosómedve", "kangaroo": "Kenguru", "bunny": "Nyuszi", "hamster": "Hörcsög", "mouse": "Egér", "capy": "Kapibara", "bird": "Madárka", "lizard": "Gyík", "chick": "Csibe", "squirrel": "Mókus", "hedgehog": "Süni", "fox": "Róka", "bear": "Maci", "dino": "Dínó", "shark": "Cápa", "wolf": "Farkas", "dragon": "Sárkány", "tiger": "Tigris"},
+  petMsg:{
+    start:['Jó reggelt, {n}! Kezdjük egy pohár vízzel?','Új nap, tiszta tál! Iszunk egyet?'],
+    happy:['Szuper tempó, {n}!','Jó ütemben vagyunk, még {r}.','Ügyes vagy! Csak így tovább.','Jól haladunk, {n}. Még {r} a célig.'],
+    thirsty:['Üres a tálam… iszunk egyet?','Kicsit lemaradtunk, még {r}. Pótoljuk?','Egy pohár víz most jólesne!','Szomjas vagyok, te nem?'],
+    gap:['{h} órája nem ittunk, {n}. Igyunk egyet!','Hahó! {h} órája nem kortyoltunk.'],
+    sleep:['Zzz… jó éjt, {n}!','Most pihenünk, holnap folytatjuk.','Csendben vagyok, alszom.'],
+    party:['Megvan a mai cél! Hurrá!','Kész a napi adag, büszke vagyok rád, {n}!','Cél kipipálva! Pacsi!'],
+    sip:['Glugy-glugy! +{a}','Finom volt! +{a}','Egészségedre! +{a}','Ez jólesett! +{a}'],
+    pet:['Jaj, de jó a simogatás!','Szeretlek, {n}!','Még, még!','Köszi, {n}!']
+  },
   cVidam:'Vidám', cNeon:'Neon', colorNote:'A Vidám világos és sötét módban is színes, a Neon mindig sötét.',
   soundSec:'Hangok és rezgés', soundOn:'Hangok', vibOn:'Rezgés', vibNote:'Koppintáskor röviden rezeg.', vibNA:'Ezen a telefonon nem érhető el (iPhone-on a böngésző nem engedi).',
   quietOn:'Csend a napi időszakon kívül', whenSound:'Mikor szóljon?', evAdd:'Ital hozzáadása', evDel:'Törlés, visszavonás', evGoal:'Cél teljesítve',
@@ -976,6 +1058,19 @@ en:{
   priv1:'I don’t share anything you enter with anyone.', priv2:'Others using the same link can’t see your log.', priv3:'No ads, no sign-up.',
   privMore:'More details in Help, under the question mark button.', start2:'Let’s start',
   drinks:{water:'Water',sparkling:'Sparkling water',tea:'Tea',herbal:'Herbal tea',coffee:'Coffee',latte:'Milk coffee',juice:'Juice',lemonade:'Lemonade',smoothie:'Smoothie',milk:'Milk',plantmilk:'Plant milk',kefir:'Kefir',cocoa:'Cocoa',soup:'Soup',isotonic:'Sports drink',beer:'Alcohol-free beer',other:'Other'},
+  petSec:'Pet', petOn:'Pet on the main screen', petTalk:'Talks to you (bubble)', petNameLbl:'Name', petNamePh:'e.g. Buddy',
+  petPick:'Choose your pet', petAcc:'Accessory', accNone:'None', accGlasses:'Sunglasses', accCap:'Cap', accPhones:'Headphones',
+  petFriend:'buddy', petTapAria:'Pet it', petNames:{"dog": "Dog", "cat": "Cat", "racoon": "Raccoon", "kangaroo": "Kangaroo", "bunny": "Bunny", "hamster": "Hamster", "mouse": "Mouse", "capy": "Capybara", "bird": "Bird", "lizard": "Lizard", "chick": "Chick", "squirrel": "Squirrel", "hedgehog": "Hedgehog", "fox": "Fox", "bear": "Bear", "dino": "Dino", "shark": "Shark", "wolf": "Wolf", "dragon": "Dragon", "tiger": "Tiger"},
+  petMsg:{
+    start:['Good morning, {n}! Shall we start with a glass of water?','New day, fresh bowl! Shall we drink?'],
+    happy:['Great pace, {n}!','We’re on track, {r} to go.','Nice work! Keep it up.','Going well, {n}. {r} left.'],
+    thirsty:['My bowl is empty… shall we drink?','We’re a bit behind, {r} to go. Catch up?','A glass of water would be nice now!','I’m thirsty, aren’t you?'],
+    gap:['We haven’t had a drink for {h} hours, {n}. Let’s drink!','Hey! {h} hours without a sip.'],
+    sleep:['Zzz… good night, {n}!','Resting now, we’ll carry on tomorrow.','Shh, I’m sleeping.'],
+    party:['Today’s goal reached! Hooray!','Daily amount done, I’m proud of you, {n}!','Goal ticked off! High five!'],
+    sip:['Glug-glug! +{a}','Tasty! +{a}','Cheers! +{a}','That hit the spot! +{a}'],
+    pet:['Ooh, that’s nice!','Love you, {n}!','More, more!','Thanks, {n}!']
+  },
   cVidam:'Cheerful', cNeon:'Neon', colorNote:'Cheerful stays colorful in light and dark mode; Neon is always dark.',
   soundSec:'Sounds and vibration', soundOn:'Sounds', vibOn:'Vibration', vibNote:'A short buzz when you tap.', vibNA:'Not available on this phone (the browser doesn’t allow it on iPhone).',
   quietOn:'Quiet outside your daily window', whenSound:'When should it play?', evAdd:'Adding a drink', evDel:'Delete, undo', evGoal:'Goal reached',
@@ -1065,6 +1160,10 @@ function normalizeDrinks(){
   if(!Array.isArray(state.buttons)||state.buttons.length!==4)state.buttons=[1,2,3,5].map(dl=>({dl,drink:''}));
   state.buttons=state.buttons.map(b=>({dl:Math.max(.5,Math.min(20,r1(+b.dl||2))),drink:b.drink&&knownDrink(b.drink)?b.drink:''}));
 }
+function normalizePet(){
+  const p=state.pet&&typeof state.pet==='object'?state.pet:{};
+  state.pet={on:p.on!==false,talk:p.talk!==false,kind:PETS[p.kind]?p.kind:'dog',name:typeof p.name==='string'?p.name.slice(0,16):'',acc:['none','glasses','cap','headphones'].includes(p.acc)?p.acc:'none'};
+}
 function normalizeSound(){
   const d={on:true,vib:true,quiet:true,set:'drop',vol:.6,ev:{add:true,del:true,goal:true}},s=state.sound&&typeof state.sound==='object'?state.sound:{};
   state.sound={on:s.on!==false,vib:s.vib!==false,quiet:s.quiet!==false,set:['drop','bubble','melody'].includes(s.set)?s.set:'drop',
@@ -1087,7 +1186,7 @@ function svgIcon(key){return '<svg viewBox="0 0 24 24" fill="none" stroke="curre
 function iconEl(id,cls){const d=drinkOf(id),w=document.createElement('span');w.className=cls||'dic';w.style.setProperty('--dc',d.c);w.innerHTML=svgIcon(d.icon);return w}
 
 /* days: {'2026-10-09': {entries:[{t,dl,type}], act:0|3|6, hot:bool}} */
-let state={goal:20,weight:80,mode:'system',accent:'ocean',name:'',onboarded:false,lang:null,unit:'dl',view:'glass',ui:'simple',start:'07:00',end:'22:00',drink:'water',drinkOrder:null,drinkShow:null,custom:{},dover:{},buttons:null,sound:null,days:{}};
+let state={goal:20,weight:80,mode:'system',accent:'ocean',name:'',onboarded:false,lang:null,unit:'dl',view:'glass',ui:'simple',start:'07:00',end:'22:00',drink:'water',drinkOrder:null,drinkShow:null,custom:{},dover:{},buttons:null,sound:null,pet:null,days:{}};
 let col=null;
 const $=id=>document.getElementById(id);
 const root=document.documentElement;
@@ -1118,7 +1217,7 @@ function loadLocal(){
 function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){}}
 
 /* --- beállítás-ikonok --- */
-const SET_ICONS={"language": ["#3fa9f5", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z\"/>"], "nameQ": ["#ff5f8f", "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5\"/>"], "display": ["#14b8a6", "<path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/>"], "mode": ["#8a5cf6", "<path d=\"M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12\"/><circle cx=\"16\" cy=\"6\" r=\"2\"/><circle cx=\"10\" cy=\"12\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>"], "drinksSec": ["#22a861", "<path d=\"M7 4h10l-1.2 16H8.2z\"/><path d=\"M7.5 9h9\"/>"], "buttonsSec": ["#f08a1c", "<rect x=\"3\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"13\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"3\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"13\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\"/>"], "unit": ["#3fa9f5", "<path d=\"M3 17L17 3l4 4L7 21z\"/><path d=\"M7 13l2 2M10 10l2 2M13 7l2 2\"/>"], "window": ["#14b8a6", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/>"], "soundSec": ["#f08a1c", "<path d=\"M4 9v6h4l5 4V5L8 9z\"/><path d=\"M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11\"/>"], "appearance": ["#ff5f8f", "<circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/>"], "color": ["#d946a8", "<path d=\"M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.9 1.8-1.8 0-1.3-1-1.5-1-2.6 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.7 17 3 12 3z\"/><circle cx=\"7.5\" cy=\"11\" r=\"1.2\"/><circle cx=\"10\" cy=\"7\" r=\"1.2\"/><circle cx=\"15\" cy=\"7\" r=\"1.2\"/>"], "calcTitle": ["#8a5cf6", "<path d=\"M5 20h14l-2-12H7z\"/><circle cx=\"12\" cy=\"5\" r=\"2\"/>"], "baseManual": ["#5b3fd6", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><circle cx=\"12\" cy=\"12\" r=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"1.3\"/>"], "data": ["#64748b", "<ellipse cx=\"12\" cy=\"5.5\" rx=\"7.5\" ry=\"2.5\"/><path d=\"M4.5 5.5v13c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-13M4.5 12c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5\"/>"]};
+const SET_ICONS={"petSec":["#d26d08","<circle cx=\"7\" cy=\"9\" r=\"2.2\"/><circle cx=\"11\" cy=\"5.5\" r=\"2.2\"/><circle cx=\"15.5\" cy=\"6.5\" r=\"2.2\"/><circle cx=\"18\" cy=\"11\" r=\"2.2\"/><path d=\"M8.5 16.5c0-2.6 2-4.5 4.2-4.5s4.3 1.9 4.3 4.3c0 2-1.5 3.2-3.4 3.2-1 0-1.6-.4-2.4-.4s-1.2.4-2 .4c-1.6 0-2.7-1.2-2.7-3z\"/>"],"language": ["#3fa9f5", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z\"/>"], "nameQ": ["#ff5f8f", "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5\"/>"], "display": ["#14b8a6", "<path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/>"], "mode": ["#8a5cf6", "<path d=\"M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12\"/><circle cx=\"16\" cy=\"6\" r=\"2\"/><circle cx=\"10\" cy=\"12\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>"], "drinksSec": ["#22a861", "<path d=\"M7 4h10l-1.2 16H8.2z\"/><path d=\"M7.5 9h9\"/>"], "buttonsSec": ["#f08a1c", "<rect x=\"3\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"13\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"3\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"13\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\"/>"], "unit": ["#3fa9f5", "<path d=\"M3 17L17 3l4 4L7 21z\"/><path d=\"M7 13l2 2M10 10l2 2M13 7l2 2\"/>"], "window": ["#14b8a6", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/>"], "soundSec": ["#f08a1c", "<path d=\"M4 9v6h4l5 4V5L8 9z\"/><path d=\"M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11\"/>"], "appearance": ["#ff5f8f", "<circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/>"], "color": ["#d946a8", "<path d=\"M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.9 1.8-1.8 0-1.3-1-1.5-1-2.6 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.7 17 3 12 3z\"/><circle cx=\"7.5\" cy=\"11\" r=\"1.2\"/><circle cx=\"10\" cy=\"7\" r=\"1.2\"/><circle cx=\"15\" cy=\"7\" r=\"1.2\"/>"], "calcTitle": ["#8a5cf6", "<path d=\"M5 20h14l-2-12H7z\"/><circle cx=\"12\" cy=\"5\" r=\"2\"/>"], "baseManual": ["#5b3fd6", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><circle cx=\"12\" cy=\"12\" r=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"1.3\"/>"], "data": ["#64748b", "<ellipse cx=\"12\" cy=\"5.5\" rx=\"7.5\" ry=\"2.5\"/><path d=\"M4.5 5.5v13c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-13M4.5 12c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5\"/>"]};
 function decorateSettings(){
   document.querySelectorAll('#setScrim .sheet>div>h2').forEach(h=>{
     const el=h.querySelector('[data-t]')||h,key=el.dataset.t,ic=SET_ICONS[key];if(!ic||h.querySelector('.sic'))return;
@@ -1137,7 +1236,7 @@ function applyLang(){
   document.querySelectorAll('[data-lang]').forEach(el=>{el.hidden=el.dataset.lang!==(state.lang==='en'?'en':'hu')});
   document.querySelectorAll('[data-lang-btn]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.langBtn===(state.lang||'hu')));
   buildDrinkRow();buildEditor();buildBtnCfg();if(!$('drinksScrim').hidden)buildDrinkList();
-  decorateSettings();renderSound();
+  decorateSettings();renderSound();buildPetGrid();renderPetSettings();petKey='';
 }
 
 /* --- téma --- */
@@ -1170,6 +1269,203 @@ function closeSheet(id){$(id).hidden=true;const i=openStack.map(x=>x.id).lastInd
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeSheet(b.dataset.close));
 ['setScrim','entryScrim','helpScrim','drinksScrim','drinkEdScrim'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target===$(id))closeSheet(id)}));
 document.addEventListener('keydown',e=>{if(e.key!=='Escape'||!openStack.length)return;const top=openStack[openStack.length-1].id;if(top!=='onbScrim')closeSheet(top)});
+
+/* --- kisállatok: kódból rajzolt figurák --- */
+const PETS={
+  dog:{b:'#f2a65a',l:'#fff1dc',d:'#d9824a',n:'#3b2a22',ears:'tri',nose:'round',tail:'curl',mz:[26,20]},
+  cat:{b:'#a9b0c2',l:'#f4f5f9',d:'#f4a9bb',n:'#e07f98',ears:'triTall',nose:'cat',tail:'long',mz:[20,15],sp:['catStripes','whiskers']},
+  racoon:{b:'#9aa0ab',l:'#f4f4f6',d:'#3b3f4a',n:'#23252b',ears:'round',nose:'round',tail:'ringed',mz:[22,17],sp:['mask']},
+  kangaroo:{b:'#c98a55',l:'#f3d6b3',d:'#a96a3a',n:'#3b2a22',ears:'long',nose:'round',tail:'thick',mz:[22,18],sp:['pouch']},
+  bunny:{b:'#ece6f2',l:'#ffffff',d:'#f6b3c4',n:'#f07f9d',ears:'long',nose:'pink',tail:'pom',mz:[18,14]},
+  hamster:{b:'#eaa65e',l:'#fff1dc',d:'#f2b8c2',n:'#e98aa0',ears:'small',nose:'pink',tail:'none',mz:[18,14],sp:['cheeks']},
+  mouse:{b:'#b7b5c4',l:'#f1f0f6',d:'#f6b3c4',n:'#f07f9d',ears:'mouse',nose:'pink',tail:'thin',mz:[16,12],sp:['whiskers']},
+  capy:{b:'#b9865a',l:'#d9b089',d:'#8f6440',n:'#4a3322',ears:'small',nose:'nostrils',tail:'none',mz:[36,24],hr:[60,46],sp:['fruit'],ey:90},
+  bird:{b:'#4aa3e0',l:'#e8f5ff',d:'#2f7fbf',n:'#ffa53a',ears:'none',nose:'beak',tail:'feather',mz:[0,0],hr:[52,46],sp:['wings','tuftFeather']},
+  lizard:{b:'#6cc36b',l:'#d4f2a6',d:'#3f9a4a',n:'#2f6b36',ears:'none',nose:'nostrils',tail:'lizard',mz:[30,18],hr:[60,46],sp:['spots'],big:true},
+  chick:{b:'#ffd93b',l:'#fff3a8',d:'#e8a800',n:'#ff8a1f',ears:'none',nose:'beak',tail:'none',mz:[0,0],hr:[52,46],sp:['wings','tuftHair']},
+  squirrel:{b:'#d9733a',l:'#fbe1c4',d:'#a8501f',n:'#3b2a22',ears:'tuft',nose:'round',tail:'squirrel',mz:[20,15]},
+  hedgehog:{b:'#e9c79b',l:'#fbe9cf',d:'#6e4f3a',n:'#2b2233',ears:'small',nose:'round',tail:'none',mz:[22,16],sp:['spikes']},
+  fox:{b:'#f07a2a',l:'#ffffff',d:'#3b2a22',n:'#2b2233',ears:'triTip',nose:'round',tail:'foxtail',mz:[26,18],sp:['foxCheeks']},
+  bear:{b:'#9a6a45',l:'#e2c09a',d:'#6e4a2f',n:'#2b2233',ears:'round',nose:'round',tail:'none',mz:[26,19]},
+  dino:{b:'#4caf6a',l:'#c6ec9a',d:'#2e7d4a',n:'#1f4f2e',ears:'none',nose:'nostrils',tail:'thick',mz:[34,22],hr:[60,46],sp:['ridge'],teeth:true},
+  shark:{b:'#6f8fae',l:'#f2f6fa',d:'#4b6a8a',n:'#2b2233',ears:'none',nose:'none',tail:'shark',mz:[40,22],sp:['dorsal','fins'],teeth:true},
+  wolf:{b:'#7c8597',l:'#e7eaf0',d:'#4b5263',n:'#23252b',ears:'triTall',nose:'round',tail:'bushy',mz:[28,20],sp:['wolfBrow']},
+  dragon:{b:'#7b5cd6',l:'#f3d9a0',d:'#5a3fb0',n:'#3a2470',ears:'none',nose:'nostrils',tail:'dragon',mz:[30,20],sp:['horns','dwings','ridge']},
+  tiger:{b:'#f39c3a',l:'#fff6ea',d:'#2b2233',n:'#2b2233',ears:'round',nose:'round',tail:'tiger',mz:[26,19],sp:['tigerStripes']}
+};
+const PET_KEYS=Object.keys(PETS);
+function petSVG(kind,mood,acc){
+  const p=PETS[kind]||PETS.dog,sp=p.sp||[],has=x=>sp.includes(x);
+  const B=p.b,Lc=p.l,D=p.d,N=p.n,ey=p.ey||95,hr=p.hr||[56,48],ink='#2b2233';
+  const droop=(mood==='thirsty'||mood==='sleep');
+  const mir=s=>'<g transform="translate(200 0) scale(-1 1)">'+s+'</g>';
+  const both=s=>s+mir(s);
+  let back='',tail='',ears='',head='',face='',top='',fx='';
+  /* fül */
+  const E={
+    tri:'<path d="M60 66 L52 22 L92 48 Z" fill="'+B+'"/><path d="M63 60 L58 34 L84 50 Z" fill="'+D+'"/>',
+    triTall:'<path d="M54 70 L50 14 L90 46 Z" fill="'+B+'"/><path d="M58 62 L55 28 L82 48 Z" fill="'+D+'"/>',
+    triTip:'<path d="M56 70 L50 16 L92 46 Z" fill="'+B+'"/><path d="M60 62 L56 32 L82 48 Z" fill="'+Lc+'"/><path d="M50 16 L53.5 31 L61.5 25 Z" fill="'+D+'"/>',
+    tuft:'<path d="M60 66 L52 22 L92 48 Z" fill="'+B+'"/><path d="M63 60 L58 34 L84 50 Z" fill="'+Lc+'"/><path d="M50 28 L42 10 L54 18 L55 4 L61 24 Z" fill="'+D+'"/>',
+    round:'<circle cx="60" cy="54" r="17" fill="'+B+'"/><circle cx="60" cy="54" r="9" fill="'+D+'"/>',
+    small:'<circle cx="66" cy="54" r="11" fill="'+B+'"/><circle cx="66" cy="54" r="6" fill="'+D+'"/>',
+    long:'<g transform="rotate(-12 74 34)"><ellipse cx="74" cy="26" rx="12" ry="32" fill="'+B+'"/><ellipse cx="74" cy="28" rx="6" ry="24" fill="'+D+'"/></g>',
+    mouse:'<circle cx="54" cy="50" r="24" fill="'+B+'"/><circle cx="54" cy="50" r="15" fill="'+D+'"/>',
+    none:''
+  };
+  if(p.ears!=='none')ears=both('<g'+(droop?' transform="rotate(-14 72 58)"':'')+'>'+E[p.ears]+'</g>');
+  /* farok */
+  const T={
+    curl:'<path d="M138 152 C176 148 180 112 162 106 C154 104 151 112 157 116 C165 122 160 138 136 142 Z" fill="'+B+'"/>',
+    long:'<path d="M138 166 C178 166 186 130 173 112 C168 106 160 110 164 116 C172 132 166 152 136 156 Z" fill="'+B+'"/>',
+    tiger:'<path d="M138 166 C178 166 186 130 173 112 C168 106 160 110 164 116 C172 132 166 152 136 156 Z" fill="'+B+'"/><path d="M171 118 L180 124 M174 134 L183 138 M168 150 L174 158" stroke="'+D+'" stroke-width="4" stroke-linecap="round"/>',
+    ringed:'<path d="M136 162 C182 162 192 120 172 102 C160 94 148 112 160 118 C172 130 164 150 134 152 Z" fill="'+B+'"/><path d="M170 106 C178 112 180 120 178 126 L166 124 C166 118 164 114 160 110 Z" fill="#3b3f4a"/><path d="M176 138 C172 146 166 152 158 156 L152 148 C158 146 162 142 164 136 Z" fill="#3b3f4a"/>',
+    bushy:'<path d="M136 162 C182 162 192 120 172 102 C160 94 148 112 160 118 C172 130 164 150 134 152 Z" fill="'+B+'"/><path d="M172 102 C166 98 158 102 158 110 C166 108 172 110 176 116 C178 110 176 104 172 102 Z" fill="'+Lc+'"/>',
+    foxtail:'<path d="M136 162 C182 162 192 120 172 102 C160 94 148 112 160 118 C172 130 164 150 134 152 Z" fill="'+B+'"/><path d="M172 102 C164 96 154 102 156 112 C164 108 174 110 180 120 C182 112 178 104 172 102 Z" fill="'+Lc+'"/>',
+    thick:'<path d="M138 170 C170 182 194 176 202 160 C188 164 168 160 146 148 Z" fill="'+B+'"/>',
+    dragon:'<path d="M138 170 C170 182 192 174 198 158 C186 162 168 158 146 148 Z" fill="'+B+'"/><path d="M194 160 L210 150 L206 170 Z" fill="'+D+'"/>',
+    pom:'<circle cx="148" cy="172" r="12" fill="'+Lc+'"/>',
+    thin:'<path d="M146 174 C178 180 190 158 176 146" fill="none" stroke="'+D+'" stroke-width="4" stroke-linecap="round"/>',
+    feather:'<path d="M138 164 L178 148 L172 170 Z" fill="'+D+'"/>',
+    lizard:'<path d="M140 170 C170 184 196 168 190 144 C188 136 180 140 182 148 C184 162 166 168 144 160 Z" fill="'+B+'"/>',
+    squirrel:'<path d="M132 170 C170 176 198 140 184 96 C176 70 146 74 150 98 C166 104 172 128 160 146 C154 156 142 158 132 156 Z" fill="'+B+'"/><path d="M160 92 C170 104 172 124 164 140" fill="none" stroke="'+Lc+'" stroke-width="5" stroke-linecap="round" opacity=".7"/>',
+    shark:'<path d="M142 160 L186 128 L178 160 L188 190 Z" fill="'+B+'"/>',
+    none:''
+  };
+  tail=T[p.tail]||'';
+  /* hát mögötti elemek */
+  if(has('dwings'))back+=both('<path d="M62 142 L14 100 L26 128 L10 138 L36 148 L22 160 L58 160 Z" fill="'+D+'"/>');
+  if(has('spikes')){let pts=[];for(let i=0;i<=24;i++){const a=Math.PI*(1.02+i*.96/24),r=i%2?1:1.22;pts.push((100+66*r*Math.cos(a)).toFixed(1)+' '+(96+58*r*Math.sin(a)).toFixed(1))}
+    back+='<path d="M'+pts.join(' L')+' Z" fill="'+D+'"/><ellipse cx="100" cy="150" rx="56" ry="40" fill="'+D+'"/>';}
+  if(has('dorsal'))back+='<path d="M86 50 L112 8 L120 50 Z" fill="'+B+'"/>';
+  /* test */
+  let body='<ellipse cx="100" cy="154" rx="48" ry="36" fill="'+B+'"/><ellipse cx="100" cy="162" rx="28" ry="22" fill="'+Lc+'"/>';
+  if(has('fins'))body+=both('<path d="M58 148 L26 170 L62 168 Z" fill="'+D+'"/>');
+  else if(has('wings'))body+=both('<ellipse cx="56" cy="152" rx="12" ry="22" transform="rotate(18 56 152)" fill="'+D+'"/>');
+  else body+='<ellipse cx="80" cy="184" rx="13" ry="7" fill="'+Lc+'"/><ellipse cx="120" cy="184" rx="13" ry="7" fill="'+Lc+'"/>';
+  if(has('pouch'))body+='<path d="M80 162 Q100 178 120 162" fill="none" stroke="'+D+'" stroke-width="3" stroke-linecap="round"/>';
+  if(has('tigerStripes'))body+=both('<path d="M56 140 L70 146 L56 152 Z" fill="'+D+'"/>');
+  /* fej */
+  head='<ellipse cx="100" cy="92" rx="'+hr[0]+'" ry="'+hr[1]+'" fill="'+B+'"/>';
+  if(has('horns'))top+=both('<path d="M72 54 Q60 30 72 18 Q72 36 82 50 Z" fill="'+Lc+'"/>');
+  if(has('ridge'))head+='<path d="M80 48 L86 32 L93 46 Z M94 45 L100 28 L106 45 Z M107 46 L114 32 L120 48 Z" fill="'+D+'"/>';
+  if(has('mask'))face+='<path d="M54 96 C56 80 70 78 84 86 L100 92 L116 86 C130 78 144 80 146 96 C144 108 128 110 116 104 L100 98 L84 104 C72 110 56 108 54 96 Z" fill="#3b3f4a"/><path d="M96 48 L104 48 L102 80 L98 80 Z" fill="#7e8490"/>'+both('<circle cx="78" cy="'+ey+'" r="10" fill="#ffffff" opacity=".9"/>');
+  if(has('wolfBrow'))face+='<path d="M64 82 Q100 54 136 82 L122 90 Q100 76 78 90 Z" fill="'+D+'" opacity=".55"/>';
+  if(has('catStripes'))face+='<path d="M92 50 L94 60 M100 47 L100 59 M108 50 L106 60" stroke="#858ca0" stroke-width="3" stroke-linecap="round"/>';
+  if(has('tigerStripes'))face+='<path d="M94 46 L100 64 L106 46 Z" fill="'+D+'"/>'+both('<path d="M84 50 L90 62 L80 58 Z M46 86 L64 92 L46 98 Z" fill="'+D+'"/>');
+  if(has('spots'))face+='<circle cx="80" cy="62" r="5" fill="'+D+'" opacity=".45"/><circle cx="120" cy="58" r="4" fill="'+D+'" opacity=".45"/><circle cx="132" cy="74" r="3.5" fill="'+D+'" opacity=".45"/>';
+  if(has('foxCheeks'))face+=both('<path d="M46 100 Q60 130 94 122 Q76 104 46 100 Z" fill="'+Lc+'"/>');
+  if(p.mz[0])face+='<ellipse cx="100" cy="114" rx="'+p.mz[0]+'" ry="'+p.mz[1]+'" fill="'+Lc+'"/>';
+  if(has('cheeks'))face+=both('<ellipse cx="66" cy="114" rx="19" ry="15" fill="'+Lc+'"/>');
+  face+=both('<ellipse cx="74" cy="114" rx="8" ry="5" fill="#ff8fa8" opacity=".5"/>');
+  /* szemek */
+  const ex=7*(p.big?1.25:1),eyR=(mood==='thirsty'?8:9)*(p.big?1.2:1);
+  const arc=(x,up)=>'M'+(x-8)+' '+(ey+(up?3:0))+' Q'+x+' '+(ey+(up?-7:6))+' '+(x+8)+' '+(ey+(up?3:0));
+  const glasses=acc==='glasses'&&mood!=='sleep';
+  if(!glasses){
+    if(mood==='happy'||mood==='thirsty')face+='<g class="blink">'+both('<ellipse cx="78" cy="'+ey+'" rx="'+ex+'" ry="'+eyR+'" fill="'+ink+'"/><circle cx="80.5" cy="'+(ey-3.5)+'" r="2.6" fill="#fff"/>')+'</g>';
+    if(mood==='thirsty')face+=both('<path d="M68 '+(ey-16)+' L86 '+(ey-12)+'" stroke="'+ink+'" stroke-width="3" stroke-linecap="round"/>');
+    if(mood==='sleep')face+=both('<path d="'+arc(78,false)+'" fill="none" stroke="'+ink+'" stroke-width="3.2" stroke-linecap="round"/>');
+    if(mood==='party')face+=both('<path d="'+arc(78,true)+'" fill="none" stroke="'+ink+'" stroke-width="3.6" stroke-linecap="round"/>');
+  }else if(mood==='sleep')face+=both('<path d="'+arc(78,false)+'" fill="none" stroke="'+ink+'" stroke-width="3.2" stroke-linecap="round"/>');
+  /* orr */
+  if(p.nose==='round')face+='<ellipse cx="100" cy="106" rx="8" ry="6" fill="'+N+'"/>';
+  if(p.nose==='pink')face+='<ellipse cx="100" cy="106" rx="5.5" ry="4.2" fill="'+N+'"/>';
+  if(p.nose==='cat')face+='<path d="M94 104 L106 104 L100 111 Z" fill="'+N+'"/>';
+  if(p.nose==='nostrils')face+=both('<ellipse cx="91" cy="106" rx="3.4" ry="2.6" fill="'+N+'"/>');
+  if(has('whiskers'))face+=both('<path d="M82 112 L58 108 M82 117 L58 120" stroke="#8b90a3" stroke-width="2" stroke-linecap="round"/>');
+  /* száj */
+  const beak=p.nose==='beak';
+  if(beak)face+=mood==='party'||mood==='thirsty'
+    ?'<path d="M89 104 L111 104 L100 112 Z" fill="'+N+'"/><path d="M92 113 L108 113 L100 122 Z" fill="'+N+'"/>'
+    :'<path d="M89 104 L111 104 L100 118 Z" fill="'+N+'"/>';
+  else{
+    if(mood==='happy'){face+='<path d="M88 116 Q100 128 112 116" fill="none" stroke="'+ink+'" stroke-width="3" stroke-linecap="round"/>';
+      if(p.teeth)face+='<path d="M92 119.5 L95 125 L98 121.5 Z M102 121.5 L105 125 L108 119.5 Z" fill="#fff"/>';}
+    if(mood==='thirsty')face+='<ellipse cx="100" cy="121" rx="5" ry="6" fill="'+ink+'"/><path d="M96 123 Q100 136 104 123 Z" fill="#ff7a93"/>';
+    if(mood==='sleep')face+='<path d="M94 119 Q100 122 106 119" fill="none" stroke="'+ink+'" stroke-width="2.6" stroke-linecap="round"/>';
+    if(mood==='party'){face+='<path d="M86 114 Q100 138 114 114 Z" fill="'+ink+'"/><path d="M92 124 Q100 132 108 124 Q100 120 92 124 Z" fill="#ff7a93"/>';
+      if(p.teeth)face+='<path d="M89 114.5 L93 121 L97 115 Z M103 115 L107 121 L111 114.5 Z" fill="#fff"/>';}
+  }
+  /* kiegészítők */
+  const capOn=acc==='cap',phonesOn=acc==='headphones';
+  if(has('fruit')&&!capOn&&!phonesOn&&mood!=='party')top+='<circle cx="100" cy="42" r="11" fill="#ffa53a"/><path d="M100 31 Q106 22 114 26 Q109 33 100 31 Z" fill="#4fb55a"/>';
+  if(has('tuftHair')&&!capOn)top+='<path d="M96 48 Q96 30 104 38 Q106 26 112 40" fill="none" stroke="'+D+'" stroke-width="3.4" stroke-linecap="round"/>';
+  if(has('tuftFeather')&&!capOn)top+='<path d="M98 47 Q100 30 110 34" fill="none" stroke="'+D+'" stroke-width="4" stroke-linecap="round"/>';
+  if(glasses)top+='<rect x="62" y="'+(ey-11)+'" width="32" height="21" rx="9" fill="#1d1a33"/><rect x="106" y="'+(ey-11)+'" width="32" height="21" rx="9" fill="#1d1a33"/><path d="M94 '+(ey-3)+' L106 '+(ey-3)+'" stroke="#1d1a33" stroke-width="4"/><path d="M68 '+(ey-5)+' L76 '+(ey-8)+' M112 '+(ey-5)+' L120 '+(ey-8)+'" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>';
+  if(capOn)top+='<path d="M50 64 Q52 30 100 30 Q148 30 150 64 Q100 52 50 64 Z" fill="#e0403a"/><path d="M124 58 Q150 52 170 60 Q160 70 140 66 Z" fill="#b8302b"/><circle cx="100" cy="31" r="4" fill="#b8302b"/>';
+  if(phonesOn)top+='<path d="M42 96 Q40 28 100 28 Q160 28 158 96" fill="none" stroke="#2b2233" stroke-width="8" stroke-linecap="round"/><rect x="32" y="80" width="22" height="34" rx="9" fill="#ff5f8f"/><rect x="146" y="80" width="22" height="34" rx="9" fill="#ff5f8f"/>';
+  if(mood==='party'&&!capOn)top+='<path d="M82 52 L100 4 L118 52 Z" fill="#ff5f8f"/><path d="M88 36 L112 36 L109 28 L91 28 Z" fill="#ffe36e"/><circle cx="100" cy="5" r="7" fill="#4fe0c2"/>';
+  /* hangulat kellékek */
+  if(mood==='happy')fx+='<path class="float" d="M158 50 C158 44 166 42 168 48 C170 42 178 44 178 50 C178 58 168 62 168 64 C168 62 158 58 158 50 Z" fill="#ff5f8f"/>';
+  if(mood==='thirsty')fx+='<path d="M158 60 Q168 74 158 80 Q148 74 158 60 Z" fill="#6ec6ff"/><path d="M8 178 H58 Q54 194 33 194 Q12 194 8 178 Z" fill="#8a7fd6"/><ellipse cx="33" cy="178" rx="25" ry="4" fill="#b9b1ef"/>';
+  if(mood==='sleep')fx+='<g class="zz" fill="#8a7fd6" font-family="system-ui,sans-serif" font-weight="800"><text x="152" y="56" font-size="22">Z</text><text x="172" y="36" font-size="15">z</text><text x="186" y="22" font-size="11">z</text></g>';
+  if(mood==='party')fx+='<g class="confetti"><rect x="20" y="40" width="8" height="12" rx="2" fill="#3fa9f5" transform="rotate(-20 24 46)"/><rect x="168" y="28" width="8" height="12" rx="2" fill="#ffa53a" transform="rotate(25 172 34)"/><rect x="30" y="96" width="7" height="10" rx="2" fill="#4fd18b" transform="rotate(35 33 101)"/><rect x="176" y="92" width="7" height="10" rx="2" fill="#ff5f8f" transform="rotate(-30 179 97)"/><circle cx="152" cy="14" r="4" fill="#ffe36e"/><circle cx="44" cy="16" r="4" fill="#8a5cf6"/></g>';
+  return '<svg viewBox="-12 -8 224 210" aria-hidden="true"><ellipse cx="100" cy="190" rx="56" ry="7" fill="#000" opacity=".13"/>'+
+    '<g class="wag">'+tail+'</g><g class="breathe"><g class="bounce">'+back+body+ears+head+face+top+'</g></g>'+fx+'</svg>';
+}
+
+let petKey='',petTemp=null,petTempTimer=null,petLastMood='';
+function petMood(now,d,tot,g,p){
+  const S=mins(state.start)??420,E=mins(state.end)??1320,N=now.getHours()*60+now.getMinutes();
+  if(tot>=g)return 'party';
+  if(N<S||N>=E)return 'sleep';
+  const last=d.entries.length?d.entries[d.entries.length-1].t:null,since=last?(now-last)/60000:(N-S);
+  if(since>=120)return 'thirsty';
+  if(p&&p.exp!=null&&tot-p.exp<=-1)return 'thirsty';
+  return 'happy';
+}
+function petText(kind,vars){
+  const M=L().petMsg[kind]||[''],seed=keyOf(new Date())+':'+new Date().getHours()+':'+kind;
+  return pick(M,seed).replace(/\{n\}/g,state.name||t('petFriend')).replace(/\{r\}/g,vars.r||'').replace(/\{a\}/g,vars.a||'').replace(/\{h\}/g,vars.h||'');
+}
+function petTextRand(kind,vars){const M=L().petMsg[kind]||[''];return M[Math.floor(Math.random()*M.length)].replace(/\{n\}/g,state.name||t('petFriend')).replace(/\{a\}/g,vars.a||'')}
+function renderPet(now,d,tot,g,p){
+  const P=state.pet,card=$('petCard');
+  if(!P.on){card.hidden=true;return}
+  card.hidden=false;
+  const mood=petMood(now,d,tot,g,p),key=P.kind+'|'+mood+'|'+P.acc;
+  if(key!==petKey){petKey=key;$('petSvg').innerHTML=petSVG(P.kind,mood,P.acc);const box=$('petBox');box.classList.remove('happy','thirsty','sleep','party');box.classList.add(mood)}
+  $('petBox').setAttribute('aria-label',t('petTapAria')+': '+(P.name||L().petNames[P.kind]));
+  $('petNameLbl').textContent=P.name||'';$('petNameLbl').hidden=!P.name;
+  const bub=$('petBubble');bub.hidden=!P.talk;$('petCard').style.gridTemplateColumns=P.talk?'':'auto';
+  if(!P.talk)return;
+  let txt;
+  if(petTemp)txt=petTemp;
+  else{
+    const S=mins(state.start)??420,N=now.getHours()*60+now.getMinutes(),last=d.entries.length?d.entries[d.entries.length-1].t:null,since=last?(now-last)/60000:null;
+    const vars={r:amt(Math.max(0,r1(g-tot))),h:since!=null?Math.floor(since/60):''};
+    if(mood==='happy'&&tot===0&&N-S<150)txt=petText('start',vars);
+    else if(mood==='thirsty'&&since!=null&&since>=120)txt=petText('gap',vars);
+    else txt=petText(mood,vars);
+  }
+  if(bub.textContent!==txt){bub.textContent=txt;if(petLastMood){bub.classList.remove('pop');void bub.offsetWidth;bub.classList.add('pop')}}
+  petLastMood=mood;
+}
+function petSay(txt){if(!state.pet.on||!state.pet.talk)return;petTemp=txt;clearTimeout(petTempTimer);petTempTimer=setTimeout(()=>{petTemp=null;render()},4500);render()}
+function petHop(){const b=$('petBox');b.classList.remove('sip');void b.offsetWidth;b.classList.add('sip');setTimeout(()=>b.classList.remove('sip'),800)}
+const HEART='<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-7.5-10.4A4.4 4.4 0 0 1 12 7.8a4.4 4.4 0 0 1 7.5 2.8C19.5 16.4 12 21 12 21z"/></svg>';
+$('petBox').onclick=()=>{
+  const h=$('petHearts');h.textContent='';
+  [-34,-12,10,30].forEach((dx,i)=>{const e=document.createElement('i');e.style.setProperty('--dx',dx+'px');e.style.animationDelay=(i*.08)+'s';e.innerHTML=HEART;h.appendChild(e)});
+  setTimeout(()=>{h.textContent=''},1500);petHop();buzz(12);petSay(petTextRand('pet',{}));
+};
+function buildPetGrid(){
+  const g=$('petGrid');g.textContent='';
+  PET_KEYS.forEach(k=>{const b=document.createElement('button');b.dataset.pet=k;b.innerHTML=petSVG(k,'happy','none');
+    const sp=document.createElement('span');sp.textContent=L().petNames[k];b.appendChild(sp);b.setAttribute('aria-label',L().petNames[k]);
+    b.onclick=()=>{state.pet.kind=k;renderPetSettings();render();writeSettings();petHop()};g.appendChild(b)});
+}
+function renderPetSettings(){
+  const P=state.pet;$('petOn').checked=P.on;$('petTalk').checked=P.talk;
+  if(document.activeElement!==$('petNameIn'))$('petNameIn').value=P.name;
+  document.querySelectorAll('#petGrid button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.pet===P.kind));
+  document.querySelectorAll('[data-pacc]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.pacc===P.acc));
+}
+$('petOn').onchange=()=>{state.pet.on=$('petOn').checked;render();writeSettings()};
+$('petTalk').onchange=()=>{state.pet.talk=$('petTalk').checked;render();writeSettings()};
+$('petNameIn').oninput=()=>{state.pet.name=$('petNameIn').value.trim().slice(0,16);render();writeSettings()};
+document.querySelectorAll('[data-pacc]').forEach(b=>b.onclick=()=>{state.pet.acc=b.dataset.pacc;renderPetSettings();render();writeSettings()});
 
 /* --- hangok és rezgés --- */
 let actx=null;
@@ -1214,7 +1510,7 @@ function add(dl,type,tm){
   const when=tm||Date.now(),k=keyOf(new Date(when)),d=ensure(k),before=sum(d),g=goalOf(d);
   d.entries.push({t:when,dl,type:type||'water'});d.entries.sort((a,b)=>a.t-b.t);render();writeDay(k);
   const isToday=k===keyOf(new Date());
-  if(isToday&&before<g&&sum(d)>=g){play('goal');buzz([30,60,30,60,60])}else{play('add');buzz(15)}
+  if(isToday&&before<g&&sum(d)>=g){play('goal');buzz([30,60,30,60,60]);petHop()}else{play('add');buzz(15);if(isToday){petHop();petSay(petTextRand('sip',{a:amt(dl)}))}}
 }
 let undo=null,toastTimer;
 function delEntry(k,i){
@@ -1379,7 +1675,7 @@ $('nameOnb').addEventListener('keydown',e=>{if(e.key==='Enter')onbStep2()});
 $('onbDone').onclick=()=>{state.onboarded=true;closeSheet('onbScrim');render();writeSettings()};
 
 /* --- beállítások --- */
-$('openSet').onclick=()=>{buildBtnCfg();renderSound();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderSettings();openSheet('setScrim')};
+$('openSet').onclick=()=>{buildBtnCfg();renderSound();renderPetSettings();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderSettings();openSheet('setScrim')};
 $('openHelp').onclick=()=>openSheet('helpScrim');
 $('nameSet').oninput=()=>{state.name=cleanName($('nameSet').value);render();writeSettings()};
 document.querySelectorAll('[data-lang-btn]').forEach(b=>b.onclick=()=>{state.lang=b.dataset.langBtn;applyLang();renderSettings();render();writeSettings()});
@@ -1415,7 +1711,7 @@ function renderSettings(){
 /* export / import */
 $('exportBtn').onclick=async()=>{
   const data=JSON.stringify({app:'vizmero',version:7,exported:new Date().toISOString(),
-    settings:{sound:state.sound,goal:state.goal,weight:state.weight,name:state.name,lang:state.lang,unit:state.unit,start:state.start,end:state.end,custom:state.custom,dover:state.dover,drinkOrder:state.drinkOrder,drinkShow:state.drinkShow,buttons:state.buttons},days:state.days},null,1);
+    settings:{pet:state.pet,sound:state.sound,goal:state.goal,weight:state.weight,name:state.name,lang:state.lang,unit:state.unit,start:state.start,end:state.end,custom:state.custom,dover:state.dover,drinkOrder:state.drinkOrder,drinkShow:state.drinkShow,buttons:state.buttons},days:state.days},null,1);
   const fname=t('backupName')+keyOf(new Date())+'.json';
   try{
     const file=new File([data],fname,{type:'application/json'});
@@ -1642,6 +1938,7 @@ function render(){
 
   const p=pace(now,d,tot,g);
   renderViz(now,d,tot,g,p,adv);
+  renderPet(now,d,tot,g,p);
   $('paceHead').textContent=p.head;$('pacePill').textContent=p.pill;$('pacePill').className='pill '+(p.cls||'');
   $('paceTip').textContent=p.tip;$('paceMotto').textContent=p.motto;
   const ex=$('expect');if(p.exp!=null&&tot<g&&p.exp>0&&p.exp<g){ex.hidden=false;ex.style.bottom=(p.exp/g*100)+'%'}else ex.hidden=true;
@@ -1690,7 +1987,7 @@ function render(){
 }
 
 /* --- indulás --- */
-loadLocal();normalizeDrinks();normalizeSound();
+loadLocal();normalizeDrinks();normalizeSound();normalizePet();
 if(!state.lang&&state.onboarded)state.lang='hu';
 applyLang();applyTheme();render();
 if(!state.onboarded)startOnb();
@@ -1700,7 +1997,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='9.0';
+const APP_VERSION='9.1';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
