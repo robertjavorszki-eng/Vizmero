@@ -23,6 +23,7 @@ html,body{margin:0}
   --water:#1f8fc4; --water-soft:#c3e2f2; --water-deep:#0d5f8a;
   --b1:#2a9bd2; --b2:#1f84bb; --b3:#156ea3; --b4:#0d5682; --ok:#1d8a5b; --warn:#b36b00;
   --d-tea:#b06d16; --d-coffee:#7b4a2b; --d-juice:#d9531e; --d-milk:#6b7a86; --d-other:#8a4fc2;
+  --d-green:#3f8a2e;--d-pink:#c2457a;--d-yellow:#9a7600;--d-teal:#13897a;--d-red:#c43c2c;--d-latte:#9c6b45;
   --display:"Avenir Next Condensed","Roboto Condensed","Arial Narrow",sans-serif-condensed,system-ui,sans-serif;
   --body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   color-scheme:light;
@@ -30,17 +31,17 @@ html,body{margin:0}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0a1820; --surface:#13232d; --ink:#e6eef3; --muted:#93a6b2; --line:#26394a;
   --water:#3fb2e6; --water-soft:#173d52; --water-deep:#8fd6f5; --ok:#4cc58f; --warn:#f0a63a;
-  --d-tea:#e0a14f; --d-coffee:#c99670; --d-juice:#ff8f5e; --d-milk:#b5c2cc; --d-other:#c59bf0; color-scheme:dark}}
+  --d-tea:#e0a14f; --d-coffee:#c99670; --d-juice:#ff8f5e; --d-milk:#b5c2cc; --d-other:#c59bf0; --d-green:#7ccf62;--d-pink:#f08cb8;--d-yellow:#e8c547;--d-teal:#4fd1bd;--d-red:#ff8a7a;--d-latte:#d9b08c; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0a1820; --surface:#13232d; --ink:#e6eef3; --muted:#93a6b2; --line:#26394a;
   --water:#3fb2e6; --water-soft:#173d52; --water-deep:#8fd6f5; --ok:#4cc58f; --warn:#f0a63a;
-  --d-tea:#e0a14f; --d-coffee:#c99670; --d-juice:#ff8f5e; --d-milk:#b5c2cc; --d-other:#c59bf0; color-scheme:dark}
+  --d-tea:#e0a14f; --d-coffee:#c99670; --d-juice:#ff8f5e; --d-milk:#b5c2cc; --d-other:#c59bf0; --d-green:#7ccf62;--d-pink:#f08cb8;--d-yellow:#e8c547;--d-teal:#4fd1bd;--d-red:#ff8a7a;--d-latte:#d9b08c; color-scheme:dark}
 
 /* A felhasználó saját választása (JS állítja: data-dark, data-accent) */
 html:root[data-dark="0"]{--surface:#ffffff;--ink:#10212c;--muted:#5a6c78;--line:#d5dee5;--ok:#1d8a5b;--warn:#b36b00;
-  --d-tea:#b06d16;--d-coffee:#7b4a2b;--d-juice:#d9531e;--d-milk:#6b7a86;--d-other:#8a4fc2;color-scheme:light}
+  --d-tea:#b06d16;--d-coffee:#7b4a2b;--d-juice:#d9531e;--d-milk:#6b7a86;--d-other:#8a4fc2;--d-green:#3f8a2e;--d-pink:#c2457a;--d-yellow:#9a7600;--d-teal:#13897a;--d-red:#c43c2c;--d-latte:#9c6b45;color-scheme:light}
 html:root[data-dark="1"]{--surface:#13232d;--ink:#e6eef3;--muted:#93a6b2;--line:#26394a;--ok:#4cc58f;--warn:#f0a63a;
-  --d-tea:#e0a14f;--d-coffee:#c99670;--d-juice:#ff8f5e;--d-milk:#b5c2cc;--d-other:#c59bf0;color-scheme:dark}
+  --d-tea:#e0a14f;--d-coffee:#c99670;--d-juice:#ff8f5e;--d-milk:#b5c2cc;--d-other:#c59bf0;--d-green:#7ccf62;--d-pink:#f08cb8;--d-yellow:#e8c547;--d-teal:#4fd1bd;--d-red:#ff8a7a;--d-latte:#d9b08c;color-scheme:dark}
 html:root[data-accent="ocean"][data-dark="0"]{--bg:#eaf2f7;--water:#1f8fc4;--water-soft:#c3e2f2;--water-deep:#0d5f8a}
 html:root[data-accent="ocean"][data-dark="1"]{--bg:#0a1820;--water:#3fb2e6;--water-soft:#173d52;--water-deep:#8fd6f5}
 html:root[data-accent="ocean"]{--b1:#2a9bd2;--b2:#1f84bb;--b3:#156ea3;--b4:#0d5682}
@@ -114,7 +115,7 @@ h1{font-family:var(--display);font-weight:800;font-size:1.9rem;letter-spacing:.0
 .dic{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--dc) 18%,transparent);color:var(--dc);flex:none}
 .dic svg{width:17px;height:17px}
 .btns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-body.unit-l .add b{font-size:1.7rem;letter-spacing:-.01em}
+body.unit-l .add b{font-size:clamp(1.3rem,7vw,1.7rem);letter-spacing:-.01em}
 .add{appearance:none;border:none;border-radius:16px;padding-block:18px 14px;color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--body);box-shadow:0 3px 0 rgba(0,0,0,.22);transition:transform .08s}
 .add:active{transform:translateY(3px);box-shadow:none}
 #b1{background:var(--b1)}#b2{background:var(--b2)}#b3{background:var(--b3)}#b5{background:var(--b4)}
@@ -190,6 +191,41 @@ h2{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mu
 .tank .top{position:absolute;left:20px;top:18px;display:flex;flex-direction:column;gap:2px;z-index:2}
 .tank .bottom{position:absolute;left:18px;right:18px;bottom:16px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px;font-size:.88rem;font-weight:600;z-index:2}
 .tank .tag{position:absolute;right:12px;font-size:.7rem;font-weight:700;color:#fff;background:var(--warn);padding:2px 8px;border-radius:999px;z-index:2}
+/* gombok ikonja, italaim */
+.add{position:relative}
+.add .bi{position:absolute;top:4px;left:50%;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--dc);display:grid;place-items:center}
+.add .bi svg{width:12px;height:12px}
+.btns .add.long b{font-size:clamp(1.15rem,6vw,1.5rem);letter-spacing:-.02em}
+.btns .add.xlong b{font-size:clamp(.95rem,4.8vw,1.25rem);letter-spacing:-.02em}
+.dlist{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.dlist li{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto auto;gap:6px;align-items:center;padding:6px 8px 6px 12px;border-top:1px solid var(--line)}
+.dlist li:first-child{border-top:none}
+.dlist li.off .dname,.dlist li.off .dic{opacity:.45}
+.dname{border:none;background:none;text-align:left;font:600 .95rem var(--body);color:var(--ink);padding:10px 4px;cursor:pointer;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dname small{display:block;font-weight:500;font-size:.72rem;color:var(--muted)}
+.mv{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:1rem;cursor:pointer}
+.mv:disabled{opacity:.3;cursor:default}
+.tg{position:relative;width:46px;height:28px;flex:none}
+.tg input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.tg i{position:absolute;inset:0;border-radius:999px;background:var(--line);transition:background .2s;pointer-events:none}
+.tg i::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .2s}
+.tg input:checked+i{background:var(--water)}
+.tg input:checked+i::after{transform:translateX(18px)}
+.tg input:focus-visible+i{outline:3px solid var(--water-deep);outline-offset:2px}
+.icongrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.icongrid button{height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--dc);display:grid;place-items:center;cursor:pointer}
+.icongrid button svg{width:24px;height:24px}
+.icongrid button[aria-pressed="true"]{border-color:var(--dc);background:color-mix(in srgb,var(--dc) 14%,var(--surface))}
+.colgrid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px}
+.colgrid button{aspect-ratio:1;max-width:100%;border-radius:50%;border:3px solid var(--surface);outline:1.5px solid var(--line);cursor:pointer;padding:0}
+.colgrid button[aria-pressed="true"]{outline:3px solid var(--ink)}
+.btnrow{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.btnrow:first-of-type{border-top:none}
+.btnrow .stp{display:flex;align-items:center;gap:6px}
+.btnrow .stp .step{width:36px;height:36px;font-size:1.1rem}
+.btnrow output{min-width:3.6em;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.btnrow select{min-width:0;width:100%;height:40px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:500 .9rem var(--body);padding-inline:8px}
+.btnno{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:.85rem}
 .note{font-size:.8rem;color:var(--muted);text-align:center;margin:0}
 .adv{display:none}
 body.advanced .adv{display:revert}
@@ -385,6 +421,18 @@ body.advanced .adv.grid{display:grid}
     </div>
 
     <div>
+      <h2 data-t="drinksSec"></h2>
+      <button class="ghost" id="openDrinks" style="width:100%" data-t="editDrinks"></button>
+      <p class="small" style="margin-top:8px" data-t="drinksNote"></p>
+    </div>
+
+    <div>
+      <h2 data-t="buttonsSec"></h2>
+      <div id="btnCfg"></div>
+      <p class="small" style="margin-top:4px" data-t="buttonsNote"></p>
+    </div>
+
+    <div>
       <h2 data-t="unit"></h2>
       <div class="opt2">
         <button class="chip" id="unit-dl" data-unit="dl" data-t="unitDl"></button>
@@ -449,6 +497,38 @@ body.advanced .adv.grid{display:grid}
       </div>
       <input type="file" id="importFile" accept=".json,application/json" hidden>
       <p class="small" style="margin-top:8px" data-t="dataNote"></p>
+    </div>
+  </div>
+</div>
+
+<!-- Italaim -->
+<div class="scrim" id="drinksScrim" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="drinksTitle">
+    <header><h3 id="drinksTitle" data-t="myDrinks"></h3><button class="icon" data-close="drinksScrim" data-ta="close">✕</button></header>
+    <p class="small" style="margin:-8px 0 0" data-t="myDrinksNote"></p>
+    <ul class="dlist" id="dlist"></ul>
+    <button class="custom" id="addDrink" data-t="addDrink"></button>
+  </div>
+</div>
+
+<div class="scrim" id="drinkEdScrim" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="deTitle">
+    <header><h3 id="deTitle"></h3><button class="icon" data-close="drinkEdScrim" data-ta="close">✕</button></header>
+    <div>
+      <h2><label for="deName" data-t="drinkNameLbl"></label></h2>
+      <input class="text" type="text" id="deName" maxlength="24" data-tp="drinkNamePh">
+    </div>
+    <div>
+      <h2 data-t="iconLbl"></h2>
+      <div class="icongrid" id="deIcons"></div>
+    </div>
+    <div>
+      <h2 data-t="colorLbl"></h2>
+      <div class="colgrid" id="deColors"></div>
+    </div>
+    <div class="actions">
+      <button class="ghost danger" id="deDelete"></button>
+      <button class="primary" id="deSave" data-t="save"></button>
     </div>
   </div>
 </div>
@@ -558,6 +638,12 @@ body.advanced .adv.grid{display:grid}
       <p>Haladó módban előbb válaszd ki fent, mit iszol; a gombok azzal az itallal rögzítenek. A kávé, a tea és a többi ital is beszámít a napi célba.</p>
     </section>
     <section>
+      <h4>Italaim és saját gombok</h4>
+      <p>A beállításokban az <b>Italaim szerkesztése</b> gombbal választhatod ki, mely italok jelenjenek meg (pl. szénsavas víz, gyógytea, tejeskávé, növényi tej, kakaó, leves, sportital, alkoholmentes sör). A kapcsolóval mutatod vagy elrejted, a nyilakkal rendezed, a névre koppintva átnevezheted, és ikont, színt adhatsz neki. A <b>+ Saját ital</b> gombbal teljesen újat is felvehetsz. Minden ital beszámít a napi célba.</p>
+      <p>A <b>Gombok</b> részben a négy gyorsgomb mennyiségét és italát állíthatod, pl. „2 dl tejeskávé”. Ha egy gombhoz italt rendelsz, kis ikon jelzi rajta, és mindig azzal rögzít. A „kiválasztott ital” beállítású gomb haladó módban a „Mit iszol?” sorban kijelölt italt rögzíti, egyszerű módban vizet.</p>
+      <p>Tejes kávénál nem kell külön felvenni a tejet: rögzítsd az egész csészét egyben. A kávé és a tea is beszámít a folyadékbevitelbe.</p>
+    </section>
+    <section>
       <h4>Hatféle kijelző</h4>
       <p>A mennyiséget hatféleképpen nézheted: <b>Mérőpohár</b>, <b>Gyűrű</b>, <b>Kulacs</b>, <b>Pohársor</b> (2 dl-es poharakban számolva), <b>Idővonal</b> (a nap grafikonja a tervhez képest) és <b>Akvárium</b>. A rajzot balra húzva a következőre, jobbra húzva az előzőre vált (koppintással is lapozhatsz), a beállítások „Kijelző” részében pedig közvetlenül választhatsz. A pontok a rajz alatt mutatják, melyiknél jársz.</p>
     </section>
@@ -634,6 +720,12 @@ body.advanced .adv.grid{display:grid}
       <h4>Logging a drink</h4>
       <p>Tap <b>+1</b>, <b>+2</b>, <b>+3</b> or <b>+5 dl</b> (in liters: +0.1 / +0.2 / +0.3 / +0.5 l). An average glass is about 2–2.5 dl, a mug about 3 dl, a small bottle of water 5 dl. (1 dl = 100 ml.)</p>
       <p>In advanced mode, first pick what you’re drinking at the top; the buttons log that drink. Coffee, tea and other drinks also count towards your daily goal.</p>
+    </section>
+    <section>
+      <h4>My drinks and custom buttons</h4>
+      <p>In Settings, <b>Edit my drinks</b> lets you choose which drinks appear (e.g. sparkling water, herbal tea, milk coffee, plant milk, cocoa, soup, sports drink, alcohol-free beer). Use the switch to show or hide one, the arrows to reorder, and tap a name to rename it and pick an icon and color. <b>+ Custom drink</b> adds a brand-new one. Every drink counts towards your daily goal.</p>
+      <p>Under <b>Buttons</b> you can set the amount and drink of the four quick buttons, e.g. “2 dl milk coffee”. A button with a drink shows a small icon and always logs that drink. A button set to “selected drink” logs the drink chosen under “What are you drinking?” in advanced mode, and water in simple mode.</p>
+      <p>For coffee with milk there’s no need to log the milk separately: log the whole cup at once. Coffee and tea count towards your fluid intake too.</p>
     </section>
     <section>
       <h4>Six display styles</h4>
@@ -722,7 +814,14 @@ hu:{
   privText:'A naplód csak ezen a telefonon tárolódik. Az app nem küldi el sehova, nem kell hozzá fiók, és megnyitás után internet nélkül is működik.',
   priv1:'Senkivel nem osztom meg, amit beírsz.', priv2:'Más, aki ugyanezt a linket használja, nem látja a naplódat.', priv3:'Nincs reklám, nincs regisztráció.',
   privMore:'Részletek a súgóban, a kérdőjeles gomb alatt.', start2:'Kezdjük',
-  drinks:{water:'Víz',tea:'Tea',coffee:'Kávé',juice:'Gyümölcslé',milk:'Tej',other:'Egyéb'},
+  drinks:{water:'Víz',sparkling:'Szénsavas víz',tea:'Tea',herbal:'Gyógytea',coffee:'Kávé',latte:'Tejeskávé',juice:'Gyümölcslé',lemonade:'Limonádé',smoothie:'Smoothie',milk:'Tej',plantmilk:'Növényi tej',kefir:'Kefir',cocoa:'Kakaó',soup:'Leves',isotonic:'Sportital',beer:'Alkoholmentes sör',other:'Egyéb'},
+  drinksSec:'Italok', editDrinks:'Italaim szerkesztése', drinksNote:'Melyik italok jelenjenek meg, milyen sorrendben, milyen néven és ikonnal. Saját italt is felvehetsz.',
+  buttonsSec:'Gombok', buttonsNote:'A négy gyorsgomb mennyisége és itala. A „kiválasztott ital” a „Mit iszol?” sorban kijelölt italt rögzíti (egyszerű módban vizet).',
+  selDrink:'Kiválasztott ital', btnAria:(a,d)=>'Hozzáadás: '+a+(d?', '+d:''),
+  myDrinks:'Italaim', myDrinksNote:'A bekapcsolt italok jelennek meg a „Mit iszol?” sorban. Mind beszámít a napi célba.',
+  addDrink:'+ Saját ital', up:'Feljebb', down:'Lejjebb', showDrink:'Megjelenítés', custom:'saját', renamed:'átnevezve',
+  newDrink:'Új ital', editDrink:'Ital szerkesztése', drinkNameLbl:'Név', drinkNamePh:'pl. Bodzaszörp', iconLbl:'Ikon', colorLbl:'Szín',
+  deleteDrink:'Törlés', resetDrink:'Eredeti', tNeedName:'Adj nevet az italnak.', tDrinkDeleted:n=>n+' törölve. A korábbi bejegyzések megmaradnak.', tDrinkSaved:'Mentve',
   tDeleted:(a,dr,t)=>a+' '+dr.toLowerCase()+' törölve ('+t+')', tLogged:(a,dr,t)=>a+' '+dr.toLowerCase()+' rögzítve ('+t+')', tEdited:'Javítva', tUpdated:'Frissítve a legújabb változatra.',
   tSaveFail:'Nem sikerült menteni. Ellenőrizd a netet.', tWindow:'A napi időszak legyen legalább 2 óra, és a vége a kezdés után legyen.',
   tBase:a=>'Alapcél: '+a, tExported:f=>'Mentés kész: '+f, tExportFail:'A mentés nem sikerült ezen az eszközön.',
@@ -790,7 +889,14 @@ en:{
   privText:'Your log is stored only on this phone. The app doesn’t send it anywhere, needs no account, and works offline after the first visit.',
   priv1:'I don’t share anything you enter with anyone.', priv2:'Others using the same link can’t see your log.', priv3:'No ads, no sign-up.',
   privMore:'More details in Help, under the question mark button.', start2:'Let’s start',
-  drinks:{water:'Water',tea:'Tea',coffee:'Coffee',juice:'Juice',milk:'Milk',other:'Other'},
+  drinks:{water:'Water',sparkling:'Sparkling water',tea:'Tea',herbal:'Herbal tea',coffee:'Coffee',latte:'Milk coffee',juice:'Juice',lemonade:'Lemonade',smoothie:'Smoothie',milk:'Milk',plantmilk:'Plant milk',kefir:'Kefir',cocoa:'Cocoa',soup:'Soup',isotonic:'Sports drink',beer:'Alcohol-free beer',other:'Other'},
+  drinksSec:'Drinks', editDrinks:'Edit my drinks', drinksNote:'Choose which drinks appear, in what order, with what name and icon. You can add your own too.',
+  buttonsSec:'Buttons', buttonsNote:'Amount and drink of the four quick buttons. “Selected drink” logs the drink chosen under “What are you drinking?” (water in simple mode).',
+  selDrink:'Selected drink', btnAria:(a,d)=>'Add '+a+(d?', '+d:''),
+  myDrinks:'My drinks', myDrinksNote:'Drinks that are switched on appear under “What are you drinking?”. All of them count towards your daily goal.',
+  addDrink:'+ Custom drink', up:'Move up', down:'Move down', showDrink:'Show', custom:'custom', renamed:'renamed',
+  newDrink:'New drink', editDrink:'Edit drink', drinkNameLbl:'Name', drinkNamePh:'e.g. Elderflower cordial', iconLbl:'Icon', colorLbl:'Color',
+  deleteDrink:'Delete', resetDrink:'Reset', tNeedName:'Give the drink a name.', tDrinkDeleted:n=>n+' deleted. Earlier entries are kept.', tDrinkSaved:'Saved',
   tDeleted:(a,dr,t)=>a+' '+dr.toLowerCase()+' deleted ('+t+')', tLogged:(a,dr,t)=>a+' '+dr.toLowerCase()+' logged ('+t+')', tEdited:'Updated', tUpdated:'Updated to the latest version.',
   tSaveFail:'Couldn’t save. Check your connection.', tWindow:'The daily window must be at least 2 hours, and the end must come after the start.',
   tBase:a=>'Base goal: '+a, tExported:f=>'Saved: '+f, tExportFail:'Saving didn’t work on this device.',
@@ -827,24 +933,65 @@ function t(key,...a){const v=L()[key];return typeof v==='function'?v(...a):(v??k
 
 const ICON={
   water:'<path d="M12 3.5s6 6.4 6 10.8a6 6 0 0 1-12 0C6 9.9 12 3.5 12 3.5z"/>',
+  sparkling:'<path d="M7 4h10l-1.2 16H8.2z"/><circle cx="10.5" cy="14.5" r="1"/><circle cx="13.6" cy="11" r="1"/><circle cx="12.2" cy="17" r=".7"/><circle cx="11" cy="8.5" r=".7"/>',
   tea:'<path d="M4 10h12v4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 11.5h1.5a2.3 2.3 0 0 1 0 4.6H15.6"/><path d="M10 10V6.5"/><rect x="8.6" y="4" width="2.8" height="2.6" rx=".4"/>',
+  herbal:'<path d="M4 11h12v3a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 12h1.5a2.2 2.2 0 0 1 0 4.4H15.6"/><path d="M8.5 8.5c0-2.6 2.1-4.5 5-4.5 0 2.6-2.1 4.5-5 4.5z"/>',
   coffee:'<path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><path d="M16 10.5h1.2a2.4 2.4 0 0 1 0 4.8H16"/><path d="M8.5 3.5c-.8 1 .8 1.8 0 3M12 3.5c-.8 1 .8 1.8 0 3"/>',
+  latte:'<path d="M7 3h10l-1.3 18H8.3z"/><path d="M7.4 9h9.2"/><path d="M7.9 14h8.2"/>',
   juice:'<path d="M6.5 8h11l-1.4 12H7.9z"/><path d="M13.5 8l2-5h3"/><path d="M7.2 13h9.6"/>',
+  lemonade:'<path d="M5 7h10l-1.3 14H6.3z"/><circle cx="16.5" cy="6.5" r="3.2"/><path d="M16.5 3.3v6.4M13.3 6.5h6.4"/>',
+  smoothie:'<path d="M6 8h12l-1.5 13h-9z"/><path d="M5 8h14"/><path d="M12 8l2-5h3"/><path d="M7 13h10"/>',
   milk:'<path d="M8 3h8v3l2 3v12H6V9l2-3z"/><path d="M6 9h12"/><path d="M8 6h8"/>',
-  other:'<path d="M7 4h10l-1.2 16H8.2z"/><path d="M7.5 9h9"/>'
+  plantmilk:'<path d="M8 3h8v3l2 3v12H6V9l2-3z"/><path d="M6 9h12"/><path d="M9.5 18c0-2.4 1.9-4.3 4.5-4.3 0 2.4-1.9 4.3-4.5 4.3z"/>',
+  kefir:'<path d="M9.5 2h5v3h-5z"/><path d="M9.5 5c-2 1.5-3 3-3 5v11h11V10c0-2-1-3.5-3-5"/><path d="M6.5 13h11"/>',
+  cocoa:'<path d="M5 9h11v7a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><path d="M16 11h1.2a2.4 2.4 0 0 1 0 4.8H16"/><rect x="7.2" y="5.6" width="3" height="3" rx=".6"/><rect x="11" y="5" width="3" height="3" rx=".6"/>',
+  soup:'<path d="M3 11h18a9 7 0 0 1-18 0z"/><path d="M8.5 20.5h7"/><path d="M9 3.5c-.8 1 .8 1.8 0 3M13 3.5c-.8 1 .8 1.8 0 3"/>',
+  isotonic:'<path d="M10 2h4v3h-4z"/><path d="M9 5h6l1 3v13H8V8z"/><path d="M8 12h8"/><path d="M8 16h8"/>',
+  beer:'<path d="M5 8h10v12H5z"/><path d="M15 10h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M5 8a2 2 0 0 1 2.5-3 2.5 2.5 0 0 1 4.5 0A2 2 0 0 1 15 8"/><path d="M8.5 11v6M11.5 11v6"/>',
+  other:'<path d="M7 4h10l-1.2 16H8.2z"/><path d="M7.5 9h9"/>',
+  star:'<path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/>',
+  heart:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>'
 };
-const DRINKS=[
-  {id:'water',c:'var(--water)'},{id:'tea',c:'var(--d-tea)'},{id:'coffee',c:'var(--d-coffee)'},
-  {id:'juice',c:'var(--d-juice)'},{id:'milk',c:'var(--d-milk)'},{id:'other',c:'var(--d-other)'}
+const ICON_KEYS=Object.keys(ICON);
+const COLORS={water:'var(--water)',teal:'var(--d-teal)',green:'var(--d-green)',yellow:'var(--d-yellow)',orange:'var(--d-juice)',red:'var(--d-red)',pink:'var(--d-pink)',purple:'var(--d-other)',brown:'var(--d-coffee)',grey:'var(--d-milk)'};
+/* gyári italok: id, szín, alapból látszik-e */
+const CATALOG=[
+  ['water','water',1],['sparkling','teal',0],['tea','tea',1],['herbal','green',0],['coffee','brown',1],['latte','latte',0],
+  ['juice','orange',1],['lemonade','yellow',0],['smoothie','pink',0],['milk','grey',1],['plantmilk','green',0],['kefir','grey',0],
+  ['cocoa','brown',0],['soup','red',0],['isotonic','teal',0],['beer','yellow',0],['other','purple',1]
 ];
-const DMAP=Object.fromEntries(DRINKS.map(d=>[d.id,d]));
-function drinkOf(id){return DMAP[id]||DMAP.water}
-function drinkName(id){return L().drinks[drinkOf(id).id]}
-function iconEl(id,cls){const d=drinkOf(id),w=document.createElement('span');w.className=cls||'dic';w.style.setProperty('--dc',d.c);
-  w.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICON[d.id]+'</svg>';return w}
+const CAT=Object.fromEntries(CATALOG.map(([id,c,def])=>[id,{id,color:c,def:!!def}]));
+function colorVar(c){return c==='tea'?'var(--d-tea)':c==='latte'?'var(--d-latte)':(COLORS[c]||COLORS.water)}
+function normalizeDrinks(){
+  state.custom=state.custom&&typeof state.custom==='object'?state.custom:{};
+  state.dover=state.dover&&typeof state.dover==='object'?state.dover:{};
+  state.drinkShow=state.drinkShow&&typeof state.drinkShow==='object'?state.drinkShow:{};
+  const ids=[...CATALOG.map(x=>x[0]),...Object.keys(state.custom).filter(id=>!state.custom[id].removed)];
+  let order=Array.isArray(state.drinkOrder)?state.drinkOrder.filter(id=>ids.includes(id)):[];
+  ids.forEach(id=>{if(!order.includes(id))order.push(id)});
+  state.drinkOrder=order;
+  ids.forEach(id=>{if(!(id in state.drinkShow))state.drinkShow[id]=CAT[id]?CAT[id].def:true});
+  if(!Array.isArray(state.buttons)||state.buttons.length!==4)state.buttons=[1,2,3,5].map(dl=>({dl,drink:''}));
+  state.buttons=state.buttons.map(b=>({dl:Math.max(.5,Math.min(20,r1(+b.dl||2))),drink:b.drink&&knownDrink(b.drink)?b.drink:''}));
+}
+function knownDrink(id){return !!(CAT[id]||(state.custom&&state.custom[id]))}
+function drinkOf(id){
+  const cu=state.custom&&state.custom[id];
+  if(cu)return {id,c:colorVar(cu.color),icon:ICON[cu.icon]?cu.icon:'other'};
+  const base=CAT[id]||CAT.water,ov=(state.dover&&state.dover[base.id])||{};
+  return {id:base.id,c:colorVar(ov.color||base.color),icon:ICON[ov.icon]?ov.icon:base.id};
+}
+function drinkName(id){
+  const cu=state.custom&&state.custom[id];if(cu)return cu.name;
+  const base=CAT[id]?id:'water',ov=state.dover&&state.dover[base];
+  return (ov&&ov.name)||L().drinks[base];
+}
+function visibleDrinks(){return state.drinkOrder.filter(id=>state.drinkShow[id]&&knownDrink(id)&&!(state.custom[id]&&state.custom[id].removed))}
+function svgIcon(key){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICON[key]+'</svg>'}
+function iconEl(id,cls){const d=drinkOf(id),w=document.createElement('span');w.className=cls||'dic';w.style.setProperty('--dc',d.c);w.innerHTML=svgIcon(d.icon);return w}
 
 /* days: {'2026-10-09': {entries:[{t,dl,type}], act:0|3|6, hot:bool}} */
-let state={goal:20,weight:80,mode:'system',accent:'ocean',name:'',onboarded:false,lang:null,unit:'dl',view:'glass',ui:'simple',start:'07:00',end:'22:00',drink:'water',days:{}};
+let state={goal:20,weight:80,mode:'system',accent:'ocean',name:'',onboarded:false,lang:null,unit:'dl',view:'glass',ui:'simple',start:'07:00',end:'22:00',drink:'water',drinkOrder:null,drinkShow:null,custom:{},dover:{},buttons:null,days:{}};
 let col=null;
 const $=id=>document.getElementById(id);
 const root=document.documentElement;
@@ -882,7 +1029,7 @@ function applyLang(){
   document.querySelectorAll('[data-tp]').forEach(el=>{el.placeholder=t(el.dataset.tp)});
   document.querySelectorAll('[data-lang]').forEach(el=>{el.hidden=el.dataset.lang!==(state.lang==='en'?'en':'hu')});
   document.querySelectorAll('[data-lang-btn]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.langBtn===(state.lang||'hu')));
-  buildDrinkRow();buildEditor();
+  buildDrinkRow();buildEditor();buildBtnCfg();if(!$('drinksScrim').hidden)buildDrinkList();
 }
 
 /* --- téma --- */
@@ -911,7 +1058,7 @@ const openStack=[];
 function openSheet(id,focusEl){openStack.push({id,back:document.activeElement});$(id).hidden=false;const sh=$(id).querySelector('.sheet');if(sh)sh.scrollTop=0;setTimeout(()=>(focusEl||$(id).querySelector('[data-close]')||sh).focus(),40)}
 function closeSheet(id){$(id).hidden=true;const i=openStack.map(x=>x.id).lastIndexOf(id);if(i>=0){const b=openStack[i].back;openStack.splice(i,1);if(b&&b.focus)b.focus()}}
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeSheet(b.dataset.close));
-['setScrim','entryScrim','helpScrim'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target===$(id))closeSheet(id)}));
+['setScrim','entryScrim','helpScrim','drinksScrim','drinkEdScrim'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target===$(id))closeSheet(id)}));
 document.addEventListener('keydown',e=>{if(e.key!=='Escape'||!openStack.length)return;const top=openStack[openStack.length-1].id;if(top!=='onbScrim')closeSheet(top)});
 
 /* --- rögzítés --- */
@@ -929,15 +1076,42 @@ $('toastBtn').onclick=()=>{
   if(!undo)return;const {k,e}=undo;undo=null;const d=ensure(k);
   d.entries.push(e);d.entries.sort((a,b)=>a.t-b.t);$('toast').hidden=true;render();writeDay(k);
 };
-document.querySelectorAll('.add').forEach(b=>b.onclick=()=>add(+b.dataset.dl,state.ui==='advanced'?state.drink:'water'));
+document.querySelectorAll('.add').forEach((b,i)=>b.onclick=()=>{const c=state.buttons[i];add(c.dl,c.drink||(state.ui==='advanced'?state.drink:'water'))});
+function renderButtons(){
+  document.querySelectorAll('.add').forEach((b,i)=>{const c=state.buttons[i];
+    const lbl='+'+uv(c.dl);b.querySelector('b').textContent=lbl;b.classList.toggle('long',lbl.length===4);b.classList.toggle('xlong',lbl.length>=5);b.querySelector('span').textContent=longU(c.dl);
+    let bi=b.querySelector('.bi');if(c.drink){if(!bi){bi=document.createElement('i');bi.className='bi';b.appendChild(bi)}const d=drinkOf(c.drink);bi.style.setProperty('--dc',d.c);bi.innerHTML=svgIcon(d.icon)}else if(bi)bi.remove();
+    b.setAttribute('aria-label',t('btnAria',amtL(c.dl),c.drink?drinkName(c.drink):''))});
+}
+function buildBtnCfg(){
+  const box=$('btnCfg');box.textContent='';
+  state.buttons.forEach((c,i)=>{
+    const row=document.createElement('div');row.className='btnrow';
+    const no=document.createElement('span');no.className='btnno';no.style.background='var(--b'+(i+1)+')';no.textContent=i+1;
+    const stp=document.createElement('div');stp.className='stp';
+    const mi=document.createElement('button');mi.className='step';mi.textContent='−';mi.setAttribute('aria-label',t('less'));
+    const out=document.createElement('output');out.textContent=amt(c.dl);
+    const pl=document.createElement('button');pl.className='step';pl.textContent='+';pl.setAttribute('aria-label',t('more'));
+    mi.onclick=()=>{c.dl=Math.max(.5,r1(c.dl-.5));out.textContent=amt(c.dl);renderButtons();writeSettings()};
+    pl.onclick=()=>{c.dl=Math.min(20,r1(c.dl+.5));out.textContent=amt(c.dl);renderButtons();writeSettings()};
+    stp.append(mi,out,pl);
+    const sel=document.createElement('select');sel.setAttribute('aria-label',t('drink')+' '+(i+1));
+    const o0=document.createElement('option');o0.value='';o0.textContent=t('selDrink');sel.appendChild(o0);
+    const ids=state.drinkOrder.filter(id=>knownDrink(id)&&(state.drinkShow[id]||id===c.drink));
+    ids.forEach(id=>{const o=document.createElement('option');o.value=id;o.textContent=drinkName(id);sel.appendChild(o)});
+    sel.value=c.drink||'';sel.onchange=()=>{c.drink=sel.value;renderButtons();writeSettings()};
+    row.append(no,stp,sel);box.appendChild(row);
+  });
+}
 document.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>{const k=keyOf(new Date());ensure(k).act=+b.dataset.act;render();writeDay(k)});
 $('hot').onclick=()=>{const k=keyOf(new Date()),d=ensure(k);d.hot=!d.hot;render();writeDay(k)};
 
 /* italválasztó sor */
 function buildDrinkRow(){
   const row=$('drinkRow');row.textContent='';
-  DRINKS.forEach(d=>{const b=document.createElement('button');b.className='chip';b.style.setProperty('--dc',d.c);b.dataset.drink=d.id;
-    b.append(iconEl(d.id),drinkName(d.id));b.onclick=()=>{state.drink=d.id;renderDrinkRow();writeSettings()};row.appendChild(b)});
+  if(!visibleDrinks().includes(state.drink))state.drink=visibleDrinks()[0]||'water';
+  visibleDrinks().forEach(id=>{const d=drinkOf(id),b=document.createElement('button');b.className='chip';b.style.setProperty('--dc',d.c);b.dataset.drink=id;
+    b.append(iconEl(id),drinkName(id));b.onclick=()=>{state.drink=id;renderDrinkRow();writeSettings()};row.appendChild(b)});
   renderDrinkRow();
 }
 function renderDrinkRow(){document.querySelectorAll('#drinkRow .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.drink===state.drink))}
@@ -947,8 +1121,9 @@ let ed={mode:'new',k:null,i:-1,dl:2,type:'water'};
 const QUICK=[1.5,2.5,3.3,4,7.5,10];
 function buildEditor(){
   const q=$('amQuick');q.textContent='';QUICK.forEach(v=>{const b=document.createElement('button');b.className='chip';b.dataset.v=v;b.textContent=amt(v);b.onclick=()=>{ed.dl=v;renderEditor()};q.appendChild(b)});
-  const g=$('drinkGrid');g.textContent='';DRINKS.forEach(d=>{const b=document.createElement('button');b.className='chip';b.style.setProperty('--dc',d.c);b.dataset.drink=d.id;
-    b.append(iconEl(d.id),drinkName(d.id));b.onclick=()=>{ed.type=d.id;renderEditor()};g.appendChild(b)});
+  const g=$('drinkGrid');g.textContent='';const ids=visibleDrinks();if(ed&&ed.type&&!ids.includes(ed.type)&&knownDrink(ed.type))ids.push(ed.type);
+  ids.forEach(id=>{const d=drinkOf(id),b=document.createElement('button');b.className='chip';b.style.setProperty('--dc',d.c);b.dataset.drink=id;
+    b.append(iconEl(id),drinkName(id));b.onclick=()=>{ed.type=id;renderEditor()};g.appendChild(b)});
 }
 function renderEditor(){
   $('amOut').firstChild.nodeValue=uv(ed.dl);$('amOut').lastChild.textContent=U();
@@ -960,7 +1135,7 @@ function openEditor(k,i){
     $('entryTitle').textContent=t('customTitle');$('amSave').textContent=t('add');$('amDelete').hidden=true}
   else{const e=state.days[k].entries[i];ed={mode:'edit',k,i,dl:e.dl,type:e.type||'water'};$('amTime').value=hhmm(e.t);
     $('entryTitle').textContent=t('editTitle');$('amSave').textContent=t('save');$('amDelete').hidden=false}
-  renderEditor();openSheet('entryScrim');
+  buildEditor();renderEditor();openSheet('entryScrim');
 }
 $('openCustom').onclick=()=>openEditor(null);
 $('amMinus').onclick=()=>{ed.dl=Math.max(.5,r1(ed.dl-.5));renderEditor()};
@@ -973,6 +1148,66 @@ $('amSave').onclick=()=>{
     closeSheet('entryScrim');render();writeDay(ed.k);toast(t('tEdited'))}
 };
 $('amDelete').onclick=()=>{closeSheet('entryScrim');delEntry(ed.k,ed.i)};
+
+/* --- Italaim --- */
+function refreshDrinkUI(){buildDrinkRow();buildEditor();buildBtnCfg();renderButtons();render();writeSettings()}
+function buildDrinkList(){
+  const ul=$('dlist');ul.textContent='';const ids=state.drinkOrder.filter(knownDrink);
+  ids.forEach((id,i)=>{
+    const li=document.createElement('li');if(!state.drinkShow[id])li.className='off';
+    const nb=document.createElement('button');nb.className='dname';nb.textContent=drinkName(id);
+    const tag=state.custom[id]?t('custom'):(state.dover[id]&&state.dover[id].name?t('renamed'):'');
+    if(tag){const sm=document.createElement('small');sm.textContent=tag;nb.appendChild(sm)}
+    nb.onclick=()=>openDrinkEd(id);
+    const up=document.createElement('button');up.className='mv';up.textContent='↑';up.setAttribute('aria-label',t('up')+': '+drinkName(id));up.disabled=i===0;
+    const dn=document.createElement('button');dn.className='mv';dn.textContent='↓';dn.setAttribute('aria-label',t('down')+': '+drinkName(id));dn.disabled=i===ids.length-1;
+    const mvTo=(j)=>{const o=state.drinkOrder,a=o.indexOf(id),b=o.indexOf(ids[j]);[o[a],o[b]]=[o[b],o[a]];buildDrinkList();refreshDrinkUI();
+      const btns=$('dlist').children[j].querySelectorAll('.mv');(j<i?btns[0]:btns[1]).focus()};
+    up.onclick=()=>mvTo(i-1);dn.onclick=()=>mvTo(i+1);
+    const tg=document.createElement('label');tg.className='tg';const cb=document.createElement('input');cb.type='checkbox';cb.checked=!!state.drinkShow[id];
+    cb.setAttribute('aria-label',t('showDrink')+': '+drinkName(id));
+    cb.onchange=()=>{state.drinkShow[id]=cb.checked;li.className=cb.checked?'':'off';refreshDrinkUI()};
+    tg.append(cb,document.createElement('i'));
+    li.append(iconEl(id),nb,up,dn,tg);ul.appendChild(li);
+  });
+}
+$('openDrinks').onclick=()=>{buildDrinkList();openSheet('drinksScrim')};
+$('addDrink').onclick=()=>openDrinkEd(null);
+let de=null;
+function openDrinkEd(id){
+  if(id){const d=drinkOf(id),cu=state.custom[id],ov=state.dover[id]||{};
+    de={id,name:drinkName(id),icon:d.icon,color:cu?cu.color:(ov.color||CAT[id].color)}}
+  else de={id:null,name:'',icon:'other',color:'purple'};
+  $('deTitle').textContent=t(id?'editDrink':'newDrink');$('deName').value=de.id?de.name:'';
+  const isCustom=de.id&&state.custom[de.id];
+  $('deDelete').hidden=!de.id||(!isCustom&&!state.dover[de.id]);
+  $('deDelete').textContent=t(isCustom?'deleteDrink':'resetDrink');
+  renderDrinkEd();openSheet('drinkEdScrim',$('deName'));
+}
+function renderDrinkEd(){
+  const c=colorVar(de.color),ig=$('deIcons');ig.textContent='';
+  ICON_KEYS.forEach(k=>{const b=document.createElement('button');b.style.setProperty('--dc',c);b.innerHTML=svgIcon(k);b.setAttribute('aria-label',k);
+    b.setAttribute('aria-pressed',k===de.icon);b.onclick=()=>{de.icon=k;renderDrinkEd()};ig.appendChild(b)});
+  const cg=$('deColors');cg.textContent='';
+  [...Object.keys(COLORS)].forEach(k=>{const b=document.createElement('button');b.style.background=COLORS[k];b.setAttribute('aria-label',k);
+    b.setAttribute('aria-pressed',k===de.color);b.onclick=()=>{de.color=k;renderDrinkEd()};cg.appendChild(b)});
+}
+$('deSave').onclick=()=>{
+  const name=($('deName').value||'').trim().replace(/\s+/g,' ').slice(0,24);
+  if(!de.id){if(!name){toast(t('tNeedName'));$('deName').focus();return}
+    const id='c'+Date.now().toString(36);state.custom[id]={name,icon:de.icon,color:de.color};state.drinkOrder.push(id);state.drinkShow[id]=true}
+  else if(state.custom[de.id]){if(!name){toast(t('tNeedName'));$('deName').focus();return}Object.assign(state.custom[de.id],{name,icon:de.icon,color:de.color})}
+  else{const base=CAT[de.id],ov={};if(name&&name!==L().drinks[de.id])ov.name=name;if(de.icon!==de.id)ov.icon=de.icon;if(de.color!==base.color)ov.color=de.color;
+    if(Object.keys(ov).length)state.dover[de.id]=ov;else delete state.dover[de.id]}
+  closeSheet('drinkEdScrim');buildDrinkList();refreshDrinkUI();toast(t('tDrinkSaved'));
+};
+$('deDelete').onclick=()=>{
+  if(!de.id)return;
+  if(state.custom[de.id]){const n=state.custom[de.id].name;state.custom[de.id].removed=true;state.drinkOrder=state.drinkOrder.filter(x=>x!==de.id);
+    state.buttons.forEach(b=>{if(b.drink===de.id)b.drink=''});if(state.drink===de.id)state.drink='water';toast(t('tDrinkDeleted',n))}
+  else delete state.dover[de.id];
+  closeSheet('drinkEdScrim');buildDrinkList();refreshDrinkUI();
+};
 
 /* --- első indítás --- */
 function cleanName(v){return (v||'').trim().replace(/\s+/g,' ').slice(0,30)}
@@ -991,7 +1226,7 @@ $('nameOnb').addEventListener('keydown',e=>{if(e.key==='Enter')onbStep2()});
 $('onbDone').onclick=()=>{state.onboarded=true;closeSheet('onbScrim');render();writeSettings()};
 
 /* --- beállítások --- */
-$('openSet').onclick=()=>{$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderSettings();openSheet('setScrim')};
+$('openSet').onclick=()=>{buildBtnCfg();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderSettings();openSheet('setScrim')};
 $('openHelp').onclick=()=>openSheet('helpScrim');
 $('nameSet').oninput=()=>{state.name=cleanName($('nameSet').value);render();writeSettings()};
 document.querySelectorAll('[data-lang-btn]').forEach(b=>b.onclick=()=>{state.lang=b.dataset.langBtn;applyLang();renderSettings();render();writeSettings()});
@@ -1027,7 +1262,7 @@ function renderSettings(){
 /* export / import */
 $('exportBtn').onclick=async()=>{
   const data=JSON.stringify({app:'vizmero',version:7,exported:new Date().toISOString(),
-    settings:{goal:state.goal,weight:state.weight,name:state.name,lang:state.lang,unit:state.unit,start:state.start,end:state.end},days:state.days},null,1);
+    settings:{goal:state.goal,weight:state.weight,name:state.name,lang:state.lang,unit:state.unit,start:state.start,end:state.end,custom:state.custom,dover:state.dover,drinkOrder:state.drinkOrder,drinkShow:state.drinkShow,buttons:state.buttons},days:state.days},null,1);
   const fname=t('backupName')+keyOf(new Date())+'.json';
   try{
     const file=new File([data],fname,{type:'application/json'});
@@ -1041,12 +1276,15 @@ $('importFile').onchange=async()=>{
   const f=$('importFile').files[0];$('importFile').value='';if(!f)return;
   let obj;try{obj=JSON.parse(await f.text())}catch(e){toast(t('tBadFile'));return}
   if(!obj||typeof obj.days!=='object'){toast(t('tBadFile'));return}
+  if(obj.settings&&obj.settings.custom&&typeof obj.settings.custom==='object'){for(const id in obj.settings.custom){const c=obj.settings.custom[id];
+    if(/^c[a-z0-9]{1,12}$/.test(id)&&!state.custom[id]&&c&&typeof c.name==='string')state.custom[id]={name:c.name.slice(0,24),icon:ICON[c.icon]?c.icon:'other',color:COLORS[c.color]?c.color:'purple',removed:!!c.removed}}
+    normalizeDrinks();buildDrinkRow();buildEditor()}
   let nd=0,ne=0;
   for(const k in obj.days){
     if(!/^\d{4}-\d{2}-\d{2}$/.test(k))continue;
     const src=obj.days[k],list=Array.isArray(src)?src:(src&&Array.isArray(src.entries)?src.entries:[]);
     const d=ensure(k),have=new Set(d.entries.map(e=>e.t));let added=0;
-    list.forEach(e=>{if(e&&typeof e.t==='number'&&typeof e.dl==='number'&&e.dl>0&&e.dl<=50&&!have.has(e.t)){d.entries.push({t:e.t,dl:r1(e.dl),type:DMAP[e.type]?e.type:'water'});have.add(e.t);added++}});
+    list.forEach(e=>{if(e&&typeof e.t==='number'&&typeof e.dl==='number'&&e.dl>0&&e.dl<=50&&!have.has(e.t)){d.entries.push({t:e.t,dl:r1(e.dl),type:knownDrink(e.type)?e.type:'water'});have.add(e.t);added++}});
     if(src&&!Array.isArray(src)){if(!d.act&&[3,6].includes(src.act))d.act=src.act;if(!d.hot&&src.hot)d.hot=true}
     d.entries.sort((a,b)=>a.t-b.t);
     if(added){nd++;ne+=added;writeDay(k)}else if(!d.entries.length&&!d.act&&!d.hot)delete state.days[k];
@@ -1226,7 +1464,7 @@ function render(){
   $('date').textContent=Ld.dateFmt(now.getDate(),Ld.months[now.getMonth()],Ld.days[now.getDay()]);
   $('date').style.whiteSpace='pre-line';
   $('total').firstChild.nodeValue=uv(tot);$('total').lastChild.textContent=longU(tot);
-  document.querySelectorAll('.add').forEach(b=>{b.querySelector('b').textContent='+'+uv(+b.dataset.dl);b.querySelector('span').textContent=longU(+b.dataset.dl)});
+  renderButtons();
 
   const fill=$('fill');fill.textContent='';fill.style.height=Math.min(tot/g,1)*100+'%';
   let lastColor='var(--water)';
@@ -1299,7 +1537,7 @@ function render(){
 }
 
 /* --- indulás --- */
-loadLocal();
+loadLocal();normalizeDrinks();
 if(!state.lang&&state.onboarded)state.lang='hu';
 applyLang();applyTheme();render();
 if(!state.onboarded)startOnb();
@@ -1309,7 +1547,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='8.2';
+const APP_VERSION='8.3';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
