@@ -54,6 +54,10 @@ html:root[data-accent="coral"]{--b1:#e0603d;--b2:#cd4f2c;--b3:#b54122;--b4:#9333
 html:root[data-accent="lavender"][data-dark="0"]{--bg:#f1effb;--water:#6b5bd6;--water-soft:#dad5f6;--water-deep:#3e2f9c}
 html:root[data-accent="lavender"][data-dark="1"]{--bg:#14121f;--water:#a395ff;--water-soft:#2e2856;--water-deep:#d4ccff;--surface:#1e1b2e;--line:#35304f}
 html:root[data-accent="lavender"]{--b1:#8274e0;--b2:#6a5ad5;--b3:#5545bf;--b4:#41329f}
+html:root[data-accent="vidam"][data-dark="0"]{--bg:#f3f0ff;--surface:#ffffff;--line:#e3ddf7;--ink:#1d1a33;--muted:#5f5699;--water:#5b3fd6;--water-soft:#dcd3ff;--water-deep:#4327b8}
+html:root[data-accent="vidam"][data-dark="1"]{--bg:#16122b;--surface:#211b3d;--line:#3a3366;--ink:#f1eeff;--muted:#b0a7e0;--water:#8f7bff;--water-soft:#2f2858;--water-deep:#c9beff}
+html:root[data-accent="vidam"]{--b1:#1c86cf;--b2:#1a9455;--b3:#d26d08;--b4:#d63a6a}
+html:root[data-accent="neon"]{--bg:#120f24;--surface:#1d1838;--line:#3a3366;--ink:#f1eeff;--muted:#a9a1dc;--water:#4ff0ff;--water-soft:#173a46;--water-deep:#8ff7ff;--warn:#ffb84f;--ok:#c6ff4f;--b1:#10303a;--b2:#26330f;--b3:#3a2810;--b4:#3a1035;color-scheme:dark}
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-tap-highlight-color:transparent;transition:background .3s}
@@ -226,6 +230,46 @@ h2{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mu
 .btnrow output{min-width:3.6em;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
 .btnrow select{min-width:0;width:100%;height:40px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:500 .9rem var(--body);padding-inline:8px}
 .btnno{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:.85rem}
+/* ikonos gombok */
+.chip.ic{gap:6px}
+.chip.ic svg{flex:none;opacity:.9}
+.segrow .chip.ic{padding-inline:8px}
+/* színes, kártyás beállítások */
+#setScrim .sheet{background:var(--bg)}
+#setScrim .sheet>header{background:var(--bg)}
+#setScrim .sheet>div{background:var(--surface);border-radius:18px;padding:14px}
+#setScrim .sheet>div>h2{display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:1rem;color:var(--ink);font-weight:800;margin:0 0 12px}
+#setScrim .sheet>div>h2 label{font:inherit;color:inherit}
+.sic{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:#fff;flex:none;background:var(--sc)}
+.sic svg{width:18px;height:18px}
+#setScrim .calc{background:var(--bg)}
+#setScrim .text,#setScrim .time,#setScrim .btnrow select{background:var(--bg)}
+.srow{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line)}
+.srow.first{border-top:none}
+.play{width:38px;height:38px;border-radius:50%;border:none;background:var(--water-soft);color:var(--water-deep);display:grid;place-items:center;cursor:pointer;flex:none}
+.sw i.stripes{border-radius:50%}
+/* Vidám és Neon téma extrái */
+html:root[data-accent="vidam"] #act0,html:root[data-accent="neon"] #act0{--cc:#1a9455}
+html:root[data-accent="vidam"] #act3,html:root[data-accent="neon"] #act3{--cc:#1c86cf}
+html:root[data-accent="vidam"] #act6,html:root[data-accent="neon"] #act6{--cc:#d26d08}
+html:root[data-accent="vidam"] #hot,html:root[data-accent="neon"] #hot{--cc:#c99100}
+html:root[data-accent="neon"] #act0{--cc:#c6ff4f}html:root[data-accent="neon"] #act3{--cc:#4ff0ff}html:root[data-accent="neon"] #act6{--cc:#ffb84f}html:root[data-accent="neon"] #hot{--cc:#ff4fd8}
+html:root[data-accent="vidam"] .segrow .chip,html:root[data-accent="neon"] .segrow .chip{border-color:transparent;background:color-mix(in srgb,var(--cc) 16%,var(--surface));color:var(--ink)}
+html:root[data-accent="vidam"] .segrow .chip svg,html:root[data-accent="neon"] .segrow .chip svg{color:var(--cc)}
+html:root[data-accent="vidam"] .segrow .chip[aria-pressed="true"],html:root[data-accent="neon"] .segrow .chip[aria-pressed="true"]{border-color:var(--cc);background:color-mix(in srgb,var(--cc) 32%,var(--surface))}
+html:root[data-accent="vidam"][data-dark="0"] .pace{background:#fff3b8;border-color:transparent;color:#3f3200}
+html:root[data-accent="vidam"][data-dark="0"] .pace .motto{color:#6b5700}
+html:root[data-accent="vidam"][data-dark="1"] .pace{background:#2b2350;border-color:#4a3f86}
+html:root[data-accent="neon"] .pace{background:#2a1a3d;border-color:#ff4fd8}
+html:root[data-accent="vidam"][data-dark="0"] #openHelp{background:#ffe36e;color:#5a4300;border-color:transparent}
+html:root[data-accent="vidam"][data-dark="0"] #openSet{background:#ff8fb1;color:#5c0f2a;border-color:transparent}
+html:root[data-accent="neon"] #openHelp{color:#c6ff4f}html:root[data-accent="neon"] #openSet{color:#4ff0ff}
+html:root[data-accent="neon"] h1{color:#ff4fd8}
+html:root[data-accent="neon"] .add{border:2px solid var(--bc);color:var(--bc);box-shadow:none}
+html:root[data-accent="neon"] #b1{--bc:#4ff0ff;background:#10303a}html:root[data-accent="neon"] #b2{--bc:#c6ff4f;background:#26330f}
+html:root[data-accent="neon"] #b3{--bc:#ffb84f;background:#3a2810}html:root[data-accent="neon"] #b5{--bc:#ff4fd8;background:#3a1035}
+html:root[data-accent="neon"] .add .bi{background:#120f24}
+html:root[data-accent="vidam"] .add{box-shadow:0 4px 0 rgba(0,0,0,.18)}
 .note{font-size:.8rem;color:var(--muted);text-align:center;margin:0}
 .adv{display:none}
 body.advanced .adv{display:revert}
@@ -245,7 +289,7 @@ body.modal{overflow:hidden}
 .sheet header h3{margin:0;font-size:1.15rem}
 .opt2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .opt3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.swatches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .sw{border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:10px 4px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font:600 .8rem var(--body);color:var(--ink)}
 .sw i{width:34px;height:34px;border-radius:50%;display:block}
 .sw[aria-pressed="true"]{border-color:var(--ink)}
@@ -343,9 +387,9 @@ body.modal{overflow:hidden}
   <section class="extras" data-ta="todayConditions">
     <h2 style="margin:0" data-t="today2"></h2>
     <div class="segrow">
-      <button class="chip" id="act0" data-act="0" data-t="actSit"></button>
-      <button class="chip" id="act3" data-act="3" data-t="actMid"></button>
-      <button class="chip" id="act6" data-act="6" data-t="actHigh"></button>
+      <button class="chip ic" id="act0" data-act="0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21v-5l3-3 3 3v5"/><circle cx="10" cy="6" r="2"/><path d="M15 21h3"/></svg><span data-t="actSit"></span></button>
+      <button class="chip ic" id="act3" data-act="3"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="4.5" r="2"/><path d="M7 21l3-6 3 2v4M10 15l1-5 4 3 3-1"/></svg><span data-t="actMid"></span></button>
+      <button class="chip ic" id="act6" data-act="6"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3l-7 11h5l-1 7 7-11h-5z"/></svg><span data-t="actHigh"></span></button>
       <button class="chip" id="hot" data-ta="hotAria">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span data-t="hot"></span>
       </button>
@@ -419,8 +463,8 @@ body.modal{overflow:hidden}
     <div>
       <h2 data-t="mode"></h2>
       <div class="opt2">
-        <button class="chip" id="u-simple" data-ui="simple" data-t="simple"></button>
-        <button class="chip" id="u-advanced" data-ui="advanced" data-t="advanced"></button>
+        <button class="chip ic" id="u-simple" data-ui="simple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3"/></svg><span data-t="simple"></span></button>
+        <button class="chip ic" id="u-advanced" data-ui="advanced"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span data-t="advanced"></span></button>
       </div>
       <p class="small" style="margin-top:8px" data-t="modeNote"></p>
     </div>
@@ -440,8 +484,8 @@ body.modal{overflow:hidden}
     <div>
       <h2 data-t="unit"></h2>
       <div class="opt2">
-        <button class="chip" id="unit-dl" data-unit="dl" data-t="unitDl"></button>
-        <button class="chip" id="unit-l" data-unit="l" data-t="unitL"></button>
+        <button class="chip ic" id="unit-dl" data-unit="dl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10l-1.2 16H8.2z"/><path d="M7.5 9h9"/></svg><span data-t="unitDl"></span></button>
+        <button class="chip ic" id="unit-l" data-unit="l"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2h4v3h-4z"/><path d="M9 5h6l1 3v13H8V8z"/></svg><span data-t="unitL"></span></button>
       </div>
       <p class="small" style="margin-top:8px" data-t="unitNote"></p>
     </div>
@@ -456,21 +500,43 @@ body.modal{overflow:hidden}
     </div>
 
     <div>
+      <h2 data-t="soundSec"></h2>
+      <div class="srow first"><span data-t="soundOn"></span><label class="tg"><input type="checkbox" id="snOn"><i></i></label></div>
+      <div class="srow"><span><span data-t="vibOn"></span><small class="small" id="vibNote" style="display:block"></small></span><label class="tg"><input type="checkbox" id="snVib"><i></i></label></div>
+      <div class="srow"><span data-t="quietOn"></span><label class="tg"><input type="checkbox" id="snQuiet"><i></i></label></div>
+      <p class="small" style="margin:12px 0 4px;font-weight:700" data-t="whenSound"></p>
+      <div class="srow first"><button class="play" data-play="add" data-ta="play"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></button><span style="margin-right:auto" data-t="evAdd"></span><label class="tg"><input type="checkbox" data-sev="add"><i></i></label></div>
+      <div class="srow"><button class="play" data-play="del" data-ta="play"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></button><span style="margin-right:auto" data-t="evDel"></span><label class="tg"><input type="checkbox" data-sev="del"><i></i></label></div>
+      <div class="srow"><button class="play" data-play="goal" data-ta="play"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></button><span style="margin-right:auto" data-t="evGoal"></span><label class="tg"><input type="checkbox" data-sev="goal"><i></i></label></div>
+      <p class="small" style="margin:12px 0 6px;font-weight:700" data-t="soundSet"></p>
+      <div class="opt3">
+        <button class="chip ic" data-sset="drop"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5s6 6.4 6 10.8a6 6 0 0 1-12 0C6 9.9 12 3.5 12 3.5z"/></svg><span data-t="sDrop"></span></button>
+        <button class="chip ic" data-sset="bubble"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="14" r="4"/><circle cx="16" cy="8" r="2.5"/><circle cx="17" cy="16" r="1.5"/></svg><span data-t="sBubble"></span></button>
+        <button class="chip ic" data-sset="melody"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><span data-t="sMelody"></span></button>
+      </div>
+      <div class="row" style="margin-top:12px"><label for="snVol" data-t="volume"></label><input type="range" id="snVol" min="0" max="100" step="5" value="60"><output id="snVolOut">60%</output></div>
+      <p class="small" style="margin-top:8px" data-t="soundNote"></p>
+    </div>
+
+    <div>
       <h2 data-t="appearance"></h2>
       <div class="opt3">
-        <button class="chip" id="m-system" data-mode="system" data-t="mSystem"></button>
-        <button class="chip" id="m-light" data-mode="light" data-t="mLight"></button>
-        <button class="chip" id="m-dark" data-mode="dark" data-t="mDark"></button>
+        <button class="chip ic" id="m-system" data-mode="system"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18h2"/></svg><span data-t="mSystem"></span></button>
+        <button class="chip ic" id="m-light" data-mode="light"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span data-t="mLight"></span></button>
+        <button class="chip ic" id="m-dark" data-mode="dark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><span data-t="mDark"></span></button>
       </div>
     </div>
 
     <div>
       <h2 data-t="color"></h2>
+      <p class="small" style="margin:-4px 0 10px" data-t="colorNote"></p>
       <div class="swatches">
         <button class="sw" id="a-ocean" data-accent="ocean"><i style="background:linear-gradient(135deg,#2a9bd2,#0d5682)"></i><span data-t="cOcean"></span></button>
         <button class="sw" id="a-mint" data-accent="mint"><i style="background:linear-gradient(135deg,#3fd1a8,#085a48)"></i><span data-t="cMint"></span></button>
         <button class="sw" id="a-coral" data-accent="coral"><i style="background:linear-gradient(135deg,#ff8a6b,#93331a)"></i><span data-t="cCoral"></span></button>
         <button class="sw" id="a-lavender" data-accent="lavender"><i style="background:linear-gradient(135deg,#a395ff,#41329f)"></i><span data-t="cLavender"></span></button>
+        <button class="sw" id="a-vidam" data-accent="vidam"><i class="stripes" style="background:linear-gradient(90deg,#1c86cf 0 33%,#1a9455 33% 66%,#d63a6a 66%)"></i><span data-t="cVidam"></span></button>
+        <button class="sw" id="a-neon" data-accent="neon"><i class="stripes" style="background:linear-gradient(90deg,#ff4fd8 0 33%,#4ff0ff 33% 66%,#c6ff4f 66%);box-shadow:inset 0 0 0 3px #120f24"></i><span data-t="cNeon"></span></button>
       </div>
     </div>
 
@@ -649,6 +715,11 @@ body.modal{overflow:hidden}
       <p>Tejes kávénál nem kell külön felvenni a tejet: rögzítsd az egész csészét egyben. A kávé és a tea is beszámít a folyadékbevitelbe.</p>
     </section>
     <section>
+      <h4>Hangok és rezgés</h4>
+      <p>Az app rövid hangot ad ital hozzáadásakor, törléskor vagy visszavonáskor, és egy kis dallamot, amikor meglesz a napi cél. A beállítások <b>Hangok és rezgés</b> részében kikapcsolhatod, eseményenként is, választhatsz hangkészletet (Vízcsepp, Buborék, Dallam), állíthatod a hangerőt, és a lejátszás gombbal meg is hallgathatod.</p>
+      <p>Alapból a napi időszakon kívül (pl. késő este) csendben marad. Androidon koppintáskor röviden rezeg is; iPhone-on ezt a böngésző nem engedi. iPhone-on a néma kapcsoló a hangokat is elnémítja.</p>
+    </section>
+    <section>
       <h4>Hatféle kijelző</h4>
       <p>A mennyiséget hatféleképpen nézheted: <b>Mérőpohár</b>, <b>Gyűrű</b>, <b>Kulacs</b>, <b>Pohársor</b> (2 dl-es poharakban számolva), <b>Idővonal</b> (a nap grafikonja a tervhez képest) és <b>Akvárium</b>. A rajzot balra húzva a következőre, jobbra húzva az előzőre vált (koppintással is lapozhatsz), a beállítások „Kijelző” részében pedig közvetlenül választhatsz. A pontok a rajz alatt mutatják, melyiknél jársz.</p>
     </section>
@@ -686,7 +757,7 @@ body.modal{overflow:hidden}
     </section>
     <section>
       <h4>Beállítások</h4>
-      <p>Itt választhatsz <b>nyelvet</b> (magyar vagy angol), megadhatod vagy átírhatod a keresztneved, ezzel köszönt az app, és itt állíthatod a <b>mértékegységet</b> is: deciliter vagy liter. A megjelenés lehet <b>Nappali</b>, <b>Éjszakai</b> vagy <b>Rendszer</b> (ez a telefonod világos vagy sötét módját követi), és négy szín közül választhatsz: Óceán, Menta, Korall, Levendula.</p>
+      <p>Itt választhatsz <b>nyelvet</b> (magyar vagy angol), megadhatod vagy átírhatod a keresztneved, ezzel köszönt az app, és itt állíthatod a <b>mértékegységet</b> is: deciliter vagy liter. A megjelenés lehet <b>Nappali</b>, <b>Éjszakai</b> vagy <b>Rendszer</b> (ez a telefonod világos vagy sötét módját követi), és hat szín közül választhatsz: Óceán, Menta, Korall, Levendula, a színes <b>Vidám</b>, és a mindig sötét, élénk <b>Neon</b>.</p>
     </section>
     </div>
 
@@ -733,6 +804,11 @@ body.modal{overflow:hidden}
       <p>For coffee with milk there’s no need to log the milk separately: log the whole cup at once. Coffee and tea count towards your fluid intake too.</p>
     </section>
     <section>
+      <h4>Sounds and vibration</h4>
+      <p>The app plays a short sound when you add a drink, delete or undo, and a little tune when you reach your daily goal. Under <b>Sounds and vibration</b> in Settings you can turn them off (per event too), pick a sound set (Water drop, Bubble, Melody), set the volume and preview each one with the play button.</p>
+      <p>By default it stays quiet outside your daily window (e.g. late at night). On Android it also gives a short buzz when you tap; the browser doesn’t allow that on iPhone. On iPhone the silent switch also mutes the sounds.</p>
+    </section>
+    <section>
       <h4>Six display styles</h4>
       <p>You can view your progress six ways: <b>Measuring glass</b>, <b>Ring</b>, <b>Bottle</b>, <b>Glasses</b> (counted in 2 dl glasses), <b>Timeline</b> (your day charted against the plan) and <b>Aquarium</b>. Swipe the drawing left for the next one or right for the previous one (a tap also moves on), or pick one directly under “Display” in Settings. The dots below the drawing show which one you’re on.</p>
     </section>
@@ -770,7 +846,7 @@ body.modal{overflow:hidden}
     </section>
     <section>
       <h4>Settings</h4>
-      <p>Choose the <b>language</b> (Hungarian or English), enter or change your first name for the greeting, and pick the <b>unit</b>: deciliters or liters. Appearance can be <b>Light</b>, <b>Dark</b> or <b>System</b> (follows your phone’s light or dark mode), with four colors: Ocean, Mint, Coral, Lavender.</p>
+      <p>Choose the <b>language</b> (Hungarian or English), enter or change your first name for the greeting, and pick the <b>unit</b>: deciliters or liters. Appearance can be <b>Light</b>, <b>Dark</b> or <b>System</b> (follows your phone’s light or dark mode), with six color themes: Ocean, Mint, Coral, Lavender, the colorful <b>Cheerful</b>, and the always-dark, vivid <b>Neon</b>.</p>
     </section>
     </div>
   </div>
@@ -820,6 +896,11 @@ hu:{
   priv1:'Senkivel nem osztom meg, amit beírsz.', priv2:'Más, aki ugyanezt a linket használja, nem látja a naplódat.', priv3:'Nincs reklám, nincs regisztráció.',
   privMore:'Részletek a súgóban, a kérdőjeles gomb alatt.', start2:'Kezdjük',
   drinks:{water:'Víz',sparkling:'Szénsavas víz',tea:'Tea',herbal:'Gyógytea',coffee:'Kávé',latte:'Tejeskávé',juice:'Gyümölcslé',lemonade:'Limonádé',smoothie:'Smoothie',milk:'Tej',plantmilk:'Növényi tej',kefir:'Kefir',cocoa:'Kakaó',soup:'Leves',isotonic:'Sportital',beer:'Alkoholmentes sör',other:'Egyéb'},
+  cVidam:'Vidám', cNeon:'Neon', colorNote:'A Vidám világos és sötét módban is színes, a Neon mindig sötét.',
+  soundSec:'Hangok és rezgés', soundOn:'Hangok', vibOn:'Rezgés', vibNote:'Koppintáskor röviden rezeg.', vibNA:'Ezen a telefonon nem érhető el (iPhone-on a böngésző nem engedi).',
+  quietOn:'Csend a napi időszakon kívül', whenSound:'Mikor szóljon?', evAdd:'Ital hozzáadása', evDel:'Törlés, visszavonás', evGoal:'Cél teljesítve',
+  soundSet:'Hangkészlet', sDrop:'Vízcsepp', sBubble:'Buborék', sMelody:'Dallam', volume:'Hangerő', play:'Meghallgatás',
+  soundNote:'iPhone-on a néma kapcsoló elnémítja a hangokat. A hangokat az app maga hozza létre, nem tölt le semmit.',
   drinksSec:'Italok', editDrinks:'Italaim szerkesztése', drinksNote:'Melyik italok jelenjenek meg, milyen sorrendben, milyen néven és ikonnal. Saját italt is felvehetsz.',
   buttonsSec:'Gombok', buttonsNote:'A négy gyorsgomb mennyisége és itala. A „kiválasztott ital” a „Mit iszol?” sorban kijelölt italt rögzíti (egyszerű módban vizet).',
   selDrink:'Kiválasztott ital', btnAria:(a,d)=>'Hozzáadás: '+a+(d?', '+d:''),
@@ -895,6 +976,11 @@ en:{
   priv1:'I don’t share anything you enter with anyone.', priv2:'Others using the same link can’t see your log.', priv3:'No ads, no sign-up.',
   privMore:'More details in Help, under the question mark button.', start2:'Let’s start',
   drinks:{water:'Water',sparkling:'Sparkling water',tea:'Tea',herbal:'Herbal tea',coffee:'Coffee',latte:'Milk coffee',juice:'Juice',lemonade:'Lemonade',smoothie:'Smoothie',milk:'Milk',plantmilk:'Plant milk',kefir:'Kefir',cocoa:'Cocoa',soup:'Soup',isotonic:'Sports drink',beer:'Alcohol-free beer',other:'Other'},
+  cVidam:'Cheerful', cNeon:'Neon', colorNote:'Cheerful stays colorful in light and dark mode; Neon is always dark.',
+  soundSec:'Sounds and vibration', soundOn:'Sounds', vibOn:'Vibration', vibNote:'A short buzz when you tap.', vibNA:'Not available on this phone (the browser doesn’t allow it on iPhone).',
+  quietOn:'Quiet outside your daily window', whenSound:'When should it play?', evAdd:'Adding a drink', evDel:'Delete, undo', evGoal:'Goal reached',
+  soundSet:'Sound set', sDrop:'Water drop', sBubble:'Bubble', sMelody:'Melody', volume:'Volume', play:'Preview',
+  soundNote:'On iPhone the silent switch mutes the sounds. The app makes the sounds itself and downloads nothing.',
   drinksSec:'Drinks', editDrinks:'Edit my drinks', drinksNote:'Choose which drinks appear, in what order, with what name and icon. You can add your own too.',
   buttonsSec:'Buttons', buttonsNote:'Amount and drink of the four quick buttons. “Selected drink” logs the drink chosen under “What are you drinking?” (water in simple mode).',
   selDrink:'Selected drink', btnAria:(a,d)=>'Add '+a+(d?', '+d:''),
@@ -979,6 +1065,11 @@ function normalizeDrinks(){
   if(!Array.isArray(state.buttons)||state.buttons.length!==4)state.buttons=[1,2,3,5].map(dl=>({dl,drink:''}));
   state.buttons=state.buttons.map(b=>({dl:Math.max(.5,Math.min(20,r1(+b.dl||2))),drink:b.drink&&knownDrink(b.drink)?b.drink:''}));
 }
+function normalizeSound(){
+  const d={on:true,vib:true,quiet:true,set:'drop',vol:.6,ev:{add:true,del:true,goal:true}},s=state.sound&&typeof state.sound==='object'?state.sound:{};
+  state.sound={on:s.on!==false,vib:s.vib!==false,quiet:s.quiet!==false,set:['drop','bubble','melody'].includes(s.set)?s.set:'drop',
+    vol:typeof s.vol==='number'?Math.max(0,Math.min(1,s.vol)):d.vol,ev:Object.assign({},d.ev,s.ev||{})};
+}
 function knownDrink(id){return !!(CAT[id]||(state.custom&&state.custom[id]))}
 function drinkOf(id){
   const cu=state.custom&&state.custom[id];
@@ -996,7 +1087,7 @@ function svgIcon(key){return '<svg viewBox="0 0 24 24" fill="none" stroke="curre
 function iconEl(id,cls){const d=drinkOf(id),w=document.createElement('span');w.className=cls||'dic';w.style.setProperty('--dc',d.c);w.innerHTML=svgIcon(d.icon);return w}
 
 /* days: {'2026-10-09': {entries:[{t,dl,type}], act:0|3|6, hot:bool}} */
-let state={goal:20,weight:80,mode:'system',accent:'ocean',name:'',onboarded:false,lang:null,unit:'dl',view:'glass',ui:'simple',start:'07:00',end:'22:00',drink:'water',drinkOrder:null,drinkShow:null,custom:{},dover:{},buttons:null,days:{}};
+let state={goal:20,weight:80,mode:'system',accent:'ocean',name:'',onboarded:false,lang:null,unit:'dl',view:'glass',ui:'simple',start:'07:00',end:'22:00',drink:'water',drinkOrder:null,drinkShow:null,custom:{},dover:{},buttons:null,sound:null,days:{}};
 let col=null;
 const $=id=>document.getElementById(id);
 const root=document.documentElement;
@@ -1026,6 +1117,15 @@ function loadLocal(){
 }
 function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){}}
 
+/* --- beállítás-ikonok --- */
+const SET_ICONS={"language": ["#3fa9f5", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z\"/>"], "nameQ": ["#ff5f8f", "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5\"/>"], "display": ["#14b8a6", "<path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/>"], "mode": ["#8a5cf6", "<path d=\"M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12\"/><circle cx=\"16\" cy=\"6\" r=\"2\"/><circle cx=\"10\" cy=\"12\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>"], "drinksSec": ["#22a861", "<path d=\"M7 4h10l-1.2 16H8.2z\"/><path d=\"M7.5 9h9\"/>"], "buttonsSec": ["#f08a1c", "<rect x=\"3\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"13\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"3\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"13\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\"/>"], "unit": ["#3fa9f5", "<path d=\"M3 17L17 3l4 4L7 21z\"/><path d=\"M7 13l2 2M10 10l2 2M13 7l2 2\"/>"], "window": ["#14b8a6", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/>"], "soundSec": ["#f08a1c", "<path d=\"M4 9v6h4l5 4V5L8 9z\"/><path d=\"M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11\"/>"], "appearance": ["#ff5f8f", "<circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/>"], "color": ["#d946a8", "<path d=\"M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.9 1.8-1.8 0-1.3-1-1.5-1-2.6 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.7 17 3 12 3z\"/><circle cx=\"7.5\" cy=\"11\" r=\"1.2\"/><circle cx=\"10\" cy=\"7\" r=\"1.2\"/><circle cx=\"15\" cy=\"7\" r=\"1.2\"/>"], "calcTitle": ["#8a5cf6", "<path d=\"M5 20h14l-2-12H7z\"/><circle cx=\"12\" cy=\"5\" r=\"2\"/>"], "baseManual": ["#5b3fd6", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><circle cx=\"12\" cy=\"12\" r=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"1.3\"/>"], "data": ["#64748b", "<ellipse cx=\"12\" cy=\"5.5\" rx=\"7.5\" ry=\"2.5\"/><path d=\"M4.5 5.5v13c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-13M4.5 12c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5\"/>"]};
+function decorateSettings(){
+  document.querySelectorAll('#setScrim .sheet>div>h2').forEach(h=>{
+    const el=h.querySelector('[data-t]')||h,key=el.dataset.t,ic=SET_ICONS[key];if(!ic||h.querySelector('.sic'))return;
+    const sp=document.createElement('span');sp.className='sic';sp.style.setProperty('--sc',ic[0]);
+    sp.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ic[1]+'</svg>';h.prepend(sp)});
+}
+
 /* --- nyelv --- */
 function applyLang(){
   root.lang=state.lang==='en'?'en':'hu';
@@ -1037,13 +1137,14 @@ function applyLang(){
   document.querySelectorAll('[data-lang]').forEach(el=>{el.hidden=el.dataset.lang!==(state.lang==='en'?'en':'hu')});
   document.querySelectorAll('[data-lang-btn]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.langBtn===(state.lang||'hu')));
   buildDrinkRow();buildEditor();buildBtnCfg();if(!$('drinksScrim').hidden)buildDrinkList();
+  decorateSettings();renderSound();
 }
 
 /* --- téma --- */
 const mq=matchMedia('(prefers-color-scheme: dark)');
 function applyTheme(){
   const m=state.mode;let dark;
-  if(m==='dark')dark=true;else if(m==='light')dark=false;
+  if(state.accent==='neon')dark=true;else if(m==='dark')dark=true;else if(m==='light')dark=false;
   else{const h=root.getAttribute('data-theme');dark=h==='dark'||(h!=='light'&&mq.matches)}
   root.setAttribute('data-dark',dark?'1':'0');
   root.setAttribute('data-accent',state.accent||'ocean');
@@ -1070,11 +1171,54 @@ document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeSheet(b.
 ['setScrim','entryScrim','helpScrim','drinksScrim','drinkEdScrim'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target===$(id))closeSheet(id)}));
 document.addEventListener('keydown',e=>{if(e.key!=='Escape'||!openStack.length)return;const top=openStack[openStack.length-1].id;if(top!=='onbScrim')closeSheet(top)});
 
+/* --- hangok és rezgés --- */
+let actx=null;
+function audio(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();return actx}catch(e){return null}}
+function tone(c,t0,f0,f1,dur,type,vol){
+  const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f0,t0);if(f1)o.frequency.exponentialRampToValueAtTime(f1,t0+dur);
+  g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(Math.max(.0002,vol),t0+.012);g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+  o.connect(g);g.connect(c.destination);o.start(t0);o.stop(t0+dur+.03);
+}
+const SOUNDS={
+  drop:{add:(c,t,v)=>{tone(c,t,1500,520,.15,'sine',v)},del:(c,t,v)=>{tone(c,t,520,240,.13,'sine',v*.7)},
+    goal:(c,t,v)=>{[880,1175,1568].forEach((f,i)=>tone(c,t+i*.11,f,0,.38,'sine',v*.8))}},
+  bubble:{add:(c,t,v)=>{tone(c,t,520,1200,.07,'sine',v);tone(c,t+.08,700,1600,.08,'sine',v*.8)},del:(c,t,v)=>{tone(c,t,320,170,.11,'triangle',v*.8)},
+    goal:(c,t,v)=>{[600,800,1000,1300,1700].forEach((f,i)=>tone(c,t+i*.07,f,f*1.6,.09,'sine',v*.7))}},
+  melody:{add:(c,t,v)=>{tone(c,t,784,0,.12,'triangle',v);tone(c,t+.1,1046,0,.18,'triangle',v)},del:(c,t,v)=>{tone(c,t,659,0,.1,'triangle',v*.7);tone(c,t+.09,523,0,.16,'triangle',v*.7)},
+    goal:(c,t,v)=>{[523,659,784,1046,1319].forEach((f,i)=>tone(c,t+i*.12,f,0,.32,'triangle',v*.85))}}
+};
+function quietNow(){if(!state.sound.quiet)return false;const n=new Date(),N=n.getHours()*60+n.getMinutes(),S=mins(state.start)??420,E=mins(state.end)??1320;return N<S||N>=E}
+function play(ev,force){
+  const S=state.sound;if(!force&&(!S.on||!S.ev[ev]||quietNow()))return;
+  const c=audio();if(!c)return;try{SOUNDS[S.set][ev](c,c.currentTime+.02,S.vol*.45)}catch(e){}
+}
+function buzz(p){if(state.sound.vib&&navigator.vibrate)try{navigator.vibrate(p)}catch(e){}}
+function renderSound(){
+  if(!state.sound)return;const S=state.sound;
+  $('snOn').checked=S.on;$('snVib').checked=S.vib;$('snQuiet').checked=S.quiet;
+  const canVib=!!navigator.vibrate;$('snVib').disabled=!canVib;$('vibNote').textContent=t(canVib?'vibNote':'vibNA');
+  document.querySelectorAll('[data-sev]').forEach(cb=>{cb.checked=!!S.ev[cb.dataset.sev]});
+  document.querySelectorAll('[data-sset]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.sset===S.set));
+  $('snVol').value=Math.round(S.vol*100);$('snVolOut').textContent=Math.round(S.vol*100)+'%';
+}
+$('snOn').onchange=()=>{state.sound.on=$('snOn').checked;writeSettings();if(state.sound.on)play('add',true)};
+$('snVib').onchange=()=>{state.sound.vib=$('snVib').checked;writeSettings();buzz(30)};
+$('snQuiet').onchange=()=>{state.sound.quiet=$('snQuiet').checked;writeSettings()};
+document.querySelectorAll('[data-sev]').forEach(cb=>cb.onchange=()=>{state.sound.ev[cb.dataset.sev]=cb.checked;writeSettings()});
+document.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>play(b.dataset.play,true));
+document.querySelectorAll('[data-sset]').forEach(b=>b.onclick=()=>{state.sound.set=b.dataset.sset;renderSound();writeSettings();play('add',true)});
+let volT;$('snVol').oninput=()=>{state.sound.vol=+$('snVol').value/100;$('snVolOut').textContent=$('snVol').value+'%';writeSettings();clearTimeout(volT);volT=setTimeout(()=>play('add',true),180)};
+
 /* --- rögzítés --- */
-function add(dl,type,tm){const when=tm||Date.now(),k=keyOf(new Date(when)),d=ensure(k);d.entries.push({t:when,dl,type:type||'water'});d.entries.sort((a,b)=>a.t-b.t);render();writeDay(k)}
+function add(dl,type,tm){
+  const when=tm||Date.now(),k=keyOf(new Date(when)),d=ensure(k),before=sum(d),g=goalOf(d);
+  d.entries.push({t:when,dl,type:type||'water'});d.entries.sort((a,b)=>a.t-b.t);render();writeDay(k);
+  const isToday=k===keyOf(new Date());
+  if(isToday&&before<g&&sum(d)>=g){play('goal');buzz([30,60,30,60,60])}else{play('add');buzz(15)}
+}
 let undo=null,toastTimer;
 function delEntry(k,i){
-  const d=state.days[k];if(!d)return;const [e]=d.entries.splice(i,1);undo={k,e};render();writeDay(k);
+  const d=state.days[k];if(!d)return;const [e]=d.entries.splice(i,1);undo={k,e};render();writeDay(k);play('del');buzz(10);
   toast(t('tDeleted',amt(e.dl),drinkName(e.type),hhmm(e.t)),true);
 }
 function toast(msg,withUndo){
@@ -1083,7 +1227,7 @@ function toast(msg,withUndo){
 }
 $('toastBtn').onclick=()=>{
   if(!undo)return;const {k,e}=undo;undo=null;const d=ensure(k);
-  d.entries.push(e);d.entries.sort((a,b)=>a.t-b.t);$('toast').hidden=true;render();writeDay(k);
+  d.entries.push(e);d.entries.sort((a,b)=>a.t-b.t);$('toast').hidden=true;render();writeDay(k);play('del');buzz(10);
 };
 document.querySelectorAll('.add').forEach((b,i)=>b.onclick=()=>{const c=state.buttons[i];add(c.dl,c.drink||(state.ui==='advanced'?state.drink:'water'))});
 function renderButtons(){
@@ -1235,7 +1379,7 @@ $('nameOnb').addEventListener('keydown',e=>{if(e.key==='Enter')onbStep2()});
 $('onbDone').onclick=()=>{state.onboarded=true;closeSheet('onbScrim');render();writeSettings()};
 
 /* --- beállítások --- */
-$('openSet').onclick=()=>{buildBtnCfg();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderSettings();openSheet('setScrim')};
+$('openSet').onclick=()=>{buildBtnCfg();renderSound();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderSettings();openSheet('setScrim')};
 $('openHelp').onclick=()=>openSheet('helpScrim');
 $('nameSet').oninput=()=>{state.name=cleanName($('nameSet').value);render();writeSettings()};
 document.querySelectorAll('[data-lang-btn]').forEach(b=>b.onclick=()=>{state.lang=b.dataset.langBtn;applyLang();renderSettings();render();writeSettings()});
@@ -1271,7 +1415,7 @@ function renderSettings(){
 /* export / import */
 $('exportBtn').onclick=async()=>{
   const data=JSON.stringify({app:'vizmero',version:7,exported:new Date().toISOString(),
-    settings:{goal:state.goal,weight:state.weight,name:state.name,lang:state.lang,unit:state.unit,start:state.start,end:state.end,custom:state.custom,dover:state.dover,drinkOrder:state.drinkOrder,drinkShow:state.drinkShow,buttons:state.buttons},days:state.days},null,1);
+    settings:{sound:state.sound,goal:state.goal,weight:state.weight,name:state.name,lang:state.lang,unit:state.unit,start:state.start,end:state.end,custom:state.custom,dover:state.dover,drinkOrder:state.drinkOrder,drinkShow:state.drinkShow,buttons:state.buttons},days:state.days},null,1);
   const fname=t('backupName')+keyOf(new Date())+'.json';
   try{
     const file=new File([data],fname,{type:'application/json'});
@@ -1546,7 +1690,7 @@ function render(){
 }
 
 /* --- indulás --- */
-loadLocal();normalizeDrinks();
+loadLocal();normalizeDrinks();normalizeSound();
 if(!state.lang&&state.onboarded)state.lang='hu';
 applyLang();applyTheme();render();
 if(!state.onboarded)startOnb();
@@ -1556,7 +1700,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='8.6';
+const APP_VERSION='9.0';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
