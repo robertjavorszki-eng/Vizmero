@@ -1885,7 +1885,7 @@ function gResize(){
   gDraw(0);
 }
 function arcNew(id,opts){
-  opts=opts||{};GM.id=id;const g=ARC[id],dc=dailyChallenge();
+  opts=opts||{};GM.id=id;GM.busy=false;const g=ARC[id],dc=dailyChallenge();
   Object.assign(GM,{on:true,paused:false,t:0,score:0,lives:3,level:1,parts:[],texts:[],banner:null,inv:0,shake:0,st:{},
     ch:dc.game===id&&(dc.ty!=='daily'||opts.daily)?dc:null,chDone:gameDoneToday(),chHit:false,keys:{},lastWhy:null,earned:false,daily:!!opts.daily,rng:Math.random,hist:[]});
   if(opts.daily)GM.rng=seedRng(keyOf(new Date())+'#'+id);
@@ -1924,14 +1924,14 @@ function gBanner(txt,c,t){GM.banner={txt,c:c||'#5b3fd6',t:t||1.6}}
 function gLevelUp(){GM.level++;gBanner(t('gLevel',GM.level));gSfx('level')}
 /* fejtörő megoldva */
 function arcSolved(){
-  const g=ARC[GM.id];GM.st.solved++;GM.score+=100+GM.level*20;gSfx('solve');gConfetti();buzz([20,30,20]);
+  const id=GM.id,g=ARC[id];GM.st.solved++;GM.score+=100+GM.level*20;gSfx('solve');gConfetti();buzz([20,30,20]);
   if(GM.daily){
     state.game.dailyMoves={d:keyOf(new Date()),g:GM.id,m:GM.st.moves||0};saveLocal();
     if(GM.ch&&!GM.chDone)gWinChallenge();else gBanner(t('gSolved'),'#1d8a5b',1.6);
-    GM.solvedAt=GM.t;setTimeout(()=>{if(GM.on&&GM.id===g.key)arcOver('daily')},1600);return;
+    GM.solvedAt=GM.t;setTimeout(()=>{if(GM.on&&GM.id===id)arcOver('daily')},1600);return;
   }
   gBanner(t('gSolved'),'#1d8a5b',1.4);GM.busy=true;
-  setTimeout(()=>{if(!GM.on||GM.id!==g.key)return;GM.busy=false;GM.level++;state.game.lv[g.key]=Math.max(state.game.lv[g.key]||1,GM.level);saveLocal();GM.hist=[];g.init();gBanner(t('gLevel',GM.level))},1500);
+  setTimeout(()=>{if(!GM.on||GM.id!==id){GM.busy=false;return}GM.busy=false;GM.level++;state.game.lv[id]=Math.max(state.game.lv[id]||1,GM.level);saveLocal();GM.hist=[];g.init();gBanner(t('gLevel',GM.level))},1500);
 }
 function arcOver(why){
   if(!GM.on)return;GM.on=false;gHelp(false);$('gHelpBtn').hidden=true;const g=ARC[GM.id];if(why!=='daily'&&why!=='quit')gSfx('over');
@@ -2121,22 +2121,22 @@ Object.assign(I18N.en,{
 });
 
 Object.assign(I18N.hu,{
-  gOver_full:'Leértek a buborékok!', gTapFly:'Koppints a repüléshez!', gPerfect:'Tökéletes! ⭐⭐⭐',
+  gOver_full:'Leértek a buborékok!', gTapFly:'Tartsd nyomva a repüléshez!', gPerfect:'Tökéletes! ⭐⭐⭐',
   gJugGoal:n=>'Mérj ki pontosan '+n+' dl-t!', gJugGoalBowl:n=>'Tölts pontosan '+n+' dl-t a tálba!', gJugMin:n=>'Legkevesebb: '+n+' lépés', gFillBtn:'Tölt', gEmptyBtn:'Kiönt', gTapBowl:'koppints a tálra az öntéshez', gTooMuch:'Túl sok lenne!',
   gJamGoal:'Juttasd ki a piros autót jobbra!',
   gh_bubble:'Húzd az ujjad a célzáshoz, engedd el a lövéshez. Ha 3 vagy több egyforma szín összeér, kipukkannak. A vízbuborék plusz pontot ér, a szivárvány bármelyik színhez illik. Ha sokszor nem pukkan semmi, lejjebb jön a plafon.',
-  gh_fly:'Koppints, és a kedvenced felrepül. Repülj át a felhők között, és szedd össze a cseppeket! A 3. szinttől mérges viharfelhők is mozognak.',
+  gh_fly:'Tartsd nyomva az ujjad, és a kedvenced felrepül, ha elengeded, zuhan. Repülj át a felhők között, és szedd össze a cseppeket! A 3. szinttől mérges viharfelhők is mozognak.',
   gh_jugs:'Mérj ki pontosan annyi vizet, amennyit kér! „Tölt”: tele a kancsó, „Kiönt”: üres lesz. Koppints egy kancsóra, majd egy másikra az átöntéshez. A későbbi szinteken három kancsó és tál is van.',
   gh_jam:'Csúsztasd az autókat előre-hátra (csak a saját irányukban), hogy a piros autó kijusson jobbra a dugóból!',
   ch_bubble_pops:n=>'Pukkassz ki '+n+' buborékot egy játékban', ch_bubble_water:n=>'Pukkassz ki '+n+' vízbuborékot', ch_bubble_level:n=>'Juss el a '+n+'. szintig',
   ch_fly_pass:n=>'Repülj át '+n+' felhőkapun egy játékban', ch_fly_drops:n=>'Szedj össze '+n+' cseppet repülés közben', ch_fly_level:n=>'Juss el a '+n+'. szintig'
 });
 Object.assign(I18N.en,{
-  gOver_full:'The bubbles reached the bottom!', gTapFly:'Tap to fly!', gPerfect:'Perfect! ⭐⭐⭐',
+  gOver_full:'The bubbles reached the bottom!', gTapFly:'Hold to fly!', gPerfect:'Perfect! ⭐⭐⭐',
   gJugGoal:n=>'Measure exactly '+n+' dl!', gJugGoalBowl:n=>'Pour exactly '+n+' dl into the bowl!', gJugMin:n=>'Fewest possible: '+n+' moves', gFillBtn:'Fill', gEmptyBtn:'Empty', gTapBowl:'tap the bowl to pour', gTooMuch:'That would be too much!',
   gJamGoal:'Get the red car out to the right!',
   gh_bubble:'Drag to aim, release to shoot. When 3 or more of the same color touch, they pop. Water bubbles are worth extra, rainbow matches any color. If nothing pops for a while, the ceiling comes down.',
-  gh_fly:'Tap and your buddy flies up. Fly through the gaps in the clouds and collect the drops! From level 3, grumpy storm clouds move up and down.',
+  gh_fly:'Hold your finger down and your buddy flies up; let go and it falls. Fly through the gaps in the clouds and collect the drops! From level 3, grumpy storm clouds move up and down.',
   gh_jugs:'Measure exactly the amount asked! “Fill” fills a jug, “Empty” empties it. Tap one jug, then another to pour. Later levels have three jugs and a bowl.',
   gh_jam:'Slide the cars back and forth (only along their direction) so the red car can escape the jam to the right!',
   ch_bubble_pops:n=>'Pop '+n+' bubbles in one game', ch_bubble_water:n=>'Pop '+n+' water bubbles', ch_bubble_level:n=>'Reach level '+n,
@@ -2200,13 +2200,13 @@ Object.assign(I18N.en,{
 });
 
 Object.assign(I18N.hu,{gSwipeOnly:'húzd az ujjad fel, le, balra vagy jobbra',gHelpOk:'Értem, mehet!', gHelpTitle:'Hogyan kell játszani?', gTips:{
-  catch:['👆 Húzd az ujjad balra-jobbra, a kedvenced követi.','💧 Kapd el a cseppeket! Fent a víz-csík fogy, a cseppek töltik.','🪨 Kerüld a köveket és a méheket, a só kiszárít.','❤️ Szív, 🛡️ pajzs, 🧲 mágnes, ⏱️ lassítás: ezeket érdemes elkapni.'],
-  breakout:['👆 Húzd az ujjad: a kedvenced viszi az ütőt.','💧 Koppints az indításhoz, és pattintsd a cseppet a blokkokba.','🧊 A jég két ütésre törik, a kő sosem.','🫧 A buborékból bónusz pottyan, kapd el az ütővel!'],
+  catch:['👆 Húzd az ujjad bárhol a képernyőn: a kedvenced ugyanannyit mozdul, fel-le is. Az ujjad lehet alatta, így jól látod.','💧 Kapd el a cseppeket! Fent a víz-csík fogy, a cseppek töltik.','🪨 Kerüld a köveket és a méheket, a só kiszárít.','❤️ Szív, 🛡️ pajzs, 🧲 mágnes, ⏱️ lassítás: ezeket érdemes elkapni.'],
+  breakout:['👆 Húzd az ujjad bárhol balra-jobbra: az ütő ugyanannyit mozdul.','💧 Koppints az indításhoz, és pattintsd a cseppet a blokkokba.','🧊 A jég két ütésre törik, a kő sosem.','🫧 A buborékból bónusz pottyan, kapd el az ütővel!'],
   bubble:['👆 Tartsd az ujjad a képernyőn és célozz, engedd el a lövéshez.','🎯 Ha 3 vagy több egyforma szín összeér, kipukkannak.','💧 A vízbuborék plusz pont, a 🌈 bármelyik színhez illik.','⬇️ Ha sokáig nem pukkan semmi, lejjebb jön a plafon.'],
-  fly:['👆 Koppints: a kedvenced felrepül. Ha nem koppintasz, esik.','☁️ Repülj át a felhők közötti réseken!','💧 Szedd össze a cseppeket.','⛈️ A 3. szinttől a viharfelhők mozognak.'],
-  road:['👆 Húzd az ujjad balra-jobbra a kormányzáshoz.','🛣️ Maradj az úton! Ha sokáig lemész róla, életet veszítesz.','🚧 Kerüld a bóját és az autókat, a pocsolyán megcsúszol.','💧 A cseppek töltik a víz-csíkot.'],
+  fly:['👆 Tartsd nyomva az ujjad: a kedvenced felfelé repül. Ha elengeded, zuhanni kezd.','☁️ Repülj át a felhők közötti réseken!','💧 Szedd össze a cseppeket.','⛈️ A 3. szinttől a viharfelhők mozognak.'],
+  road:['👆 Húzd az ujjad bárhol balra-jobbra a kormányzáshoz.','🛣️ Maradj az úton! Ha sokáig lemész róla, életet veszítesz.','🚧 Kerüld a bóját és az autókat, a pocsolyán megcsúszol.','💧 A cseppek töltik a víz-csíkot.'],
   run:['👈👉 Húzd balra vagy jobbra: sávváltás.','👆 Húzd felfelé: ugrás az alacsony korlát fölött.','👇 Húzd lefelé: bebújás a magas sorompó alatt.','🚂 A vonatot csak kikerülni lehet!'],
-  jump:['👆 Húzd az ujjad balra-jobbra, a kedvenced magától ugrál.','☁️ Ugrálj felhőről felhőre egyre feljebb!','🌈 A rugó magasra dob, az esőfelhő egy ugrás után eltűnik.','🐝 A méhet felülről ráugorva legyőzöd, oldalról megcsíp.'],
+  jump:['👆 Húzd az ujjad bárhol balra-jobbra, a kedvenced magától ugrál.','☁️ Ugrálj felhőről felhőre egyre feljebb!','🌈 A rugó magasra dob, az esőfelhő egy ugrás után eltűnik.','🐝 A méhet felülről ráugorva legyőzöd, oldalról megcsíp.'],
   soccer:['👆 Tedd az ujjad a labdára, és húzd a kapu felé.','↔️ Amerre húzod, oda megy a labda.','↕️ Hosszabb húzás = magasabb lövés (de ne a léc fölé!).','🧤 Lődd el a kapus mellett! 3 hiba és vége.'],
   hoops:['👆 Fogd meg a labdát, lendítsd fel a kosár felé, és engedd el.','💨 Gyorsabb, hosszabb lendítés = erősebb dobás. Az irány is számít!','🏀 Dobj ívben! A gyűrűbe csak felülről eshet be, a palánkról is bepattanhat.','💦 A gyűrű érintése nélküli „csobb” 3 pont.','⏱️ Minden kosár időt ad, a 2. szinttől mozog a palánk.'],
   memo:['👆 Koppints egy kártyára, majd egy másikra.','🃏 Ha egyformák, ott maradnak, ha nem, visszafordulnak.','🧠 Jegyezd meg, mi hol volt!','⏱️ Találd meg az összes párt, mielőtt lejár az idő.'],
@@ -2220,13 +2220,13 @@ Object.assign(I18N.hu,{gSwipeOnly:'húzd az ujjad fel, le, balra vagy jobbra',gH
   sudoku:['👆 Koppints egy üres mezőre, majd lent egy italra.','🧩 Minden sorban, oszlopban és vastag keretes dobozban minden ital egyszer szerepel.','🟥 Ha ütközik valamivel, pirosan látszik.','✕ Ezzel törölheted a mezőt.']
 }});
 Object.assign(I18N.en,{gSwipeOnly:'swipe up, down, left or right',gHelpOk:'Got it, let’s go!', gHelpTitle:'How to play', gTips:{
-  catch:['👆 Slide your finger left and right, your buddy follows.','💧 Catch the drops! The water bar drains, drops refill it.','🪨 Dodge rocks and bees, salt dries you out.','❤️ Heart, 🛡️ shield, 🧲 magnet, ⏱️ slow-mo: worth catching.'],
-  breakout:['👆 Slide your finger: your buddy carries the paddle.','💧 Tap to launch and bounce the drop into the blocks.','🧊 Ice takes two hits, stone never breaks.','🫧 Bubbles drop bonuses – catch them with the paddle!'],
+  catch:['👆 Drag anywhere on the screen: your buddy moves the same way, up and down too. Keep your finger below it so you can see it.','💧 Catch the drops! The water bar drains, drops refill it.','🪨 Dodge rocks and bees, salt dries you out.','❤️ Heart, 🛡️ shield, 🧲 magnet, ⏱️ slow-mo: worth catching.'],
+  breakout:['👆 Drag anywhere left or right: the paddle moves the same amount.','💧 Tap to launch and bounce the drop into the blocks.','🧊 Ice takes two hits, stone never breaks.','🫧 Bubbles drop bonuses – catch them with the paddle!'],
   bubble:['👆 Hold your finger to aim, let go to shoot.','🎯 When 3 or more of the same color touch, they pop.','💧 Water bubbles score extra, 🌈 matches any color.','⬇️ If nothing pops for a while, the ceiling comes down.'],
-  fly:['👆 Tap to fly up. If you don’t tap, you fall.','☁️ Fly through the gaps between the clouds!','💧 Collect the drops.','⛈️ From level 3, storm clouds move.'],
-  road:['👆 Slide your finger left and right to steer.','🛣️ Stay on the road! Too long off it and you lose a life.','🚧 Dodge cones and cars, puddles make you skid.','💧 Drops refill the water bar.'],
+  fly:['👆 Hold your finger down to fly up. Let go and you fall.','☁️ Fly through the gaps between the clouds!','💧 Collect the drops.','⛈️ From level 3, storm clouds move.'],
+  road:['👆 Drag anywhere left or right to steer.','🛣️ Stay on the road! Too long off it and you lose a life.','🚧 Dodge cones and cars, puddles make you skid.','💧 Drops refill the water bar.'],
   run:['👈👉 Swipe left or right: change lane.','👆 Swipe up: jump over low barriers.','👇 Swipe down: duck under high bars.','🚂 Trains can only be dodged!'],
-  jump:['👆 Slide your finger left and right, your buddy hops by itself.','☁️ Hop from cloud to cloud, higher and higher!','🌈 Springs launch you, rain clouds vanish after one hop.','🐝 Stomp bees from above, from the side they sting.'],
+  jump:['👆 Drag anywhere left or right, your buddy hops by itself.','☁️ Hop from cloud to cloud, higher and higher!','🌈 Springs launch you, rain clouds vanish after one hop.','🐝 Stomp bees from above, from the side they sting.'],
   soccer:['👆 Put your finger on the ball and swipe toward the goal.','↔️ The ball goes where you swipe.','↕️ Longer swipe = higher shot (but not over the bar!).','🧤 Beat the keeper! Three misses and it’s over.'],
   hoops:['👆 Grab the ball, flick it toward the hoop and let go.','💨 Faster, longer flick = stronger throw. Direction matters too!','🏀 Throw in an arc! The ball only drops in from above, and can bank in off the board.','💦 A swish (no rim) is worth 3.','⏱️ Every basket adds time; from level 2 the hoop moves.'],
   memo:['👆 Tap one card, then another.','🃏 Matching cards stay, others flip back.','🧠 Remember where things were!','⏱️ Find all pairs before time runs out.'],
@@ -2319,12 +2319,13 @@ ARC.catch=(()=>{
   return {key:'catch',kind:'action',icon:'💧',col:'#3fa9f5',lives:true,chY:54,
     chs:[{ty:'drops',ns:[25,35,45]},{ty:'level',ns:[3,4,5]},{ty:'gold',ns:[2,3,4]},{ty:'combo',ns:[10,15,20]}],
     prog(ty){const st=GM.st;return ty==='drops'?st.drops:ty==='level'?GM.level:ty==='gold'?st.gold:st.maxCombo},
-    resize(){S.ps=Math.min(96,Math.max(66,GM.W*.22));S.py=GM.H-S.ps*.62-14;S.px=Math.min(S.px,GM.W);S.tx=Math.min(S.tx,GM.W)},
-    init(){Object.assign(GM.st,{drops:0,gold:0,combo:0,maxCombo:0});Object.assign(S,{items:[],water:1,spawnT:.6,shield:0,magnet:0,slow:0,px:GM.W/2,tx:GM.W/2,vx:0});this.resize()},
+    resize(){S.ps=Math.min(96,Math.max(66,GM.W*.22));S.ymax=GM.H-S.ps*.62-14;S.ymin=GM.H*.3;if(S.py==null||S.py>S.ymax)S.py=S.ty=S.ymax;S.px=Math.min(S.px,GM.W);S.tx=Math.min(S.tx,GM.W)},
+    init(){Object.assign(GM.st,{drops:0,gold:0,combo:0,maxCombo:0});Object.assign(S,{items:[],water:1,spawnT:.6,shield:0,magnet:0,slow:0,px:GM.W/2,tx:GM.W/2,vx:0,py:null,ty:null});this.resize()},
     step(dt){
       const sl=S.slow>0?.5:1;
       if(GM.keys.left)S.tx=Math.max(0,S.tx-520*dt);if(GM.keys.right)S.tx=Math.min(GM.W,S.tx+520*dt);
-      const nx=S.px+(S.tx-S.px)*Math.min(1,dt*14);S.vx=(nx-S.px)/Math.max(dt,.001);S.px=Math.max(S.ps*.35,Math.min(GM.W-S.ps*.35,nx));
+      if(GM.keys.up)S.ty-=420*dt;if(GM.keys.down)S.ty+=420*dt;S.tx=Math.max(S.ps*.35,Math.min(GM.W-S.ps*.35,S.tx));S.ty=Math.max(S.ymin,Math.min(S.ymax,S.ty));
+      const nx=S.px+(S.tx-S.px)*Math.min(1,dt*18);S.vx=(nx-S.px)/Math.max(dt,.001);S.px=nx;S.py+=(S.ty-S.py)*Math.min(1,dt*18);
       S.spawnT-=dt*sl;if(S.spawnT<=0){spawn();S.spawnT=Math.max(.32,1.05-GM.level*.07)*(.75+Math.random()*.5)}
       S.water-=dt*(.028+GM.level*.006);['shield','magnet','slow'].forEach(k=>S[k]=Math.max(0,S[k]-dt));
       const pr=S.ps*.36,pcx=S.px,pcy=S.py+S.ps*.05;
@@ -2350,7 +2351,7 @@ ARC.catch=(()=>{
     hud(c){const W=GM.W,bw=Math.min(180,W*.42),bx=(W-bw)/2,by=14;c.fillStyle='rgba(29,26,51,.25)';rr(c,bx,by,bw,14,7);c.fill();
       c.fillStyle=S.water<.25?'#ff5f5f':'#3fa9f5';rr(c,bx+2,by+2,Math.max(0,(bw-4)*S.water),10,5);c.fill();
       c.font='700 10px system-ui,sans-serif';c.fillStyle='#1d1a33';c.textAlign='center';c.fillText(t('gWater'),W/2,by+26)},
-    down(x){S.tx=x},move(x,y,p){if(p)S.tx=x}
+    down(x,y){S.d={x,y,px:S.tx,py:S.ty}},move(x,y,p){if(p&&S.d){S.tx=S.d.px+(x-S.d.x);S.ty=S.d.py+(y-S.d.y)}},up(){S.d=null}
   };
 })();
 
@@ -2451,7 +2452,7 @@ ARC.breakout=(()=>{
       S.balls.forEach(b=>{c.fillStyle='#3fa9f5';c.beginPath();c.arc(b.x,b.y,b.r,0,7);c.fill();c.fillStyle='rgba(255,255,255,.8)';c.beginPath();c.arc(b.x-3,b.y-3,2.5,0,7);c.fill();gFace(c,b.x,b.y+1,b.r*.7)});
       if(GM.on&&S.balls.some(b=>b.stuck)){c.font='700 13px system-ui';c.fillStyle='#3b3566';c.textAlign='center';c.fillText(t('gTapLaunch'),W/2,S.py-40)}
     },
-    down(x){S.tx=x;if(S.balls.some(b=>b.stuck))launch()},move(x,y,p){if(p)S.tx=x},key(k,d){if(d&&k===' ')launch()}
+    down(x,y){S.d={x,tx:S.tx,moved:false}},move(x,y,p){if(p&&S.d){S.tx=S.d.tx+(x-S.d.x);if(Math.abs(x-S.d.x)>8)S.d.moved=true}},up(){if(S.d&&!S.d.moved&&S.balls.some(b=>b.stuck))launch();S.d=null},key(k,d){if(d&&k===' ')launch()}
   };
 })();
 
@@ -2563,7 +2564,7 @@ ARC.fly=(()=>{
     step(dt){
       const K=k(),sp=(150+GM.level*14)*Math.max(.9,GM.W/390);
       if(!S.started){S.y=GM.H*.45+Math.sin(GM.t*3)*8;return}
-      S.vy+=1500*K*dt;S.y+=S.vy*dt;
+      S.vy+=1500*K*dt;if(S.hold){S.vy-=3300*K*dt;if(S.vy<-430*K)S.vy=-430*K}S.y+=S.vy*dt;
       const top=60,bot=GM.H-30,pr=S.ps*.3;
       if(S.y<top+pr){S.y=top+pr;S.vy=Math.abs(S.vy)*.3}
       if(S.y>bot-pr){S.y=bot-pr;S.vy=-520*K;if(!GM.inv){GM.lives--;GM.inv=1.5;gSfx('hit');buzz(60);GM.shake=.3}}
@@ -2583,8 +2584,8 @@ ARC.fly=(()=>{
       gPet(c,S.px,S.y,S.ps,GM.inv>0||!GM.on?'thirsty':'happy',Math.max(-.5,Math.min(.6,S.vy/900)),GM.inv>0&&Math.floor(GM.inv*10)%2?.4:1);
       if(GM.on&&!S.started){c.font='800 16px system-ui';c.fillStyle='#3b3566';c.textAlign='center';c.fillText(t('gTapFly'),W/2,H*.65)}
     },
-    down(){if(!S.started)S.started=true;S.vy=-470*k();gSfx('flap')},
-    key(k2,d){if(d&&(k2===' '||k2==='ArrowUp'))this.down()}
+    down(){if(!S.started)S.started=true;S.hold=true;if(S.vy>0)S.vy*=.3;gSfx('flap')},up(){S.hold=false},
+    key(k2,d){if(k2===' '||k2==='ArrowUp'){if(d){if(!S.hold)this.down()}else this.up()}}
   };
 })();
 
@@ -2650,7 +2651,7 @@ ARC.road=(()=>{
     hud(c){const W=GM.W,bw=Math.min(160,W*.38),bx=(W-bw)/2,by=14;c.fillStyle='rgba(29,26,51,.25)';rr(c,bx,by,bw,14,7);c.fill();
       c.fillStyle=S.water<.25?'#ff5f5f':'#3fa9f5';rr(c,bx+2,by+2,Math.max(0,(bw-4)*S.water),10,5);c.fill();
       c.font='700 10px system-ui,sans-serif';c.fillStyle='#1d1a33';c.textAlign='center';c.fillText(t('gWater')+' · '+Math.floor(GM.st.dist)+' m',W/2,by+26)},
-    down(x){S.tx=x},move(x,y,p){if(p)S.tx=x}
+    down(x){S.d={x,tx:S.tx}},move(x,y,p){if(p&&S.d)S.tx=S.d.tx+(x-S.d.x)},up(){S.d=null}
   };
 })();
 
@@ -2707,7 +2708,7 @@ ARC.jump=(()=>{
       c.restore();
       c.font='700 12px system-ui';c.fillStyle='#3b3566';c.textAlign='center';c.fillText(GM.st.height+' m',W/2,24);
     },
-    down(x){S.tx=x},move(x,y,p){if(p)S.tx=x}
+    down(x){S.d={x,tx:S.tx}},move(x,y,p){if(p&&S.d)S.tx=S.d.tx+(x-S.d.x)},up(){S.d=null}
   };
 })();
 
@@ -4258,7 +4259,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='10.6';
+const APP_VERSION='10.7';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
