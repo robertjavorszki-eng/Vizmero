@@ -301,6 +301,9 @@ html:root[data-accent="vidam"] .add{box-shadow:0 4px 0 rgba(0,0,0,.18)}
 @keyframes bubPop{0%{transform:scale(.92);opacity:.4}100%{transform:none;opacity:1}}
 html:root[data-accent="vidam"][data-dark="0"] .bubble{background:#fff3b8;border-color:transparent;color:#3f3200}
 html:root[data-accent="neon"] .bubble{background:#2a1a3d;border-color:#ff4fd8}
+.accrow{display:flex;flex-wrap:wrap;gap:6px}
+.accrow .chip{height:38px;font-size:.85rem;padding-inline:12px}
+.acclbl{margin:8px 0 4px;font-size:.78rem;color:var(--muted);font-weight:700}
 .petname{font-size:.78rem;color:var(--muted);padding-left:4px}
 .petgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .petgrid button{border:1.5px solid var(--line);background:var(--bg);border-radius:14px;padding:2px 2px 6px;display:flex;flex-direction:column;align-items:center;gap:0;cursor:pointer;font:600 .72rem var(--body);color:var(--ink);min-width:0}
@@ -511,12 +514,22 @@ body.modal{overflow:hidden}
       <p class="small" style="margin:12px 0 6px;font-weight:700" data-t="petPick"></p>
       <div class="petgrid" id="petGrid"></div>
       <p class="small" style="margin:12px 0 6px;font-weight:700" data-t="petAcc"></p>
-      <div class="opt2" id="petAccRow">
-        <button class="chip" data-pacc="none"><span data-t="accNone"></span></button>
-        <button class="chip" data-pacc="glasses"><span data-t="accGlasses"></span></button>
-        <button class="chip" data-pacc="cap"><span data-t="accCap"></span></button>
-        <button class="chip" data-pacc="headphones"><span data-t="accPhones"></span></button>
+      <p class="acclbl" data-t="accHead"></p>
+      <div class="accrow"><button class="chip" data-acc="head" data-v="none"><span data-t="accNone"></span></button><button class="chip" data-acc="head" data-v="cap"><span data-t="hCap"></span></button><button class="chip" data-acc="head" data-v="beanie"><span data-t="hBeanie"></span></button><button class="chip" data-acc="head" data-v="crown"><span data-t="hCrown"></span></button><button class="chip" data-acc="head" data-v="tophat"><span data-t="hTophat"></span></button><button class="chip" data-acc="head" data-v="bow"><span data-t="hBow"></span></button></div>
+      <p class="acclbl" data-t="accEyes"></p>
+      <div class="accrow"><button class="chip" data-acc="eyes" data-v="none"><span data-t="accNone"></span></button><button class="chip" data-acc="eyes" data-v="sun"><span data-t="eSun"></span></button><button class="chip" data-acc="eyes" data-v="glasses"><span data-t="eGlasses"></span></button></div>
+      <p class="acclbl" data-t="accNeck"></p>
+      <div class="accrow"><button class="chip" data-acc="neck" data-v="none"><span data-t="accNone"></span></button><button class="chip" data-acc="neck" data-v="bowtie"><span data-t="nBowtie"></span></button><button class="chip" data-acc="neck" data-v="scarf"><span data-t="nScarf"></span></button><button class="chip" data-acc="neck" data-v="collar"><span data-t="nCollar"></span></button></div>
+      <div class="srow" style="margin-top:6px"><span data-t="accPhones"></span><label class="tg"><input type="checkbox" id="petPhones"><i></i></label></div>
+      <p class="small" style="margin:12px 0 6px;font-weight:700" data-t="petVoice"></p>
+      <div class="accrow">
+        <button class="chip" data-pvoice="off"><span data-t="vOff"></span></button>
+        <button class="chip" data-pvoice="tap"><span data-t="vTap"></span></button>
+        <button class="chip" data-pvoice="events"><span data-t="vEvents"></span></button>
+        <button class="chip" data-pvoice="random"><span data-t="vRandom"></span></button>
       </div>
+      <div class="srow" style="margin-top:6px"><span data-t="petVoiceTry"></span><button class="play" id="petVoicePlay" data-ta="play"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></button></div>
+      <p class="small" style="margin-top:6px" data-t="petVoiceNote"></p>
     </div>
 
     <div>
@@ -776,7 +789,8 @@ body.modal{overflow:hidden}
     <section>
       <h4>Kisállat</h4>
       <p>A főoldalon egy kis kedvenc társalog veled: pislog, lélegzik, csóválja a farkát, és a helyzet szerint viselkedik. Ha jó a tempó, vidám; ha lemaradtál vagy régóta nem ittál, szomjas, és odatolja az üres tálját; a napi időszakon kívül alszik; ha megvan a cél, ünnepel. Ital hozzáadásakor ő is ugrik egyet, és ha megsimogatod (rákoppintasz), szívecskéket küld.</p>
-      <p>A beállítások <b>Kisállat</b> részében 20 állat közül választhatsz (köztük dínó, cápa, farkas, sárkány és tigris is), nevet adhatsz neki, felteheted rá a napszemüveget, a sapkát vagy a fejhallgatót, és kikapcsolhatod a szövegbuborékot vagy az egész kisállatot.</p>
+      <p>A beállítások <b>Kisállat</b> részében 20 állat közül választhatsz (köztük dínó, cápa, farkas, sárkány és tigris is), nevet adhatsz neki, öltöztetheted (fejre: baseballsapka, kötött sapka, korona, cilinder, masni; szemre: napszemüveg vagy szemüveg; nyakba: csokornyakkendő, sál, nyakörv; plusz fejhallgató, mindez kombinálható), és kikapcsolhatod a szövegbuborékot vagy az egész kisállatot.</p>
+      <p>Mindegyik állatnak saját hangja van: a kutya vakkant, a cica nyávog, a madárka csiripel, a dínó és a sárkány bömböl, a farkas vonyít, a cápa csattog. A <b>Kisállat hangja</b> résznél választhatod, hogy soha, csak koppintásra, eseményeknél is (ital hozzáadása, cél teljesítése), vagy néha magától is megszólaljon.</p>
     </section>
     <section>
       <h4>Hangok és rezgés</h4>
@@ -870,7 +884,8 @@ body.modal{overflow:hidden}
     <section>
       <h4>Pet</h4>
       <p>A little pet keeps you company on the main screen: it blinks, breathes, wags its tail and reacts to how you’re doing. On pace it’s happy; if you’re behind or haven’t had a drink for a while, it’s thirsty and pushes its empty bowl towards you; outside your daily window it sleeps; when you reach your goal, it celebrates. It hops when you add a drink, and sends hearts when you pet it (tap it).</p>
-      <p>Under <b>Pet</b> in Settings you can pick from 20 animals (including a dino, shark, wolf, dragon and tiger), give it a name, add sunglasses, a cap or headphones, and turn off the speech bubble or the pet altogether.</p>
+      <p>Under <b>Pet</b> in Settings you can pick from 20 animals (including a dino, shark, wolf, dragon and tiger), give it a name, dress it up (head: baseball cap, beanie, crown, top hat, bow; eyes: sunglasses or glasses; neck: bow tie, scarf, collar; plus headphones, all combinable), and turn off the speech bubble or the pet altogether.</p>
+      <p>Every animal has its own sound: the dog barks, the cat meows, the bird chirps, the dino and dragon roar, the wolf howls, the shark chomps. Under <b>Pet sound</b> choose whether it never makes a sound, only when tapped, on events too (adding a drink, reaching your goal), or now and then on its own.</p>
     </section>
     <section>
       <h4>Sounds and vibration</h4>
@@ -967,6 +982,10 @@ hu:{
   drinks:{water:'Víz',sparkling:'Szénsavas víz',tea:'Tea',herbal:'Gyógytea',coffee:'Kávé',latte:'Tejeskávé',juice:'Gyümölcslé',lemonade:'Limonádé',smoothie:'Smoothie',milk:'Tej',plantmilk:'Növényi tej',kefir:'Kefir',cocoa:'Kakaó',soup:'Leves',isotonic:'Sportital',beer:'Alkoholmentes sör',other:'Egyéb'},
   petSec:'Kisállat', petOn:'Kisállat a főoldalon', petTalk:'Beszél hozzád (buborék)', petNameLbl:'Neve', petNamePh:'pl. Bodri',
   petPick:'Válassz kedvencet', petAcc:'Kiegészítő', accNone:'Semmi', accGlasses:'Napszemüveg', accCap:'Sapka', accPhones:'Fejhallgató',
+  accHead:'Fejre', accEyes:'Szemre', accNeck:'Nyakba', hCap:'Baseballsapka', hBeanie:'Kötött sapka', hCrown:'Korona', hTophat:'Cilinder', hBow:'Masni',
+  eSun:'Napszemüveg', eGlasses:'Szemüveg', nBowtie:'Csokornyakkendő', nScarf:'Sál', nCollar:'Nyakörv',
+  petVoice:'Kisállat hangja', vOff:'Ki', vTap:'Koppintásra', vEvents:'Eseményeknél is', vRandom:'Néha magától is', petVoiceTry:'Meghallgatom',
+  petVoiceNote:'A kutya vakkant, a cica nyávog, a dínó bömböl… Eseményeknél: ital hozzáadásakor néha, és a cél teljesítésekor. A hangok a „Hangok és rezgés” beállításait követik (hangerő, csend a napi időszakon kívül).',
   petFriend:'barátom', petTapAria:'Simogasd meg', petNames:{"dog": "Kutya", "cat": "Cica", "racoon": "Mosómedve", "kangaroo": "Kenguru", "bunny": "Nyuszi", "hamster": "Hörcsög", "mouse": "Egér", "capy": "Kapibara", "bird": "Madárka", "lizard": "Gyík", "chick": "Csibe", "squirrel": "Mókus", "hedgehog": "Süni", "fox": "Róka", "bear": "Maci", "dino": "Dínó", "shark": "Cápa", "wolf": "Farkas", "dragon": "Sárkány", "tiger": "Tigris"},
   petMsg:{
     start:['Jó reggelt, {n}! Kezdjük egy pohár vízzel?','Új nap, tiszta tál! Iszunk egyet?'],
@@ -1060,6 +1079,10 @@ en:{
   drinks:{water:'Water',sparkling:'Sparkling water',tea:'Tea',herbal:'Herbal tea',coffee:'Coffee',latte:'Milk coffee',juice:'Juice',lemonade:'Lemonade',smoothie:'Smoothie',milk:'Milk',plantmilk:'Plant milk',kefir:'Kefir',cocoa:'Cocoa',soup:'Soup',isotonic:'Sports drink',beer:'Alcohol-free beer',other:'Other'},
   petSec:'Pet', petOn:'Pet on the main screen', petTalk:'Talks to you (bubble)', petNameLbl:'Name', petNamePh:'e.g. Buddy',
   petPick:'Choose your pet', petAcc:'Accessory', accNone:'None', accGlasses:'Sunglasses', accCap:'Cap', accPhones:'Headphones',
+  accHead:'Head', accEyes:'Eyes', accNeck:'Neck', hCap:'Baseball cap', hBeanie:'Beanie', hCrown:'Crown', hTophat:'Top hat', hBow:'Bow',
+  eSun:'Sunglasses', eGlasses:'Glasses', nBowtie:'Bow tie', nScarf:'Scarf', nCollar:'Collar',
+  petVoice:'Pet sound', vOff:'Off', vTap:'When tapped', vEvents:'On events too', vRandom:'Now and then too', petVoiceTry:'Preview',
+  petVoiceNote:'The dog barks, the cat meows, the dino roars… On events: sometimes when you add a drink, and when you reach your goal. Sounds follow your “Sounds and vibration” settings (volume, quiet outside your daily window).',
   petFriend:'buddy', petTapAria:'Pet it', petNames:{"dog": "Dog", "cat": "Cat", "racoon": "Raccoon", "kangaroo": "Kangaroo", "bunny": "Bunny", "hamster": "Hamster", "mouse": "Mouse", "capy": "Capybara", "bird": "Bird", "lizard": "Lizard", "chick": "Chick", "squirrel": "Squirrel", "hedgehog": "Hedgehog", "fox": "Fox", "bear": "Bear", "dino": "Dino", "shark": "Shark", "wolf": "Wolf", "dragon": "Dragon", "tiger": "Tiger"},
   petMsg:{
     start:['Good morning, {n}! Shall we start with a glass of water?','New day, fresh bowl! Shall we drink?'],
@@ -1162,7 +1185,13 @@ function normalizeDrinks(){
 }
 function normalizePet(){
   const p=state.pet&&typeof state.pet==='object'?state.pet:{};
-  state.pet={on:p.on!==false,talk:p.talk!==false,kind:PETS[p.kind]?p.kind:'dog',name:typeof p.name==='string'?p.name.slice(0,16):'',acc:['none','glasses','cap','headphones'].includes(p.acc)?p.acc:'none'};
+  state.pet={on:p.on!==false,talk:p.talk!==false,kind:PETS[p.kind]?p.kind:'dog',name:typeof p.name==='string'?p.name.slice(0,16):'',acc:normAcc(p.acc),voice:['off','tap','events','random'].includes(p.voice)?p.voice:'events'};
+}
+function normAcc(a){
+  if(typeof a==='string')return {head:a==='cap'?'cap':'none',eyes:a==='glasses'?'sun':'none',neck:'none',phones:a==='headphones'};
+  a=a&&typeof a==='object'?a:{};
+  return {head:['none','cap','beanie','crown','tophat','bow'].includes(a.head)?a.head:'none',eyes:['none','sun','glasses'].includes(a.eyes)?a.eyes:'none',
+    neck:['none','bowtie','scarf','collar'].includes(a.neck)?a.neck:'none',phones:!!a.phones};
 }
 function normalizeSound(){
   const d={on:true,vib:true,quiet:true,set:'drop',vol:.6,ev:{add:true,del:true,goal:true}},s=state.sound&&typeof state.sound==='object'?state.sound:{};
@@ -1295,6 +1324,7 @@ const PETS={
 };
 const PET_KEYS=Object.keys(PETS);
 function petSVG(kind,mood,acc){
+  const A=acc&&typeof acc==='object'?acc:{head:acc==='cap'?'cap':'none',eyes:acc==='glasses'?'sun':'none',neck:'none',phones:acc==='headphones'};
   const p=PETS[kind]||PETS.dog,sp=p.sp||[],has=x=>sp.includes(x);
   const B=p.b,Lc=p.l,D=p.d,N=p.n,ey=p.ey||95,hr=p.hr||[56,48],ink='#2b2233';
   const droop=(mood==='thirsty'||mood==='sleep');
@@ -1361,7 +1391,7 @@ function petSVG(kind,mood,acc){
   /* szemek */
   const ex=7*(p.big?1.25:1),eyR=(mood==='thirsty'?8:9)*(p.big?1.2:1);
   const arc=(x,up)=>'M'+(x-8)+' '+(ey+(up?3:0))+' Q'+x+' '+(ey+(up?-7:6))+' '+(x+8)+' '+(ey+(up?3:0));
-  const glasses=acc==='glasses'&&mood!=='sleep';
+  const glasses=A.eyes==='sun'&&mood!=='sleep';
   if(!glasses){
     if(mood==='happy'||mood==='thirsty')face+='<g class="blink">'+both('<ellipse cx="78" cy="'+ey+'" rx="'+ex+'" ry="'+eyR+'" fill="'+ink+'"/><circle cx="80.5" cy="'+(ey-3.5)+'" r="2.6" fill="#fff"/>')+'</g>';
     if(mood==='thirsty')face+=both('<path d="M68 '+(ey-16)+' L86 '+(ey-12)+'" stroke="'+ink+'" stroke-width="3" stroke-linecap="round"/>');
@@ -1388,14 +1418,24 @@ function petSVG(kind,mood,acc){
       if(p.teeth)face+='<path d="M89 114.5 L93 121 L97 115 Z M103 115 L107 121 L111 114.5 Z" fill="#fff"/>';}
   }
   /* kiegészítők */
-  const capOn=acc==='cap',phonesOn=acc==='headphones';
-  if(has('fruit')&&!capOn&&!phonesOn&&mood!=='party')top+='<circle cx="100" cy="42" r="11" fill="#ffa53a"/><path d="M100 31 Q106 22 114 26 Q109 33 100 31 Z" fill="#4fb55a"/>';
-  if(has('tuftHair')&&!capOn)top+='<path d="M96 48 Q96 30 104 38 Q106 26 112 40" fill="none" stroke="'+D+'" stroke-width="3.4" stroke-linecap="round"/>';
-  if(has('tuftFeather')&&!capOn)top+='<path d="M98 47 Q100 30 110 34" fill="none" stroke="'+D+'" stroke-width="4" stroke-linecap="round"/>';
+  const headOn=A.head&&A.head!=='none',phonesOn=!!A.phones;
+  let neck='';
+  if(A.neck==='bowtie')neck='<path d="M84 132 L99 141 L84 150 Z" fill="#d63a6a"/><path d="M116 132 L101 141 L116 150 Z" fill="#d63a6a"/><circle cx="100" cy="141" r="5" fill="#a8234c"/>';
+  if(A.neck==='scarf')neck='<path d="M56 130 Q100 152 144 130 L146 143 Q100 167 54 143 Z" fill="#e0403a"/><path d="M118 146 L133 145 L130 178 L116 174 Z" fill="#c8302b"/><path d="M60 136 Q100 156 140 136" fill="none" stroke="#ff8a7a" stroke-width="2" stroke-dasharray="4 5"/>';
+  if(A.neck==='collar')neck='<path d="M62 134 Q100 152 138 134 L139 141 Q100 160 61 141 Z" fill="#5b3fd6"/><circle cx="100" cy="155" r="6.5" fill="#ffd23f" stroke="#d9a400" stroke-width="1.5"/>';
+  if(has('fruit')&&!headOn&&!phonesOn&&mood!=='party')top+='<circle cx="100" cy="42" r="11" fill="#ffa53a"/><path d="M100 31 Q106 22 114 26 Q109 33 100 31 Z" fill="#4fb55a"/>';
+  if(has('tuftHair')&&!headOn)top+='<path d="M96 48 Q96 30 104 38 Q106 26 112 40" fill="none" stroke="'+D+'" stroke-width="3.4" stroke-linecap="round"/>';
+  if(has('tuftFeather')&&!headOn)top+='<path d="M98 47 Q100 30 110 34" fill="none" stroke="'+D+'" stroke-width="4" stroke-linecap="round"/>';
   if(glasses)top+='<rect x="62" y="'+(ey-11)+'" width="32" height="21" rx="9" fill="#1d1a33"/><rect x="106" y="'+(ey-11)+'" width="32" height="21" rx="9" fill="#1d1a33"/><path d="M94 '+(ey-3)+' L106 '+(ey-3)+'" stroke="#1d1a33" stroke-width="4"/><path d="M68 '+(ey-5)+' L76 '+(ey-8)+' M112 '+(ey-5)+' L120 '+(ey-8)+'" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>';
-  if(capOn)top+='<path d="M50 64 Q52 30 100 30 Q148 30 150 64 Q100 52 50 64 Z" fill="#e0403a"/><path d="M124 58 Q150 52 170 60 Q160 70 140 66 Z" fill="#b8302b"/><circle cx="100" cy="31" r="4" fill="#b8302b"/>';
+  if(A.eyes==='glasses')top+='<circle cx="78" cy="'+ey+'" r="13" fill="#ffffff" fill-opacity=".18" stroke="#1d1a33" stroke-width="3"/><circle cx="122" cy="'+ey+'" r="13" fill="#ffffff" fill-opacity=".18" stroke="#1d1a33" stroke-width="3"/><path d="M91 '+(ey-2)+' Q100 '+(ey-7)+' 109 '+(ey-2)+'" fill="none" stroke="#1d1a33" stroke-width="3"/>';
+  if(A.head==='cap')top+='<path d="M50 64 Q52 30 100 30 Q148 30 150 64 Q100 52 50 64 Z" fill="#e0403a"/><path d="M124 58 Q150 52 170 60 Q160 70 140 66 Z" fill="#b8302b"/><circle cx="100" cy="31" r="4" fill="#b8302b"/>';
+  if(A.head==='beanie')top+='<path d="M50 66 Q50 26 100 26 Q150 26 150 66 Z" fill="#3fa9f5"/><rect x="47" y="58" width="106" height="13" rx="6" fill="#1c86cf"/><path d="M70 34 L70 58 M85 28 L85 58 M100 26 L100 58 M115 28 L115 58 M130 34 L130 58" stroke="#1c86cf" stroke-width="2.5" opacity=".6"/><circle cx="100" cy="22" r="10" fill="#ffffff"/>';
+  if(A.head==='crown')top+='<path d="M66 54 L68 22 L84 40 L100 16 L116 40 L132 22 L134 54 Z" fill="#ffd23f" stroke="#d9a400" stroke-width="2.5" stroke-linejoin="round"/><circle cx="100" cy="42" r="4.5" fill="#d63a6a"/><circle cx="80" cy="46" r="3.5" fill="#3fa9f5"/><circle cx="120" cy="46" r="3.5" fill="#4fd18b"/>';
+  if(A.head==='tophat')top+='<ellipse cx="100" cy="52" rx="42" ry="8" fill="#1d1a33"/><rect x="74" y="8" width="52" height="44" rx="5" fill="#1d1a33"/><rect x="74" y="38" width="52" height="8" fill="#d63a6a"/>';
+  if(A.head==='bow')top+='<g transform="rotate(-18 136 52)"><path d="M136 52 L114 40 L116 64 Z" fill="#ff5f8f"/><path d="M136 52 L158 40 L156 64 Z" fill="#ff5f8f"/><circle cx="136" cy="52" r="6" fill="#d63a6a"/></g>';
   if(phonesOn)top+='<path d="M42 96 Q40 28 100 28 Q160 28 158 96" fill="none" stroke="#2b2233" stroke-width="8" stroke-linecap="round"/><rect x="32" y="80" width="22" height="34" rx="9" fill="#ff5f8f"/><rect x="146" y="80" width="22" height="34" rx="9" fill="#ff5f8f"/>';
-  if(mood==='party'&&!capOn)top+='<path d="M82 52 L100 4 L118 52 Z" fill="#ff5f8f"/><path d="M88 36 L112 36 L109 28 L91 28 Z" fill="#ffe36e"/><circle cx="100" cy="5" r="7" fill="#4fe0c2"/>';
+  if(mood==='party'&&!headOn)top+='<path d="M82 52 L100 4 L118 52 Z" fill="#ff5f8f"/><path d="M88 36 L112 36 L109 28 L91 28 Z" fill="#ffe36e"/><circle cx="100" cy="5" r="7" fill="#4fe0c2"/>';
+  top=neck+top;
   /* hangulat kellékek */
   if(mood==='happy')fx+='<path class="float" d="M158 50 C158 44 166 42 168 48 C170 42 178 44 178 50 C178 58 168 62 168 64 C168 62 158 58 158 50 Z" fill="#ff5f8f"/>';
   if(mood==='thirsty')fx+='<path d="M158 60 Q168 74 158 80 Q148 74 158 60 Z" fill="#6ec6ff"/><path d="M8 178 H58 Q54 194 33 194 Q12 194 8 178 Z" fill="#8a7fd6"/><ellipse cx="33" cy="178" rx="25" ry="4" fill="#b9b1ef"/>';
@@ -1424,7 +1464,7 @@ function renderPet(now,d,tot,g,p){
   const P=state.pet,card=$('petCard');
   if(!P.on){card.hidden=true;return}
   card.hidden=false;
-  const mood=petMood(now,d,tot,g,p),key=P.kind+'|'+mood+'|'+P.acc;
+  const mood=petMood(now,d,tot,g,p),key=P.kind+'|'+mood+'|'+JSON.stringify(P.acc);
   if(key!==petKey){petKey=key;$('petSvg').innerHTML=petSVG(P.kind,mood,P.acc);const box=$('petBox');box.classList.remove('happy','thirsty','sleep','party');box.classList.add(mood)}
   $('petBox').setAttribute('aria-label',t('petTapAria')+': '+(P.name||L().petNames[P.kind]));
   $('petNameLbl').textContent=P.name||'';$('petNameLbl').hidden=!P.name;
@@ -1448,7 +1488,7 @@ const HEART='<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-7.5-10.4A4.4 4.4 
 $('petBox').onclick=()=>{
   const h=$('petHearts');h.textContent='';
   [-34,-12,10,30].forEach((dx,i)=>{const e=document.createElement('i');e.style.setProperty('--dx',dx+'px');e.style.animationDelay=(i*.08)+'s';e.innerHTML=HEART;h.appendChild(e)});
-  setTimeout(()=>{h.textContent=''},1500);petHop();buzz(12);petSay(petTextRand('pet',{}));
+  setTimeout(()=>{h.textContent=''},1500);petHop();buzz(12);petSay(petTextRand('pet',{}));if(petVoiceOn('tap'))petVoice(true);
 };
 function buildPetGrid(){
   const g=$('petGrid');g.textContent='';
@@ -1460,12 +1500,17 @@ function renderPetSettings(){
   const P=state.pet;$('petOn').checked=P.on;$('petTalk').checked=P.talk;
   if(document.activeElement!==$('petNameIn'))$('petNameIn').value=P.name;
   document.querySelectorAll('#petGrid button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.pet===P.kind));
-  document.querySelectorAll('[data-pacc]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.pacc===P.acc));
+  document.querySelectorAll('[data-acc]').forEach(b=>b.setAttribute('aria-pressed',P.acc[b.dataset.acc]===b.dataset.v));
+  $('petPhones').checked=!!P.acc.phones;
+  document.querySelectorAll('[data-pvoice]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.pvoice===P.voice));
 }
 $('petOn').onchange=()=>{state.pet.on=$('petOn').checked;render();writeSettings()};
 $('petTalk').onchange=()=>{state.pet.talk=$('petTalk').checked;render();writeSettings()};
 $('petNameIn').oninput=()=>{state.pet.name=$('petNameIn').value.trim().slice(0,16);render();writeSettings()};
-document.querySelectorAll('[data-pacc]').forEach(b=>b.onclick=()=>{state.pet.acc=b.dataset.pacc;renderPetSettings();render();writeSettings()});
+document.querySelectorAll('[data-acc]').forEach(b=>b.onclick=()=>{state.pet.acc[b.dataset.acc]=b.dataset.v;renderPetSettings();render();writeSettings();petHop()});
+$('petPhones').onchange=()=>{state.pet.acc.phones=$('petPhones').checked;render();writeSettings();petHop()};
+document.querySelectorAll('[data-pvoice]').forEach(b=>b.onclick=()=>{state.pet.voice=b.dataset.pvoice;renderPetSettings();writeSettings();if(state.pet.voice!=='off')petVoice(true)});
+$('petVoicePlay').onclick=()=>petVoice(true);
 
 /* --- hangok és rezgés --- */
 let actx=null;
@@ -1483,6 +1528,51 @@ const SOUNDS={
   melody:{add:(c,t,v)=>{tone(c,t,784,0,.12,'triangle',v);tone(c,t+.1,1046,0,.18,'triangle',v)},del:(c,t,v)=>{tone(c,t,659,0,.1,'triangle',v*.7);tone(c,t+.09,523,0,.16,'triangle',v*.7)},
     goal:(c,t,v)=>{[523,659,784,1046,1319].forEach((f,i)=>tone(c,t+i*.12,f,0,.32,'triangle',v*.85))}}
 };
+/* állathangok: az app maga állítja elő */
+function vtone(c,t0,f0,f1,dur,type,vol,o){
+  o=o||{};const osc=c.createOscillator(),g=c.createGain();let node=osc;osc.type=type;
+  osc.frequency.setValueAtTime(f0,t0);
+  if(o.mid){osc.frequency.linearRampToValueAtTime(o.mid,t0+dur*.45);osc.frequency.linearRampToValueAtTime(f1,t0+dur)}else if(f1)osc.frequency.exponentialRampToValueAtTime(f1,t0+dur);
+  if(o.vib){const l=c.createOscillator(),lg=c.createGain();l.frequency.value=o.vib;lg.gain.value=o.vibAmt||12;l.connect(lg);lg.connect(osc.frequency);l.start(t0);l.stop(t0+dur+.05)}
+  if(o.lp){const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=o.lp;f.Q.value=o.q||1;osc.connect(f);node=f}
+  g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(Math.max(.0002,vol),t0+(o.att||.015));g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+  node.connect(g);g.connect(c.destination);osc.start(t0);osc.stop(t0+dur+.05);
+}
+function vnoise(c,t0,dur,vol,freq,type){
+  const n=Math.floor(c.sampleRate*dur),buf=c.createBuffer(1,n,c.sampleRate),d=buf.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+  const src=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();src.buffer=buf;f.type=type||'bandpass';f.frequency.value=freq||1200;f.Q.value=1;
+  g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(Math.max(.0002,vol),t0+.01);g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+  src.connect(f);f.connect(g);g.connect(c.destination);src.start(t0);src.stop(t0+dur+.02);
+}
+const VOICES={
+  bark:(c,t,v)=>{vtone(c,t,520,330,.11,'square',v*.5,{lp:1400});vtone(c,t+.17,480,300,.13,'square',v*.5,{lp:1400})},
+  meow:(c,t,v)=>{vtone(c,t,480,560,.55,'sawtooth',v*.45,{mid:820,lp:1800,vib:6,vibAmt:14,att:.06})},
+  chirp:(c,t,v)=>{[0,.09,.18].forEach((d,i)=>vtone(c,t+d,2300+i*200,3400,.06,'sine',v*.55))},
+  peep:(c,t,v)=>{vtone(c,t,1800,2400,.09,'sine',v*.55);vtone(c,t+.14,1900,2600,.1,'sine',v*.55)},
+  squeak:(c,t,v)=>{vtone(c,t,1700,2600,.07,'sine',v*.5);vtone(c,t+.1,1900,2800,.06,'sine',v*.45)},
+  chitter:(c,t,v)=>{[0,.06,.12,.18].forEach(d=>vtone(c,t+d,1300,1700,.045,'triangle',v*.45))},
+  yip:(c,t,v)=>{vtone(c,t,900,1600,.11,'triangle',v*.55,{lp:2400});vtone(c,t+.16,1000,1700,.1,'triangle',v*.5,{lp:2400})},
+  growl:(c,t,v)=>{vtone(c,t,150,110,.42,'sawtooth',v*.6,{lp:700,vib:28,vibAmt:10,att:.05})},
+  roar:(c,t,v)=>{vtone(c,t,140,70,.75,'sawtooth',v*.7,{lp:900,vib:22,vibAmt:14,att:.08});vnoise(c,t,.6,v*.35,500,'lowpass')},
+  dragon:(c,t,v)=>{vtone(c,t,220,90,.7,'sawtooth',v*.6,{lp:1100,vib:18,vibAmt:18,att:.06});vnoise(c,t+.1,.7,v*.4,1800)},
+  howl:(c,t,v)=>{vtone(c,t,380,520,1.1,'sine',v*.6,{mid:720,vib:5,vibAmt:10,att:.15})},
+  chomp:(c,t,v)=>{vtone(c,t,180,60,.12,'square',v*.5,{lp:500});vnoise(c,t,.08,v*.5,2500);vtone(c,t+.2,180,60,.12,'square',v*.5,{lp:500});vnoise(c,t+.2,.08,v*.5,2500)},
+  wheek:(c,t,v)=>{vtone(c,t,800,1200,.16,'sine',v*.5,{vib:9,vibAmt:20});vtone(c,t+.22,850,1250,.16,'sine',v*.45,{vib:9,vibAmt:20})},
+  click:(c,t,v)=>{[0,.08,.16].forEach(d=>vnoise(c,t+d,.03,v*.6,3500))},
+  snuffle:(c,t,v)=>{vnoise(c,t,.12,v*.5,900);vnoise(c,t+.18,.12,v*.5,1100)},
+  grunt:(c,t,v)=>{vtone(c,t,210,150,.2,'sawtooth',v*.5,{lp:600});vtone(c,t+.26,200,140,.18,'sawtooth',v*.45,{lp:600})},
+  boop:(c,t,v)=>{vtone(c,t,700,950,.12,'sine',v*.5);vtone(c,t+.15,950,700,.14,'sine',v*.45)}
+};
+const PET_VOICE={dog:'bark',cat:'meow',racoon:'chitter',kangaroo:'grunt',bunny:'boop',hamster:'squeak',mouse:'squeak',capy:'wheek',bird:'chirp',lizard:'click',
+  chick:'peep',squirrel:'chitter',hedgehog:'snuffle',fox:'yip',bear:'growl',dino:'roar',shark:'chomp',wolf:'howl',dragon:'dragon',tiger:'growl'};
+function petVoice(force,delay){
+  const S=state.sound,P=state.pet;if(!S.on||!P.on)return;
+  if(!force&&(P.voice==='off'||quietNow()))return;
+  const c=force?audio():actx;if(!c)return;
+  try{VOICES[PET_VOICE[P.kind]||'boop'](c,c.currentTime+.02+(delay||0),S.vol*.5)}catch(e){}
+}
+function petVoiceOn(level){const order={off:0,tap:1,events:2,random:3};return order[state.pet.voice]>=order[level]}
+setInterval(()=>{if(!document.hidden&&actx&&petVoiceOn('random')&&Math.random()<.18)petVoice(false)},60000);
 function quietNow(){if(!state.sound.quiet)return false;const n=new Date(),N=n.getHours()*60+n.getMinutes(),S=mins(state.start)??420,E=mins(state.end)??1320;return N<S||N>=E}
 function play(ev,force){
   const S=state.sound;if(!force&&(!S.on||!S.ev[ev]||quietNow()))return;
@@ -1510,7 +1600,7 @@ function add(dl,type,tm){
   const when=tm||Date.now(),k=keyOf(new Date(when)),d=ensure(k),before=sum(d),g=goalOf(d);
   d.entries.push({t:when,dl,type:type||'water'});d.entries.sort((a,b)=>a.t-b.t);render();writeDay(k);
   const isToday=k===keyOf(new Date());
-  if(isToday&&before<g&&sum(d)>=g){play('goal');buzz([30,60,30,60,60]);petHop()}else{play('add');buzz(15);if(isToday){petHop();petSay(petTextRand('sip',{a:amt(dl)}))}}
+  if(isToday&&before<g&&sum(d)>=g){play('goal');buzz([30,60,30,60,60]);petHop();if(petVoiceOn('events'))petVoice(false,.7)}else{play('add');buzz(15);if(isToday){petHop();petSay(petTextRand('sip',{a:amt(dl)}));if(petVoiceOn('events')&&Math.random()<.5)petVoice(false,.3)}}
 }
 let undo=null,toastTimer;
 function delEntry(k,i){
@@ -1997,7 +2087,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='9.1';
+const APP_VERSION='9.2';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
