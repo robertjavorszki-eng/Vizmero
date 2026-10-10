@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Vízmérő</title>
-<meta name="description" content="Egyszerű, reklámmentes vízivás-napló. Az adataid a telefonodon maradnak.">
+<title>Lefety</title>
+<meta name="description" content="Lefety – egyszerű, reklámmentes folyadéknapló. Az adataid a telefonodon maradnak.">
 <meta name="theme-color" content="#eaf2f7">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Vízmérő">
+<meta name="apple-mobile-web-app-title" content="Lefety">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
@@ -303,7 +303,7 @@ body.modal{overflow:hidden}
 <body>
 <div class="wrap">
   <header>
-    <h1>Vízmérő</h1>
+    <h1 id="appName">Lefety</h1>
     <div class="hright">
       <div class="date" id="date"></div>
       <button class="icon" id="openHelp" data-ta="help">
@@ -608,7 +608,7 @@ body.modal{overflow:hidden}
 
     <div data-lang="hu" style="display:contents">
     <section>
-      <h4>Mire jó a Vízmérő?</h4>
+      <h4>Mire jó a Lefety?</h4>
       <p>Segít nyomon követni, mennyi folyadékot iszol egy nap. Minden alkalommal, amikor iszol, egy koppintással rögzíted, és mindig látod, hol tartasz a napi célodhoz képest, és hogyan érdemes beosztani a nap hátralévő részét.</p>
     </section>
     <section>
@@ -692,8 +692,8 @@ body.modal{overflow:hidden}
 
     <div data-lang="en" style="display:contents">
     <section>
-      <h4>What is Vízmérő for?</h4>
-      <p>It helps you keep track of how much you drink in a day. Every time you drink, log it with one tap. You always see where you are against your daily goal, and how to spread out the rest of the day. (Vízmérő is Hungarian for “water meter”.)</p>
+      <h4>What is Slurp for?</h4>
+      <p>It helps you keep track of how much you drink in a day. Every time you drink, log it with one tap. You always see where you are against your daily goal, and how to spread out the rest of the day.</p>
     </section>
     <section>
       <h4>Add it to your home screen</h4>
@@ -813,7 +813,7 @@ hu:{
   dataNote:'A mentés egy kis .json fájl a teljes naplóddal. Betöltéskor a meglévő bejegyzések megmaradnak, csak a hiányzók kerülnek be.',
   less:'Kevesebb', more:'Több', drink:'Ital', time:'Időpont', delete:'Törlés', add:'Hozzáadás', save:'Mentés',
   customTitle:'Egyéni mennyiség', editTitle:'Bejegyzés javítása', undo:'Visszavonás',
-  onbTitle:'Szia! Üdv a Vízmérőben.', onbAsk:'Segítek nyomon követni, mennyit iszol egy nap. Hogyan szólíthatlak?',
+  onbTitle:'Szia! Üdv a Lefetyben.', onbAsk:'Segítek nyomon követni, mennyit iszol egy nap. Hogyan szólíthatlak?',
   onbOptional:'Nem kötelező. Később a beállításokban is megadhatod vagy megváltoztathatod.', skip:'Kihagyom', next:'Tovább',
   privTitle:n=>n?n+', az adataid a tieid':'Az adataid a tieid',
   privText:'A naplód csak ezen a telefonon tárolódik. Az app nem küldi el sehova, nem kell hozzá fiók, és megnyitás után internet nélkül is működik.',
@@ -830,9 +830,9 @@ hu:{
   tDeleted:(a,dr,t)=>a+' '+dr.toLowerCase()+' törölve ('+t+')', tLogged:(a,dr,t)=>a+' '+dr.toLowerCase()+' rögzítve ('+t+')', tEdited:'Javítva', tUpdated:'Frissítve a legújabb változatra.',
   tSaveFail:'Nem sikerült menteni. Ellenőrizd a netet.', tWindow:'A napi időszak legyen legalább 2 óra, és a vége a kezdés után legyen.',
   tBase:a=>'Alapcél: '+a, tExported:f=>'Mentés kész: '+f, tExportFail:'A mentés nem sikerült ezen az eszközön.',
-  tBadFile:'Ez nem Vízmérő-mentés. Válaszd a .json fájlt, amit az app mentett.',
+  tBadFile:'Ez nem Lefety-mentés. Válaszd a .json fájlt, amit az app mentett.',
   tImported:(e,d)=>e+' bejegyzés betöltve '+d+' napra.', tNothing:'Nem volt új bejegyzés a fájlban.',
-  backupName:'vizmero-mentes-', backupTitle:'Vízmérő mentés',
+  backupName:'lefety-mentes-', backupTitle:'Lefety mentés', appName:'Lefety',
   left:a=>['Még ',a,' a célig'], done:'Cél teljesítve', goalToday:'Mai cél: ',
   goalParts:(b,a,h)=>' (alap '+b+(a?' + mozgás '+a:'')+(h?' + meleg '+h:'')+')',
   greet:{done:'Szép munka, ',morning:'Jó reggelt, ',evening:'Jó estét, ',night:'Szia, ',day:'Szép napot, '},
@@ -888,7 +888,7 @@ en:{
   dataNote:'The backup is a small .json file with your whole log. Loading keeps your existing entries and only adds the missing ones.',
   less:'Less', more:'More', drink:'Drink', time:'Time', delete:'Delete', add:'Add', save:'Save',
   customTitle:'Custom amount', editTitle:'Edit entry', undo:'Undo',
-  onbTitle:'Hi! Welcome to Vízmérő.', onbAsk:'I’ll help you keep track of how much you drink each day. What should I call you?',
+  onbTitle:'Hi! Welcome to Slurp.', onbAsk:'I’ll help you keep track of how much you drink each day. What should I call you?',
   onbOptional:'Optional. You can add or change it later in Settings.', skip:'Skip', next:'Next',
   privTitle:n=>n?n+', your data is yours':'Your data is yours',
   privText:'Your log is stored only on this phone. The app doesn’t send it anywhere, needs no account, and works offline after the first visit.',
@@ -905,9 +905,9 @@ en:{
   tDeleted:(a,dr,t)=>a+' '+dr.toLowerCase()+' deleted ('+t+')', tLogged:(a,dr,t)=>a+' '+dr.toLowerCase()+' logged ('+t+')', tEdited:'Updated', tUpdated:'Updated to the latest version.',
   tSaveFail:'Couldn’t save. Check your connection.', tWindow:'The daily window must be at least 2 hours, and the end must come after the start.',
   tBase:a=>'Base goal: '+a, tExported:f=>'Saved: '+f, tExportFail:'Saving didn’t work on this device.',
-  tBadFile:'This isn’t a Vízmérő backup. Pick the .json file the app saved.',
+  tBadFile:'This isn’t a Slurp backup. Pick the .json file the app saved.',
   tImported:(e,d)=>e+' entries loaded across '+d+' days.', tNothing:'No new entries in the file.',
-  backupName:'vizmero-backup-', backupTitle:'Vízmérő backup',
+  backupName:'slurp-backup-', backupTitle:'Slurp backup', appName:'Slurp',
   left:a=>['',a,' to go'], done:'Goal reached', goalToday:'Today’s goal: ',
   goalParts:(b,a,h)=>' (base '+b+(a?' + activity '+a:'')+(h?' + heat '+h:'')+')',
   greet:{done:'Nice work, ',morning:'Good morning, ',evening:'Good evening, ',night:'Hi, ',day:'Hello, '},
@@ -1029,6 +1029,8 @@ function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(state))}catch(e)
 /* --- nyelv --- */
 function applyLang(){
   root.lang=state.lang==='en'?'en':'hu';
+  document.title=t('appName');$('appName').textContent=t('appName');
+  const am=document.querySelector('meta[name="apple-mobile-web-app-title"]');if(am)am.content=t('appName');
   document.querySelectorAll('[data-t]').forEach(el=>{el.textContent=t(el.dataset.t)});
   document.querySelectorAll('[data-ta]').forEach(el=>{el.setAttribute('aria-label',t(el.dataset.ta))});
   document.querySelectorAll('[data-tp]').forEach(el=>{el.placeholder=t(el.dataset.tp)});
@@ -1554,7 +1556,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='8.5';
+const APP_VERSION='8.6';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;

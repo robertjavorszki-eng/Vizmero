@@ -1,8 +1,8 @@
-# Vízmérő
+# Lefety (angolul: Slurp)
 
-Egyszerű, reklámmentes vízivás-napló magyarul. Telefonon a kezdőképernyőre téve appként működik (PWA), első megnyitás után internet nélkül is.
+Egyszerű, reklámmentes folyadéknapló magyarul és angolul. Korábbi neve Vízmérő. Telefonon a kezdőképernyőre téve appként működik (PWA), első megnyitás után internet nélkül is.
 
-**Megnyitás:** https://robertjavorszki-eng.github.io/vizmero/
+**Megnyitás:** https://robertjavorszki-eng.github.io/Vizmero/
 
 ## Tudnivalók
 
@@ -26,8 +26,8 @@ Egyszerű, reklámmentes vízivás-napló magyarul. Telefonon a kezdőképernyő
 
 Három helyen kell ugyanarra emelni a verziót:
 
-1. `version.json` → `{"v":"8.3"}`
-2. `index.html` → `const APP_VERSION='8.3';`
-3. `sw.js` → `const VERSION = 'vizmero-v8.3';`
+1. `version.json` → `{"v":"8.7"}`
+2. `index.html` → `const APP_VERSION='8.7';`
+3. `sw.js` → `const VERSION = 'vizmero-v8.7';`
 
 A megnyitott app az előtérbe hozáskor (és félóránként) megnézi a `version.json`-t, és ha újabb verziót talál, magától betölti, majd kiírja: „Frissítve a legújabb változatra.”
