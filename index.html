@@ -238,7 +238,9 @@ body.advanced .adv.grid{display:grid}
 .sheet{background:var(--surface);color:var(--ink);width:100%;max-width:480px;max-height:88%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;touch-action:pan-y;box-sizing:border-box;border-radius:22px 22px 0 0;padding:18px 16px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:22px}
 .sheet>header{display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:-18px;z-index:3;background:var(--surface);margin:-18px -16px 0;padding:14px 16px 10px;border-bottom:1px solid transparent}
 .sheet.scrolled>header{border-bottom-color:var(--line)}
-.sheet>*{min-width:0}
+.sheet>*{min-width:0;flex-shrink:0}
+.scrim.under .sheet{overflow:hidden}
+body.modal{overflow:hidden}
 .opt2 .chip,.opt3 .chip{white-space:normal;height:auto;min-height:42px;line-height:1.15;padding-block:6px;text-align:center}
 .sheet header h3{margin:0;font-size:1.15rem}
 .opt2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
@@ -1059,8 +1061,9 @@ function writeSettings(){saveLocal()}
 /* --- lapok --- */
 const openStack=[];
 document.querySelectorAll('.sheet').forEach(sh=>sh.addEventListener('scroll',()=>sh.classList.toggle('scrolled',sh.scrollTop>4),{passive:true}));
-function openSheet(id,focusEl){openStack.push({id,back:document.activeElement});$(id).hidden=false;const sh=$(id).querySelector('.sheet');if(sh)sh.scrollTop=0;setTimeout(()=>(focusEl||$(id).querySelector('[data-close]')||sh).focus(),40)}
-function closeSheet(id){$(id).hidden=true;const i=openStack.map(x=>x.id).lastIndexOf(id);if(i>=0){const b=openStack[i].back;openStack.splice(i,1);if(b&&b.focus)b.focus()}}
+function stackUI(){const top=openStack.length?openStack[openStack.length-1].id:null;document.querySelectorAll('.scrim').forEach(sc=>sc.classList.toggle('under',!sc.hidden&&sc.id!==top));document.body.classList.toggle('modal',!!top)}
+function openSheet(id,focusEl){openStack.push({id,back:document.activeElement});setTimeout(stackUI,0);$(id).hidden=false;const sh=$(id).querySelector('.sheet');if(sh)sh.scrollTop=0;setTimeout(()=>(focusEl||$(id).querySelector('[data-close]')||sh).focus(),40)}
+function closeSheet(id){$(id).hidden=true;const i=openStack.map(x=>x.id).lastIndexOf(id);if(i>=0){const b=openStack[i].back;openStack.splice(i,1);if(b&&b.focus)b.focus()}stackUI()}
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeSheet(b.dataset.close));
 ['setScrim','entryScrim','helpScrim','drinksScrim','drinkEdScrim'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target===$(id))closeSheet(id)}));
 document.addEventListener('keydown',e=>{if(e.key!=='Escape'||!openStack.length)return;const top=openStack[openStack.length-1].id;if(top!=='onbScrim')closeSheet(top)});
@@ -1551,7 +1554,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='8.4';
+const APP_VERSION='8.5';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
