@@ -26,8 +26,8 @@ Egyszerű, reklámmentes folyadéknapló magyarul és angolul. Korábbi neve Ví
 
 Három helyen kell ugyanarra emelni a verziót:
 
-1. `version.json` → `{"v":"10.5"}`
-2. `index.html` → `const APP_VERSION='10.5';`
-3. `sw.js` → `const VERSION = 'vizmero-v10.5';`
+1. `version.json` → `{"v":"10.6"}`
+2. `index.html` → `const APP_VERSION='10.6';`
+3. `sw.js` → `const VERSION = 'vizmero-v10.6';`
 
 A megnyitott app az előtérbe hozáskor (és félóránként) megnézi a `version.json`-t, és ha újabb verziót talál, magától betölti, majd kiírja: „Frissítve a legújabb változatra.”
