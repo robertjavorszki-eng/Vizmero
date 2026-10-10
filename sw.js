@@ -1,5 +1,5 @@
 // Lefety – offline működés. A verziót minden kiadásnál emeld, így a telefonok frissítenek.
-const VERSION = 'vizmero-v10.1';
+const VERSION = 'vizmero-v10.2';
 const FILES = [
   './',
   './index.html',
