@@ -2011,6 +2011,7 @@ function gDailyCard(){
     '<em>'+(done?esc(t('gDoneShort'))+(dm&&dm.g===dc.game?' · '+esc(t('gMoves',dm.m)):''):esc(t('gPlayNow')))+'</em></span></button>';
 }
 function gPanel(kind,rec,id){
+  if(GM.view==='menu'&&kind!=='menu'&&!$('gPanel').hidden)GM.menuScroll=$('gPanel').scrollTop;
   GM.view=kind;
   $('gPanel').classList.toggle('over',kind!=='menu');
   const P=$('gPanel'),G=state.game;let h='';
@@ -2025,7 +2026,7 @@ function gPanel(kind,rec,id){
       arcKeys().filter(k=>(ARC[k].sec||ARC[k].kind)===kd).forEach(k=>{const b=G.bests[k];h+='<button data-game="'+k+'">'+gIcon(k)+'<b>'+esc(t('gn_'+k))+'</b><small>'+
         (ARC[k].kind==='puzzle'?esc(t('gLvlShort',G.lv[k]||1)):b?esc(t('gBest'))+': '+b:'&nbsp;')+'</small></button>'});
       h+='</div>'});
-    P.innerHTML=h;P.hidden=false;P.scrollTop=0;GM.id=null;GM.lastWhy=null;gDraw(0);
+    P.innerHTML=h;P.hidden=false;P.scrollTop=GM.menuScroll||0;GM.id=null;GM.lastWhy=null;gDraw(0);
     $('gDailyGo').onclick=()=>{const dc=dailyChallenge();ARC[dc.game].kind==='puzzle'?(audio(),arcNew(dc.game,{daily:true})):gPanel('start',false,dc.game)};
     P.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>gPanel('start',false,b.dataset.game));
     return;
@@ -3646,7 +3647,7 @@ $('gUndo').onclick=()=>{const g=GM.on&&ARC[GM.id];if(g&&g.undo&&!GM.busy){g.undo
 $('gRestart').onclick=()=>{const g=GM.on&&ARC[GM.id];if(g&&g.restart&&!GM.busy){g.restart();gSfx('slide')}};
 $('gHelpBtn').onclick=()=>{if(GM.on)gHelp(true)};
 $('gQuit').onclick=()=>{if(GM.on)arcOver('quit')};
-{const _close=closeSheet;closeSheet=function(id){if(id==='gameScrim'){if(GM.view&&GM.view!=='menu'&&!closeSheet.force){gameToMenu();return}gameStop()}_close(id)}}
+{const _close=closeSheet;closeSheet=function(id){if(id==='gameScrim'){if(GM.view&&GM.view!=='menu'&&!closeSheet.force){gameToMenu();return}if(GM.view==='menu')GM.menuScroll=$('gPanel').scrollTop;gameStop()}_close(id)}}
 /* @@ARC_END@@ */
 /* --- hangok és rezgés --- */
 let actx=null;
@@ -4259,7 +4260,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='10.7';
+const APP_VERSION='10.8';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
