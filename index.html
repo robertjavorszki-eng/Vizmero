@@ -877,7 +877,7 @@ body.modal{overflow:hidden}
       <p>Mindegyik állatnak saját hangja van: a kutya vakkant, a cica nyávog, a madárka csiripel, a dínó és a sárkány bömböl, a farkas vonyít, a cápa csattog. A járművek dudálnak, berregnek, szirénáznak, a mozdony fütyül. A <b>Hangja</b> résznél választhatod, hogy soha, csak koppintásra, eseményeknél is (ital hozzáadása, cél teljesítése), vagy néha magától is megszólaljon.</p>
     </div></details>
     <details class="hsec"><summary>Játékterem és napi kihívás</summary><div class="hbody">
-      <p>A kedvenced alatti <b>Napi kihívás</b> gomb a Játékterembe visz. Itt ügyességi játékok (pl. Cseppfogó, Feltörő) és fejtörők (Csőszerelő, Színes italok, Kancsók, Dugó, Csúszós jég, Ládatologató, Cseppösszevonó, Italos sudoku) közül választhatsz. Az ügyességiek: Cseppfogó, Feltörő, Buborék lövő, Repkedő, Kacskaringós út, Csepp-futam, Felhőugró, Párkereső. Minden játék elején rövid leírás mondja el, hogyan kell játszani. Mindegyikben a saját kedvenced szerepel, és a szintek egyre nehezebbek. A fejtörők ott folytatódnak, ahol abbahagytad, és van bennük visszalépés és újrakezdés.</p>
+      <p>A kedvenced alatti <b>Napi kihívás</b> gomb a Játékterembe visz. Itt ügyességi játékok (pl. Cseppfogó, Feltörő) és fejtörők (Csőszerelő, Színes italok, Kancsók, Dugó, Csúszós jég, Ládatologató, Cseppösszevonó, Italos sudoku) közül választhatsz. Az ügyességiek: Cseppfogó, Feltörő, Buborék lövő, Repkedő, Kacskaringós út, Csepp-futam, Felhőugró, Tizenegyes, Kosárdobó, Párkereső. Minden játék elején rövid leírás mondja el, hogyan kell játszani. Mindegyikben a saját kedvenced szerepel, és a szintek egyre nehezebbek. A fejtörők ott folytatódnak, ahol abbahagytad, és van bennük visszalépés és újrakezdés.</p>
       <p>Minden nap más játékból jön a <b>napi kihívás</b>. Az ügyességi játékokban ez egy feladat (pl. „Kapj el 35 cseppet”), a fejtörőknél egy közös napi feladvány, ami mindenkinek ugyanaz. Így a családban össze lehet hasonlítani, ki hány lépésből oldotta meg. Ha teljesíted a kihívást, nő a <b>széria</b>. Ha kimarad egy nap, egy <b>szériabefagyasztó</b> ❄️ megmenti: az elején kapsz egyet, és minden 7 napos széria után még egyet (legfeljebb kettő lehet nálad). A játékok eredményei csak ezen a telefonon tárolódnak.</p>
     </div></details>
     <details class="hsec"><summary>Hangok és rezgés</summary><div class="hbody">
@@ -962,7 +962,7 @@ body.modal{overflow:hidden}
       <p>Every animal has its own sound: the dog barks, the cat meows, the bird chirps, the dino and dragon roar, the wolf howls, the shark chomps. Vehicles honk, rev, wail their sirens, and the train whistles. Under <b>Its sound</b> choose whether it never makes a sound, only when tapped, on events too (adding a drink, reaching your goal), or now and then on its own.</p>
     </div></details>
     <details class="hsec"><summary>Arcade and daily challenge</summary><div class="hbody">
-      <p>The <b>Daily challenge</b> button under your buddy opens the Arcade, with action games (e.g. Drop Catcher, Brick Breaker) and puzzles (Pipe Fixer, Drink Sort, Jugs, Traffic Jam, Slippery Ice, Crate Pusher, Drop Merge, Drink Sudoku). Action games: Drop Catcher, Brick Breaker, Bubble Shooter, Flappy Flyer, Twisty Road, Drop Dash, Cloud Jumper, Memory. Each game starts with a short how-to. Your own buddy stars in each, and the levels get harder and harder. Puzzles continue where you left off and have undo and restart.</p>
+      <p>The <b>Daily challenge</b> button under your buddy opens the Arcade, with action games (e.g. Drop Catcher, Brick Breaker) and puzzles (Pipe Fixer, Drink Sort, Jugs, Traffic Jam, Slippery Ice, Crate Pusher, Drop Merge, Drink Sudoku). Action games: Drop Catcher, Brick Breaker, Bubble Shooter, Flappy Flyer, Twisty Road, Drop Dash, Cloud Jumper, Penalty Kick, Hoop Shot, Memory. Each game starts with a short how-to. Your own buddy stars in each, and the levels get harder and harder. Puzzles continue where you left off and have undo and restart.</p>
       <p>Every day the <b>daily challenge</b> comes from a different game: a task in action games (e.g. “Catch 35 drops”), or a shared daily puzzle that is the same for everyone, so the family can compare who needed the fewest moves. Complete it to grow your <b>streak</b>. If you miss a day, a <b>streak freeze</b> ❄️ saves it: you start with one and earn another with every 7-day streak (you can hold two at most). Game results are stored only on this phone.</p>
     </div></details>
     <details class="hsec"><summary>Sounds and vibration</summary><div class="hbody">
@@ -1731,7 +1731,7 @@ $('petVoicePlay').onclick=()=>petVoice(true);
 /* @@ARC_START@@ */
 /* --- Játékterem: közös motor --- */
 const ARC={};
-const ARC_ORDER=['catch','breakout','bubble','fly','road','run','jump','memo','merge','pipe','sort','jugs','jam','ice','soko','sudoku'];
+const ARC_ORDER=['catch','breakout','bubble','fly','road','run','jump','soccer','hoops','memo','merge','pipe','sort','jugs','jam','ice','soko','sudoku'];
 function arcKeys(){return ARC_ORDER.filter(k=>ARC[k])}
 function normalizeGame(){
   const g=state.game&&typeof state.game==='object'?state.game:{};
@@ -1809,7 +1809,7 @@ function arcNew(id,opts){
   Object.assign(GM,{on:true,paused:false,t:0,score:0,lives:3,level:1,parts:[],texts:[],banner:null,inv:0,shake:0,st:{},
     ch:dc.game===id&&(dc.ty!=='daily'||opts.daily)?dc:null,chDone:gameDoneToday(),chHit:false,keys:{},lastWhy:null,earned:false,daily:!!opts.daily,rng:Math.random,hist:[]});
   if(opts.daily)GM.rng=seedRng(keyOf(new Date())+'#'+id);
-  gLoadImgs();$('gPanel').hidden=true;state.game.plays++;saveLocal();
+  gLoadImgs();$('gPanel').hidden=true;$('gTitle').textContent=t('gn_'+id);state.game.plays++;saveLocal();
   $('gTools').hidden=g.kind!=='puzzle';
   if(g.kind==='puzzle'){GM.level=opts.daily?(g.dailyLevel||6):Math.max(1,state.game.lv[id]||1);GM.st.solved=0}
   g.init();cancelAnimationFrame(GM.raf);GM.last=performance.now();GM.raf=requestAnimationFrame(gLoop);
@@ -2069,6 +2069,23 @@ Object.assign(I18N.en,{
   ch_jump_height:n=>'Jump '+n+' meters high', ch_jump_drops:n=>'Collect '+n+' drops while hopping', ch_jump_level:n=>'Reach level '+n,
   ch_memo_pairs:n=>'Find '+n+' pairs in one game', ch_memo_combo:n=>'Find '+n+' pairs in a row without a miss', ch_memo_level:n=>'Reach level '+n,
   ch_merge_tier:n=>'Make a “'+I18N.en.tiers[n-1]+'” tile', ch_merge_score:n=>'Score '+n+' points in one game'
+});
+
+Object.assign(I18N.hu,{
+  gn_soccer:'Tizenegyes', gn_hoops:'Kosárdobó', gBullseye:'Telitalálat! +50', gSaved:'Védett!', gWallHit:'Sorfal!', gMissed:'Mellé!', gSwish:'Csobb!',
+  gKickHelp:'Húzd az ujjad a labdától a kapu felé!', gHoopHelp:'Húzd az ujjad felfelé, és engedd el!',
+  gh_soccer:'Húzd az ujjad a labdától a kapu felé: amerre húzod, oda megy, minél hosszabb a húzás, annál magasabbra. Lődd ki a kapus mellett! A 2. szinttől célpont is van a kapuban (+50), a 3.-tól sorfal. Három hiba és vége.',
+  gh_hoops:'Húzd az ujjad felfelé, és engedd el a dobáshoz. A pöttyök mutatják az ívet. Minden kosár időt is ad, a palánk érintése nélküli „csobb” 3 pontot ér, az aranylabda duplát. A 2. szinttől mozog a palánk!',
+  ch_soccer_goals:n=>'Rúgj '+n+' gólt egy játékban', ch_soccer_targets:n=>'Találd el '+n+'-szor a célpontot', ch_soccer_level:n=>'Juss el a '+n+'. szintig',
+  ch_hoops_baskets:n=>'Dobj '+n+' kosarat egy játékban', ch_hoops_swish:n=>'Dobj '+n+' tiszta kosarat (csobb)', ch_hoops_level:n=>'Juss el a '+n+'. szintig'
+});
+Object.assign(I18N.en,{
+  gn_soccer:'Penalty Kick', gn_hoops:'Hoop Shot', gBullseye:'Bullseye! +50', gSaved:'Saved!', gWallHit:'Hit the wall!', gMissed:'Missed!', gSwish:'Swish!',
+  gKickHelp:'Swipe from the ball toward the goal!', gHoopHelp:'Swipe up and let go!',
+  gh_soccer:'Swipe from the ball toward the goal: it goes where you swipe, and a longer swipe goes higher. Get it past the keeper! From level 2 there’s a target in the goal (+50), from level 3 a wall. Three misses and it’s over.',
+  gh_hoops:'Swipe up and let go to shoot. The dots show the arc. Every basket adds time, a swish (no rim) is worth 3, a golden ball doubles. From level 2 the hoop moves!',
+  ch_soccer_goals:n=>'Score '+n+' goals in one game', ch_soccer_targets:n=>'Hit the target '+n+' times', ch_soccer_level:n=>'Reach level '+n,
+  ch_hoops_baskets:n=>'Make '+n+' baskets in one game', ch_hoops_swish:n=>'Make '+n+' swishes', ch_hoops_level:n=>'Reach level '+n
 });
 
 /* Cseppfogó */
@@ -2700,6 +2717,128 @@ ARC.run=(()=>{
   };
 })();
 
+/* Tizenegyes */
+ARC.soccer=(()=>{
+  const S={};
+  function lay(){const W=GM.W,H=GM.H;S.gw=Math.min(W*.86,360);S.gh=S.gw*.4;S.gx=(W-S.gw)/2;S.gb=H*.2+S.gh+40;S.bx0=W/2;S.by0=H-150}
+  function newShot(){
+    const L=GM.level;S.ball={x:S.bx0,y:S.by0,s:1,fly:null};S.res=null;
+    S.target=L>=2?{x:S.gx+(Math.random()<.5?.15:.85)*S.gw,h:S.gh*(.25+Math.random()*.55),r:Math.max(16,30-L*2)}:null;
+    S.wall=L>=3?{x:S.gx+S.gw*(.25+Math.random()*.5),n:Math.min(4,1+Math.floor((L-1)/2)),dir:L>=5?(Math.random()<.5?-1:1):0}:null;
+    S.kx=S.gx+S.gw/2;S.kph=Math.random()*6;
+  }
+  return {key:'soccer',kind:'action',icon:'⚽',col:'#2fa84f',lives:true,chY:54,
+    chs:[{ty:'goals',ns:[5,10,15]},{ty:'targets',ns:[2,4,6]},{ty:'level',ns:[2,3,4]}],
+    prog(ty){return ty==='goals'?GM.st.goals:ty==='targets'?GM.st.targets:GM.level},
+    resize(){lay()},
+    init(){Object.assign(GM.st,{goals:0,targets:0});lay();const ks=PET_KEYS.filter(k=>k!==state.pet.kind);S.keeper=petImg(ks[Math.floor(Math.random()*ks.length)],'happy');newShot()},
+    step(dt){
+      const L=GM.level,sp=(60+L*28)*Math.max(.9,GM.W/390);S.kph+=dt;
+      const b=S.ball;
+      if(S.wall&&S.wall.dir){S.wall.x+=S.wall.dir*40*dt;if(S.wall.x<S.gx+S.gw*.2||S.wall.x>S.gx+S.gw*.8)S.wall.dir*=-1}
+      if(!b.fly){S.kx=S.gx+S.gw/2+Math.sin(S.kph*(1+L*.15))*S.gw*.22}
+      else{
+        const f=b.fly;f.t+=dt;const k=Math.min(1,f.t/f.dur);
+        b.x=f.x0+(f.tx-f.x0)*k+Math.sin(k*Math.PI)*f.curve;b.y=f.y0+(f.ty-f.y0)*k-Math.sin(k*Math.PI)*f.arc;b.s=1-k*.55;
+        const reach=Math.min(1,.35+L*.09);if(k>.25){const want=f.tx,dx=want-S.kx,mv=sp*2.2*dt*reach*2;S.kx+=Math.max(-mv,Math.min(mv,dx))}
+        if(k>=1&&!S.res){
+          const inGoal=f.tx>S.gx+8&&f.tx<S.gx+S.gw-8&&f.h<S.gh-6&&f.h>=0,kw=S.gh*.62,kh=S.gh*(.7+Math.min(.25,L*.03));
+          let res='goal';
+          if(!inGoal)res='miss';
+          else if(S.wall&&f.h<S.gh*.42&&Math.abs(f.tx-S.wall.x)<S.wall.n*S.gh*.17)res='wall';
+          else if(Math.abs(f.tx-S.kx)<kw/2+10&&f.h<kh)res='save';
+          S.res={k:res,t:1.2};
+          if(res==='goal'){GM.st.goals++;let p=100;if(S.target&&Math.hypot(f.tx-S.target.x,(S.gb-f.h)-(S.gb-S.target.h))<S.target.r+8){GM.st.targets++;p+=50;gText(f.tx,S.gb-f.h-20,t('gBullseye'),'#e09a00');gSfx('gold')}
+            GM.score+=p;gSfx('win');gConfetti();buzz([20,30,20]);if(GM.st.goals%5===0)setTimeout(()=>{if(GM.on)gLevelUp()},600)}
+          else{GM.lives--;gSfx(res==='miss'?'nope':'hit');buzz(50);if(res==='save')gText(S.kx,S.gb-S.gh,t('gSaved'),'#e0403a');else if(res==='wall')gText(f.tx,S.gb-30,t('gWallHit'),'#e0403a');else gText(GM.W/2,S.gb-S.gh-30,t('gMissed'),'#e0403a')}
+        }
+      }
+      if(S.res){S.res.t-=dt;if(S.res.t<=0&&GM.on&&GM.lives>0)newShot()}
+    },
+    draw(c){
+      const W=GM.W,H=GM.H;const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#9fdcff');g.addColorStop(.25,'#d7f0ff');g.addColorStop(.26,'#4fbf63');g.addColorStop(1,'#3ea852');c.fillStyle=g;c.fillRect(0,0,W,H);
+      c.fillStyle='rgba(255,255,255,.08)';for(let i=0;i<6;i++){c.fillRect(0,H*.26+i*H*.13,W,H*.065)}
+      c.fillStyle='#6b7080';for(let i=0;i<14;i++){c.beginPath();c.arc(i*W/13,H*.22,10,0,7);c.fill()}
+      const {gx,gw,gh,gb}=S;
+      c.strokeStyle='rgba(255,255,255,.55)';c.lineWidth=1;for(let x=gx;x<=gx+gw;x+=12){c.beginPath();c.moveTo(x,gb-gh);c.lineTo(x,gb);c.stroke()}for(let y=gb-gh;y<=gb;y+=12){c.beginPath();c.moveTo(gx,y);c.lineTo(gx+gw,y);c.stroke()}
+      c.strokeStyle='#fff';c.lineWidth=7;c.lineCap='round';c.beginPath();c.moveTo(gx,gb);c.lineTo(gx,gb-gh);c.lineTo(gx+gw,gb-gh);c.lineTo(gx+gw,gb);c.stroke();
+      c.strokeStyle='rgba(255,255,255,.8)';c.lineWidth=3;c.beginPath();c.moveTo(gx-30,gb);c.lineTo(gx+gw+30,gb);c.stroke();
+      if(S.target){c.strokeStyle='#ffd23b';c.lineWidth=4;c.setLineDash([6,5]);c.beginPath();c.arc(S.target.x,gb-S.target.h,S.target.r,0,7);c.stroke();c.setLineDash([]);gDrop(c,S.target.x,gb-S.target.h+2,S.target.r*.28,'#ffd23b',false)}
+      const kh=S.gh*.9;if(S.keeper.complete&&S.keeper.naturalWidth){const dive=S.ball.fly?Math.max(-.6,Math.min(.6,(S.ball.fly.tx-S.kx)/120)):0;c.save();c.translate(S.kx,gb-kh*.48);c.rotate(dive);c.drawImage(S.keeper,-kh*.55,-kh*.5,kh*1.1,kh);
+        c.fillStyle='#ff9f1c';c.beginPath();c.arc(-kh*.42,-kh*.05,kh*.12,0,7);c.arc(kh*.42,-kh*.05,kh*.12,0,7);c.fill();c.restore()}
+      if(S.wall){const n=S.wall.n,w=S.gh*.34;for(let i=0;i<n;i++){const x=S.wall.x+(i-(n-1)/2)*w,y=gb+28;c.fillStyle=['#e0403a','#3fa9f5','#8a5cf6','#ff9f1c'][i%4];rr(c,x-w*.4,y-S.gh*.42,w*.8,S.gh*.42,10);c.fill();c.fillStyle='#ffd9b3';c.beginPath();c.arc(x,y-S.gh*.48,w*.3,0,7);c.fill();gFace(c,x,y-S.gh*.48,w*.3)}}
+      c.fillStyle='rgba(255,255,255,.85)';c.beginPath();c.arc(S.bx0,S.by0+16,4,0,7);c.fill();
+      gPet(c,S.bx0-70,S.by0-10,90,S.res&&S.res.k==='goal'?'party':S.res?'thirsty':'happy');
+      const b=S.ball,r=17*b.s;c.fillStyle='rgba(0,0,0,.18)';c.beginPath();c.ellipse(b.x,(b.fly?b.fly.y0+(b.fly.ty-b.fly.y0)*Math.min(1,b.fly.t/b.fly.dur):b.y)+r,r,r*.35,0,0,7);c.fill();
+      c.fillStyle='#fff';c.beginPath();c.arc(b.x,b.y,r,0,7);c.fill();c.fillStyle='#2b2233';c.beginPath();for(let i=0;i<5;i++){const a=i*1.2566+(b.fly?b.fly.t*14:0);c.moveTo(b.x+Math.cos(a)*r*.55,b.y+Math.sin(a)*r*.55);c.arc(b.x+Math.cos(a)*r*.55,b.y+Math.sin(a)*r*.55,r*.2,0,7)}c.arc(b.x,b.y,r*.24,0,7);c.fill();
+      if(GM.on&&!b.fly&&!S.res&&GM.st.goals===0&&GM.lives===3){c.font='800 14px system-ui';c.fillStyle='#fff';c.textAlign='center';c.fillText(t('gKickHelp'),W/2,H-50)}
+      if(S.drag){c.strokeStyle='rgba(255,255,255,.8)';c.lineWidth=4;c.setLineDash([6,6]);c.beginPath();c.moveTo(S.drag.x0,S.drag.y0);c.lineTo(S.drag.x,S.drag.y);c.stroke();c.setLineDash([])}
+    },
+    down(x,y){if(S.ball.fly||S.res)return;S.drag={x0:x,y0:y,x,y,t0:GM.t}},
+    move(x,y,p){if(S.drag&&p){S.drag.x=x;S.drag.y=y}},
+    up(x,y){const d=S.drag;S.drag=null;if(!d||S.ball.fly||S.res)return;const dx=x-d.x0,dy=y-d.y0;if(dy>-30){return}
+      const dist=S.by0-S.gb,tx=S.bx0+dx*(dist/Math.max(60,-dy))*.9,len=Math.hypot(dx,dy),dur=Math.max(.32,.62-len/1400);
+      const h=Math.max(0,Math.min(1.35,(len-70)/230))*S.gh;
+      S.ball.fly={t:0,dur,x0:S.bx0,y0:S.by0,tx,ty:S.gb-h,h,arc:30+h*.4,curve:0};gSfx('hit');buzz(15)}
+  };
+})();
+
+/* Kosárdobó */
+ARC.hoops=(()=>{
+  const S={};const K=()=>Math.max(.85,GM.H/760);
+  function lay(){S.bx0=GM.W*.5;S.by0=GM.H-170;S.hy=GM.H*.32;S.rw=Math.min(84,GM.W*.21)}
+  function newBall(){S.shots++;S.ball={x:S.bx0,y:S.by0,vx:0,vy:0,live:false,touched:false,scored:false,gold:S.shots%5===0}}
+  return {key:'hoops',kind:'action',icon:'🏀',col:'#f08a1c',lives:false,chY:70,
+    chs:[{ty:'baskets',ns:[8,12,16]},{ty:'swish',ns:[2,4,6]},{ty:'level',ns:[2,3,4]}],
+    prog(ty){return ty==='baskets'?GM.st.baskets:ty==='swish'?GM.st.swish:GM.level},
+    resize(){lay()},
+    init(){Object.assign(GM.st,{baskets:0,swish:0});lay();Object.assign(S,{hx:GM.W/2,hph:0,time:45,shots:0,drag:null});newBall()},
+    step(dt){
+      const k=K(),L=GM.level,b=S.ball;S.time-=dt;if(S.time<=0){S.time=0;arcOver('time');return}
+      S.hph+=dt;if(L>=2)S.hx=GM.W/2+Math.sin(S.hph*(.6+L*.18))*Math.min(GM.W*.3,40+L*22);
+      const rimL={x:S.hx-S.rw/2,y:S.hy},rimR={x:S.hx+S.rw/2,y:S.hy},board={x:S.hx+S.rw/2+10,top:S.hy-90,bot:S.hy+10};
+      if(b.live){
+        const n=4;for(let i=0;i<n;i++){
+          b.vy+=1500*k*dt/n;const py=b.y;b.x+=b.vx*dt/n;b.y+=b.vy*dt/n;
+          [rimL,rimR].forEach(p=>{const dx=b.x-p.x,dy=b.y-p.y,d=Math.hypot(dx,dy),R=15;if(d<R&&d>0){const nx=dx/d,ny=dy/d,dot=b.vx*nx+b.vy*ny;if(dot<0){b.vx-=1.7*dot*nx;b.vy-=1.7*dot*ny;b.x=p.x+nx*R;b.y=p.y+ny*R;b.touched=true;gSfx('clink')}}});
+          if(b.x+13>board.x&&b.x-13<board.x+8&&b.y>board.top&&b.y<board.bot&&b.vx>0){b.vx=-Math.abs(b.vx)*.6;b.x=board.x-13;b.touched=true;gSfx('bounce')}
+          if(!b.scored&&b.vy>0&&py<S.hy&&b.y>=S.hy&&b.x>rimL.x+6&&b.x<rimR.x-6){b.scored=true;
+            const sw=!b.touched,p=(sw?3:2)*(b.gold?2:1);GM.score+=p;GM.st.baskets++;if(sw)GM.st.swish++;S.time+=sw?3:2;S.net=.5;
+            gText(S.hx,S.hy-30,sw?t('gSwish')+' +'+p:'+'+p,sw?'#14b8a6':'#f08a1c');gSfx(sw?'gold':'win');gSplash(S.hx,S.hy+20,'#4fb8ff',sw?16:8);buzz([20,30]);
+            if(GM.st.baskets%5===0)gLevelUp()}
+        }
+        if(b.y>GM.H+40||b.x<-60||b.x>GM.W+60){if(!b.scored)gSfx('nope');newBall()}
+      }
+      S.net=Math.max(0,(S.net||0)-dt);
+    },
+    draw(c){
+      const W=GM.W,H=GM.H;const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#ffe0c2');g.addColorStop(.6,'#ffd0a6');g.addColorStop(.61,'#e8a76a');g.addColorStop(1,'#d9925a');c.fillStyle=g;c.fillRect(0,0,W,H);
+      c.strokeStyle='rgba(255,255,255,.5)';c.lineWidth=3;c.beginPath();c.ellipse(W/2,H*.61+80,W*.4,50,0,Math.PI,0);c.stroke();
+      const hx=S.hx,hy=S.hy,rw=S.rw;
+      c.fillStyle='#ffffff';rr(c,hx-rw*.75,hy-95,rw*1.5,80,8);c.fill();c.strokeStyle='#e0403a';c.lineWidth=3;rr(c,hx-rw*.3,hy-52,rw*.6,38,4);c.stroke();
+      c.fillStyle='#9aa0b0';c.fillRect(hx-3,hy-15,6,15);
+      const drawNet=()=>{c.strokeStyle='rgba(255,255,255,.95)';c.lineWidth=1.6;const nh=34+(S.net||0)*20;for(let i=0;i<=6;i++){const x0=hx-rw/2+i*rw/6,x1=hx-rw*.3+i*rw*.6/6;c.beginPath();c.moveTo(x0,hy);c.lineTo(x1,hy+nh);c.stroke()}
+        for(let j=1;j<=3;j++){const y=hy+j*nh/3.5,w=rw/2-(rw*.2)*(j/3);c.beginPath();c.moveTo(hx-w,y);c.lineTo(hx+w,y);c.stroke()}};
+      const b=S.ball,behind=b.live&&b.vy>0&&b.y<hy;
+      const drawBall=()=>{const r=14;c.save();c.translate(b.x,b.y);c.rotate((b.x+b.y)*.03);c.fillStyle=b.gold?'#ffc21a':'#f08a1c';if(b.gold){c.shadowColor='#ffd23b';c.shadowBlur=14}c.beginPath();c.arc(0,0,r,0,7);c.fill();c.shadowBlur=0;
+        c.strokeStyle='#5a2d0c';c.lineWidth=1.6;c.beginPath();c.moveTo(-r,0);c.lineTo(r,0);c.moveTo(0,-r);c.lineTo(0,r);c.stroke();c.beginPath();c.arc(-r*1.2,0,r*.9,-.9,.9);c.stroke();c.beginPath();c.arc(r*1.2,0,r*.9,Math.PI-.9,Math.PI+.9);c.stroke();c.restore()};
+      if(behind)drawBall();
+      c.strokeStyle='#ff5a1f';c.lineWidth=5;c.beginPath();c.ellipse(hx,hy,rw/2,6,0,0,7);c.stroke();drawNet();
+      if(!behind)drawBall();
+      gPet(c,S.bx0-80,S.by0+40,96,GM.on?(S.net>0?'party':'happy'):'thirsty');
+      if(S.drag&&!b.live){const vx=(S.drag.x-S.drag.x0)*5.4,vy=(S.drag.y-S.drag.y0)*5.4,k=K(),dots=Math.max(4,14-GM.level*2);let x=b.x,y=b.y,ux=vx,uy=vy;c.fillStyle='rgba(91,63,214,.55)';
+        for(let i=0;i<dots;i++){for(let s=0;s<3;s++){uy+=1500*k*.016;x+=ux*.016;y+=uy*.016}c.beginPath();c.arc(x,y,3.5,0,7);c.fill()}}
+      c.textAlign='center';c.font='900 22px system-ui';c.fillStyle=S.time<10?'#e0403a':'#1d1a33';c.fillText('⏱ '+Math.ceil(S.time),W/2,24);
+      if(GM.on&&S.shots<=2&&!b.live){c.font='800 13px system-ui';c.fillStyle='#3b3566';c.fillText(t('gHoopHelp'),W/2,H-40)}
+    },
+    hud(){},
+    down(x,y){if(S.ball.live)return;S.drag={x0:x,y0:y,x,y}},
+    move(x,y,p){if(S.drag&&p){S.drag.x=x;S.drag.y=y}},
+    up(x,y){const d=S.drag;S.drag=null;if(!d||S.ball.live)return;const vx=(x-d.x0)*5.4,vy=(y-d.y0)*5.4;if(vy>-200)return;
+      Object.assign(S.ball,{vx,vy,live:true});gSfx('flap')}
+  };
+})();
+
 /* Csőszerelő */
 const DIRS=[[-1,0,1],[0,1,2],[1,0,4],[0,-1,8]];/* N E S W bitek */
 function rotMask(m){return ((m<<1)|(m>>3))&15}
@@ -2729,7 +2868,7 @@ ARC.pipe=(()=>{
         if((m[j]&op)&&!vis[j]){vis[j]=1;q.push(j)}}}
     const ti=(R-1)*C+S.tc;return {vis,order,ok:!!vis[ti]&&!!(m[ti]&4)};
   }
-  function layoutDims(){const ts=Math.floor(Math.min((GM.W-24)/S.C,(GM.H-260)/S.R,70));S.ts=ts;S.x0=(GM.W-ts*S.C)/2;S.y0=Math.max(96,(GM.H-ts*S.R)/2-40)}
+  function layoutDims(){const ts=Math.floor(Math.min((GM.W-24)/S.C,(GM.H-260)/S.R,70));S.ts=ts;S.x0=(GM.W-ts*S.C)/2;S.y0=Math.max(110,(GM.H-ts*S.R-170)/2+50)}
   return {key:'pipe',kind:'puzzle',icon:'🔧',col:'#14b8a6',dailyLevel:6,
     prog(){return GM.st.solved},
     resize(){layoutDims()},
@@ -2772,7 +2911,7 @@ ARC.pipe=(()=>{
       c.fillStyle='#8a7fd6';c.beginPath();c.moveTo(tx-30,ty+16);c.lineTo(tx+30,ty+16);c.quadraticCurveTo(tx+26,ty+34,tx,ty+34);c.quadraticCurveTo(tx-26,ty+34,tx-30,ty+16);c.fill();
       if(S.done&&S.anim>.9){c.fillStyle='#3fa9f5';c.beginPath();c.ellipse(tx,ty+18,26,5,0,0,7);c.fill()}
       const px=Math.max(50,Math.min(GM.W-50,tx+(tx>GM.W/2?-72:72)));
-      gPet(c,px,ty+12,Math.min(90,ts*1.4),S.done&&S.anim>.9?'party':'thirsty');
+      gPet(c,px,ty+40,Math.min(84,ts*1.4),S.done&&S.anim>.9?'party':'thirsty');
     },
     down(x,y){
       if(S.done||GM.busy)return;const {R,C,ts,x0,y0}=S,cc=Math.floor((x-x0)/ts),r=Math.floor((y-y0)/ts);if(cc<0||r<0||cc>=C||r>=R)return;
@@ -2786,7 +2925,7 @@ ARC.pipe=(()=>{
 
 /* Színes italok */
 ARC.sort=(()=>{
-  const S={},CAP=4,COL=['#3fa9f5','#ff9f1c','#ff5f8f','#7ed957','#8a5cf6','#8b5a3c','#ffe14d','#14b8a6','#e0403a','#f4f1ea'];
+  const S={},CAP=4,COL=['#3fa9f5','#ff9f1c','#ff5f8f','#7ed957','#8a5cf6','#8b5a3c','#ffe14d','#14b8a6','#e0403a','#1e3a8a'];
   function nColors(L){return [3,4,5,5,6,7,7,8,8,9][Math.min(L-1,9)]}
   const top=t=>t.length?t[t.length-1].c:-1;
   function canPour(a,b){const A=S.tubes[a],B=S.tubes[b];return a!==b&&A.length&&B.length<CAP&&(!B.length||top(B)===top(A))}
@@ -2809,13 +2948,13 @@ ARC.sort=(()=>{
   function layout(){
     const n=S.tubes.length,per=n>6?Math.ceil(n/2):n,rows=n>6?2:1;
     const tw=Math.min(54,(GM.W-20)/per-14),th=tw*3.3,gap=(GM.W-per*tw)/(per+1);
-    S.tw=tw;S.th=th;const totalH=rows*th+(rows-1)*50,y0=Math.max(110,(GM.H-totalH)/2-50);
+    S.tw=tw;S.th=th;const totalH=rows*th+(rows-1)*50,y0=Math.max(110,(GM.H-totalH)/2-70);
     S.pos=S.tubes.map((_,i)=>{const r=Math.floor(i/per),k=i%per,inRow=r===rows-1?n-per*(rows-1):per,g2=(GM.W-inRow*tw)/(inRow+1);return {x:g2+k*(tw+g2),y:y0+r*(th+50)}});
   }
   return {key:'sort',kind:'puzzle',icon:'🧃',col:'#ff5f8f',dailyLevel:6,
     prog(){return GM.st.solved},resize(){layout()},
     init(){
-      const L=GM.level,n=nColors(L),hidden=L>=7,cols=shuffleR(COL.slice()).slice(0,n);GM.st.moves=0;GM.hist=[];S.sel=-1;S.done=false;S.stream=null;
+      const L=GM.level,n=nColors(L),hidden=L>=8,cols=shuffleR(COL.slice()).slice(0,n);GM.st.moves=0;GM.hist=[];S.sel=-1;S.done=false;S.stream=null;
       let tubes;
       for(let tries=0;tries<60;tries++){
         const segs=[];cols.forEach((c,i)=>{for(let k=0;k<CAP;k++)segs.push(i)});shuffleR(segs);
@@ -2823,7 +2962,7 @@ ARC.sort=(()=>{
         if(tubes.some(t=>t.length===CAP&&t.every(x=>x===t[0])))continue;
         if(solvable(tubes))break;
       }
-      S.cols=cols;S.tubes=tubes.map(t=>t.map((c,k)=>({c,hid:hidden&&k<t.length-1})));S.t0=JSON.stringify(S.tubes);layout();
+      S.cols=cols;S.tubes=tubes.map(t=>t.map((c,k)=>({c,hid:hidden&&k<t.length-2})));S.t0=JSON.stringify(S.tubes);layout();
     },
     step(dt){if(S.stream){S.stream.t-=dt;if(S.stream.t<=0)S.stream=null}},
     draw(c){
@@ -2842,7 +2981,7 @@ ARC.sort=(()=>{
       });
       if(S.stream){const a=S.pos[S.stream.a],b=S.pos[S.stream.b];c.strokeStyle=S.cols[S.stream.c];c.lineWidth=6;c.lineCap='round';c.globalAlpha=Math.min(1,S.stream.t*4);
         c.beginPath();c.moveTo(a.x+tw/2,a.y-18);c.quadraticCurveTo((a.x+b.x)/2+tw/2,Math.min(a.y,b.y)-60,b.x+tw/2,b.y+6);c.stroke();c.globalAlpha=1}
-      gPet(c,GM.W/2,GM.H-60,90,S.done?'party':'happy');
+      gPet(c,GM.W/2,GM.H-112,80,S.done?'party':'happy');
     },
     down(x,y){
       if(S.done||GM.busy)return;const {tw,th}=S;let hit=-1;
@@ -3804,7 +3943,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='9.7';
+const APP_VERSION='9.8';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
