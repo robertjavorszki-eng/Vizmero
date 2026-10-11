@@ -3845,13 +3845,31 @@ ARC.hoops2=(()=>{
       if(fx)for(let i=0;i<NR;i++){const v=((i*7919)%5+5)%5;if(v>1)continue;c.fillStyle=v?'rgba(255,240,210,.13)':'rgba(150,95,40,.07)';c.fillRect(0,ry(i),W,ry(i+1)-ry(i))}
       c.strokeStyle='rgba(130,85,40,.22)';c.lineWidth=1;c.beginPath();for(let i=1;i<NR;i++){c.moveTo(0,ry(i));c.lineTo(W,ry(i))}c.stroke();
       if(fx===2){c.strokeStyle='rgba(120,75,35,.25)';c.beginPath();for(let i=0;i<NR;i++){for(let j=0;j<3;j++){const x=(((i*131+j*577)%97)/97)*W;c.moveTo(x,ry(i));c.lineTo(x+(x-W/2)*.05,ry(i+1))}}c.stroke()}
-      c.fillStyle='#1f4fbf';c.fillRect(0,fy,W,7);c.strokeStyle='#ffffff';c.lineWidth=3;c.beginPath();c.moveTo(0,fy+8);c.lineTo(W,fy+8);c.stroke();
-      c.fillStyle='#1f4fbf';c.beginPath();c.moveTo(W/2-W*.17,fy+8);c.lineTo(W/2+W*.17,fy+8);c.lineTo(W/2+W*.24,fy+(H-fy)*.45);c.lineTo(W/2-W*.24,fy+(H-fy)*.45);c.closePath();c.fill();
-      if(fx){const g=c.createLinearGradient(0,fy+8,0,fy+(H-fy)*.45);g.addColorStop(0,'rgba(255,255,255,.14)');g.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=g;c.fill()}
-      c.strokeStyle='#ffffff';c.lineWidth=2.5;c.stroke();
-      c.setLineDash([7,7]);c.beginPath();c.ellipse(W/2,fy+(H-fy)*.45,W*.24,(H-fy)*.09,0,Math.PI,2*Math.PI);c.stroke();c.setLineDash([]);
-      c.strokeStyle='#1f4fbf';c.beginPath();c.ellipse(W/2,fy+(H-fy)*.45,W*.24,(H-fy)*.09,0,0,Math.PI);c.stroke();
-      c.lineWidth=3;c.beginPath();c.ellipse(W/2,fy+8,W*.46,(H-fy)*.78,0,0,Math.PI);c.stroke();
+      {/* oldalnézeti pályafestés: perspektivikus padló (X: pálya hossza, d: mélység 0=távoli oldalvonal, 1=közeli) */
+        const vx=W*.5,fp=(X,d)=>[vx+(X-vx)*(1+d*.9),fy+(H-fy)*d],dm=.42,toX=(sx,d)=>vx+(sx-vx)/(1+d*.9);
+        const Xh=toX(S.hx0,dm),Xb=toX(S.hx0+S.rw/2+30,dm),Xft=Xb-W*.46,d1=.24,d2=.62;
+        const path=(pts,close)=>{c.beginPath();pts.forEach(([X,d],k)=>{const q=fp(X,d);k?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1])});if(close)c.closePath()};
+        const ln=(pts,col,w,dash)=>{path(pts);c.strokeStyle=col;c.lineWidth=w;if(dash)c.setLineDash(dash);c.stroke();c.setLineDash([])};
+        const arcP=(cx,cd,rx,rd,a0,a1,n)=>{const o=[];for(let k=0;k<=n;k++){const a=a0+(a1-a0)*k/n;o.push([cx+Math.cos(a)*rx,cd+Math.sin(a)*rd])}return o};
+        /* kék sáv: távoli oldalvonalon túl és az alapvonal mögött */
+        path([[-W,0],[W*3,0],[W*3,.035],[-W,.035]],true);c.fillStyle='#1f4fbf';c.fill();
+        path([[Xb,.035],[W*3,.035],[W*3,1.2],[Xb,1.2]],true);c.fill();
+        ln([[-W,.035],[Xb,.035],[Xb,1.2]],'#ffffff',3);
+        /* hárompontos ív (kék) */
+        const R3=W*.62;ln(arcP(Xh,dm,R3,dm*1.9,Math.PI*.5,Math.PI*1.5,40).filter(([X,d])=>d>.035&&d<1.25),'#1f4fbf',3);
+        /* festett zóna */
+        path([[Xft,d1],[Xb,d1],[Xb,d2],[Xft,d2]],true);c.fillStyle='#1f4fbf';c.fill();
+        if(fx){const g=c.createLinearGradient(0,fp(0,d1)[1],0,fp(0,d2)[1]);g.addColorStop(0,'rgba(255,255,255,.12)');g.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=g;c.fill()}
+        ln([[Xb,d1],[Xft,d1],[Xft,d2],[Xb,d2]],'#ffffff',2.5);
+        /* büntető kör: kosár felőli fele szaggatott (a zónában), másik fele kék a parkettán */
+        const rft=(d2-d1)/2,rxft=W*.13;
+        ln(arcP(Xft,dm+(d1+d2)/2-dm,rxft,rft,-Math.PI/2,Math.PI/2,24),'#ffffff',2.5,[7,6]);
+        ln(arcP(Xft,(d1+d2)/2,rxft,rft,Math.PI/2,Math.PI*1.5,24),'#1f4fbf',2.5);
+        /* gyűrű alatti félkör, a palánk felé nyitott */
+        ln(arcP(Xh,dm,W*.11,rft*.62,Math.PI*.5,Math.PI*1.5,24),'#ffffff',2.5);
+        /* jelölők a zóna szélein */
+        [.18,.3,.42,.55].forEach((f,k)=>{const X=Xb-(Xb-Xft)*f,col=k?'#1f4fbf':'#ffffff';ln([[X,d1],[X,d1-.03]],col,2.5);ln([[X,d2],[X,d2+.04]],col,2.5)});
+      }
       arenaGloss(c,0,fy+8,W,(H-fy)*.5);
       const hx=S.hx,hy=S.hy,rw=S.rw;
       const bx=hx+rw/2+6,fyy=GM.H*.6;
@@ -5035,7 +5053,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='12.9';
+const APP_VERSION='13.0';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
