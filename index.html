@@ -2629,13 +2629,37 @@ function gSoccerBall(c,x,y,r,a,b){
   c.restore();c.strokeStyle='rgba(0,0,0,.25)';c.lineWidth=1;c.beginPath();c.arc(x,y,r,0,7);c.stroke();
 }
 /* kosárlabda: a = pörgés (visszapörgés), b = dőlés */
-function gBasketBall(c,x,y,r,a,b,gold){
-  a=a||0;b=b==null?.5:b;c.save();
-  c.fillStyle=gold?b3shade(c,x,y,r,'#fff2b0','#ffc21a','#a87400'):b3shade(c,x,y,r,'#fbb46c','#e8762a','#9c4214');c.beginPath();c.arc(x,y,r,0,7);c.fill();
-  if(r>9&&state.fx!=='low'){const pt=b3pebble(c);if(pt!=='none'){c.save();c.clip();c.globalAlpha=.22;c.fillStyle=pt;c.fillRect(x-r,y-r,r*2,r*2);c.restore()}}
+/* csillagos sáv geometriája */
+(()=>{const s=.34,cs=Math.sqrt(1-s*s),N=48;BALL3.bandU=[];BALL3.bandL=[];
+  for(let i=0;i<=N;i++){const t=i/N*Math.PI*2;BALL3.bandU.push([cs*Math.cos(t),s,cs*Math.sin(t)]);BALL3.bandL.push([cs*Math.cos(t),-s,cs*Math.sin(t)])}
+  BALL3.stars=[];for(let k=0;k<7;k++){const t=k/7*Math.PI*2,cn=[Math.cos(t),0,Math.sin(t)],u=[-Math.sin(t),0,Math.cos(t)],v=[0,1,0],pts=[];
+    for(let j=0;j<10;j++){const an=-Math.PI/2+j*Math.PI/5,rr2=(j%2?.085:.21),p=[cn[0]+rr2*(Math.cos(an)*u[0]+Math.sin(an)*v[0]),cn[1]+rr2*(Math.cos(an)*u[1]-Math.sin(an)*v[1]),cn[2]+rr2*(Math.cos(an)*u[2]+Math.sin(an)*v[2])],l=Math.hypot(p[0],p[1],p[2]);pts.push([p[0]/l,p[1]/l,p[2]/l])}
+    BALL3.stars.push({c:cn,pts})}})();
+const BB_KINDS=['classic','pro','stars'];
+function gBasketBall(c,x,y,r,a,b,gold,kind){
+  a=a||0;b=b==null?.5:b;kind=gold?'classic':(kind||'classic');c.save();
+  const base=gold?['#fff2b0','#ffc21a','#a87400']:kind==='pro'?['#d98a50','#b8561f','#5e260a']:kind==='stars'?['#fffaf0','#ece2cc','#9a907e']:['#fbb46c','#e8762a','#9c4214'];
+  c.fillStyle=b3shade(c,x,y,r,base[0],base[1],base[2]);c.beginPath();c.arc(x,y,r,0,7);c.fill();
   c.beginPath();c.arc(x,y,r,0,7);c.clip();
-  if(r>7)b3seams(c,x,y,r,BALL3.bb,a,b,'rgba(255,190,120,.35)',Math.max(1.2,r*.11));
-  b3seams(c,x,y,r,BALL3.bb,a,b,'#24140c',Math.max(1,r*.065));
+  if(kind==='stars'){/* sötétkék sáv csillagokkal: pontonként számolt kitöltés */
+    const k=state.fx==='full'?2:1,n=Math.max(8,Math.ceil(r*2*k));let cv=BALL3.rc;if(!cv){cv=BALL3.rc=document.createElement('canvas')}
+    if(cv.width!==n){cv.width=cv.height=n;BALL3.rx=cv.getContext('2d');BALL3.rid=BALL3.rx.createImageData(n,n)}
+    const id=BALL3.rid,d=id.data,ca=Math.cos(a),sa=Math.sin(a),cb=Math.cos(b),sb=Math.sin(b),h=n/2;
+    for(let py=0;py<n;py++)for(let px=0;px<n;px++){const i=(py*n+px)*4,nx=(px+.5-h)/h,ny=-(py+.5-h)/h,q=nx*nx+ny*ny;if(q>1){d[i+3]=0;continue}
+      const nz=Math.sqrt(1-q),z1=nx*sb+nz*cb,yb=ny*ca+z1*sa,band=Math.abs(yb)<.34,L=.55+.45*Math.max(0,-.45*nx+.55*ny+.7*nz);
+      if(band){d[i]=30*L;d[i+1]=47*L;d[i+2]=122*L}else{d[i]=250*L;d[i+1]=244*L;d[i+2]=228*L}d[i+3]=255}
+    BALL3.rx.putImageData(id,0,0);c.drawImage(cv,x-r,y-r,r*2,r*2);
+    c.strokeStyle='#f4efe4';c.lineWidth=Math.max(1,r*.05);c.lineJoin='round';
+    BALL3.stars.forEach(st=>{if(b3rot(st.c,a,b)[2]<.15)return;c.beginPath();st.pts.forEach((p,i)=>{const q=b3proj(b3rot(p,a,b),x,y,r);i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1])});c.closePath();c.stroke()});
+    b3seams(c,x,y,r,[BALL3.bandU,BALL3.bandL],a,b,'#121218',Math.max(1,r*.06));
+    b3seams(c,x,y,r,[BALL3.bb[1]],a,b,'rgba(20,20,30,.55)',Math.max(.8,r*.035));
+  }
+  if(r>9&&state.fx!=='low'){const pt=b3pebble(c);if(pt!=='none'){c.save();c.globalAlpha=kind==='pro'?.32:kind==='stars'?.14:.22;c.fillStyle=pt;c.fillRect(x-r,y-r,r*2,r*2);c.restore()}}
+  if(kind!=='stars'){
+    if(r>7&&kind!=='pro')b3seams(c,x,y,r,BALL3.bb,a,b,'rgba(255,190,120,.35)',Math.max(1.2,r*.11));
+    b3seams(c,x,y,r,BALL3.bb,a,b,kind==='pro'?'#140c08':'#24140c',Math.max(1,r*(kind==='pro'?.045:.065)));
+  }
+  if(kind!=='classic'||gold){c.fillStyle='rgba(255,255,255,'+(kind==='pro'?.22:.3)+')';c.beginPath();c.ellipse(x-r*.38,y-r*.45,r*.28,r*.15,-.5,0,7);c.fill()}
   c.restore();
 }
 
@@ -3611,7 +3635,7 @@ ARC.hoops=(()=>{
   /* vetítés: világ (x oldalra, y fel, z mélység) → képernyő */
   function P(x,y,z){const d=z-CAMZ,f=GM.W*FK;return {x:GM.W/2+x*f/d,y:S.hor-(y-CAMY)*f/d,s:f/d}}
   function lay(){S.hor=GM.H*.36}
-  function newBall(){S.shots++;S.ball={x:0,y:1.15,z:.6,vx:0,vy:0,vz:0,live:false,touched:false,scored:false,gold:S.shots%5===0,sx:0,sy:0};placeHand()}
+  function newBall(){S.shots++;S.ball={x:0,y:1.15,z:.6,vx:0,vy:0,vz:0,live:false,touched:false,scored:false,gold:S.shots%5===0,kind:BB_KINDS[Math.floor(Math.random()*3)],sx:0,sy:0};placeHand()}
   function placeHand(){const b=S.ball,p=P(b.x,b.y,b.z);b.sx=p.x;b.sy=p.y}
   function rimPts(){const out=[];for(let i=0;i<16;i++){const a=i/16*Math.PI*2;out.push([S.hx+Math.cos(a)*RR,YH,ZH+Math.sin(a)*RR])}return out}
   function miss(b){if(b.resolved||b.scored)return;b.resolved=true;if(b.ooh||Math.random()<.45){gSfx('aww');S.sad=1.3;S.tense=0}else gSfx('nope')}
@@ -3713,7 +3737,7 @@ ARC.hoops=(()=>{
       const bpos=o=>o.live?P(o.x,o.y,o.z):{x:o.sx,y:o.sy,s:P(o.x,o.y,o.z).s};
       const drawBall=o=>{const bp=bpos(o),ballR=Math.max(4,BRAD*bp.s);if(o.live){c.fillStyle='rgba(0,0,0,.15)';const sh=P(o.x,0,o.z);c.beginPath();c.ellipse(sh.x,sh.y,ballR,ballR*.3,0,0,7);c.fill()}
         if(o.gold){c.save();c.shadowColor='#ffd23b';c.shadowBlur=14;c.fillStyle='#ffc21a';c.beginPath();c.arc(bp.x,bp.y,ballR,0,7);c.fill();c.restore()}
-        gBasketBall(c,bp.x,bp.y,ballR,-(o.y+o.z)*3.2,.45+o.x*.8,o.gold)};
+        gBasketBall(c,bp.x,bp.y,ballR,-(o.y+o.z)*3.2,.45+o.x*.8,o.gold,o.kind)};
       const balls=S.old.concat(b.live?[b]:[]),inN=o=>o.live&&o.y<YH&&o.y>YH-.55&&Math.hypot(o.x-hx,o.z-ZH)<RR+.05,back=o=>o.live&&(o.z>ZH||inN(o));
       const nb=balls.find(inN),bp=nb?bpos(nb):{x:-999};
       const rc=P(hx,YH,ZH),rwid=RR*rc.s,rhy=RR*rc.s*.32,nh=rc.s*(.45+S.net*.15);
@@ -3754,7 +3778,7 @@ ARC.hoops=(()=>{
 ARC.hoops2=(()=>{
   const S={};const K=()=>Math.max(.85,GM.H/760);
   function lay(){S.bx0=GM.W*.24;S.by0=GM.H-170;S.hy0=S.hy=GM.H*.34;S.hx0=GM.W*.7;S.rw=Math.min(94,GM.W*.24)}
-  function newBall(){S.shots++;S.ball={x:S.bx0,y:S.by0,vx:0,vy:0,live:false,touched:false,scored:false,bank:false,gold:S.shots%5===0}}
+  function newBall(){S.shots++;S.ball={x:S.bx0,y:S.by0,vx:0,vy:0,live:false,touched:false,scored:false,bank:false,gold:S.shots%5===0,kind:BB_KINDS[Math.floor(Math.random()*3)]}}
   const BR=19;
   return {key:'hoops2',arena:true,kind:'action',icon:'🏀',col:'#f08a1c',lives:false,chY:70,
     chs:[{ty:'baskets',ns:[8,12,16]},{ty:'swish',ns:[2,4,6]},{ty:'level',ns:[2,3,4]}],
@@ -3825,7 +3849,7 @@ ARC.hoops2=(()=>{
         return inNet};
       const isBack=o=>o.live&&o.vy>0&&(o.y<hy||(o.y<hy+74&&Math.abs(o.x-hx)<rw/2+6)),all=S.old.concat([b]);
       const drawBall=b=>{const r=BR;if(b.gold){c.save();c.shadowColor='#ffd23b';c.shadowBlur=14;c.fillStyle='#ffc21a';c.beginPath();c.arc(b.x,b.y,r,0,7);c.fill();c.restore()}
-        gBasketBall(c,b.x,b.y,r,(b.x+b.y)*.035,.4,b.gold)};
+        gBasketBall(c,b.x,b.y,r,(b.x+b.y)*.035,.4,b.gold,b.kind)};
       all.filter(isBack).forEach(drawBall);
       drawNet();c.strokeStyle='#ff5a1f';c.lineWidth=5;c.beginPath();c.ellipse(hx,hy,rw/2,6,0,0,7);c.stroke();
       all.filter(o=>!isBack(o)).forEach(drawBall);
@@ -4992,7 +5016,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='12.4';
+const APP_VERSION='12.5';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
