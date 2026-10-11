@@ -943,7 +943,7 @@ body.modal{overflow:hidden}
     </div></details>
     <details class="hsec"><summary>Hangok és rezgés</summary><div class="hbody">
       <p>Az app rövid hangot ad ital hozzáadásakor, törléskor vagy visszavonáskor, és egy kis dallamot, amikor meglesz a napi cél. A beállítások <b>Hangok és rezgés</b> részében kikapcsolhatod, eseményenként is, választhatsz hangkészletet (Vízcsepp, Buborék, Dallam), állíthatod a hangerőt, és a lejátszás gombbal meg is hallgathatod.</p>
-      <p>Alapból a napi időszakon kívül (pl. késő este) csendben marad. Androidon koppintáskor röviden rezeg is; iPhone-on ezt a böngésző nem engedi. iPhone-on a néma kapcsoló a hangokat is elnémítja.</p>
+      <p>Alapból a napi időszakon kívül (pl. késő este) csendben marad. Androidon koppintáskor röviden rezeg is; iPhone-on ezt a böngésző nem engedi. iPhone-on a néma kapcsoló a hangokat is elnémítja. A hangerőt a telefon médiahangereje szabályozza (a hangerőgombok, amíg az app van előtérben), és ha közben zenét hallgatsz, az app hangjai nem állítják le. Ha az app a háttérből jön vissza, a hang az első koppintással újraindul.</p>
     </div></details>
     <details class="hsec"><summary>Hatféle kijelző</summary><div class="hbody">
       <p>A mennyiséget hatféleképpen nézheted: <b>Mérőpohár</b>, <b>Gyűrű</b>, <b>Kulacs</b>, <b>Pohársor</b> (2 dl-es poharakban számolva), <b>Idővonal</b> (a nap grafikonja a tervhez képest) és <b>Akvárium</b>. A rajzot balra húzva a következőre, jobbra húzva az előzőre vált (koppintással is lapozhatsz), a beállítások „Kijelző” részében pedig közvetlenül választhatsz. A pontok a rajz alatt mutatják, melyiknél jársz.</p>
@@ -1028,7 +1028,7 @@ body.modal{overflow:hidden}
     </div></details>
     <details class="hsec"><summary>Sounds and vibration</summary><div class="hbody">
       <p>The app plays a short sound when you add a drink, delete or undo, and a little tune when you reach your daily goal. Under <b>Sounds and vibration</b> in Settings you can turn them off (per event too), pick a sound set (Water drop, Bubble, Melody), set the volume and preview each one with the play button.</p>
-      <p>By default it stays quiet outside your daily window (e.g. late at night). On Android it also gives a short buzz when you tap; the browser doesn’t allow that on iPhone. On iPhone the silent switch also mutes the sounds.</p>
+      <p>By default it stays quiet outside your daily window (e.g. late at night). On Android it also gives a short buzz when you tap; the browser doesn’t allow that on iPhone. On iPhone the silent switch also mutes the sounds. Volume follows the phone’s media volume (the volume buttons while the app is in front), and the app’s sounds don’t stop your music. When the app comes back from the background, sound restarts with your first tap.</p>
     </div></details>
     <details class="hsec"><summary>Six display styles</summary><div class="hbody">
       <p>You can view your progress six ways: <b>Measuring glass</b>, <b>Ring</b>, <b>Bottle</b>, <b>Glasses</b> (counted in 2 dl glasses), <b>Timeline</b> (your day charted against the plan) and <b>Aquarium</b>. Swipe the drawing left for the next one or right for the previous one (a tap also moves on), or pick one directly under “Display” in Settings. The dots below the drawing show which one you’re on.</p>
@@ -3700,7 +3700,22 @@ $('gQuit').onclick=()=>{if(GM.on)arcOver('quit')};
 /* @@ARC_END@@ */
 /* --- hangok és rezgés --- */
 let actx=null;
-function audio(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();return actx}catch(e){return null}}
+function audio(){try{
+  try{if(navigator.audioSession&&navigator.audioSession.type!=='ambient')navigator.audioSession.type='ambient'}catch(e){}
+  if(actx&&(actx.state==='closed'||actx.state==='interrupted')){try{actx.close()}catch(e){}actx=null}
+  actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+  if(actx.state!=='running'){const p=actx.resume();if(p&&p.catch)p.catch(()=>{})}
+  return actx}catch(e){return null}}
+/* iOS: háttérből visszatérve a hangot újra kell indítani egy érintéssel */
+let audioStale=false;
+function unlockAudio(){
+  if(!actx&&!audioStale)return;
+  if(audioStale&&actx){try{actx.close()}catch(e){}actx=null}
+  audioStale=false;const c=audio();if(!c)return;
+  try{const b=c.createBuffer(1,1,22050),src=c.createBufferSource();src.buffer=b;src.connect(c.destination);src.start(0)}catch(e){}
+}
+['pointerdown','touchend','keydown'].forEach(ev=>document.addEventListener(ev,unlockAudio,{capture:true,passive:true}));
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&actx)audioStale=true});
 function tone(c,t0,f0,f1,dur,type,vol){
   const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f0,t0);if(f1)o.frequency.exponentialRampToValueAtTime(f1,t0+dur);
   g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(Math.max(.0002,vol),t0+.012);g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
@@ -4318,7 +4333,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='11.2';
+const APP_VERSION='11.3';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
