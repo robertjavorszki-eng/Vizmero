@@ -902,7 +902,7 @@ body.modal{overflow:hidden}
 <!-- Súgó / Help -->
 <div class="scrim game" id="gameScrim" hidden>
   <div class="sheet gsheet" role="dialog" aria-modal="true" aria-labelledby="gTitle">
-    <header><h3 id="gTitle" data-t="gTitle"></h3><span style="display:flex;gap:8px"><button class="icon" id="gHelpBtn" data-ta="gHelpTitle" hidden style="font-weight:900">?</button><button class="icon" data-close="gameScrim" data-ta="close">✕</button></span></header>
+    <header><h3 id="gTitle" data-t="gTitle"></h3><span style="display:flex;gap:8px"><button class="icon" id="gMusicBtn" data-ta="gMusicA" hidden>🎵</button><button class="icon" id="gHelpBtn" data-ta="gHelpTitle" hidden style="font-weight:900">?</button><button class="icon" data-close="gameScrim" data-ta="close">✕</button></span></header>
     <div class="gwrap"><canvas id="gCan" aria-label="game"></canvas><div class="gtools" id="gTools" hidden><button id="gUndo"><span data-t="gUndo"></span></button><button id="gRestart"><span data-t="gRestart"></span></button><button id="gQuit"><span data-t="gQuit"></span></button></div><div class="gpanel" id="gPanel" hidden></div><div class="ghelp" id="gHelpBox" hidden></div></div>
   </div>
 </div>
@@ -957,6 +957,7 @@ body.modal{overflow:hidden}
       <p>A kedvenced alatti <b>Napi kihívás</b> gomb a Játékterembe visz. Itt ügyességi játékok (pl. Cseppfogó, Feltörő) és fejtörők (Csőszerelő, Színes italok, Kancsók, Dugó, Csúszós jég, Ládatologató, Cseppösszevonó, Italos sudoku) közül választhatsz. Az ügyességiek: Cseppfogó, Feltörő, Buborék lövő, Repkedő, Kacskaringós út, Csepp-futam, Felhőugró, Tizenegyes, Kosárdobó (szemből és oldalról), Párkereső. Minden játék első indításakor egy rövid útmutató mondja el, mit kell csinálni, és később is bármikor elolvashatod a fenti <b>?</b> gombbal (addig a játék megáll). Mindegyikben a saját kedvenced szerepel, és a szintek egyre nehezebbek. A fejtörők ott folytatódnak, ahol abbahagytad, és van bennük visszalépés és újrakezdés.</p>
       <p>Minden nap más játékból jön a <b>napi kihívás</b>. Az ügyességi játékokban ez egy feladat (pl. „Kapj el 35 cseppet”), a fejtörőknél egy közös napi feladvány, ami mindenkinek ugyanaz. Így a családban össze lehet hasonlítani, ki hány lépésből oldotta meg. Ha teljesíted a kihívást, nő a <b>széria</b>. Ha kimarad egy nap, egy <b>szériabefagyasztó</b> ❄️ megmenti: az elején kapsz egyet, és minden 7 napos széria után még egyet (legfeljebb kettő lehet nálad). A játékok eredményei csak ezen a telefonon tárolódnak.</p>
       <p>A szabadtéri játékokban (Cseppfogó, Feltörő, Buborék lövő, Repkedő, Kacskaringós út, Csepp-futam, Felhőugró, Tizenegyes) <b>változik az időjárás és a napszak</b>: van napsütés, borús őszi idő, zápor szivárvánnyal, vihar villámlással, hóesés, szél és köd, reggeltől éjszakáig. Közben madarak és repülők húznak el, néha legyek, szúnyogok, darazsak zümmögnek, és halk madár-, állat- vagy városi hangok szólnak. Az idő csak a látványt változtatja, a szél legfeljebb kicsit sodorja a lehulló dolgokat. A Játékterem tetején ki is kapcsolhatod.</p>
+      <p>A Játékterem tetején a <b>Játékhangok</b> között választhatsz: <b>Vagány</b> (mély dobütések, basszus) vagy <b>Cuki</b> (csilingelő hangok). A <b>Háttérzene</b> minden játékhoz külön stílusú zenét ad: pörgőset az ügyességiekhez, dobbantósat a sportjátékokhoz, nyugisat a fejtörőkhöz. Játék közben a fejléc 🎵 gombjával is ki-be kapcsolhatod.</p>
     </div></details>
     <details class="hsec"><summary>Hangok és rezgés</summary><div class="hbody">
       <p>Az app rövid hangot ad ital hozzáadásakor, törléskor vagy visszavonáskor, és egy kis dallamot, amikor meglesz a napi cél. A beállítások <b>Hangok és rezgés</b> részében kikapcsolhatod, eseményenként is, választhatsz hangkészletet (Vízcsepp, Buborék, Dallam), állíthatod a hangerőt, és a lejátszás gombbal meg is hallgathatod.</p>
@@ -1043,6 +1044,7 @@ body.modal{overflow:hidden}
       <p>The <b>Daily challenge</b> button under your buddy opens the Arcade, with action games (e.g. Drop Catcher, Brick Breaker) and puzzles (Pipe Fixer, Drink Sort, Jugs, Traffic Jam, Slippery Ice, Crate Pusher, Drop Merge, Drink Sudoku). Action games: Drop Catcher, Brick Breaker, Bubble Shooter, Flappy Flyer, Twisty Road, Drop Dash, Cloud Jumper, Penalty Kick, Hoop Shot (front and side), Memory. Each game shows a short how-to the first time you play it, and you can reread it anytime with the <b>?</b> button at the top (the game pauses meanwhile). Your own buddy stars in each, and the levels get harder and harder. Puzzles continue where you left off and have undo and restart.</p>
       <p>Every day the <b>daily challenge</b> comes from a different game: a task in action games (e.g. “Catch 35 drops”), or a shared daily puzzle that is the same for everyone, so the family can compare who needed the fewest moves. Complete it to grow your <b>streak</b>. If you miss a day, a <b>streak freeze</b> ❄️ saves it: you start with one and earn another with every 7-day streak (you can hold two at most). Game results are stored only on this phone.</p>
       <p>Outdoor games (Drop Catcher, Brick Breaker, Bubble Shooter, Flappy Flyer, Twisty Road, Drop Dash, Cloud Jumper, Penalty Kick) get <b>changing weather and time of day</b>: sunshine, cloudy autumn, showers with a rainbow, storms with lightning, snow, wind and fog, from morning to night. Birds and planes pass by, flies, mosquitoes and wasps buzz around now and then, with soft bird, animal or city sounds. Weather is mostly visual – wind only nudges falling items a little. You can switch it off at the top of the Arcade.</p>
+      <p>At the top of the Arcade you can pick <b>Game sounds</b>: <b>Bold</b> (deep kicks, bass) or <b>Cute</b> (tinkly sounds). <b>Background music</b> gives each game its own style: upbeat for skill games, stomping for sports, calm for puzzles. Toggle it any time in a game with the 🎵 button in the header.</p>
     </div></details>
     <details class="hsec"><summary>Sounds and vibration</summary><div class="hbody">
       <p>The app plays a short sound when you add a drink, delete or undo, and a little tune when you reach your daily goal. Under <b>Sounds and vibration</b> in Settings you can turn them off (per event too), pick a sound set (Water drop, Bubble, Melody), set the volume and preview each one with the play button.</p>
@@ -1853,7 +1855,7 @@ function normalizeGame(){
   const lv=g.lv&&typeof g.lv==='object'?g.lv:{};
   state.game={streak:+g.streak||0,bestStreak:+g.bestStreak||0,last:typeof g.last==='string'?g.last:'',
     freezes:g.freezes==null?1:Math.max(0,Math.min(2,+g.freezes||0)),frozen:Array.isArray(g.frozen)?g.frozen.slice(-30):[],plays:+g.plays||0,
-    bests,lv,seen:g.seen&&typeof g.seen==='object'?g.seen:{},dailyMoves:g.dailyMoves&&g.dailyMoves.d===keyOf(new Date())?g.dailyMoves:null,wx:g.wx!==false};
+    bests,lv,seen:g.seen&&typeof g.seen==='object'?g.seen:{},dailyMoves:g.dailyMoves&&g.dailyMoves.d===keyOf(new Date())?g.dailyMoves:null,wx:g.wx!==false,music:g.music!==false,sfx:g.sfx==='cute'?'cute':'bold'};
 }
 function dayDiff(a,b){const p=k=>{const x=k.split('-').map(Number);return Date.UTC(x[0],x[1]-1,x[2])};return Math.round((p(b)-p(a))/864e5)}
 function gameStreakCheck(){
@@ -1889,6 +1891,7 @@ function gLoadImgs(){const k=state.pet.kind;gImgs={happy:petImg(k,'happy'),thirs
 function gSfx(kind,x){
   const S=state.sound;if(!S.on)return;const c=audio();if(!c)return;const t0=c.currentTime+.01,v=S.vol*.4;
   try{
+    if(sfxBold()&&gSfxBold(kind,x,c,t0,v))return;
     if(kind==='drop'){const f=700+Math.min(x||0,20)*45;tone(c,t0,f,f*1.8,.09,'sine',v)}
     if(kind==='gold'){[1047,1319,1568,2093].forEach((f,i)=>tone(c,t0+i*.05,f,0,.12,'triangle',v*.8))}
     if(kind==='hit'){vtone(c,t0,300,90,.3,'square',v*.5,{lp:900});vnoise(c,t0,.15,v*.5,600,'lowpass')}
@@ -1932,7 +1935,7 @@ function arcNew(id,opts){
   gLoadImgs();$('gPanel').hidden=true;$('gTitle').textContent=t('gn_'+id);state.game.plays++;saveLocal();
   $('gTools').hidden=g.kind!=='puzzle';GM.view='play';
   if(g.kind==='puzzle'){GM.level=opts.daily?(g.dailyLevel||6):Math.max(1,state.game.lv[id]||1);GM.st.solved=0}
-  g.init();wxStart(g);$('gHelpBtn').hidden=false;if(!state.game.seen[id])gHelp(true);
+  g.init();wxStart(g);musStart(id);$('gHelpBtn').hidden=false;$('gMusicBtn').hidden=false;musBtn();if(!state.game.seen[id])gHelp(true);
   cancelAnimationFrame(GM.raf);GM.last=performance.now();GM.raf=requestAnimationFrame(gLoop);
 }
 function gLoop(now){
@@ -1975,7 +1978,7 @@ function arcSolved(){
   setTimeout(()=>{if(!GM.on||GM.id!==id){GM.busy=false;return}GM.busy=false;GM.level++;state.game.lv[id]=Math.max(state.game.lv[id]||1,GM.level);saveLocal();GM.hist=[];g.init();gBanner(t('gLevel',GM.level))},1500);
 }
 function arcOver(why){
-  if(!GM.on)return;GM.on=false;wxAmb();gHelp(false);$('gHelpBtn').hidden=true;const g=ARC[GM.id];if(why!=='daily'&&why!=='quit')gSfx('over');
+  if(!GM.on)return;GM.on=false;wxAmb();musStop();gHelp(false);$('gHelpBtn').hidden=true;$('gMusicBtn').hidden=true;const g=ARC[GM.id];if(why!=='daily'&&why!=='quit')gSfx('over');
   const B=state.game.bests,val=g.kind==='puzzle'?Math.max(B[GM.id]||0,state.game.lv[GM.id]||1):GM.score,rec=g.kind!=='puzzle'&&GM.score>(B[GM.id]||0);
   B[GM.id]=g.kind==='puzzle'?val:Math.max(B[GM.id]||0,GM.score);saveLocal();
   GM.lastWhy=why;$('gTools').hidden=true;gDraw(0);gPanel('over',rec);
@@ -2065,6 +2068,8 @@ function gPanel(kind,rec,id){
     if(G.justFroze){h+='<p class="gnote ice">'+esc(t('gFroze',G.justFroze))+'</p>';G.justFroze=0}
     if(G.justLost){h+='<p class="gnote">'+esc(t('gLost'))+'</p>';G.justLost=false}
     h+=gDailyCard()+gStatsHTML();
+    {const bd=G.sfx!=='cute';h+='<button class="gwx on" id="gSfxBtn"><span><b>'+esc(t('gSfxT'))+'</b><small>'+esc(t(bd?'gSfxBoldD':'gSfxCuteD'))+'</small></span><em>'+esc(t(bd?'gSfxBold':'gSfxCute'))+'</em></button>'}
+    {const mo=G.music!==false;h+='<button class="gwx'+(mo?' on':'')+'" id="gMusBtn"><span><b>'+esc(t('gMusicT'))+'</b><small>'+esc(t('gMusicD'))+'</small></span><em>'+esc(t(mo?'gOn':'gOff'))+'</em></button>'}
     {const on=G.wx!==false;h+='<button class="gwx'+(on?' on':'')+'" id="gWxBtn" aria-pressed="'+on+'"><span><b>'+esc(t('gWxT'))+'</b><small>'+esc(t('gWxD'))+'</small></span><em>'+esc(t(on?'gOn':'gOff'))+'</em></button>'}
     ['action','puzzle'].forEach(kd=>{
       h+='<p class="gsec">'+esc(t(kd==='action'?'gSkill':'gPuzzles'))+'</p><div class="ggrid">';
@@ -2074,6 +2079,8 @@ function gPanel(kind,rec,id){
     P.innerHTML=h;P.hidden=false;P.scrollTop=GM.menuScroll||0;GM.id=null;GM.lastWhy=null;gDraw(0);
     $('gDailyGo').onclick=()=>{const dc=dailyChallenge();ARC[dc.game].kind==='puzzle'?(audio(),arcNew(dc.game,{daily:true})):gPanel('start',false,dc.game)};
     P.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>gPanel('start',false,b.dataset.game));
+    $('gSfxBtn').onclick=()=>{G.sfx=G.sfx==='cute'?'bold':'cute';saveLocal();audio();gSfx('win');GM.menuScroll=P.scrollTop;gPanel('menu')};
+    $('gMusBtn').onclick=()=>{G.music=G.music===false;saveLocal();GM.menuScroll=P.scrollTop;gPanel('menu')};
     $('gWxBtn').onclick=()=>{G.wx=G.wx===false;saveLocal();GM.menuScroll=P.scrollTop;gPanel('menu')};
     return;
   }
@@ -2114,13 +2121,13 @@ function openGame(){
 }
 function gameToMenu(){
   $('gHelpBox').hidden=true;$('gTools').hidden=true;$('gHelpBtn').hidden=true;
-  wxStop();
+  wxStop();musStop();$('gMusicBtn').hidden=true;
   if(GM.on){const g=ARC[GM.id];GM.on=false;cancelAnimationFrame(GM.raf);if(g.kind!=='puzzle'&&GM.score>(state.game.bests[GM.id]||0)){state.game.bests[GM.id]=GM.score;saveLocal()}}
   GM.parts=[];GM.texts=[];GM.banner=null;renderGameBtn();gPanel('menu');
 }
 function gameStop(){
   $('gHelpBox').hidden=true;
-  wxStop();
+  wxStop();musStop();$('gMusicBtn').hidden=true;
   if(GM.on){const g=ARC[GM.id];GM.on=false;cancelAnimationFrame(GM.raf);if(g.kind!=='puzzle'&&GM.score>(state.game.bests[GM.id]||0)){state.game.bests[GM.id]=GM.score;saveLocal()}}
   renderGameBtn();if(GM.chHit)petSay(t('gPetWin'));
 }
@@ -2304,10 +2311,10 @@ I18N.en.gTips.hoops=['👆 Grab the ball, flick it toward the hoop and let go.',
 /* időjárás, napszak szövegek */
 Object.assign(I18N.hu,{wx_sun:'Napsütés',wx_autumn:'Borús őszi idő',wx_shower:'Nyári zápor',wx_storm:'Vihar',wx_rainbow:'Szivárvány',wx_snow:'Hóesés',wx_windy:'Szeles idő',wx_fog:'Ködös idő',wx_clear:'Derült ég',wx_gust:'Széllökés',
   tod_morning:'Reggel',tod_day:'Napközben',tod_sunset:'Naplemente',tod_evening:'Este',tod_night:'Éjszaka',
-  gWxT:'🌦️ Időjárás és napszak',gWxD:'A szabadtéri játékokban változik az idő, a napszak, és madarak, állathangok is jönnek.',gOn:'Be',gOff:'Ki'});
+  gWxT:'🌦️ Időjárás és napszak',gWxD:'A szabadtéri játékokban változik az idő, a napszak, és madarak, állathangok is jönnek.',gOn:'Be',gOff:'Ki',gSfxT:'🔊 Játékhangok',gMusicT:'🎵 Háttérzene',gMusicD:'Zene a játékok alatt. Játék közben a 🎵 gombbal is ki-be kapcsolhatod.',gMusicOn:'Zene be',gMusicOff:'Zene ki',gMusicA:'Zene be/ki',gSfxBold:'Vagány',gSfxCute:'Cuki',gSfxBoldD:'Mély dobütések, basszus, arcade dallamok. Koppints a váltáshoz.',gSfxCuteD:'Könnyed, csilingelő hangok. Koppints a váltáshoz.'});
 Object.assign(I18N.en,{wx_sun:'Sunshine',wx_autumn:'Cloudy autumn',wx_shower:'Summer shower',wx_storm:'Storm',wx_rainbow:'Rainbow',wx_snow:'Snowfall',wx_windy:'Windy',wx_fog:'Foggy',wx_clear:'Clear sky',wx_gust:'Gust of wind',
   tod_morning:'Morning',tod_day:'Daytime',tod_sunset:'Sunset',tod_evening:'Evening',tod_night:'Night',
-  gWxT:'🌦️ Weather & time of day',gWxD:'Outdoor games get changing weather, day and night, birds and animal sounds.',gOn:'On',gOff:'Off'});
+  gWxT:'🌦️ Weather & time of day',gWxD:'Outdoor games get changing weather, day and night, birds and animal sounds.',gOn:'On',gOff:'Off',gSfxT:'🔊 Game sounds',gMusicT:'🎵 Background music',gMusicD:'Music while you play. Toggle it any time with the 🎵 button in a game.',gMusicOn:'Music on',gMusicOff:'Music off',gMusicA:'Music on/off',gSfxBold:'Bold',gSfxCute:'Cute',gSfxBoldD:'Deep kicks, bass and arcade tunes. Tap to switch.',gSfxCuteD:'Light, tinkly sounds. Tap to switch.'});
 
 /* Időjárás a szabadtéri játékokban */
 const WX_TYPES={
@@ -2619,6 +2626,114 @@ function gBasketBall(c,x,y,r,a,b,gold){
   b3seams(c,x,y,r,BALL3.bb,a,b,'#24140c',Math.max(1,r*.065));
   c.restore();
 }
+
+/* „Vagány” játékhangok: mély dobütés, basszus, lejjebb hangolt arcade dallamok */
+function sfxBold(){return state.game.sfx!=='cute'}
+function kick(c,t,v,f0,f1,d){/* telefon-hangszórón is érezhető: 150-200 Hz-ről lecsúszó szinusz + kattanás + felhang */
+  f0=f0||170;f1=f1||48;d=d||.22;const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+d*.8);
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,v*1.4),t+.006);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+.03);
+  vtone(c,t,f0*2,f1*2,d*.6,'triangle',v*.35);vnoise(c,t,.03,v*.5,3500,'highpass')}
+function bass(c,t,f,d,v,f1){vtone(c,t,f,f1||f,d,'sawtooth',v*.55,{lp:Math.min(1400,f*7),att:.008});vtone(c,t,f*2,(f1||f)*2,d,'square',v*.12,{lp:1200})}
+function chord(c,t,f,d,v){[1,1.5,2].forEach((m,i)=>vtone(c,t,f*m,f*m,d,'sawtooth',v*(i?.22:.3),{lp:2200,att:.01}))}
+function gSfxBold(kind,x,c,t0,v){
+  switch(kind){
+    case 'drop':{const f=330+Math.min(x||0,20)*22;tone(c,t0,f,f*2,.09,'square',v*.35);bass(c,t0,f/4,.12,v*.6);return true}
+    case 'gold':kick(c,t0,v*.8);[262,330,392,523,659].forEach((f,i)=>{vtone(c,t0+i*.05,f,f,.14,'square',v*.3,{lp:3000});tone(c,t0+i*.05,f*2,0,.1,'triangle',v*.25)});return true;
+    case 'hit':kick(c,t0,v*.85,200,40,.35);bass(c,t0,110,.3,v*.75,45);vnoise(c,t0,.22,v*.7,700,'lowpass');return true;
+    case 'power':kick(c,t0,v*.7);[196,262,330,392,523].forEach((f,i)=>vtone(c,t0+i*.05,f,f*1.06,.12,'sawtooth',v*.3,{lp:2600}));return true;
+    case 'level':[0,.12,.24].forEach((d,i)=>{kick(c,t0+d,v*.8);chord(c,t0+d,[131,165,196][i],.16,v)});kick(c,t0+.4,v);chord(c,t0+.4,262,.5,v);return true;
+    case 'win':[0,.11,.22,.33,.5].forEach((d,i)=>{if(i%2===0||i===4)kick(c,t0+d,v*.9);chord(c,t0+d,[196,247,294,392,392][i],i===4?.6:.14,v)});return true;
+    case 'solve':[0,.1,.2].forEach((d,i)=>{kick(c,t0+d,v*.7);chord(c,t0+d,[165,196,262][i],i===2?.45:.12,v)});return true;
+    case 'over':[0,.18,.36,.54].forEach((d,i)=>{bass(c,t0+d,[110,98,87,65][i],.26,v*1.1,[108,96,85,40][i]);if(i===3)kick(c,t0+d,v,140,35,.5)});return true;
+    case 'bounce':kick(c,t0,v*.6,150,70,.12);tone(c,t0,330,400,.05,'square',v*.18);return true;
+    case 'brick':{const f=196+(x||0)*30;kick(c,t0,v*.5,160,60,.1);vtone(c,t0,f,f*1.2,.08,'square',v*.35,{lp:2400});return true}
+    case 'pop':kick(c,t0,v*.5,180,70,.1);tone(c,t0,250+(x||0)*30,700,.07,'square',v*.3);return true;
+    case 'flap':vnoise(c,t0,.1,v*.45,600,'lowpass');kick(c,t0,v*.35,120,60,.1);return true;
+    case 'nope':bass(c,t0,92,.16,v*.9,80);return true;
+    case 'tick':tone(c,t0,440,400,.04,'square',v*.25);kick(c,t0,v*.25,120,60,.05);return true;
+    case 'clink':tone(c,t0,1200,1150,.08,'triangle',v*.4);kick(c,t0,v*.3,140,70,.07);return true;
+    case 'slide':vnoise(c,t0,.22,v*.4,900,'lowpass');bass(c,t0,82,.18,v*.6,70);return true;
+    case 'pour':vnoise(c,t0,.35,v*.4,900,'lowpass');vtone(c,t0,180,330,.3,'triangle',v*.3);return true;
+    case 'flip':kick(c,t0,v*.3,140,80,.06);tone(c,t0,500,800,.06,'square',v*.2);return true;
+    case 'clap':kick(c,t0,v*.8,120,40,.4);return false;
+    case 'cheer':kick(c,t0,v,110,38,.6);bass(c,t0,65,.8,v*.5,60);return false;
+    case 'salt':kick(c,t0,v*.6,140,45,.25);return false;
+  }
+  return false;
+}
+
+/* Háttérzene a játékokhoz: menet közben generált, ismétlődő dallamú loopok */
+const MUS={on:false,c:null,bus:null,timer:null,step:0,next:0,track:null,seed:1,noise:null,mel:null};
+const NOTE=n=>440*Math.pow(2,(n-69)/12);
+const MUS_TRACKS={
+  /* ügyességi: lendületes, A-moll */
+  drive:{bpm:126,prog:[[57,60,64],[53,57,60],[48,52,55],[55,59,62]],bassOct:-24,kick:[0,4,8,12],snare:[4,12],hat:'off',lead:'square',scale:[0,3,5,7,10],arp:true},
+  /* ügyességi: vidám, C-dúr */
+  bounce:{bpm:112,prog:[[48,52,55],[55,59,62],[57,60,64],[53,57,60]],bassOct:-12,kick:[0,6,8],snare:[4,12],hat:'eighth',lead:'triangle',scale:[0,2,4,7,9],bassSync:true},
+  /* sport: dobbantós taps-ütem */
+  sport:{bpm:118,prog:[[52,55,59],[52,55,59],[48,52,55],[50,54,57]],bassOct:-12,kick:[0,2,8,10],snare:[4,12],clap:true,hat:'eighth',lead:'sawtooth',scale:[0,3,5,7,10]},
+  /* fejtörő: nyugis, lo-fi */
+  chill:{bpm:84,prog:[[50,53,57,60],[55,59,62,65],[48,52,55,59],[57,60,64,67]],bassOct:-12,kick:[0,10],snare:[],rim:[4,12],hat:'soft',lead:'sine',scale:[0,2,4,7,9],pad:true,sparse:true}
+};
+function musTrackFor(id){const g=ARC[id];if(!g)return 'drive';if(id==='soccer'||id==='hoops'||id==='hoops2')return 'sport';if(g.kind==='puzzle'||g.sec==='puzzle')return 'chill';return ['catch','fly','jump','bubble','memo'].includes(id)?'bounce':'drive'}
+function musOn(){return state.game.music!==false&&state.sound.on}
+function musRng(s){return ()=>{s=(s*16807)%2147483647;return (s-1)/2147483646}}
+function musNoise(c){if(MUS.noise&&MUS.noise.c===c)return MUS.noise.b;const n=c.sampleRate,b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;MUS.noise={c,b};return b}
+function mTone(t,f,d,type,v,o){o=o||{};const c=MUS.c,os=c.createOscillator(),g=c.createGain();os.type=type;os.frequency.setValueAtTime(f,t);if(o.f1)os.frequency.exponentialRampToValueAtTime(o.f1,t+d*.8);
+  let node=os;if(o.lp){const fl=c.createBiquadFilter();fl.type='lowpass';fl.frequency.value=o.lp;fl.Q.value=o.q||.8;os.connect(fl);node=fl}
+  const a=o.att||.01;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,v),t+a);g.gain.setValueAtTime(Math.max(.0002,v*(o.sus||.7)),t+Math.max(a,d*.5));g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  node.connect(g);g.connect(MUS.bus);os.start(t);os.stop(t+d+.05)}
+function mNoise(t,d,v,type,f){const c=MUS.c,s=c.createBufferSource(),fl=c.createBiquadFilter(),g=c.createGain();s.buffer=musNoise(c);fl.type=type;fl.frequency.value=f;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,v),t+.004);g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(fl);fl.connect(g);g.connect(MUS.bus);s.start(t,Math.random()*.5);s.stop(t+d+.02)}
+function mKick(t,v){mTone(t,160,.26,'sine',v,{f1:45,att:.004,sus:.9});mTone(t,320,.06,'triangle',v*.3,{f1:90,att:.002})}
+function mSnare(t,v){mNoise(t,.16,v*.7,'bandpass',1900);mTone(t,190,.1,'triangle',v*.4,{f1:150,att:.002})}
+function mClap(t,v){[0,.012,.026].forEach(d=>mNoise(t+d,.09,v*.55,'bandpass',1400))}
+function mHat(t,v,open){mNoise(t,open?.12:.04,v*.35,'highpass',7500)}
+function musMelody(T,bar){/* 4 ütemenként ismétlődő, 8 ütemenként variált dallam */
+  const r=musRng(MUS.seed*7919+Math.floor(bar/8)*131+(bar%4)*17+1),ch=T.prog[bar%4],root=ch[0]+12,out=[];
+  for(let s=0;s<16;s++){const on=T.sparse?(s%4===0&&r()<.55)||(s%4===2&&r()<.15):(s%2===0?r()<.62:r()<.18);
+    if(!on){out.push(null);continue}const tone=r()<.5?ch[Math.floor(r()*ch.length)]+12:root+T.scale[Math.floor(r()*T.scale.length)]+(r()<.25?12:0);out.push(tone)}
+  if(bar%4===3){out[14]=null;out[15]=null;out[12]=ch[0]+12}return out}
+function musSched(){
+  const c=actx;if(!MUS.on||!c||c.state!=='running'){return}
+  if(MUS.c!==c){MUS.c=c;MUS.bus=c.createGain();const cp=c.createDynamicsCompressor();cp.threshold.value=-14;cp.ratio.value=4;MUS.bus.connect(cp);cp.connect(c.destination);MUS.next=c.currentTime+.08}
+  const T=MUS_TRACKS[MUS.track],sd=60/T.bpm/4,vol=state.sound.vol*.2*(GM.paused?0:1);
+  MUS.bus.gain.setTargetAtTime(vol,c.currentTime,.15);
+  if(MUS.next<c.currentTime-.2)MUS.next=c.currentTime+.05;
+  while(MUS.next<c.currentTime+.18){
+    const t=MUS.next,st=MUS.step%16,bar=Math.floor(MUS.step/16),ch=T.prog[bar%4],lv=Math.min(4,(GM.level||1)),swing=st%2?sd*.08:0,tt=t+swing;
+    if(!GM.paused){
+      if(T.kick.includes(st))mKick(t,.9);
+      if(T.snare.includes(st))mSnare(t,.7);
+      if(T.clap&&T.snare.includes(st))mClap(t,.7);
+      if(T.rim&&T.rim.includes(st))mTone(t,1600,.04,'square',.12,{lp:2500,att:.002});
+      if(T.hat==='off'&&st%4===2)mHat(tt,.6,true);if(T.hat==='off'&&lv>=3&&st%2===1)mHat(tt,.3);
+      if(T.hat==='eighth'&&st%2===0)mHat(t,st%4===2?.6:.35);if(T.hat==='eighth'&&lv>=3&&st%2)mHat(tt,.25);
+      if(T.hat==='soft'&&st%2===0)mHat(t,.22);
+      /* basszus */
+      const bn=ch[0]+T.bassOct;
+      if(T.bassSync){if([0,3,6,10,12].includes(st))mTone(t,NOTE(bn+(st===10?7:0)),sd*2.2,'sawtooth',.38,{lp:700,att:.006})}
+      else if(T.pad){if(st===0||st===8)mTone(t,NOTE(bn),sd*7.5,'sine',.5,{att:.03,sus:.8})}
+      else if(st%2===0)mTone(t,NOTE(bn+(st%8===6?12:0)),sd*1.6,'sawtooth',.34,{lp:520+lv*80,att:.006});
+      /* akkord / pad */
+      if(T.pad&&st===0)ch.forEach(n=>mTone(t,NOTE(n),sd*15,'triangle',.07,{att:.25,sus:.85,lp:1800}));
+      else if(!T.pad&&(st===0||st===8||(T.arp&&st%4===2)))ch.forEach(n=>mTone(tt,NOTE(n),sd*(T.arp?1.2:3),'square',.035,{lp:1600,att:.01}));
+      if(T.arp&&lv>=2){const an=ch[st%ch.length]+24;mTone(tt,NOTE(an),sd*.9,'triangle',.05,{att:.005})}
+      /* dallam */
+      if(st===0)MUS.mel=musMelody(T,bar);const mn=MUS.mel&&MUS.mel[st];
+      if(mn)mTone(tt,NOTE(mn),sd*(T.sparse?3.5:1.7),T.lead,T.lead==='sine'?.16:.1,{lp:T.lead==='sawtooth'?2200:3500,att:.01,sus:.6});
+    }
+    MUS.next+=sd;MUS.step++;
+  }
+}
+function musStart(id){
+  musStop(true);if(!musOn())return;MUS.track=musTrackFor(id);MUS.seed=1+Math.floor(Math.random()*9999);MUS.step=0;MUS.on=true;MUS.c=null;
+  const c=audio();if(c)MUS.next=c.currentTime+.1;MUS.timer=setInterval(musSched,40);musSched();
+}
+function musStop(fast){MUS.on=false;if(MUS.timer){clearInterval(MUS.timer);MUS.timer=null}
+  if(MUS.bus&&MUS.c){try{const b=MUS.bus;b.gain.setTargetAtTime(0,MUS.c.currentTime,fast?.03:.25);setTimeout(()=>{try{b.disconnect()}catch(e){}},fast?300:1500)}catch(e){}}MUS.bus=null;MUS.c=null}
+function musToggle(){state.game.music=state.game.music===false;saveLocal();musBtn();if(GM.on&&state.game.music!==false){audio();musStart(GM.id)}else musStop()}
+function musBtn(){const b=$('gMusicBtn');if(!b)return;const on=state.game.music!==false;b.textContent=on?'🎵':'🔇';b.setAttribute('aria-pressed',on);b.title=t(on?'gMusicOn':'gMusicOff')}
 
 /* Cseppfogó */
 ARC.catch=(()=>{
@@ -4068,10 +4183,11 @@ document.addEventListener('keydown',e=>{if(!GM.on||$('gameScrim').hidden)return;
   if(e.key==='p'&&g.kind==='action')GM.paused=!GM.paused});
 document.addEventListener('keyup',e=>{if(e.key==='ArrowLeft')GM.keys.left=false;if(e.key==='ArrowRight')GM.keys.right=false;if(e.key==='ArrowUp')GM.keys.up=false;if(e.key==='ArrowDown')GM.keys.down=false;
   const g=GM.on&&ARC[GM.id];if(g&&g.key)g.key(e.key,false)});
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&GM.on&&ARC[GM.id].kind==='action')GM.paused=true;if(!document.hidden&&GM.on)GM.last=performance.now()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)musStop(true);else if(GM.on&&musOn())musStart(GM.id);if(document.hidden&&GM.on&&ARC[GM.id].kind==='action')GM.paused=true;if(!document.hidden&&GM.on)GM.last=performance.now()});
 window.addEventListener('resize',()=>{if(!$('gameScrim').hidden)gResize()});
 $('gUndo').onclick=()=>{const g=GM.on&&ARC[GM.id];if(g&&g.undo&&!GM.busy){g.undo();gSfx('tick')}};
 $('gRestart').onclick=()=>{const g=GM.on&&ARC[GM.id];if(g&&g.restart&&!GM.busy){g.restart();gSfx('slide')}};
+$('gMusicBtn').onclick=()=>{if(GM.on)musToggle()};
 $('gHelpBtn').onclick=()=>{if(GM.on)gHelp(true)};
 $('gQuit').onclick=()=>{if(GM.on)arcOver('quit')};
 {const _close=closeSheet;closeSheet=function(id){if(id==='gameScrim'){if(GM.view&&GM.view!=='menu'&&!closeSheet.force){gameToMenu();return}if(GM.view==='menu')GM.menuScroll=$('gPanel').scrollTop;gameStop()}_close(id)}}
@@ -4714,7 +4830,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='11.9';
+const APP_VERSION='12.0';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
