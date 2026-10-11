@@ -2827,8 +2827,21 @@ ARC.merge=(()=>{
 
 /* Csepp-futam (3 sávos futás) */
 ARC.run=(()=>{
-  const S={},FAR=1400,F=260;
-  function proj(lane,z,h){const sc=F/(F+z),hy=GM.H*.3,by=GM.H-110;return {x:GM.W/2+lane*GM.W*.3*sc,y:hy+(by-hy)*sc-(h||0)*sc,s:sc}}
+  const S={},FAR=2300,F=260;
+  const bend=z=>(S.curv||0)*Math.pow(Math.max(0,z)/600,2);
+  function proj(lane,z,h){const sc=F/(F+z),hy=GM.H*.3,by=GM.H-110;return {x:GM.W/2+(lane+bend(z))*GM.W*.3*sc,y:hy+(by-hy)*sc-(h||0)*sc,s:sc}}
+  const DECO=[['🌳',90,30],['🌲',100,22],['🌳',70,14],['🌿',30,10],['🌼',18,10],['🌷',18,6],['🪨',28,6],['🐄',46,4],['🐑',36,5],['🐇',22,4],['🦌',46,3],['🐓',24,3],['🏡',90,3],['🌻',34,5],['lake',0,4]];
+  function spawnDeco(z){
+    let tot=0;DECO.forEach(d=>tot+=d[2]);let r=Math.random()*tot,k=DECO[0];for(const d of DECO){if((r-=d[2])<0){k=d;break}}
+    const side=Math.random()<.5?-1:1,x=side*(2.5+Math.random()*(k[0]==='lake'?2.5:4.5));
+    S.deco.push({e:k[0],sz:k[1]*(.8+Math.random()*.5),x,z,flip:Math.random()<.5});
+    if(k[0]==='lake'&&Math.random()<.7)S.deco.push({e:'🦆',sz:26,x:x+(Math.random()-.5)*.8,z:z+10,flip:Math.random()<.5});
+  }
+  function mountains(c,W,hy,off,col,amp,seed,base){
+    c.fillStyle=col;c.beginPath();c.moveTo(-10,hy+2);const step=W/8;
+    for(let i=-1;i<=9;i++){const k=Math.floor((i*step-off)/step),x=k*step+off+ (i<0?0:0),h=amp*(.5+.5*Math.abs(Math.sin(k*seed+1.3)));c.lineTo(x,hy-h*base);c.lineTo(x+step/2,hy-h)}
+    c.lineTo(W+10,hy+2);c.closePath();c.fill();
+  }
   function spawnRow(z){
     const L=GM.level,lanes=shuffleR([-1,0,1]);const free=lanes[0];
     lanes.slice(1).forEach((ln,i)=>{const r=Math.random();if(i===1&&r<.45)return;
@@ -2848,12 +2861,14 @@ ARC.run=(()=>{
     chs:[{ty:'dist',ns:[500,800,1200]},{ty:'drops',ns:[30,50,70]},{ty:'level',ns:[2,3,4]}],
     prog(ty){return ty==='dist'?Math.floor(GM.st.dist):ty==='drops'?GM.st.drops:GM.level},
     resize(){},
-    init(){Object.assign(GM.st,{dist:0,drops:0});Object.assign(S,{lane:0,lx:0,lane2:0,h:0,vh:0,roll:0,obs:[],drops:[],next:500,mag:0,shield:0,sl:0})},
+    init(){Object.assign(GM.st,{dist:0,drops:0});Object.assign(S,{lane:0,lx:0,lane2:0,h:0,vh:0,roll:0,obs:[],drops:[],next:500,mag:0,shield:0,sl:0,curv:0,mx:0,deco:[],dnext:0});for(let z=0;z<FAR;z+=60)spawnDeco(z)},
     step(dt){
       const v=(420+GM.level*45+Math.min(GM.t,120)*2);S.sl+=v*dt;GM.st.dist+=v*dt/20;GM.score=Math.floor(GM.st.dist)+GM.st.drops*5;
       S.lx+=(S.lane-S.lx)*Math.min(1,dt*14);S.lane2=Math.round(S.lx);
       if(S.h>0||S.vh>0){S.vh-=2200*dt;S.h=Math.max(0,S.h+S.vh*dt);if(S.h===0)S.vh=0}
       S.roll=Math.max(0,S.roll-dt);S.mag=Math.max(0,S.mag-dt);S.shield=Math.max(0,S.shield-dt);
+      const tc=Math.sin(S.sl/2600)*Math.sin(S.sl/1000+1.3)*Math.min(.5,.22+GM.level*.05);S.curv+=(tc-S.curv)*Math.min(1,dt*.8);S.mx+=S.curv*v*dt*.12;
+      S.deco.forEach(o=>o.z-=v*dt);S.deco=S.deco.filter(o=>o.z>-90);S.dnext-=v*dt;while(S.dnext<=0){spawnDeco(FAR+Math.random()*40);S.dnext+=55+Math.random()*50}
       S.next-=v*dt;if(S.next<=0){spawnRow(FAR);S.next=Math.max(260,520-GM.level*30)*(.8+Math.random()*.4)}
       S.obs.forEach(o=>o.z-=v*dt);S.drops.forEach(d=>d.z-=v*dt);
       for(const o of S.obs){if(!o.hit&&hitTest(o)){o.hit=true;if(S.shield>0){S.shield=0;gSfx('power');gText(GM.W/2,GM.H*.6,t('gBlocked'),'#1f8fc4')}else if(!GM.inv){GM.lives--;GM.inv=1.4;gSfx('hit');buzz(60);GM.shake=.35}}}
@@ -2868,18 +2883,27 @@ ARC.run=(()=>{
     draw(c){
       const W=GM.W,H=GM.H,hy=H*.3,hue=gLevelHue();
       const g=c.createLinearGradient(0,0,0,hy);g.addColorStop(0,'hsl('+hue+',85%,78%)');g.addColorStop(1,'hsl('+((hue+30)%360)+',90%,92%)');c.fillStyle=g;c.fillRect(0,0,W,hy+2);
-      c.fillStyle='rgba(255,255,255,.8)';[[.15,.12],[.6,.08],[.85,.2]].forEach(([fx,fy])=>{const x=fx*W,y=fy*H;c.beginPath();c.arc(x,y,16,0,7);c.arc(x+18,y-6,20,0,7);c.arc(x+38,y,14,0,7);c.fill()});
+      c.fillStyle='#fff7c2';c.beginPath();c.arc(W*.82-S.mx*.2%W,hy*.32,22,0,7);c.fill();
+      c.fillStyle='rgba(255,255,255,.85)';[[.15,.12],[.6,.08],[.85,.2],[.35,.22]].forEach(([fx,fy],i)=>{const x=((fx*W-S.mx*(.3+i*.05))%(W+120)+W+120)%(W+120)-60,y=fy*H;c.beginPath();c.arc(x,y,16,0,7);c.arc(x+18,y-6,20,0,7);c.arc(x+38,y,14,0,7);c.fill()});
+      mountains(c,W,hy,(-S.mx*.5)%(W/8),'#a9b8d6',hy*.55,2.7,.2);
+      c.fillStyle='rgba(255,255,255,.9)';
+      mountains(c,W,hy,(-S.mx)%(W/8),'#7e93b8',hy*.38,1.9,.15);
+      c.fillStyle='#8fd18a';c.beginPath();c.moveTo(0,hy+2);for(let x=0;x<=W+20;x+=20){c.lineTo(x,hy-10-8*Math.sin((x+S.mx*1.6)/45))}c.lineTo(W,hy+2);c.fill();
       c.fillStyle='#7fd18b';c.fillRect(0,hy,W,H-hy);
-      const a=proj(-1.75,FAR),b=proj(1.75,FAR),cc=proj(1.75,-60),d=proj(-1.75,-60);
-      c.fillStyle='#c9a77c';c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.lineTo(cc.x,cc.y);c.lineTo(d.x,d.y);c.fill();
-      c.fillStyle='#a8865c';for(let z=-(S.sl%60);z<FAR;z+=60){const l=proj(-1.7,z),r=proj(1.7,z);c.fillRect(l.x,l.y-2*l.s,r.x-l.x,Math.max(1,6*l.s))}
-      c.strokeStyle='#8f95a3';c.lineWidth=2;[-1,0,1].forEach(ln=>[-.28,.28].forEach(o=>{const p1=proj(ln+o,FAR),p2=proj(ln+o,-60);c.beginPath();c.moveTo(p1.x,p1.y);c.lineTo(p2.x,p2.y);c.stroke()}));
-      const items=[];S.obs.forEach(o=>items.push({z:o.z,o}));S.drops.forEach(d=>items.push({z:d.z,d}));items.sort((p,q)=>q.z-p.z);
+      const bandP=320;for(let z=-(S.sl%bandP);z<FAR;z+=bandP){const y1=proj(0,Math.max(-60,z)).y,y2=proj(0,Math.max(-60,z+bandP/2)).y;c.fillStyle='#74c77f';c.fillRect(0,y2,W,y1-y2)}
+      const zs=[];for(let z=FAR;z>-60;z-=z>600?80:30)zs.push(z);zs.push(-60);
+      c.fillStyle='#c9a77c';c.beginPath();zs.forEach((z,i)=>{const p2=proj(-1.75,z);i?c.lineTo(p2.x,p2.y):c.moveTo(p2.x,p2.y)});zs.slice().reverse().forEach(z=>{const p2=proj(1.75,z);c.lineTo(p2.x,p2.y)});c.closePath();c.fill();
+      c.strokeStyle='#a8865c';for(let z=-(S.sl%60);z<FAR;z+=60){const l=proj(-1.7,z),r=proj(1.7,z);c.lineWidth=Math.max(1,6*l.s);c.beginPath();c.moveTo(l.x,l.y);c.lineTo(r.x,r.y);c.stroke()}
+      c.strokeStyle='#8f95a3';c.lineWidth=2;[-1,0,1].forEach(ln=>[-.28,.28].forEach(o=>{c.beginPath();zs.forEach((z,i)=>{const p2=proj(ln+o,z);i?c.lineTo(p2.x,p2.y):c.moveTo(p2.x,p2.y)});c.stroke()}));
+      /* tavak a földön */
+      S.deco.forEach(o=>{if(o.e!=='lake'||o.z>FAR)return;const p2=proj(o.x,o.z),w=GM.W*.3*p2.s*2.2;c.fillStyle='#5fb8f0';c.beginPath();c.ellipse(p2.x,p2.y,w,w*.28,0,0,7);c.fill();c.fillStyle='rgba(255,255,255,.4)';c.beginPath();c.ellipse(p2.x-w*.3,p2.y-w*.05,w*.25,w*.05,0,0,7);c.fill()});
+      const items=[];S.deco.forEach(o=>{if(o.e!=='lake'&&o.z<FAR)items.push({z:o.z,dc:o})});S.obs.forEach(o=>items.push({z:o.z,o}));S.drops.forEach(d=>items.push({z:d.z,d}));items.sort((p,q)=>q.z-p.z);
       let petDrawn=false;const drawPet=()=>{petDrawn=true;const p=proj(S.lx,0,S.h),sz=S.roll>0?70:90;
         c.fillStyle='rgba(0,0,0,.15)';const g0=proj(S.lx,0);c.beginPath();c.ellipse(g0.x,g0.y,34,8,0,0,7);c.fill();
         c.save();if(S.roll>0){c.translate(p.x,p.y-20);c.scale(1.1,.7);gPet(c,0,0,sz,'happy',(GM.t*12)%6.28)}else gPet(c,p.x,p.y-sz*.42,sz,GM.inv>0||!GM.on?'thirsty':'happy',(S.lx-S.lane)*-.3,GM.inv>0&&Math.floor(GM.inv*10)%2?.4:1);c.restore();
         if(S.shield>0){c.strokeStyle='rgba(63,169,245,.7)';c.lineWidth=4;c.beginPath();c.arc(p.x,p.y-40,52,0,7);c.stroke()}};
       items.forEach(it=>{
+        if(it.dc){const o=it.dc,p2=proj(o.x,o.z),fs=o.sz*p2.s*2;if(fs<3||p2.y>H+40)return;c.save();c.translate(p2.x,p2.y);if(o.flip)c.scale(-1,1);c.font=Math.round(fs)+'px system-ui';c.textAlign='center';c.textBaseline='bottom';c.fillText(o.e,0,fs*.08);c.restore();return}
         if(!petDrawn&&it.z<0)drawPet();
         if(it.d){const d=it.d;if(d.z>FAR)return;const p=proj(d.lane,d.z,30+Math.sin(GM.t*6+d.z)*4);if(d.pw){c.fillStyle='#fff';c.beginPath();c.arc(p.x,p.y,16*p.s*2,0,7);c.fill();c.font=Math.round(20*p.s*2)+'px system-ui';c.textAlign='center';c.textBaseline='middle';c.fillText(d.pw==='magnet'?'🧲':'🛡️',p.x,p.y)}
           else gDrop(c,p.x,p.y,Math.max(3,13*p.s*2),d.gold?'#ffc21a':'#3fa9f5',p.s>.3);return}
@@ -4294,7 +4318,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='11.1';
+const APP_VERSION='11.2';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
