@@ -2636,9 +2636,10 @@ function gSoccerBall(c,x,y,r,a,b){
   const A2=1.1,cA2=Math.cos(A2),sA2=Math.sin(A2);BALL3.cA2=cA2;
   const circ2=(f,k)=>{const o=[];for(let i=0;i<=k;i++){const t=i/k*Math.PI*2;o.push(f(t))}return o};
   BALL3.tri=[circ2(t=>[cA2,sA2*Math.cos(t),sA2*Math.sin(t)],48),circ2(t=>[-cA2,sA2*Math.cos(t),sA2*Math.sin(t)],48),circ2(t=>[Math.cos(t),0,Math.sin(t)],48)];
-  BALL3.stars=[];const R=A2*.74;for(let k=0;k<10;k++){const t=(k<5?k:k+1.5)*.42-.85,cn=nz([-Math.cos(R),Math.sin(R)*Math.cos(t),Math.sin(R)*Math.sin(t)]),u=nz(cr([1,0,0],cn)),w=cr(cn,u),pts=[];
-    for(let j=0;j<10;j++){const an=-Math.PI/2+j*Math.PI/5,rr2=(j%2?.05:.125),p=nz([cn[0]+rr2*(Math.cos(an)*u[0]-Math.sin(an)*w[0]),cn[1]+rr2*(Math.cos(an)*u[1]-Math.sin(an)*w[1]),cn[2]+rr2*(Math.cos(an)*u[2]-Math.sin(an)*w[2])]);pts.push(p)}
-    BALL3.stars.push({c:cn,pts})}
+  BALL3.stars=[];const sp=[];for(let k=0;k<5;k++){const t=.42+k*.57;sp.push([-.32,.95*Math.sin(t),.95*Math.cos(t)])}for(let k=0;k<4;k++){const t=Math.PI+.5+k*.72;sp.push([-.84,.54*Math.sin(t),.54*Math.cos(t)])}
+  sp.forEach(v=>{const cn=nz(v),u=nz(cr([1,0,0],cn)),w=cr(cn,u),pts=[];
+    for(let j=0;j<10;j++){const an=-Math.PI/2+j*Math.PI/5,rr2=(j%2?.05:.12),p=nz([cn[0]+rr2*(Math.cos(an)*u[0]-Math.sin(an)*w[0]),cn[1]+rr2*(Math.cos(an)*u[1]-Math.sin(an)*w[1]),cn[2]+rr2*(Math.cos(an)*u[2]-Math.sin(an)*w[2])]);pts.push(p)}
+    BALL3.stars.push({c:cn,pts})});
 })();
 const BB_KINDS=['classic','pro','stars'];
 function gBasketBall(c,x,y,r,a,b,gold,kind){
@@ -2652,12 +2653,12 @@ function gBasketBall(c,x,y,r,a,b,gold,kind){
     const id=BALL3.rid,d=id.data,ca=Math.cos(a),sa=Math.sin(a),cb=Math.cos(b),sb=Math.sin(b),h=n/2;
     for(let py=0;py<n;py++)for(let px=0;px<n;px++){const i=(py*n+px)*4,nx=(px+.5-h)/h,ny=-(py+.5-h)/h,q=nx*nx+ny*ny;if(q>1){d[i+3]=0;continue}
       const nz=Math.sqrt(1-q),xb=nx*cb-nz*sb,z1=nx*sb+nz*cb,yb=ny*ca+z1*sa,zb=-ny*sa+z1*ca,L=.55+.45*Math.max(0,-.45*nx+.55*ny+.7*nz);
-      const cA2=BALL3.cA2,col=xb>cA2?[204,38,44]:xb<-cA2?[30,52,140]:[250,246,238];
+      const P=xb>.64?0:xb>=0?1:xb>-.64?2:3,cl=yb>0?[0,1,2,1][P]:[1,0,1,2][P],col=cl===0?[204,38,44]:cl===2?[30,52,140]:[250,246,238];
       d[i]=col[0]*L;d[i+1]=col[1]*L;d[i+2]=col[2]*L;d[i+3]=255}
     BALL3.rx.putImageData(id,0,0);c.drawImage(cv,x-r,y-r,r*2,r*2);
     c.strokeStyle='#f4efe4';c.lineWidth=Math.max(1,r*.05);c.lineJoin='round';
     BALL3.stars.forEach(st=>{if(b3rot(st.c,a,b)[2]<.15)return;c.beginPath();st.pts.forEach((p,i)=>{const q=b3proj(b3rot(p,a,b),x,y,r);i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1])});c.closePath();c.stroke()});
-    b3seams(c,x,y,r,BALL3.tri.slice(0,2),a,b,'#121218',Math.max(1,r*.06));b3seams(c,x,y,r,[BALL3.tri[2]],a,b,'rgba(18,18,24,.8)',Math.max(.8,r*.04));
+    b3seams(c,x,y,r,BALL3.bb,a,b,'#121218',Math.max(1,r*.055));
   }
   if(r>9&&state.fx!=='low'){const pt=b3pebble(c);if(pt!=='none'){c.save();c.globalAlpha=kind==='pro'?.32:kind==='stars'?.14:.22;c.fillStyle=pt;c.fillRect(x-r,y-r,r*2,r*2);c.restore()}}
   if(kind!=='stars'){
@@ -5021,7 +5022,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()})
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='12.7';
+const APP_VERSION='12.8';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
