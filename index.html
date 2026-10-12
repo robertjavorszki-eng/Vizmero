@@ -528,6 +528,21 @@ body.modal{overflow:hidden}
 .help p:last-child{margin-bottom:0}
 .help ul{margin:0 0 8px;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
 .notrack .trk{display:none!important}
+.stats{display:flex;flex-direction:column;gap:12px}.sthead{display:flex;align-items:baseline;justify-content:space-between}.sthead h2{margin:0}
+.stkpi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.stkpi div{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px 12px;display:flex;flex-direction:column;gap:1px}
+.stkpi span{font-size:.75rem;font-weight:700;color:var(--muted)}.stkpi b{font-family:var(--display);font-weight:800;font-size:1.75rem;line-height:1.05;color:var(--water-deep);font-variant-numeric:tabular-nums}
+.stcar{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x pan-y;margin:0 -16px;padding:0 16px;scroll-padding:0 16px}
+.stcar::-webkit-scrollbar{display:none}
+.stcard{flex:0 0 100%;scroll-snap-align:start;box-sizing:border-box;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.stcard h3{margin:0;font-size:1.05rem}.stcard .sub2{margin:0;font-size:.8rem;color:var(--muted);font-weight:600}.stcard .cap{margin:0;font-size:.9rem;font-weight:600;line-height:1.4}.stcard .cap b{color:var(--water-deep)}
+.stcard svg text{font-family:var(--body);font-size:11px;font-weight:700;fill:var(--muted)}
+.stdots{display:flex;justify-content:center;gap:7px}.stdots button{width:8px;height:8px;border-radius:50%;border:none;padding:0;background:var(--line);cursor:pointer}.stdots button[aria-current="true"]{background:var(--water);width:20px;border-radius:5px}
+.stleg{display:flex;flex-direction:column;gap:7px;flex:1;font-size:.88rem;font-weight:600}.stleg div{display:flex;align-items:center;gap:8px}.stleg i{width:12px;height:12px;border-radius:4px;flex:none}.stleg span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.strow{display:grid;grid-template-columns:96px minmax(0,1fr) 56px;gap:10px;align-items:center;font-size:.88rem;font-weight:700}.strow .tr{height:10px;border-radius:999px;background:var(--bg);overflow:hidden}.strow .tr i{display:block;height:10px;border-radius:999px}.strow b{text-align:right}
+.sthm{display:grid;grid-template-columns:34px repeat(4,minmax(0,1fr)) 40px;gap:5px;font-size:.72rem;font-weight:700;color:var(--muted);align-items:center}.sthm i{height:24px;border-radius:7px;display:block}.sthm b{text-align:right;color:var(--ink);font-size:.78rem}
+.stmini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.stmini div{background:var(--bg);border-radius:12px;padding:7px 9px;display:flex;flex-direction:column}.stmini span{font-size:.7rem;font-weight:700;color:var(--muted)}.stmini b{font-size:1rem}
+.stempty{background:var(--surface);border:2px dashed var(--line);border-radius:18px;padding:16px;text-align:center;color:var(--muted);font-weight:600;margin:0}
+
 .trackoff{background:var(--surface);border:2px dashed var(--line);border-radius:20px;padding:16px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
 .trackoff .toic{font-size:2rem}.trackoff .totxt{margin:0;font-weight:600;color:var(--muted);line-height:1.4}.tobtns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .usebtn{width:100%;display:grid;grid-template-columns:44px 1fr;grid-template-rows:auto auto;column-gap:10px;text-align:left;align-items:center;background:var(--bg);border:2px solid var(--line);border-radius:16px;padding:12px;font:inherit;color:inherit;cursor:pointer}
@@ -646,6 +661,10 @@ body.modal{overflow:hidden}
     </div>
   </section>
 
+  <section class="trk stats" id="statsSec">
+    <div class="sthead"><h2 data-t="stTitle"></h2><span class="small" data-t="st30"></span></div>
+    <div id="stBody"></div>
+  </section>
   <p class="note" id="note"></p>
 </div>
 
@@ -1062,6 +1081,7 @@ body.modal{overflow:hidden}
     </div></details>
     <details class="hsec"><summary><span class="hic">📅</span>Utolsó 7 nap és statisztika</summary><div class="hbody">
       <p>Az oszlopok a napi mennyiséget mutatják. A színes, telt oszlop azt jelenti, hogy aznap meglett a cél. A szaggatott vonal az alapcél. Haladó módban alatta a <b>sorozat</b> (hány egymást követő napon lett meg a cél), a sikeres napok száma és az átlagok is látszanak. Az átlag csak azokat a napokat számolja, amikor rögzítettél valamit.</p>
+      <p>A főoldal alján az <b>Érdekességek</b> az utolsó 30 napodból mutatnak érdekes dolgokat: átlagokat, mikor iszol a legtöbbet, a napod ritmusát, az italaid arányát és a hét napjait. A diagramok között oldalra húzva (vagy a pöttyökre koppintva) válthatsz. Pár nap ivás után jelennek meg.</p>
     </div></details>
     <details class="hsec"><summary><span class="hic">⚙️</span>Beállítások</summary><div class="hbody">
       <p>Itt választhatsz <b>nyelvet</b> (magyar vagy angol), megadhatod vagy átírhatod a keresztneved, ezzel köszönt az app, és itt állíthatod a <b>mértékegységet</b> is: deciliter vagy liter. A megjelenés lehet <b>Nappali</b>, <b>Éjszakai</b> vagy <b>Rendszer</b> (ez a telefonod világos vagy sötét módját követi), és hat szín közül választhatsz: Óceán, Menta, Korall, Levendula, a színes <b>Vidám</b>, és a mindig sötét, élénk <b>Neon</b>.</p>
@@ -1161,6 +1181,7 @@ body.modal{overflow:hidden}
     </div></details>
     <details class="hsec"><summary><span class="hic">📅</span>Last 7 days and statistics</summary><div class="hbody">
       <p>The bars show the daily amount. A solid colored bar means you reached your goal that day. The dashed line is your base goal. In advanced mode you also see your <b>streak</b> (how many days in a row you hit your goal), the number of successful days and averages. Averages only count days on which you logged something.</p>
+      <p>At the bottom of the main screen, <b>Fun facts</b> show interesting things from your last 30 days: averages, when you drink the most, your daily rhythm, your drinks and the days of the week. Swipe sideways (or tap the dots) to switch charts. They appear after a few days of drinking.</p>
     </div></details>
     <details class="hsec"><summary><span class="hic">⚙️</span>Settings</summary><div class="hbody">
       <p>Choose the <b>language</b> (Hungarian or English), enter or change your first name for the greeting, and pick the <b>unit</b>: deciliters or liters. Appearance can be <b>Light</b>, <b>Dark</b> or <b>System</b> (follows your phone’s light or dark mode), with six color themes: Ocean, Mint, Coral, Lavender, the colorful <b>Cheerful</b>, and the always-dark, vivid <b>Neon</b>.</p>
@@ -5367,6 +5388,7 @@ function render(){
   const ex=$('expect');if(p.exp!=null&&tot<g&&p.exp>0&&p.exp<g){ex.hidden=false;ex.style.bottom=(p.exp/g*100)+'%'}else ex.hidden=true;
   $('fExp').textContent=p.exp!=null?amt(half(p.exp)):'–';
   $('fProj').textContent=p.proj!=null?amt(half(p.proj)):'–';
+  try{renderStats()}catch(e){}
   $('fLast').textContent=d.entries.length?hhmm(d.entries[d.entries.length-1].t):'–';
 
   ['act0','act3','act6'].forEach(id=>$(id).setAttribute('aria-pressed',+$(id).dataset.act===(d.act||0)));
@@ -5483,8 +5505,105 @@ function fxMon(raw){
 }
 function gameFit(){const sh=document.querySelector('#gameScrim .gsheet'),wr=sh&&sh.querySelector('.gwrap');if(!wr)return;
   const maxW=Math.round(Math.min(560,Math.max(320,window.innerHeight*.7))),wide=window.innerWidth>maxW+24;wr.style.maxWidth=wide?maxW+'px':'';sh.classList.toggle('wide',wide)}
+
+/* --- érdekességek: statisztikák az utolsó 30 napból --- */
+Object.assign(I18N.hu,{stTitle:'Érdekességek',st30:'utolsó 30 nap',stEmpty:'Pár nap ivás után itt érdekességeket látsz arról, mikor és mit iszol. 💧',
+  stAvg:'Átlag naponta',stFirst:'Első korty átlagban',stSip:'Egy ivás átlagban',stBest:'Legjobb nap',
+  stWhenT:'Mikor iszol?',stWhenS:'Átlag óránként',stPeak:h=>'csúcs: '+h+' óra',stWhenCap:(a,b)=>'A legtöbbet <b>'+a+' és '+b+' óra között</b> iszol.',
+  stMorn:'délelőtt',stAft:'délután',stEve:'este',stRhyT:'A napod ritmusa',stRhyS:'Mint egy óra: minél hosszabb a cikk, annál többet iszol akkor',stPeakC:'csúcs',
+  stRhyCap:(a,b,p)=>a+' és '+b+' óra között iszol, a <b>'+p+'</b> a legerősebb.',stWhatT:'Mit iszol?',stWhatS:'Egy átlagos napod italai',
+  stWaterCap:p=>p>=50?'Az italaid <b>'+p+'%-a víz</b> – szuper!':'Az italaidnak csak <b>'+p+'%-a víz</b> – próbálj több vizet inni!',stOnlyWater:'Eddig csak vizet rögzítettél – ez a legjobb választás! (Haladó módban más italokat is felvehetsz.)',
+  stBarsT:'Italok naponta',stBarsS:'Átlagosan ennyi fogy belőlük egy nap',stWeekT:'A hét napjai',stWeekS:'Mikor iszol többet? Sötétebb = több',
+  stP:['reggel','délelőtt','délután','este'],stWd:['H','K','Sze','Cs','P','Szo','V'],stWdL:['hétfő','kedd','szerda','csütörtök','péntek','szombat','vasárnap'],
+  stWeekCap:(a,p,b)=>'<b>'+a+' '+p+'</b> vagy a legszomjasabb, '+b+' iszol a legkevesebbet.',stWdOn:['hétfőn','kedden','szerdán','csütörtökön','pénteken','szombaton','vasárnap'],stLess:'kevesebb',stMore:'több',stSum:'össz.'});
+Object.assign(I18N.en,{stTitle:'Fun facts',st30:'last 30 days',stEmpty:'After a few days of drinking you’ll see fun facts here about when and what you drink. 💧',
+  stAvg:'Daily average',stFirst:'First sip on average',stSip:'Average drink',stBest:'Best day',
+  stWhenT:'When do you drink?',stWhenS:'Average per hour',stPeak:h=>'peak: '+h+':00',stWhenCap:(a,b)=>'You drink the most <b>between '+a+' and '+b+'</b>.',
+  stMorn:'morning',stAft:'afternoon',stEve:'evening',stRhyT:'Your daily rhythm',stRhyS:'Like a clock: the longer the slice, the more you drink then',stPeakC:'peak',
+  stRhyCap:(a,b,p)=>'You drink from '+a+' to '+b+', the <b>'+p+'</b> is your strongest time.',stWhatT:'What do you drink?',stWhatS:'Your drinks on an average day',
+  stWaterCap:p=>p>=50?'<b>'+p+'% of your drinks</b> are water – great!':'Only <b>'+p+'% of your drinks</b> are water – try to drink more water!',stOnlyWater:'So far you’ve only logged water – the best choice! (In advanced mode you can add other drinks too.)',
+  stBarsT:'Drinks per day',stBarsS:'How much of each you have on an average day',stWeekT:'Days of the week',stWeekS:'When do you drink more? Darker = more',
+  stP:['early','morning','afternoon','evening'],stWd:['M','T','W','T','F','S','S'],stWdL:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+  stWeekCap:(a,p,b)=>'You’re thirstiest on <b>'+a+' '+p+'</b> and drink least on '+b+'.',stWdOn:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],stLess:'less',stMore:'more',stSum:'total'});
+try{applyLang()}catch(e){}
+let statKey='';
+function statData(){
+  const now=new Date(),days=[];
+  for(let i=0;i<30;i++){const d=new Date(now);d.setDate(d.getDate()-i);const k=keyOf(d),day=state.days[k];if(day&&day.entries&&day.entries.length)days.push({d,k,e:day.entries})}
+  if(days.length<3)return null;
+  const n=days.length,hour=new Array(24).fill(0),drink={},wdSum=new Array(7).fill(0),wdCnt=new Array(7).fill(0),hm=[...Array(7)].map(()=>[0,0,0,0]);
+  let tot=0,cnt=0,first=0;
+  days.forEach(x=>{const wd=(x.d.getDay()+6)%7;wdCnt[wd]++;let ds=0,f=1e9;
+    x.e.forEach(e=>{const t=new Date(e.t),h=t.getHours(),m=h*60+t.getMinutes();hour[h]+=e.dl;tot+=e.dl;ds+=e.dl;cnt++;f=Math.min(f,m);
+      const ty=state.ui==='advanced'?(e.type||'water'):'water';drink[ty]=(drink[ty]||0)+e.dl;hm[wd][h<9?0:h<12?1:h<17?2:3]+=e.dl});
+    wdSum[wd]+=ds;first+=f});
+  return {n,tot,cnt,first:first/n,hour:hour.map(v=>v/n),drink:Object.entries(drink).map(([id,v])=>({id,v:v/n})).sort((a,b)=>b.v-a.v),
+    wdAvg:wdSum.map((v,i)=>wdCnt[i]?v/wdCnt[i]:null),hm:hm.map((r,i)=>r.map(v=>wdCnt[i]?v/wdCnt[i]:null))};
+}
+function stFmtMin(m){m=Math.round(m);return Math.floor(m/60)+':'+String(m%60).padStart(2,'0')}
+function stBarsSVG(S){
+  const h=S.hour,act=h.map((v,i)=>v>0.05?i:-1).filter(i=>i>=0),a=Math.min(...act),b=Math.max(...act),from=Math.max(0,Math.min(a,6)),to=Math.min(23,Math.max(b,21)),N=to-from+1,mx=Math.max(...h),bw=330/N,peak=h.indexOf(mx);
+  let r='<line x1="0" y1="126" x2="330" y2="126" stroke="var(--line)" stroke-width="1.5"></line>';
+  for(let i=0;i<N;i++){const v=h[from+i],bh=Math.max(v>0?3:0,v/mx*112),x=i*bw+bw*.14;if(bh>0)r+='<rect x="'+x.toFixed(1)+'" y="'+(126-bh).toFixed(1)+'" width="'+(bw*.72).toFixed(1)+'" height="'+bh.toFixed(1)+'" rx="4" fill="'+(from+i===peak?'var(--water)':'#8fd3fb')+'"></rect>'}
+  r+='<text x="'+((peak-from)*bw+bw/2).toFixed(1)+'" y="9" text-anchor="middle" style="fill:var(--water-deep)">'+esc(uv(mx))+'</text>';
+  for(let hh=from;hh<=to;hh++)if(hh%3===0)r+='<text x="'+((hh-from)*bw+bw/2).toFixed(1)+'" y="144" text-anchor="middle">'+hh+'</text>';
+  return {svg:'<svg width="100%" height="150" viewBox="0 0 330 150" role="img" aria-label="'+esc(t('stWhenT'))+'">'+r+'</svg>',peak};
+}
+function stRingSVG(S){
+  const h=S.hour,mx=Math.max(...h),cx=130,cy=130,r0=52;let r='<circle cx="130" cy="130" r="114" fill="none" stroke="var(--line)" stroke-width="1"></circle>';
+  for(let i=0;i<24;i++){const v=h[i],a0=i/24*Math.PI*2-Math.PI/2+.02,a1=(i+1)/24*Math.PI*2-Math.PI/2-.02,r1=v>0.05?r0+v/mx*62:r0+3,col=v===mx?'var(--water)':v>0.05?'#8fd3fb':'var(--line)';
+    const P=(rr,a)=>(cx+rr*Math.cos(a)).toFixed(1)+' '+(cy+rr*Math.sin(a)).toFixed(1);
+    r+='<path d="M'+P(r0,a0)+' L'+P(r1,a0)+' A'+r1.toFixed(1)+' '+r1.toFixed(1)+' 0 0 1 '+P(r1,a1)+' L'+P(r0,a1)+' A'+r0+' '+r0+' 0 0 0 '+P(r0,a0)+' Z" fill="'+col+'"></path>'}
+  r+='<text x="130" y="10" text-anchor="middle">0</text><text x="254" y="134" text-anchor="middle">6</text><text x="130" y="258" text-anchor="middle">12</text><text x="6" y="134" text-anchor="middle">18</text>';
+  const pk=h.indexOf(mx);r+='<text x="130" y="122" text-anchor="middle">'+esc(t('stPeakC'))+'</text><text x="130" y="146" text-anchor="middle" style="font-size:24px;font-weight:800;fill:var(--water-deep)">'+pk+':00</text>';
+  return '<svg width="250" height="250" viewBox="-10 -10 280 280" role="img" aria-label="'+esc(t('stRhyT'))+'" style="align-self:center">'+r+'</svg>';
+}
+function renderStats(){
+  const box=$('stBody');if(!box)return;
+  if(!tracking()){return}
+  const S=statData(),key=JSON.stringify([S&&S.tot,S&&S.cnt,S&&S.n,state.lang,state.unit,state.ui,state.accent,state.mode]);if(key===statKey)return;statKey=key;
+  if(!S){box.innerHTML='<p class="stempty">'+esc(t('stEmpty'))+'</p>';return}
+  const Ld=L(),wdBest=S.wdAvg.reduce((bi,v,i,a)=>v!=null&&(bi<0||v>a[bi])?i:bi,-1),wdLeast=S.wdAvg.reduce((bi,v,i,a)=>v!=null&&(bi<0||v<a[bi])?i:bi,-1);
+  let h='<div class="stkpi"><div><span>'+esc(t('stAvg'))+'</span><b>'+esc(amt(r1(S.tot/S.n)))+'</b></div><div><span>'+esc(t('stFirst'))+'</span><b>'+stFmtMin(S.first)+'</b></div>'+
+    '<div><span>'+esc(t('stSip'))+'</span><b>'+esc(amt(r1(S.tot/S.cnt)))+'</b></div><div><span>'+esc(t('stBest'))+'</span><b>'+esc(Ld.stWdL[wdBest]||'–')+'</b></div></div>';
+  const cards=[],B=stBarsSVG(S),hr=S.hour,part=(a,b)=>hr.slice(a,b).reduce((x,y)=>x+y,0);
+  cards.push('<div class="stcard"><h3>'+esc(t('stWhenT'))+'</h3><p class="sub2">'+esc(t('stWhenS'))+' · '+esc(t('stPeak',B.peak))+'</p>'+B.svg+
+    '<div class="stmini"><div><span>'+esc(t('stMorn'))+'</span><b>'+esc(amt(r1(part(5,12))))+'</b></div><div><span>'+esc(t('stAft'))+'</span><b>'+esc(amt(r1(part(12,17))))+'</b></div><div><span>'+esc(t('stEve'))+'</span><b>'+esc(amt(r1(part(17,24)+part(0,5))))+'</b></div></div>'+
+    '<p class="cap">'+t('stWhenCap',B.peak,B.peak+1)+'</p></div>');
+  const act=hr.map((v,i)=>v>0.05?i:-1).filter(i=>i>=0),pp=[part(5,9),part(9,12),part(12,17),part(17,24)],pbest=pp.indexOf(Math.max(...pp));
+  cards.push('<div class="stcard"><h3>'+esc(t('stRhyT'))+'</h3><p class="sub2">'+esc(t('stRhyS'))+'</p>'+stRingSVG(S)+'<p class="cap">'+t('stRhyCap',Math.min(...act),Math.max(...act)+1,esc(Ld.stP[pbest]))+'</p></div>');
+  const D=S.drink,dt=D.reduce((x,y)=>x+y.v,0),wv=(D.find(x=>x.id==='water')||{v:0}).v,wp=Math.round(wv/dt*100);
+  if(D.length>1){
+    const C=2*Math.PI*70;let off=0,ring='';D.forEach(x=>{const Lx=x.v/dt*C;ring+='<circle cx="100" cy="100" r="70" fill="none" stroke="'+drinkOf(x.id).c+'" stroke-width="26" stroke-dasharray="'+Math.max(0,Lx-2).toFixed(1)+' '+(C-Lx+2).toFixed(1)+'" stroke-dashoffset="'+(-off).toFixed(1)+'" transform="rotate(-90 100 100)"></circle>';off+=Lx});
+    const top=D[0];
+    cards.push('<div class="stcard"><h3>'+esc(t('stWhatT'))+'</h3><p class="sub2">'+esc(t('stWhatS'))+'</p><div style="display:flex;align-items:center;gap:14px"><svg width="140" height="140" viewBox="0 0 200 200" role="img" aria-label="'+esc(t('stWhatT'))+'">'+ring+
+      '<text x="100" y="98" text-anchor="middle" style="font-size:30px;font-weight:800;fill:var(--ink)">'+Math.round(top.v/dt*100)+'%</text><text x="100" y="120" text-anchor="middle" style="font-size:14px">'+esc(drinkName(top.id))+'</text></svg>'+
+      '<div class="stleg">'+D.slice(0,6).map(x=>'<div><i style="background:'+drinkOf(x.id).c+'"></i><span>'+esc(drinkName(x.id))+'</span><b>'+esc(amt(r1(x.v)))+'</b></div>').join('')+'</div></div><p class="cap">'+t('stWaterCap',wp)+'</p></div>');
+    const mxd=D[0].v;
+    cards.push('<div class="stcard"><h3>'+esc(t('stBarsT'))+'</h3><p class="sub2">'+esc(t('stBarsS'))+'</p><div style="display:flex;height:30px;border-radius:12px;overflow:hidden;gap:2px">'+
+      D.map(x=>'<div style="width:'+(x.v/dt*100).toFixed(1)+'%;background:'+drinkOf(x.id).c+'"></div>').join('')+'</div>'+
+      D.slice(0,6).map(x=>'<div class="strow"><span style="display:flex;align-items:center;gap:7px;min-width:0"><i style="width:12px;height:12px;border-radius:4px;background:'+drinkOf(x.id).c+';flex:none"></i><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(drinkName(x.id))+'</span></span><div class="tr"><i style="width:'+(x.v/mxd*100).toFixed(0)+'%;background:'+drinkOf(x.id).c+'"></i></div><b>'+esc(amt(r1(x.v)))+'</b></div>').join('')+
+      '<p class="cap">'+t('stWaterCap',wp)+'</p></div>');
+  }else cards.push('<div class="stcard"><h3>'+esc(t('stWhatT'))+'</h3><p class="sub2">'+esc(t('stWhatS'))+'</p><div style="display:flex;align-items:center;gap:14px"><svg width="110" height="110" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="70" fill="none" stroke="'+drinkOf('water').c+'" stroke-width="26"></circle><text x="100" y="110" text-anchor="middle" style="font-size:30px;font-weight:800;fill:var(--ink)">100%</text></svg><p class="cap" style="flex:1">'+esc(t('stOnlyWater'))+'</p></div></div>');
+  const all=S.hm.flat().filter(v=>v!=null),hmx=Math.max(...all,0.1);let best=[0,0],bv=-1;
+  S.hm.forEach((r,i)=>r.forEach((v,j)=>{if(v!=null&&v>bv){bv=v;best=[i,j]}}));
+  const shade=v=>{if(v==null)return 'transparent';const f=v/hmx;return f>=.98?'var(--water)':f>.7?'#5bb7ef':f>.45?'#a9daf8':f>.2?'#cfe9fb':'#e6f4fd'};
+  let g='<div class="sthm"><span></span>'+Ld.stP.map(p=>'<span style="text-align:center">'+esc(p)+'</span>').join('')+'<span style="text-align:right">'+esc(t('stSum'))+'</span>';
+  S.hm.forEach((r,i)=>{g+='<span>'+esc(Ld.stWd[i])+'</span>'+r.map(v=>'<i style="background:'+shade(v)+'"></i>').join('')+'<b>'+(S.wdAvg[i]!=null?esc(uv(r1(S.wdAvg[i]))):'–')+'</b>'});
+  g+='</div><div style="display:flex;align-items:center;gap:6px;font-size:.7rem;font-weight:700;color:var(--muted)"><span>'+esc(t('stLess'))+'</span>'+['#e6f4fd','#cfe9fb','#a9daf8','#5bb7ef','var(--water)'].map(c=>'<i style="width:20px;height:10px;border-radius:3px;background:'+c+';display:block"></i>').join('')+'<span>'+esc(t('stMore'))+'</span></div>';
+  cards.push('<div class="stcard"><h3>'+esc(t('stWeekT'))+'</h3><p class="sub2">'+esc(t('stWeekS'))+'</p>'+g+'<p class="cap">'+t('stWeekCap',esc(Ld.stWdL[best[0]].charAt(0).toUpperCase()+Ld.stWdL[best[0]].slice(1)),esc(Ld.stP[best[1]]),esc(Ld.stWdOn[wdLeast]))+'</p></div>');
+  h+='<div class="stcar" id="stCar">'+cards.join('')+'</div><div class="stdots" id="stDots">'+cards.map((_,i)=>'<button aria-label="'+(i+1)+'"></button>').join('')+'</div>';
+  box.innerHTML=h;
+  const car=$('stCar'),dots=[...$('stDots').children],cur=Math.min(state.statCard||0,cards.length-1);
+  const mark=i=>dots.forEach((d,j)=>d.setAttribute('aria-current',j===i));
+  const step=()=>car.clientWidth-20;requestAnimationFrame(()=>{car.scrollLeft=cur*step();mark(cur)});
+  let tm;car.addEventListener('scroll',()=>{clearTimeout(tm);tm=setTimeout(()=>{const i=Math.round(car.scrollLeft/step());mark(i);if(state.statCard!==i){state.statCard=i;saveLocal()}},120)},{passive:true});
+  dots.forEach((d,i)=>d.onclick=()=>car.scrollTo({left:i*step(),behavior:'smooth'}));
+}
+statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.1',hu:['📊 Új: Érdekességek a főoldal alján – mikor és mit iszol, a napod ritmusa, a hét napjai. Oldalra húzva váltogathatod!'],en:['📊 New: Fun facts at the bottom of the main screen – when and what you drink, your daily rhythm, days of the week. Swipe to switch!']},
  {v:'14.0',hu:['✨ Szellősebb lett a „Mi újság?” és a célbeállító ablak'],en:['✨ The “What’s new” and goal setup windows got more breathing room']},
  {v:'13.9',hu:['💧 A víz most világoskék és szinte átlátszó a kijelzőkön – minden színtémánál'],en:['💧 Water is now light blue and almost see-through in the displays – in every color theme']},
  {v:'13.8',hu:['⚙️ Új „Automatikus” effektszint: a készülékhez igazodik, és ha egy játék akad, magától lejjebb vesz','📱 Tableten és fekvő telefonon a játéktér telefonnyi szélességű, középen','🔄 Fekvő telefonon a játék kéri, hogy fordítsd álló helyzetbe'],en:['⚙️ New “Automatic” effects level: adapts to your device and steps down by itself if a game stutters','📱 On tablets and landscape phones the game area is phone-sized and centered','🔄 On a landscape phone the game asks you to turn it upright']},
@@ -5517,7 +5636,7 @@ function startInfo(){
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.0';
+const APP_VERSION='14.1';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
