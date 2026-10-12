@@ -297,6 +297,16 @@ html:root[data-accent="neon"] #act0{--cc:#c6ff4f}html:root[data-accent="neon"] #
 html:root[data-accent="vidam"] .segrow .chip,html:root[data-accent="neon"] .segrow .chip{border-color:transparent;background:color-mix(in srgb,var(--cc) 16%,var(--surface));color:var(--ink)}
 html:root[data-accent="vidam"] .segrow .chip svg,html:root[data-accent="neon"] .segrow .chip svg{color:var(--cc)}
 html:root[data-accent="vidam"] .segrow .chip[aria-pressed="true"],html:root[data-accent="neon"] .segrow .chip[aria-pressed="true"]{border-color:var(--cc);background:color-mix(in srgb,var(--cc) 32%,var(--surface))}
+/* kiválasztott gomb: jól látható minden témában (vastag keret, fény, pipa) */
+.segrow .chip{--sel:var(--cc,var(--water))}.drinks .chip{--sel:var(--dc,var(--water))}
+.segrow .chip,.drinks .chip{position:relative;transition:background .15s,border-color .15s,box-shadow .15s}
+.segrow .chip[aria-pressed="true"],.drinks .chip[aria-pressed="true"]{border-width:2.5px;border-color:var(--sel);font-weight:800;box-shadow:0 0 0 3px color-mix(in srgb,var(--sel) 30%,transparent)}
+.drinks .chip[aria-pressed="true"]{background:color-mix(in srgb,var(--sel) 26%,var(--surface))}
+html:root[data-accent="vidam"] .segrow .chip[aria-pressed="true"],html:root[data-accent="neon"] .segrow .chip[aria-pressed="true"]{background:color-mix(in srgb,var(--cc) 42%,var(--surface))}
+html:root[data-accent="vidam"] .segrow .chip:not([aria-pressed="true"]),html:root[data-accent="neon"] .segrow .chip:not([aria-pressed="true"]){background:color-mix(in srgb,var(--cc) 10%,var(--surface))}
+.segrow .chip[aria-pressed="true"]::after,.drinks .chip[aria-pressed="true"]::after{content:"✓";position:absolute;top:-8px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--sel);color:#fff;font:900 12px/20px var(--body);text-align:center;box-shadow:0 0 0 2px var(--bg);pointer-events:none}
+.drinks{padding-top:9px;margin-top:-9px}
+
 html:root[data-accent="vidam"][data-dark="0"] .pace{background:#fff3b8;border-color:transparent;color:#3f3200}
 html:root[data-accent="vidam"][data-dark="0"] .pace .motto{color:#6b5700}
 html:root[data-accent="vidam"][data-dark="1"] .pace{background:#2b2350;border-color:#4a3f86}
@@ -5147,7 +5157,7 @@ $('hot').onclick=()=>{const k=keyOf(new Date()),d=ensure(k);d.hot=!d.hot;render(
 function buildDrinkRow(){
   const row=$('drinkRow');row.textContent='';
   if(!visibleDrinks().includes(state.drink))state.drink=visibleDrinks()[0]||'water';
-  visibleDrinks().forEach(id=>{const d=drinkOf(id),b=document.createElement('button');b.className='chip';b.style.setProperty('--dc',d.c);b.dataset.drink=id;
+  visibleDrinks().forEach(id=>{const d=drinkOf(id),b=document.createElement('button');b.className='chip';b.style.setProperty('--dc',d.c);if(String(d.c).includes('--liquid'))b.style.setProperty('--sel','var(--water)');b.dataset.drink=id;
     b.append(iconEl(id),drinkName(id));b.onclick=()=>{state.drink=id;renderDrinkRow();writeSettings()};row.appendChild(b)});
   renderDrinkRow();
 }
@@ -5763,6 +5773,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.4',hu:['✅ A kiválasztott gombok (Mai nap, Mit iszol?) most sötét módban is jól látszanak: vastagabb keret, fény és egy kis pipa.'],en:['✅ Selected buttons (Today, What are you drinking?) are now easy to see in dark mode too: thicker border, glow and a small check mark.']},
  {v:'14.3',hu:['🧊 Új játék: Kockaeső! Forgasd és tologasd a hulló zselékockákat, a teli sorok kifröccsennek. Négy sor egyszerre: szökőár! 🌊','📦 Van tartalék doboz, előre látod a következő darabokat, és a halvány körvonal mutatja, hová esik a darab.'],en:['🧊 New game: Block Rain! Turn and slide the falling jelly blocks, full rows splash away. Four rows at once: tsunami! 🌊','📦 There’s a hold box, you can see the next pieces, and a faint outline shows where the piece will land.']},
  {v:'14.2',hu:['🏀 Szemből kosár: puhább gyűrű, könnyebben bemegy a labda.','🏀 Oldalról kosár: kicsit kisebb gyűrű, és közelről már nem pattan vissza alulról a perem.'],en:['🏀 Front hoops: softer rim, the ball goes in more easily.','🏀 Side hoops: slightly smaller rim, and close shots no longer bounce off the rim from below.']},
  {v:'14.1',hu:['📊 Új: Érdekességek a főoldal alján – mikor és mit iszol, a napod ritmusa, a hét napjai. Oldalra húzva váltogathatod!'],en:['📊 New: Fun facts at the bottom of the main screen – when and what you drink, your daily rhythm, days of the week. Swipe to switch!']},
@@ -5798,7 +5809,7 @@ function startInfo(){
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.3';
+const APP_VERSION='14.4';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
