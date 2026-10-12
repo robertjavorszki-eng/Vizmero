@@ -512,6 +512,8 @@ body.modal{overflow:hidden}
 
 .onb{border-radius:22px;max-width:400px;padding:24px 20px;gap:0}
 .onb>div{display:flex;flex-direction:column;gap:12px}
+.sheet.onb.info{gap:14px}.sheet.info>.drop{margin:10px 0 4px 10px;flex-shrink:0}.sheet.info>#infoBody{display:flex;flex-direction:column;gap:10px}.sheet.info>#infoBody>p{margin:0}.sheet.info>#infoOk{margin-top:6px}
+#onbGoal,#goalSheetBody{display:flex;flex-direction:column;gap:12px}#onbGoal p,#goalSheetBody p{margin:0}
 .onb h3{margin:0;font-size:1.35rem;text-wrap:balance}
 .onb p{margin:0}
 .drop{width:54px;height:54px;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);background:linear-gradient(135deg,var(--b1),var(--b4));margin-bottom:4px}
@@ -5483,6 +5485,7 @@ function gameFit(){const sh=document.querySelector('#gameScrim .gsheet'),wr=sh&&
   const maxW=Math.round(Math.min(560,Math.max(320,window.innerHeight*.7))),wide=window.innerWidth>maxW+24;wr.style.maxWidth=wide?maxW+'px':'';sh.classList.toggle('wide',wide)}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.0',hu:['✨ Szellősebb lett a „Mi újság?” és a célbeállító ablak'],en:['✨ The “What’s new” and goal setup windows got more breathing room']},
  {v:'13.9',hu:['💧 A víz most világoskék és szinte átlátszó a kijelzőkön – minden színtémánál'],en:['💧 Water is now light blue and almost see-through in the displays – in every color theme']},
  {v:'13.8',hu:['⚙️ Új „Automatikus” effektszint: a készülékhez igazodik, és ha egy játék akad, magától lejjebb vesz','📱 Tableten és fekvő telefonon a játéktér telefonnyi szélességű, középen','🔄 Fekvő telefonon a játék kéri, hogy fordítsd álló helyzetbe'],en:['⚙️ New “Automatic” effects level: adapts to your device and steps down by itself if a game stutters','📱 On tablets and landscape phones the game area is phone-sized and centered','🔄 On a landscape phone the game asks you to turn it upright']},
  {v:'13.7',hu:['💧 Első indításkor választhatsz: vízivás követése, vagy csak kedvenc és játékok','🎂 Napi cél életkor alapján is – gyerekeknek ez a javasolt, nem kell testsúly','⚙️ A vízivás követése a Beállításokban bármikor be- és kikapcsolható'],en:['💧 On first start you choose: drink tracking, or just buddy and games','🎂 Daily goal by age too – recommended for kids, no weight needed','⚙️ Drink tracking can be switched on or off in Settings any time']},
@@ -5514,7 +5517,7 @@ function startInfo(){
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='13.9';
+const APP_VERSION='14.0';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
