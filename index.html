@@ -1952,7 +1952,7 @@ $('petVoicePlay').onclick=()=>petVoice(true);
 /* @@ARC_START@@ */
 /* --- Játékterem: közös motor --- */
 const ARC={};
-const ARC_ORDER=['catch','breakout','bubble','fly','road','run','shmup','jump','soccer','hoops','hoops2','memo','merge','pipe','sort','jugs','jam','ice','soko','sudoku'];
+const ARC_ORDER=['catch','breakout','bubble','fly','road','run','shmup','blocks','jump','soccer','hoops','hoops2','memo','merge','pipe','sort','jugs','jam','ice','soko','sudoku'];
 function arcKeys(){return ARC_ORDER.filter(k=>ARC[k])}
 function normalizeGame(){
   const g=state.game&&typeof state.game==='object'?state.game:{};
@@ -2447,6 +2447,20 @@ Object.assign(I18N.en,{gn_shmup:'Drop Hunter',
   bio_meadow:'Flower meadow',bio_forest:'Forest',bio_lake:'Lakes & islands',bio_beach:'Sandy beach',bio_city:'City',bio_snow:'Snowy peaks',bio_desert:'Desert',
   pu_spread:'Spread shot',pu_rapid:'Rapid fire',pu_rocket:'Rockets',pu_laser:'Water beam',pu_shield:'Bubble shield',pu_magnet:'Drop magnet',pu_wing:'Helper drones',pu_bomb:'+1 tsunami',pu_heart:'+1 life'});
 I18N.en.gTips.shmup=['👆 Drag anywhere: your buddy moves the same way. Firing is automatic.','💧 Shoot the drops – they fly to you and score points. Gold drops are worth more.','🧂☀️🐝⛈️🌵 Enemies shoot back! Clouds flash yellow first, then drop lightning.','🔱 spread, ⚡ rapid fire, 🚀 rockets, 💦 water beam, 🫧 shield, 🧲 magnet, 🐤 helper drones, ❤️ life.','🌊 The bottom-right button starts a tsunami that clears everything. Getting hit weakens your weapon by one step.','⚠️ A boss comes at the end of level 2 and every three levels after. Its white-ringed shots take several hits, its laser shows a red dashed line first, and shoot the big orb before it bursts!','🟣 From level 5, purple armored shots appear: you can’t shoot them, dodge them. From level 6, crows dive at you – their eyes flash red first.'];
+
+/* Kockaeső szövegek */
+Object.assign(I18N.hu,{gn_blocks:'Kockaeső',
+  gh_blocks:'Hulló zselékockák! Forgasd és tologasd őket úgy, hogy teli sorok legyenek – azok kifröccsennek. Ha a pohár megtelik, vége. Négy sor egyszerre: szökőár, sok pont!',
+  ch_blocks_lines:n=>'Tüntess el '+n+' sort egy játékban',ch_blocks_score:n=>'Szerezz '+n+' pontot egy játékban',ch_blocks_quad:n=>n>1?'Csinálj '+n+' szökőárat (4 sor egyszerre)':'Csinálj szökőárat (4 sor egyszerre)',
+  bkHold:'TARTALÉK',bkNext:'KÖVETKEZŐ',bkLines:'sor',bkQuad:'Szökőár! 🌊',bkPerfect:'Üres a pohár! ✨',bkCombo:n=>'Kombó ×'+n,
+  bkHint:'Koppints: forgat · Húzd: mozgat · Pöccints le: ledob',gOver_full:'Megtelt a pohár!'});
+I18N.hu.gTips.blocks=['👆 Koppints bárhová: a darab elfordul.','↔️ Húzd az ujjad oldalra: a darab lépésenként jön utánad.','⬇️ Húzd lassan lefelé: gyorsabban esik. Pöccintsd le gyorsan: azonnal leesik.','📦 Koppints a TARTALÉK dobozra (vagy pöccints felfelé), és félreteheted a darabot későbbre.','🌊 Négy sor egyszerre = szökőár, ez éri a legtöbb pontot. Egymás utáni törlések kombót adnak.','👻 A halvány körvonal mutatja, hová fog esni a darab.','⌨️ Billentyűzeten: nyilak, Szóköz = ledob, C = tartalék, Z = visszafelé forgat.'];
+Object.assign(I18N.en,{gn_blocks:'Block Rain',
+  gh_blocks:'Falling jelly blocks! Turn and slide them to fill whole rows – full rows splash away. If the glass fills up, it’s over. Four rows at once: a tsunami, lots of points!',
+  ch_blocks_lines:n=>'Clear '+n+' rows in one game',ch_blocks_score:n=>'Score '+n+' points in one game',ch_blocks_quad:n=>n>1?'Make '+n+' tsunamis (4 rows at once)':'Make a tsunami (4 rows at once)',
+  bkHold:'HOLD',bkNext:'NEXT',bkLines:'rows',bkQuad:'Tsunami! 🌊',bkPerfect:'Empty glass! ✨',bkCombo:n=>'Combo ×'+n,
+  bkHint:'Tap: turn · Drag: move · Flick down: drop',gOver_full:'The glass is full!'});
+I18N.en.gTips.blocks=['👆 Tap anywhere: the piece turns.','↔️ Drag sideways: the piece follows step by step.','⬇️ Drag slowly down: it falls faster. Flick down quickly: it drops at once.','📦 Tap the HOLD box (or flick up) to save the piece for later.','🌊 Four rows at once = tsunami, worth the most points. Back-to-back clears give combos.','👻 The faint outline shows where the piece will land.','⌨️ Keyboard: arrows, Space = drop, C = hold, Z = turn back.'];
 
 /* Időjárás a szabadtéri játékokban */
 const WX_TYPES={
@@ -4775,6 +4789,150 @@ ARC.shmup=(()=>{
   };
 })();
 
+/* Kockaeső – lehulló zselékockák, teli sorok kifröccsennek */
+ARC.blocks=(()=>{
+  const S={},CW=10,RH=22,HID=2;
+  const SH={I:[[0,1],[1,1],[2,1],[3,1]],O:[[1,0],[2,0],[1,1],[2,1]],T:[[1,0],[0,1],[1,1],[2,1]],S:[[1,0],[2,0],[0,1],[1,1]],Z:[[0,0],[1,0],[1,1],[2,1]],J:[[0,0],[0,1],[1,1],[2,1]],L:[[2,0],[0,1],[1,1],[2,1]]};
+  const COL={I:'#3fc8f2',O:'#ffd23b',T:'#9a6cf8',S:'#4fd18b',Z:'#ff5f8f',J:'#3f7cf5',L:'#ff9f1c'};
+  const KICK=[[0,0],[-1,0],[1,0],[0,-1],[-2,0],[2,0],[-1,-1],[1,-1],[0,1]];
+  const low=()=>state.fx==='low';
+  function shade(h,a){const n=parseInt(h.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,m=a>0?255:0,k=Math.abs(a);
+    return 'rgb('+Math.round(r+(m-r)*k)+','+Math.round(g+(m-g)*k)+','+Math.round(b+(m-b)*k)+')'}
+  /* kockák előre megrajzolva – gyenge telefonon se akadjon */
+  function sprites(){
+    const s=S.cs,d=Math.min(3,(GM.ctx&&GM.ctx.getTransform().a)||1);S.spr={};
+    for(const k in COL){const cv=document.createElement('canvas');cv.width=cv.height=Math.ceil(s*d);const c=cv.getContext('2d');c.scale(d,d);const col=COL[k],r=Math.max(2,s*.2);
+      if(low()){c.fillStyle=col;rr(c,1,1,s-2,s-2,r);c.fill();c.fillStyle='rgba(255,255,255,.4)';rr(c,s*.2,s*.15,s*.4,s*.14,s*.07);c.fill()}
+      else{const g=c.createLinearGradient(0,0,0,s);g.addColorStop(0,shade(col,.38));g.addColorStop(.55,col);g.addColorStop(1,shade(col,-.22));c.fillStyle=g;rr(c,1,1,s-2,s-2,r);c.fill();
+        c.strokeStyle=shade(col,-.3);c.lineWidth=1;rr(c,1.5,1.5,s-3,s-3,r);c.stroke();
+        c.fillStyle='rgba(255,255,255,.6)';rr(c,s*.18,s*.13,s*.44,s*.15,s*.075);c.fill();
+        c.fillStyle='rgba(255,255,255,.35)';c.beginPath();c.arc(s*.72,s*.7,s*.08,0,7);c.arc(s*.6,s*.8,s*.045,0,7);c.fill()}
+      S.spr[k]=cv}
+  }
+  function cell(c,x,y,s,k,a){if(a!=null)c.globalAlpha=a;c.drawImage(S.spr[k],x,y,s,s);c.globalAlpha=1}
+  function rot(cells,k,dir){if(k==='O')return cells;const n=k==='I'?4:3;return cells.map(([x,y])=>dir>0?[n-1-y,x]:[y,n-1-x])}
+  function fits(cells,px,py){for(const [cx,cy] of cells){const x=px+cx,y=py+cy;if(x<0||x>=CW||y>=RH)return false;if(y>=0&&S.g[y][x])return false}return true}
+  function bag(){const b=Object.keys(SH);for(let i=b.length-1;i>0;i--){const j=Math.floor(GM.rng()*(i+1));[b[i],b[j]]=[b[j],b[i]]}S.q.push(...b)}
+  function spawn(k){
+    if(!k){k=S.q.shift();if(S.q.length<5)bag()}
+    S.p={k,c:SH[k].map(a=>a.slice()),x:3,y:HID-1};S.lockT=0;S.resets=0;S.lowY=S.p.y;S.fall=0;
+    if(!fits(S.p.c,S.p.x,S.p.y)){S.p=null;S.dead=true;S.joy=0;GM.shake=.4;gSfx('hit');setTimeout(()=>arcOver('full'),600)}
+  }
+  function ghostY(){let y=S.p.y;while(fits(S.p.c,S.p.x,y+1))y++;return y}
+  function touched(){if(!fits(S.p.c,S.p.x,S.p.y+1)&&S.resets<15){S.lockT=0;S.resets++}}
+  function shift(d){if(!S.p||S.clr)return false;if(fits(S.p.c,S.p.x+d,S.p.y)){S.p.x+=d;touched();gSfx('tick');return true}return false}
+  function turn(dir){if(!S.p||S.clr)return;const nc=rot(S.p.c,S.p.k,dir);
+    for(const [kx,ky] of (S.p.k==='I'?KICK.concat([[0,-2]]):KICK))if(fits(nc,S.p.x+kx,S.p.y+ky)){S.p.c=nc;S.p.x+=kx;S.p.y+=ky;S.wob=1;touched();gSfx('flip');return}
+    gSfx('nope')}
+  function soft(){if(!S.p||S.clr)return;if(fits(S.p.c,S.p.x,S.p.y+1)){S.p.y++;GM.score+=1;S.fall=0;if(S.p.y>S.lowY){S.lowY=S.p.y;S.resets=0}}}
+  function hard(){if(!S.p||S.clr)return;const g=ghostY(),n=g-S.p.y;S.p.y=g;GM.score+=n*2;
+    S.trail={x:S.p.x,c:S.p.c,k:S.p.k,y0:g-n,y1:g,t:.25};lock(true)}
+  function hold(){if(!S.p||S.clr||S.held){gSfx('nope');return}const k=S.p.k;S.held=true;gSfx('slide');
+    if(S.hold){const h=S.hold;S.hold=k;spawn(h)}else{S.hold=k;spawn()}}
+  function lock(hardDrop){
+    const p=S.p;let top=true;
+    for(const [cx,cy] of p.c){const x=p.x+cx,y=p.y+cy;if(y>=0)S.g[y][x]=p.k;if(y>=HID)top=false}
+    S.p=null;S.held=false;S.land=.18;gSfx(hardDrop?'bounce':'clink');if(hardDrop){GM.shake=Math.max(GM.shake,.08)}
+    if(top){S.dead=true;GM.shake=.4;gSfx('hit');setTimeout(()=>arcOver('full'),600);return}
+    const rows=[];for(let y=0;y<RH;y++)if(S.g[y].every(Boolean))rows.push(y);
+    if(!rows.length){S.combo=0;spawn();return}
+    const n=Math.min(4,rows.length),lv=GM.level;let pts=[0,100,300,500,800][n]*lv;
+    if(n===4){if(S.b2b)pts=Math.round(pts*1.5);S.b2b=true}else S.b2b=false;
+    S.combo++;if(S.combo>1)pts+=50*(S.combo-1)*lv;
+    GM.score+=pts;S.lines+=n;GM.st.lines=S.lines;if(n===4)GM.st.quad=(GM.st.quad||0)+1;
+    const cx=S.x0+S.bw/2,cy=S.y0+(rows[0]-HID)*S.cs;
+    gText(cx,cy,'+'+pts,n===4?'#ff9f1c':'#1c86cf');
+    if(n===4){gBanner(t('bkQuad'),'#1c86cf',1.4);gSfx('gold');GM.shake=.3;buzz([30,30,60])}
+    else{gSfx('pop',n*3);buzz(20)}
+    if(S.combo>1)gText(cx,cy+28,t('bkCombo',S.combo),'#8a5cf6');
+    rows.forEach(y=>{for(let x=0;x<CW;x++){const px=S.x0+x*S.cs+S.cs/2,py=S.y0+(y-HID)*S.cs+S.cs/2;if(!low()||x%2===0)gSplash(px,py,COL[S.g[y][x]],low()?2:4)}});
+    S.clr={rows,t:.32};S.joy=1.6;
+  }
+  function finishClear(){
+    const rows=S.clr.rows;S.g=S.g.filter((r,y)=>!rows.includes(y));while(S.g.length<RH)S.g.unshift(new Array(CW).fill(null));S.clr=null;
+    if(S.g.every(r=>r.every(v=>!v))){const b=1500*GM.level;GM.score+=b;gBanner(t('bkPerfect'),'#14b8a6',1.6);gText(S.x0+S.bw/2,S.y0+S.bh/2,'+'+b,'#14b8a6');gConfetti();gSfx('win')}
+    const want=1+Math.floor(S.lines/10);while(GM.level<want)gLevelUp();
+    spawn();
+  }
+  function grav(){const l=1+(GM.level-1)*.72;return Math.max(.035,Math.pow(Math.max(.05,.8-(l-1)*.007),l-1))}
+  function stackTop(){for(let y=0;y<RH;y++)if(S.g[y].some(Boolean))return y;return RH}
+  function layout(){
+    const top=70,strip=56,hint=24;S.cs=Math.max(12,Math.floor(Math.min((GM.W-20)/CW,(GM.H-top-strip-hint-8)/(RH-HID))));
+    S.bw=S.cs*CW;S.bh=S.cs*(RH-HID);S.x0=Math.round((GM.W-S.bw)/2);S.sy=top;S.y0=top+strip;S.hb=Math.min(50,strip-4);sprites();
+  }
+  function mini(c,k,cx,cy,box,a){if(!k)return;const cs=SH[k],xs=cs.map(p=>p[0]),ys=cs.map(p=>p[1]),w=Math.max(...xs)-Math.min(...xs)+1,h=Math.max(...ys)-Math.min(...ys)+1,s=Math.floor(Math.min(box*.8/w,box*.8/h,S.cs*.8));
+    const ox=cx-w*s/2-Math.min(...xs)*s,oy=cy-h*s/2-Math.min(...ys)*s;cs.forEach(([x,y])=>cell(c,ox+x*s,oy+y*s,s,k,a))}
+  function panel(c,x,y,w,h,lbl){c.fillStyle='rgba(255,255,255,.7)';rr(c,x,y,w,h,12);c.fill();c.font='800 9px system-ui';c.fillStyle='#5f5699';c.textAlign='center';c.fillText(lbl,x+w/2,y+8)}
+  return {key:'blocks',kind:'action',icon:'🧊',col:'#14b8a6',lives:false,chY:56,
+    chs:[{ty:'lines',ns:[10,20,30]},{ty:'score',ns:[2000,5000,10000]},{ty:'quad',ns:[1,2]}],
+    prog(ty){return ty==='lines'?S.lines||0:ty==='quad'?GM.st.quad||0:GM.score},
+    dbg(){return S},
+    resize(){layout()},
+    init(){S.g=[...Array(RH)].map(()=>new Array(CW).fill(null));S.q=[];bag();bag();S.hold=null;S.held=false;S.lines=0;S.combo=0;S.b2b=false;
+      S.clr=null;S.dead=false;S.joy=0;S.wob=0;S.land=0;S.trail=null;S.soft=false;S.tp=null;S.hintT=0;GM.st.lines=0;GM.st.quad=0;layout();spawn()},
+    step(dt){
+      S.joy=Math.max(0,S.joy-dt);S.wob=Math.max(0,S.wob-dt*5);S.land=Math.max(0,S.land-dt);S.hintT+=dt;if(S.trail){S.trail.t-=dt;if(S.trail.t<=0)S.trail=null}
+      if(S.dead)return;
+      if(S.clr){S.clr.t-=dt;if(S.clr.t<=0)finishClear();return}
+      if(!S.p)return;
+      const iv=S.soft?Math.min(grav(),.045):grav();S.fall+=dt;
+      while(S.fall>=iv&&S.p){S.fall-=iv;if(fits(S.p.c,S.p.x,S.p.y+1)){S.p.y++;if(S.soft)GM.score+=1;if(S.p.y>S.lowY){S.lowY=S.p.y;S.resets=0}}else{S.fall=0;break}}
+      if(S.p&&!fits(S.p.c,S.p.x,S.p.y+1)){S.lockT+=dt;if(S.lockT>=.5)lock(false)}else if(S.p)S.lockT=0;
+    },
+    draw(c){
+      const W=GM.W,{cs,x0,y0,bw,bh,sy,hb}=S;gSky(c,gLevelHue(),false);
+      /* felső sáv: tartalék, sorok, következők */
+      panel(c,x0,sy,hb,hb,t('bkHold'));mini(c,S.hold,x0+hb/2,sy+hb/2+4,hb-12,S.held?.4:1);
+      const nx=x0+bw-hb;panel(c,nx,sy,hb,hb,t('bkNext'));if(S.q)mini(c,S.q[0],nx+hb/2,sy+hb/2+4,hb-12);
+      const sm=Math.round(hb*.66),nm=nx-x0-hb>2*(sm+6)+90?2:1;for(let i=1;i<=nm;i++){const bx=nx-i*(sm+6),by=sy+hb-sm;c.fillStyle='rgba(255,255,255,.5)';rr(c,bx,by,sm,sm,10);c.fill();if(S.q)mini(c,S.q[i],bx+sm/2,by+sm/2,sm-6,.85)}
+      c.textAlign='center';c.textBaseline='middle';c.fillStyle='#1d1a33';c.font='900 18px system-ui';const ml=x0+hb,mr=nx-nm*(sm+6),petTop=x0<44&&mr-ml>120,mx=petTop?ml+(mr-ml)*.3:(ml+mr)/2;
+      c.fillText(S.lines||0,mx,sy+hb/2-6);c.font='700 10px system-ui';c.fillStyle='#3b3566';c.fillText(t('bkLines'),mx,sy+hb/2+10);
+      /* pohár */
+      c.save();c.fillStyle='rgba(18,38,84,.62)';rr(c,x0-4,y0-4,bw+8,bh+8,14);c.fill();c.strokeStyle='rgba(255,255,255,.75)';c.lineWidth=2;rr(c,x0-4,y0-4,bw+8,bh+8,14);c.stroke();
+      c.beginPath();c.rect(x0,y0,bw,bh);c.clip();
+      if(!low()){const g=c.createLinearGradient(0,y0,0,y0+bh);g.addColorStop(0,'rgba(63,169,245,.05)');g.addColorStop(1,'rgba(63,169,245,.28)');c.fillStyle=g;c.fillRect(x0,y0,bw,bh);
+        c.fillStyle='rgba(255,255,255,.12)';for(let i=0;i<7;i++){const bx=x0+((i*53+17)%bw),by=y0+bh-((GM.t*(18+i*5)+i*97)%bh);c.beginPath();c.arc(bx,by,2+i%3,0,7);c.fill()}}
+      c.strokeStyle='rgba(255,255,255,.06)';c.lineWidth=1;c.beginPath();for(let x=1;x<CW;x++){c.moveTo(x0+x*cs+.5,y0);c.lineTo(x0+x*cs+.5,y0+bh)}for(let y=1;y<RH-HID;y++){c.moveTo(x0,y0+y*cs+.5);c.lineTo(x0+bw,y0+y*cs+.5)}c.stroke();
+      const st=stackTop();if(GM.on&&st<HID+5){c.fillStyle='rgba(255,79,134,'+(.12+.1*Math.sin(GM.t*6))+')';c.fillRect(x0,y0,bw,cs*3)}
+      if(S.g)for(let y=HID;y<RH;y++)for(let x=0;x<CW;x++){const k=S.g[y][x];if(!k)continue;const px=x0+x*cs,py=y0+(y-HID)*cs;
+        if(S.clr&&S.clr.rows.includes(y)){const f=S.clr.t/.32,s=cs*f;cell(c,px+(cs-s)/2,py+(cs-s)/2,s,k);c.fillStyle='rgba(255,255,255,'+(.8*f)+')';c.fillRect(px,py,cs,cs)}
+        else cell(c,px,py,cs,k)}
+      if(S.trail){const tr=S.trail,a=tr.t/.25;tr.c.forEach(([cx,cy])=>{const px=x0+(tr.x+cx)*cs,yA=y0+(tr.y0+cy-HID)*cs,yB=y0+(tr.y1+cy-HID)*cs;const g=c.createLinearGradient(0,yA,0,yB);g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(1,'rgba(255,255,255,'+(.45*a)+')');c.fillStyle=g;c.fillRect(px+cs*.15,yA,cs*.7,yB-yA)})}
+      if(S.p){const p=S.p,gy=ghostY();
+        p.c.forEach(([cx,cy])=>{const px=x0+(p.x+cx)*cs,py=y0+(gy+cy-HID)*cs;c.strokeStyle=COL[p.k];c.globalAlpha=.75;c.lineWidth=2;rr(c,px+3,py+3,cs-6,cs-6,cs*.18);c.stroke();c.globalAlpha=.16;c.fillStyle=COL[p.k];c.fill();c.globalAlpha=1});
+        const wb=S.wob*.08;p.c.forEach(([cx,cy])=>{const px=x0+(p.x+cx)*cs,py=y0+(p.y+cy-HID)*cs;cell(c,px-cs*wb/2,py-cs*wb/2,cs*(1+wb),p.k)});
+        /* arcocska a darabon */
+        const mx2=p.c.reduce((a,q)=>a+q[0],0)/4,my2=p.c.reduce((a,q)=>a+q[1],0)/4;let bc=p.c[0],bd=9;p.c.forEach(q=>{const d=Math.hypot(q[0]-mx2,q[1]-my2);if(d<bd){bd=d;bc=q}});
+        const fx=x0+(p.x+bc[0])*cs+cs/2,fy=y0+(p.y+bc[1]-HID)*cs+cs/2+1;gFace(c,fx,fy,cs*.3,S.lockT>.25?'o':'happy')}
+      c.restore();
+      if(S.dead){c.fillStyle='rgba(255,79,134,.25)';rr(c,x0-4,y0-4,bw+8,bh+8,14);c.fill()}
+      /* tipp + kedvenc */
+      c.textAlign='center';c.textBaseline='middle';const hy=y0+bh+15;
+      if(S.hintT<14||!GM.on){c.font='700 11px system-ui';c.fillStyle='#3b3566';c.globalAlpha=GM.on?Math.min(1,(14-S.hintT)/2):1;c.fillText(t('bkHint'),W/2,hy);c.globalAlpha=1}
+      const side=x0-4,mood=S.dead?'thirsty':S.joy>0?'party':st<HID+6?'thirsty':'happy',hop=S.joy>0?-Math.abs(Math.sin(GM.t*10))*6:0;
+      if(petTop)gPet(c,ml+(mr-ml)*.72,sy+hb/2+hop,Math.min(54,hb*1.05),mood);
+      else if(side>=40){const ps=Math.min(64,side*1.1);gPet(c,x0+bw+4+side/2,y0+bh-ps*.5+hop,ps,mood)}
+    },
+    down(x,y){
+      if(!GM.on||S.dead)return;
+      if(y>=S.sy&&y<=S.sy+S.hb&&x>=S.x0-6&&x<=S.x0+S.hb+6){hold();S.tp=null;return}
+      S.tp={sx:x,sy:y,ax:x,ay:y,axis:null,t0:performance.now()};
+    },
+    move(x,y,pr){const tp=S.tp;if(!pr||!tp||!GM.on)return;const dx=x-tp.sx,dy=y-tp.sy;
+      if(!tp.axis&&Math.hypot(dx,dy)>12){tp.axis=Math.abs(dy)>Math.abs(dx)*1.2?(dy>0?'y':'up'):'x';tp.ax=x;tp.ay=y}
+      if(tp.axis==='x'){const st=Math.max(14,S.cs*.85);while(x-tp.ax>=st){shift(1);tp.ax+=st}while(tp.ax-x>=st){shift(-1);tp.ax-=st}}
+      else if(tp.axis==='y'){const st=Math.max(12,S.cs*.75);while(y-tp.ay>=st){soft();tp.ay+=st}}},
+    up(x,y){const tp=S.tp;S.tp=null;if(!tp||!GM.on||S.dead)return;const dur=performance.now()-tp.t0,dy=y-tp.sy;
+      if(!tp.axis){if(dur<450)turn(1);return}
+      if(tp.axis==='y'&&dy>S.cs*1.4&&dur<280)hard();
+      else if(tp.axis==='up'&&-dy>S.cs*1.4)hold()},
+    key(k,dn){if(k===' '&&document.activeElement&&document.activeElement!==document.body)try{document.activeElement.blur()}catch(e){}
+      if(k==='ArrowDown'){S.soft=dn;return}if(!dn||!GM.on||S.dead||GM.paused)return;
+      if(k==='ArrowLeft')shift(-1);else if(k==='ArrowRight')shift(1);else if(k==='ArrowUp'||k==='x'||k==='X')turn(1);else if(k==='z'||k==='Z'||k==='Control')turn(-1);
+      else if(k===' ')hard();else if(k==='c'||k==='C'||k==='Shift')hold()}
+  };
+})();
+
 /* Játékterem: vezérlés */
 $('gameBtn').onclick=()=>openGame();
 {const cv=$('gCan');let pressed=false;
@@ -5605,6 +5763,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.3',hu:['🧊 Új játék: Kockaeső! Forgasd és tologasd a hulló zselékockákat, a teli sorok kifröccsennek. Négy sor egyszerre: szökőár! 🌊','📦 Van tartalék doboz, előre látod a következő darabokat, és a halvány körvonal mutatja, hová esik a darab.'],en:['🧊 New game: Block Rain! Turn and slide the falling jelly blocks, full rows splash away. Four rows at once: tsunami! 🌊','📦 There’s a hold box, you can see the next pieces, and a faint outline shows where the piece will land.']},
  {v:'14.2',hu:['🏀 Szemből kosár: puhább gyűrű, könnyebben bemegy a labda.','🏀 Oldalról kosár: kicsit kisebb gyűrű, és közelről már nem pattan vissza alulról a perem.'],en:['🏀 Front hoops: softer rim, the ball goes in more easily.','🏀 Side hoops: slightly smaller rim, and close shots no longer bounce off the rim from below.']},
  {v:'14.1',hu:['📊 Új: Érdekességek a főoldal alján – mikor és mit iszol, a napod ritmusa, a hét napjai. Oldalra húzva váltogathatod!'],en:['📊 New: Fun facts at the bottom of the main screen – when and what you drink, your daily rhythm, days of the week. Swipe to switch!']},
  {v:'14.0',hu:['✨ Szellősebb lett a „Mi újság?” és a célbeállító ablak'],en:['✨ The “What’s new” and goal setup windows got more breathing room']},
@@ -5639,7 +5798,7 @@ function startInfo(){
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.2';
+const APP_VERSION='14.3';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
