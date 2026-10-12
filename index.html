@@ -3796,14 +3796,16 @@ ARC.hoops=(()=>{
         if(b.vz>0&&b.z+BRAD>ZB&&b.z-BRAD<ZB+.05&&Math.abs(b.x-S.hx)<BW&&b.y>YH-.15&&b.y<YH-.15+BH*1.6){b.z=ZB-BRAD;b.vz=-Math.abs(b.vz)*.45;b.vx*=.8;b.touched=true;b.bank=true;
           if(Math.abs(b.x-S.hx)<.3&&b.y<YH+.45)S.sqFlash=.4;gSfx('bounce');S.sway=Math.max(S.sway,.2)}
         /* gyűrű */
-        for(const q of rimPts()){const dx=b.x-q[0],dy=b.y-q[1],dz=b.z-q[2],d=Math.hypot(dx,dy,dz),R=BRAD+.02;
-          if(d<R&&d>0){const nx=dx/d,ny=dy/d,nz=dz/d,dot=b.vx*nx+b.vy*ny+b.vz*nz;if(dot<0){const e=1.5;b.vx-=e*dot*nx;b.vy-=e*dot*ny;b.vz-=e*dot*nz;b.x=q[0]+nx*R;b.y=q[1]+ny*R;b.z=q[2]+nz*R;b.touched=true;S.sway=Math.max(S.sway,.35);gSfx('clink');if(!b.ooh&&!b.scored){b.ooh=true;gSfx('ooh');S.tense=1.8}}}}
+        for(const q of rimPts()){const dx=b.x-q[0],dy=b.y-q[1],dz=b.z-q[2],d=Math.hypot(dx,dy,dz),R=BRAD*.9;
+          if(d<R&&d>0){const nx=dx/d,ny=dy/d,nz=dz/d,dot=b.vx*nx+b.vy*ny+b.vz*nz;if(dot<0){const e=1.3;b.vx-=e*dot*nx;b.vy-=e*dot*ny;b.vz-=e*dot*nz;b.vx*=.86;b.vz*=.86;b.x=q[0]+nx*R;b.y=q[1]+ny*R;b.z=q[2]+nz*R;b.touched=true;S.sway=Math.max(S.sway,.35);gSfx('clink');if(!b.ooh&&!b.scored){b.ooh=true;gSfx('ooh');S.tense=1.8}}}}
         const hd=Math.hypot(b.x-S.hx,b.z-ZH);
+        /* puha „tölcsér”: a gyűrű fölött lefelé eső labdát kicsit befelé terel */
+        if(!b.scored&&b.vy<0&&b.y>YH-.05&&b.y<YH+.45&&hd<RR+BRAD*.7){const f=Math.min(1,3.2*h);b.x+=(S.hx-b.x)*f;b.z+=(ZH-b.z)*f}
         /* alulról nem mehet át */
         if(b.vy>0&&py<YH-.5&&b.y>=YH-.5&&hd<RR*.8){b.vy=-Math.abs(b.vy)*.3;b.y=YH-.5;S.sway=Math.max(S.sway,.5);gSfx('bounce')}
         if(b.vy>0&&py<YH&&b.y>=YH&&hd<RR-BRAD*.4&&!b.scored){b.vy=-Math.abs(b.vy)*.3;b.y=YH}
         /* kosár */
-        if(!b.scored&&b.vy<0&&py>=YH&&b.y<YH&&hd<RR-BRAD*.3){b.scored=true;b.resolved=true;S.tense=0;
+        if(!b.scored&&b.vy<0&&py>=YH&&b.y<YH&&hd<RR-BRAD*.12){b.scored=true;b.resolved=true;S.tense=0;
           const sw=!b.touched,p=(sw?3:2)*(b.gold?2:1);GM.score+=p;GM.st.baskets++;if(sw)GM.st.swish++;S.time+=sw?3:2;S.tBonus={n:sw?3:2,t:1.3};S.net=.8;S.sway=1;
           const sp=P(S.hx,YH,ZH);gText(sp.x,sp.y-40,(sw?t('gSwish')+' +':b.bank?t('gBank')+' +':'+')+p,sw?'#14b8a6':'#f08a1c');
           gSfx(sw?'gold':'win');gSfx('clap');if(sw)gSfx('cheer');S.cheer=1.6;arenaHype(sw?2:1);gSplash(sp.x,sp.y+20,'#4fb8ff',sw?16:8);buzz([20,30]);
@@ -3923,7 +3925,7 @@ ARC.hoops=(()=>{
 /* Kosár oldalról */
 ARC.hoops2=(()=>{
   const S={};const K=()=>Math.max(.85,GM.H/760);
-  function lay(){S.bx0=GM.W*.24;S.by0=GM.H-170;S.hy0=S.hy=GM.H*.34;S.hx0=GM.W*.7;S.rw=Math.min(94,GM.W*.24)}
+  function lay(){S.bx0=GM.W*.24;S.by0=GM.H-170;S.hy0=S.hy=GM.H*.34;S.hx0=GM.W*.7;S.rw=Math.min(88,GM.W*.225)}
   function newBall(){S.shots++;S.ball={x:S.bx0,y:S.by0,vx:0,vy:0,live:false,touched:false,scored:false,bank:false,gold:S.shots%5===0,kind:BB_KINDS[Math.floor(Math.random()*3)]}}
   const BR=19;
   return {key:'hoops2',arena:true,kind:'action',icon:'🏀',col:'#f08a1c',lives:false,chY:70,
@@ -3940,7 +3942,7 @@ ARC.hoops2=(()=>{
         const n=4;for(let i=0;i<n;i++){
           const NH=56,NH0=58;b.vy+=1500*k*dt/n;const py=b.y;
           if(b.vy>0&&b.y>S.hy-140&&b.y<S.hy-4&&Math.abs(b.x-S.hx)<S.rw*1.3)b.vx+=(S.hx-b.x)*6*dt/n;b.x+=b.vx*dt/n;b.y+=b.vy*dt/n;
-          [rimL,rimR].forEach(p=>{const dx=b.x-p.x,dy=b.y-p.y,d=Math.hypot(dx,dy),R=BR+1;if(d<R&&d>0){const nx=dx/d,ny=dy/d,dot=b.vx*nx+b.vy*ny;if(dot<0){b.vx-=1.55*dot*nx;b.vy-=1.55*dot*ny;b.x=p.x+nx*R;b.y=p.y+ny*R;b.touched=true;S.sway=Math.max(S.sway,.35);gSfx('clink')}}});
+          [rimL,rimR].forEach(p=>{const dx=b.x-p.x,dy=b.y-p.y,d=Math.hypot(dx,dy),R=BR+1;if(b.vy<0&&b.y>p.y-BR*.3)return;/* alulról felfelé: a gyűrű előtt/mögött elfér */if(d<R&&d>0){const nx=dx/d,ny=dy/d,dot=b.vx*nx+b.vy*ny;if(dot<0){b.vx-=1.55*dot*nx;b.vy-=1.55*dot*ny;b.x=p.x+nx*R;b.y=p.y+ny*R;b.touched=true;S.sway=Math.max(S.sway,.35);gSfx('clink')}}});
           if(b.x+BR>bx&&b.x-BR<bx+10&&b.y>btop&&b.y<bbot){if(b.vx>0){b.vx=-Math.abs(b.vx)*.62;b.x=bx-BR;b.touched=true;b.bank=true;gSfx('bounce');S.sway=Math.max(S.sway,.2)}}
           if(b.y<btop&&b.y+BR>btop-2&&b.vy>0&&b.x>bx-4&&b.x<bx+14){b.vy=-Math.abs(b.vy)*.5;gSfx('bounce')}
           if(b.vy<0){const ax=Math.abs(b.x-S.hx);if(ax<S.rw*.28+BR*.5&&py>=S.hy+NH0&&b.y<S.hy+NH0+BR){b.vy=Math.abs(b.vy)*.3;b.y=S.hy+NH0+BR;S.sway=Math.max(S.sway,.5);gSfx('bounce')}
@@ -5603,6 +5605,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.2',hu:['🏀 Szemből kosár: puhább gyűrű, könnyebben bemegy a labda.','🏀 Oldalról kosár: kicsit kisebb gyűrű, és közelről már nem pattan vissza alulról a perem.'],en:['🏀 Front hoops: softer rim, the ball goes in more easily.','🏀 Side hoops: slightly smaller rim, and close shots no longer bounce off the rim from below.']},
  {v:'14.1',hu:['📊 Új: Érdekességek a főoldal alján – mikor és mit iszol, a napod ritmusa, a hét napjai. Oldalra húzva váltogathatod!'],en:['📊 New: Fun facts at the bottom of the main screen – when and what you drink, your daily rhythm, days of the week. Swipe to switch!']},
  {v:'14.0',hu:['✨ Szellősebb lett a „Mi újság?” és a célbeállító ablak'],en:['✨ The “What’s new” and goal setup windows got more breathing room']},
  {v:'13.9',hu:['💧 A víz most világoskék és szinte átlátszó a kijelzőkön – minden színtémánál'],en:['💧 Water is now light blue and almost see-through in the displays – in every color theme']},
@@ -5636,7 +5639,7 @@ function startInfo(){
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.1';
+const APP_VERSION='14.2';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
