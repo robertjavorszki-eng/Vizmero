@@ -517,6 +517,14 @@ body.modal{overflow:hidden}
 .help p{margin:0 0 8px;max-width:62ch}
 .help p:last-child{margin-bottom:0}
 .help ul{margin:0 0 8px;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+.notrack .trk{display:none!important}
+.trackoff{background:var(--surface);border:2px dashed var(--line);border-radius:20px;padding:16px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+.trackoff .toic{font-size:2rem}.trackoff .totxt{margin:0;font-weight:600;color:var(--muted);line-height:1.4}.tobtns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.usebtn{width:100%;display:grid;grid-template-columns:44px 1fr;grid-template-rows:auto auto;column-gap:10px;text-align:left;align-items:center;background:var(--bg);border:2px solid var(--line);border-radius:16px;padding:12px;font:inherit;color:inherit;cursor:pointer}
+.usebtn span{grid-row:1/3;font-size:1.8rem;text-align:center}.usebtn b{font-size:1rem}.usebtn small{color:var(--muted);font-weight:600}
+.gtabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%}.gtabs{margin-bottom:4px}.gopts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%}
+.gopts .chip{display:flex;flex-direction:column;gap:2px;padding:10px 6px}.gopts .chip small{font-weight:700;color:var(--muted)}
+.gresult{font-weight:800;font-size:1.15rem;margin:4px 0}.gstep{display:flex;align-items:center;justify-content:center;gap:12px}
 .hic{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--surface);flex:none;font-size:15px}
 .privkid{list-style:none;margin:6px 0;padding:0;display:flex;flex-direction:column;gap:8px;text-align:left}.privkid li{background:var(--bg);border-radius:12px;padding:9px 12px;font-weight:600;line-height:1.35}
 .privmore{text-align:left;margin:4px 0 6px;align-self:stretch}.privmore>summary{cursor:pointer;font-weight:800;color:var(--water);padding:6px 0}.privmore p{font-size:.9rem;margin:6px 0;line-height:1.4}
@@ -558,7 +566,12 @@ body.modal{overflow:hidden}
     <div class="bubwrap"><p class="bubble" id="petBubble" aria-live="polite"></p><span class="petname" id="petNameLbl"></span><button class="gamebtn" id="gameBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10.5v4M5 12.5h4"/><circle cx="15.5" cy="11.5" r="1" fill="currentColor"/><circle cx="18" cy="13.5" r="1" fill="currentColor"/></svg><span id="gameBtnTxt"></span><b id="gameStreak"></b></button></div>
   </section>
 
-  <section class="hero viz" id="hero" data-ta="todaySummary">
+  <section class="trackoff" id="trackOff" hidden>
+    <div class="toic" aria-hidden="true">💧</div>
+    <p class="totxt" data-t="trackOffTxt"></p>
+    <div class="tobtns"><button class="primary" id="trackOn" data-t="trackOnBtn"></button><button class="ghost" id="trackGames" data-t="trackGamesBtn"></button></div>
+  </section>
+  <section class="hero viz trk" id="hero" data-ta="todaySummary">
     <div class="glass" aria-hidden="true"><div class="fill" id="fill"></div><div class="ticks" id="ticks"></div><div class="expect" id="expect" hidden></div></div>
     <div class="stats">
       <div class="big" id="total">0<small>deciliter</small></div>
@@ -567,10 +580,10 @@ body.modal{overflow:hidden}
     </div>
   </section>
 
-  <section class="alt viz" id="vizAlt" hidden></section>
-  <div class="vizdots" id="vizDots" aria-hidden="true"></div>
+  <section class="alt viz trk" id="vizAlt" hidden></section>
+  <div class="vizdots trk" id="vizDots" aria-hidden="true"></div>
 
-  <section class="pace" aria-live="polite">
+  <section class="pace trk" aria-live="polite">
     <div class="head"><span id="paceHead"></span><span class="pill" id="pacePill"></span></div>
     <p class="tip" id="paceTip"></p>
     <p class="motto" id="paceMotto"></p>
@@ -581,7 +594,7 @@ body.modal{overflow:hidden}
     </div>
   </section>
 
-  <section class="extras" data-ta="todayConditions">
+  <section class="extras trk" data-ta="todayConditions">
     <h2 style="margin:0" data-t="today2"></h2>
     <div class="segrow">
       <button class="chip ic" id="act0" data-act="0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21v-5l3-3 3 3v5"/><circle cx="10" cy="6" r="2"/><path d="M15 21h3"/></svg><span data-t="actSit"></span></button>
@@ -593,26 +606,26 @@ body.modal{overflow:hidden}
     </div>
   </section>
 
-  <section class="extras adv flex" data-ta="drinkType">
+  <section class="extras adv flex trk" data-ta="drinkType">
     <h2 style="margin:0" data-t="whatDrink"></h2>
     <div class="drinks" id="drinkRow"></div>
   </section>
 
-  <section class="btns" data-ta="logDrink">
+  <section class="btns trk" data-ta="logDrink">
     <button class="add" id="b1" data-dl="1"><b>+1</b><span>dl</span></button>
     <button class="add" id="b2" data-dl="2"><b>+2</b><span>dl</span></button>
     <button class="add" id="b3" data-dl="3"><b>+3</b><span>dl</span></button>
     <button class="add" id="b5" data-dl="5"><b>+5</b><span>dl</span></button>
   </section>
-  <button class="custom adv" id="openCustom" data-t="customBtn"></button>
+  <button class="custom adv trk" id="openCustom" data-t="customBtn"></button>
 
-  <section>
+  <section class="trk">
     <h2 data-t="today"></h2>
     <ul class="list" id="list"></ul>
     <p class="small adv" style="margin-top:6px" data-t="tapToEdit"></p>
   </section>
 
-  <section>
+  <section class="trk">
     <h2 data-t="last7"></h2>
     <div class="week" id="week"></div>
     <div class="kpis adv grid">
@@ -780,6 +793,8 @@ body.modal{overflow:hidden}
 
     <div>
       <h2 data-t="calcTitle"></h2>
+      <div class="srow first" style="margin-bottom:10px"><span data-t="trackSet"></span><label class="tg"><input type="checkbox" id="trackTg"><i></i></label></div>
+      <button class="ghost" id="goalWizard" style="width:100%;margin-bottom:10px" data-t="goalWizard"></button>
       <div class="calc">
         <div class="row"><label for="kg" data-t="weight"></label><input type="range" id="kg" min="40" max="150" step="1" value="80"><output id="kgOut">80 kg</output></div>
         <div class="suggest"><span data-t="suggested"></span><b id="sugg"></b></div>
@@ -909,8 +924,15 @@ body.modal{overflow:hidden}
       <p><b>Internet:</b> the app only checks whether a new version is out – that contains nothing about you. The app is hosted on GitHub Pages; like any website host, it technically sees the device’s IP address when the page opens.</p>
       <p><b>Deleting and backup:</b> if you delete the app or the browser data, all your data is gone. You can make a backup under Settings → Advanced mode → Data.</p>
       <p><b>Questions?</b> Ask the person who shared the app with you.</p></div></details>
-      <button class="primary" id="onbDone" style="width:100%" data-t="start2"></button>
+      <button class="primary" id="onbDone" style="width:100%" data-t="next"></button>
     </div>
+    <div id="onb3" hidden>
+      <div class="drop" aria-hidden="true"></div>
+      <h3 data-t="useQ"></h3>
+      <button class="usebtn" id="useTrack"><span>💧</span><b data-t="useTrack"></b><small data-t="useTrackD"></small></button>
+      <button class="usebtn" id="useFun"><span>🎮</span><b data-t="useFun"></b><small data-t="useFunD"></small></button>
+    </div>
+    <div id="onb4" hidden><div id="onbGoal"></div></div>
   </div>
 </div>
 
@@ -920,6 +942,9 @@ body.modal{overflow:hidden}
     <header><h3 id="gTitle" data-t="gTitle"></h3><span style="display:flex;gap:8px"><button class="icon" id="gMusicBtn" data-ta="gMusicA" hidden>🎵</button><button class="icon" id="gHelpBtn" data-ta="gHelpTitle" hidden style="font-weight:900">?</button><button class="icon" data-close="gameScrim" data-ta="close">✕</button></span></header>
     <div class="gwrap"><canvas id="gCan" aria-label="game"></canvas><div class="gtools" id="gTools" hidden><button id="gUndo"><span data-t="gUndo"></span></button><button id="gRestart"><span data-t="gRestart"></span></button><button id="gQuit"><span data-t="gQuit"></span></button></div><div class="gpanel" id="gPanel" hidden></div><div class="ghelp" id="gHelpBox" hidden></div></div>
   </div>
+</div>
+<div class="scrim center" id="goalScrim" hidden>
+  <div class="sheet onb info" role="dialog" aria-modal="true"><div id="goalSheetBody"></div></div>
 </div>
 <div class="scrim center" id="infoScrim" hidden>
   <div class="sheet onb info" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
@@ -1021,6 +1046,8 @@ body.modal{overflow:hidden}
     <details class="hsec"><summary><span class="hic">🎯</span>A napi cél</summary><div class="hbody">
       <p>A napi cél az <b>alapcél</b> plusz a mai mozgás és meleg. Az alapcélt a beállításokban adhatod meg: a <b>testsúlyod</b> alapján a program javasol egyet (testsúly × 30 ml, ennek kb. 80%-a italból, a többi az ételekből jön), vagy a <b>−</b> és <b>+</b> gombbal kézzel állíthatod.</p>
       <p>Jó visszajelzés a vizelet színe: a halvány szalmasárga megfelelő, a sötétsárga kevés folyadékot jelez. Ha valamilyen betegség miatt az orvosod korlátozta a folyadékot, az ő javaslata az irányadó.</p>
+      <p><b>Életkor alapján</b> is beállíthatod a célt (Beállítások → Napi cél → 🎯 Cél beállítása). Gyerekeknek ez a javasolt, mert nem kell hozzá testsúly. Ezek tájékoztató átlagértékek, nem orvosi tanács.</p>
+      <p>Ha csak a kedvenc és a játékok érdekelnek, a <b>Vízivás követése</b> kapcsolóval kikapcsolhatod a naplót, és bármikor visszakapcsolhatod.</p>
     </div></details>
     <details class="hsec"><summary><span class="hic">📅</span>Utolsó 7 nap és statisztika</summary><div class="hbody">
       <p>Az oszlopok a napi mennyiséget mutatják. A színes, telt oszlop azt jelenti, hogy aznap meglett a cél. A szaggatott vonal az alapcél. Haladó módban alatta a <b>sorozat</b> (hány egymást követő napon lett meg a cél), a sikeres napok száma és az átlagok is látszanak. Az átlag csak azokat a napokat számolja, amikor rögzítettél valamit.</p>
@@ -1118,6 +1145,8 @@ body.modal{overflow:hidden}
     <details class="hsec"><summary><span class="hic">🎯</span>Your daily goal</summary><div class="hbody">
       <p>Your daily goal is your <b>base goal</b> plus today’s activity and heat. Set the base goal in Settings: the app suggests one from your <b>body weight</b> (weight × 30 ml, about 80% of which comes from drinks and the rest from food), or set it by hand with the <b>−</b> and <b>+</b> buttons.</p>
       <p>Urine color is a good check: pale straw yellow is fine, dark yellow means too little fluid. If a doctor has limited your fluid intake because of a medical condition, follow their advice.</p>
+      <p>You can also set the goal <b>by age</b> (Settings → Daily goal → 🎯 Set goal). This is recommended for kids, since no weight is needed. These are average guide values, not medical advice.</p>
+      <p>If you only want the buddy and the games, switch off <b>Track my drinking</b> – you can turn it back on any time.</p>
     </div></details>
     <details class="hsec"><summary><span class="hic">📅</span>Last 7 days and statistics</summary><div class="hbody">
       <p>The bars show the daily amount. A solid colored bar means you reached your goal that day. The dashed line is your base goal. In advanced mode you also see your <b>streak</b> (how many days in a row you hit your goal), the number of successful days and averages. Averages only count days on which you logged something.</p>
@@ -1819,7 +1848,7 @@ function renderPet(now,d,tot,g,p){
   const P=state.pet,card=$('petCard');
   if(!P.on){card.hidden=true;return}
   card.hidden=false;
-  const mood=petMood(now,d,tot,g,p),fill=Math.min(1,tot/Math.max(g,.1)),key=P.kind+'|'+mood+'|'+(isVeh(P.kind)?P.vcol[P.kind]+Math.round(fill*20):JSON.stringify(P.acc));
+  const mood=tracking()?petMood(now,d,tot,g,p):'happy',fill=Math.min(1,tot/Math.max(g,.1)),key=P.kind+'|'+mood+'|'+(isVeh(P.kind)?P.vcol[P.kind]+Math.round(fill*20):JSON.stringify(P.acc));
   if(key!==petKey){petKey=key;$('petSvg').innerHTML=compSVG(P.kind,mood,fill);const box=$('petBox');box.classList.remove('happy','thirsty','sleep','party');box.classList.add(mood)}
   $('petBox').setAttribute('aria-label',t('petTapAria')+': '+(P.name||compName(P.kind)));
   $('petNameLbl').textContent=P.name||'';$('petNameLbl').hidden=!P.name;
@@ -1830,7 +1859,8 @@ function renderPet(now,d,tot,g,p){
   else{
     const S=mins(state.start)??420,N=now.getHours()*60+now.getMinutes(),last=d.entries.length?d.entries[d.entries.length-1].t:null,since=last?(now-last)/60000:null;
     const vars={r:amt(Math.max(0,r1(g-tot))),h:since!=null?Math.floor(since/60):''};
-    if(mood==='happy'&&tot===0&&N-S<150)txt=petText('start',vars);
+    if(!tracking())txt=petText('idle',vars);
+    else if(mood==='happy'&&tot===0&&N-S<150)txt=petText('start',vars);
     else if(mood==='thirsty'&&since!=null&&since>=120)txt=petText('gap',vars);
     else txt=petText(mood,vars);
   }
@@ -5024,7 +5054,7 @@ $('deDelete').onclick=()=>{
 
 /* --- első indítás --- */
 function cleanName(v){return (v||'').trim().replace(/\s+/g,' ').slice(0,30)}
-function showOnb(step){['onb0','onb1','onb2'].forEach((id,i)=>$(id).hidden=i!==step)}
+function showOnb(step){['onb0','onb1','onb2','onb3','onb4'].forEach((id,i)=>$(id).hidden=i!==step)}
 function startOnb(){
   $('nameOnb').value=state.name||'';
   if(!state.lang){showOnb(0);openSheet('onbScrim',document.querySelector('[data-onb-lang]'))}
@@ -5036,7 +5066,10 @@ function onbStep2(){state.name=cleanName($('nameOnb').value);render();showOnb(2)
 $('onbNext').onclick=onbStep2;
 $('onbSkip').onclick=()=>{$('nameOnb').value='';onbStep2()};
 $('nameOnb').addEventListener('keydown',e=>{if(e.key==='Enter')onbStep2()});
-$('onbDone').onclick=()=>{state.onboarded=true;state.privSeen=1;state.seenVer=APP_VERSION;closeSheet('onbScrim');render();writeSettings()};
+$('onbDone').onclick=()=>{state.privSeen=1;showOnb(3)};
+function finishOnb(track){state.onboarded=true;state.track=track;state.privSeen=1;state.seenVer=APP_VERSION;closeSheet('onbScrim');render();writeSettings()}
+$('useFun').onclick=()=>finishOnb(false);
+$('useTrack').onclick=()=>{showOnb(4);goalSetup($('onbGoal'),()=>finishOnb(true))};
 
 /* --- beállítások --- */
 $('openSet').onclick=()=>{buildBtnCfg();renderSound();renderPetSettings();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderSettings();openSheet('setScrim')};
@@ -5283,6 +5316,7 @@ function drawTicks(g){
 }
 function setKpi(id,val,unit){const el=$(id);el.textContent=val;const s=document.createElement('small');s.textContent=unit;el.appendChild(s)}
 function render(){
+  document.body.classList.toggle('notrack',!tracking());$('trackOff').hidden=tracking()||!state.onboarded;try{$('trackTg').checked=tracking()}catch(e){}
   const now=new Date(),k=keyOf(now),d=dayOf(k),tot=sum(d),g=goalOf(d),adv=state.ui==='advanced',Ld=L();
   $('date').textContent=Ld.dateFmt(now.getDate(),Ld.months[now.getMonth()],Ld.days[now.getDay()],now.getFullYear());
   $('date').style.whiteSpace='pre-line';
@@ -5372,8 +5406,53 @@ setInterval(render,60000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
 
 
+
+/* --- vízivás követése: be/ki és célbeállító --- */
+const AGE_GOALS=[{k:'a4',dl:12},{k:'a9',dl:15},{k:'a14',dl:18},{k:'ad',dl:20}];
+Object.assign(I18N.hu,{useQ:'Mire szeretnéd használni?',useTrack:'Vízivás követése',useTrackD:'+ kedvenc és játékok',useFun:'Csak kedvenc és játékok',useFunD:'A vízivást később is bekapcsolhatod',
+  gsTitle:'Napi cél beállítása',gsAge:'🎂 Életkor',gsWeight:'⚖️ Testsúly',gsManual:'✏️ Saját',a4:'4–8 év',a9:'9–13 év',a14:'14–17 év',ad:'Felnőtt',
+  gsAgeNote:'Gyerekeknek ez a javasolt. Tájékoztató átlagérték (EFSA ajánlás alapján, az ételekben lévő víz nélkül), nem orvosi tanács.',
+  gsWeightNote:'Felnőtteknek: kb. 30 ml testsúlykilónként, ennek nagyjából 80%-a ital. Nem orvosi tanács.',gsManualNote:'Ha orvos vagy szülő mondott egy mennyiséget, azt add meg.',
+  gsGoal:'Napi cél:',gsSave:'Kezdjük',gsSave2:'Mentés',trackOffTxt:'A vízivás követése most ki van kapcsolva. Ha szeretnéd, bármikor bekapcsolhatod.',trackOnBtn:'💧 Bekapcsolom',trackGamesBtn:'🎮 Játékterem',
+  trackSet:'Vízivás követése',goalWizard:'🎯 Cél beállítása (életkor, testsúly vagy saját)'});
+Object.assign(I18N.en,{useQ:'What would you like to use it for?',useTrack:'Track my drinking',useTrackD:'+ buddy and games',useFun:'Just buddy and games',useFunD:'You can turn on drink tracking later',
+  gsTitle:'Set your daily goal',gsAge:'🎂 Age',gsWeight:'⚖️ Weight',gsManual:'✏️ Custom',a4:'4–8 years',a9:'9–13 years',a14:'14–17 years',ad:'Adult',
+  gsAgeNote:'Recommended for kids. An average guide value (based on EFSA advice, not counting water from food), not medical advice.',
+  gsWeightNote:'For adults: about 30 ml per kg of body weight, roughly 80% of it from drinks. Not medical advice.',gsManualNote:'If a doctor or parent gave you an amount, enter it here.',
+  gsGoal:'Daily goal:',gsSave:'Let’s start',gsSave2:'Save',trackOffTxt:'Drink tracking is switched off right now. You can turn it on any time.',trackOnBtn:'💧 Turn it on',trackGamesBtn:'🎮 Arcade',
+  trackSet:'Track my drinking',goalWizard:'🎯 Set goal (age, weight or custom)'});
+try{Object.assign(I18N.hu.petMsg,{idle:['Szia {n}! Játsszunk egyet? 🎮','Simogass meg! 😊','Ma is jó napunk lesz!','Nézd meg a napi kihívást!','Itt vagyok, ha kellek! 💜']});
+  Object.assign(I18N.en.petMsg,{idle:['Hi {n}! Shall we play? 🎮','Give me a pat! 😊','It’s going to be a good day!','Check out the daily challenge!','I’m here if you need me! 💜']});
+  if(I18N.hu.vehMsg)Object.assign(I18N.hu.vehMsg,{idle:['Brumm! Játsszunk egyet, {n}? 🎮','Tankolva, indulásra kész!','Nézd meg a napi kihívást!']});
+  if(I18N.en.vehMsg)Object.assign(I18N.en.vehMsg,{idle:['Vroom! Shall we play, {n}? 🎮','Fuelled up and ready!','Check out the daily challenge!']})}catch(e){}
+try{applyLang()}catch(e){}
+function tracking(){return state.track!==false&&!!state.onboarded}
+function goalSetup(box,done,save2){
+  const G={mode:state.goalMode||'age',age:state.ageGrp||'a9',kg:Math.max(30,Math.min(150,state.weight||60)),man:state.goal||15};
+  const val=()=>G.mode==='age'?AGE_GOALS.find(a=>a.k===G.age).dl:G.mode==='weight'?suggested(G.kg):G.man;
+  const draw=()=>{
+    let h='<h3>'+esc(t('gsTitle'))+'</h3><div class="gtabs">'+['age','weight','manual'].map(m=>'<button class="chip" data-gm="'+m+'" aria-pressed="'+(G.mode===m)+'">'+esc(t(m==='age'?'gsAge':m==='weight'?'gsWeight':'gsManual'))+'</button>').join('')+'</div>';
+    if(G.mode==='age')h+='<div class="gopts">'+AGE_GOALS.map(a=>'<button class="chip" data-ga="'+a.k+'" aria-pressed="'+(G.age===a.k)+'"><b>'+esc(t(a.k))+'</b><small>'+esc(amtL(a.dl))+'</small></button>').join('')+'</div><p class="small">'+esc(t('gsAgeNote'))+'</p>';
+    if(G.mode==='weight')h+='<div class="row" style="width:100%"><label for="gsKg">'+esc(t('weight'))+'</label><input type="range" id="gsKg" min="30" max="150" step="1" value="'+G.kg+'"><output id="gsKgO">'+G.kg+' kg</output></div><p class="small">'+esc(t('gsWeightNote'))+'</p>';
+    if(G.mode==='manual')h+='<div class="gstep"><button class="step" id="gsM">−</button><output class="gresult" id="gsMO">'+esc(amtL(G.man))+'</output><button class="step" id="gsP">+</button></div><p class="small">'+esc(t('gsManualNote'))+'</p>';
+    h+='<p class="gresult" id="gsRes">'+esc(t('gsGoal'))+' '+esc(amtL(val()))+'</p><button class="primary" id="gsOk" style="width:100%">'+esc(t(save2?'gsSave2':'gsSave'))+'</button>';
+    box.innerHTML=h;
+    box.querySelectorAll('[data-gm]').forEach(b=>b.onclick=()=>{G.mode=b.dataset.gm;draw()});
+    box.querySelectorAll('[data-ga]').forEach(b=>b.onclick=()=>{G.age=b.dataset.ga;draw()});
+    const k=box.querySelector('#gsKg');if(k)k.oninput=()=>{G.kg=+k.value;box.querySelector('#gsKgO').textContent=G.kg+' kg';box.querySelector('#gsRes').textContent=t('gsGoal')+' '+amtL(val())};
+    const m=box.querySelector('#gsM');if(m){const upd=()=>{box.querySelector('#gsMO').textContent=amtL(G.man);box.querySelector('#gsRes').textContent=t('gsGoal')+' '+amtL(val())};
+      m.onclick=()=>{G.man=Math.max(5,G.man-1);upd()};box.querySelector('#gsP').onclick=()=>{G.man=Math.min(40,G.man+1);upd()}}
+    box.querySelector('#gsOk').onclick=()=>{state.goalMode=G.mode;if(G.mode==='age')state.ageGrp=G.age;if(G.mode==='weight')state.weight=G.kg;state.goal=val();state.track=true;writeSettings();render();if(done)done()};
+  };draw();
+}
+function openGoalSheet(){goalSetup($('goalSheetBody'),()=>{closeSheet('goalScrim');renderSettings&&renderSettings();try{$('trackTg').checked=true}catch(e){}},true);openSheet('goalScrim')}
+$('trackOn').onclick=openGoalSheet;
+$('trackGames').onclick=()=>openGame();
+$('goalWizard').onclick=openGoalSheet;
+$('trackTg').onchange=()=>{if($('trackTg').checked){$('trackTg').checked=false;openGoalSheet()}else{state.track=false;writeSettings();render()}};
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'13.7',hu:['💧 Első indításkor választhatsz: vízivás követése, vagy csak kedvenc és játékok','🎂 Napi cél életkor alapján is – gyerekeknek ez a javasolt, nem kell testsúly','⚙️ A vízivás követése a Beállításokban bármikor be- és kikapcsolható'],en:['💧 On first start you choose: drink tracking, or just buddy and games','🎂 Daily goal by age too – recommended for kids, no weight needed','⚙️ Drink tracking can be switched on or off in Settings any time']},
  {v:'13.6',hu:['🔒 Új: rövid adatvédelmi tájékoztató – a súgóban is megtalálod','🆕 Frissítés után megmutatjuk, mi újság – a súgó „Újdonságok” részében visszaolvasható','📖 A súgó fejezetei ikont kaptak'],en:['🔒 New: a short privacy note – also in Help','🆕 After an update we show what’s new – you can reread it under “What’s new” in Help','📖 Help sections got icons']},
  {v:'13.5',hu:['🎵 A zene hangerejét minden játék külön megjegyzi','🛠️ Javítva: a zene hangereje újraindítás után is megmarad'],en:['🎵 Each game remembers its own music volume','🛠️ Fixed: music volume is kept after a restart']},
  {v:'13.4',hu:['🎯 Cseppvadász: keményebb főellenfél lézerrel, rakétákkal, energiagömbbel és dühös fázissal'],en:['🎯 Drop Hunter: tougher boss with lasers, missiles, an energy orb and a rage phase']},
@@ -5402,7 +5481,7 @@ function startInfo(){
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='13.6';
+const APP_VERSION='13.7';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
