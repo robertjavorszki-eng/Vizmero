@@ -74,6 +74,10 @@ h1{font-family:var(--display);font-weight:800;font-size:1.9rem;letter-spacing:.0
 /* pohár */
 .hero{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:end}
 .glass{position:relative;width:96px;height:200px;border:3px solid var(--ink);border-top:none;border-radius:0 0 18px 18px;overflow:hidden;background:var(--surface)}
+:root{--liquid:rgba(125,206,250,.5);--liquid-top:rgba(170,225,255,.55);--liquid-deep:rgba(80,175,238,.6)}
+html:root[data-dark="1"]{--liquid:rgba(120,205,250,.38);--liquid-top:rgba(150,215,255,.42);--liquid-deep:rgba(80,170,235,.5)}
+.bottle .body,.tank{--water:var(--liquid);--water-deep:var(--liquid-deep)}
+:root{--accent-c:var(--water)}.tank .top .vnum{color:var(--accent-c)}
 .fill{position:absolute;left:0;right:0;bottom:0;height:0;display:flex;flex-direction:column-reverse;transition:height 1.2s cubic-bezier(.3,1.15,.4,1)}
 .fill::before{content:"";position:absolute;left:0;right:0;top:-5px;height:10px;border-radius:50%;background:var(--top,var(--water));opacity:.75}
 .seg-w{flex:none;width:100%}
@@ -1415,7 +1419,7 @@ const ICON={
   heart:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>'
 };
 const ICON_KEYS=Object.keys(ICON);
-const COLORS={water:'var(--water)',teal:'var(--d-teal)',green:'var(--d-green)',yellow:'var(--d-yellow)',orange:'var(--d-juice)',red:'var(--d-red)',pink:'var(--d-pink)',purple:'var(--d-other)',brown:'var(--d-coffee)',grey:'var(--d-milk)'};
+const COLORS={water:'var(--liquid)',teal:'var(--d-teal)',green:'var(--d-green)',yellow:'var(--d-yellow)',orange:'var(--d-juice)',red:'var(--d-red)',pink:'var(--d-pink)',purple:'var(--d-other)',brown:'var(--d-coffee)',grey:'var(--d-milk)'};
 /* gyári italok: id, szín, alapból látszik-e */
 const CATALOG=[
   ['water','water',1],['sparkling','teal',0],['tea','tea',1],['herbal','green',0],['coffee','brown',1],['latte','latte',0],
@@ -5286,7 +5290,7 @@ function vTank(d,tot,g,p){
   const deep=f>0?'<div class="wfill" data-lv="height|.4|0" style="height:'+(f*.4).toFixed(1)+'%;background:var(--water-deep);opacity:.35"></div>':'';
   const bubs=bubsHTML(f,9,true);
   const ex=(p.exp!=null&&p.exp>0&&p.exp<g&&tot<g)?'<div class="bline" style="bottom:'+(p.exp/g*100).toFixed(1)+'%;border-color:var(--warn);left:auto;width:42%"></div><span class="tag" style="bottom:calc('+(p.exp/g*100).toFixed(1)+'% + 6px)">'+esc(t('planNow',amt(half(p.exp))))+'</span>':'';
-  const onWater=f>16,bc=onWater?'#fff':'var(--ink)';
+  const bc='var(--ink)';
   return '<div class="tank"><div class="wfill" data-lv="height|1|0" style="height:'+f.toFixed(1)+'%"></div>'+deep+wave+bubs+ex+
     '<div class="top"><span class="vnum" style="font-size:3.8rem">'+esc(amt(tot))+'</span><span style="font-weight:700">'+esc(t('ofGoal',amtL(g)))+'</span></div>'+
     '<div class="bottom" style="color:'+bc+'"><span>'+(left>0?esc(t('leftShort',amt(left))):esc(t('done')))+'</span>'+
@@ -5334,7 +5338,7 @@ function render(){
   let lastColor='var(--water)';
   if(tot>0){let acc=0;for(const e of d.entries){if(acc>=g)break;const part=Math.min(e.dl,g-acc);acc+=part;
     const s=document.createElement('div');s.className='seg-w';s.style.height=(part/Math.min(tot,g)*100)+'%';
-    const c=drinkOf(adv?e.type:'water').c;s.style.background=c==='var(--water)'?'linear-gradient(var(--water),var(--water-deep))':c;lastColor=c;fill.appendChild(s)}}
+    const c=drinkOf(adv?e.type:'water').c;s.style.background=c==='var(--liquid)'?'linear-gradient(var(--liquid-top),var(--liquid-deep))':c;lastColor=c;fill.appendChild(s)}}
   fill.style.setProperty('--top',lastColor);
   if(tot>0&&tot<g){const wv=document.createElement('div');wv.className='gwave';fill.appendChild(wv)}
   if(tot>0){const bb=document.createElement('div');bb.innerHTML=bubsHTML(100,5,false);const el=bb.firstChild;if(el){el.removeAttribute('data-lv');fill.appendChild(el)}}
@@ -5479,6 +5483,7 @@ function gameFit(){const sh=document.querySelector('#gameScrim .gsheet'),wr=sh&&
   const maxW=Math.round(Math.min(560,Math.max(320,window.innerHeight*.7))),wide=window.innerWidth>maxW+24;wr.style.maxWidth=wide?maxW+'px':'';sh.classList.toggle('wide',wide)}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'13.9',hu:['💧 A víz most világoskék és szinte átlátszó a kijelzőkön – minden színtémánál'],en:['💧 Water is now light blue and almost see-through in the displays – in every color theme']},
  {v:'13.8',hu:['⚙️ Új „Automatikus” effektszint: a készülékhez igazodik, és ha egy játék akad, magától lejjebb vesz','📱 Tableten és fekvő telefonon a játéktér telefonnyi szélességű, középen','🔄 Fekvő telefonon a játék kéri, hogy fordítsd álló helyzetbe'],en:['⚙️ New “Automatic” effects level: adapts to your device and steps down by itself if a game stutters','📱 On tablets and landscape phones the game area is phone-sized and centered','🔄 On a landscape phone the game asks you to turn it upright']},
  {v:'13.7',hu:['💧 Első indításkor választhatsz: vízivás követése, vagy csak kedvenc és játékok','🎂 Napi cél életkor alapján is – gyerekeknek ez a javasolt, nem kell testsúly','⚙️ A vízivás követése a Beállításokban bármikor be- és kikapcsolható'],en:['💧 On first start you choose: drink tracking, or just buddy and games','🎂 Daily goal by age too – recommended for kids, no weight needed','⚙️ Drink tracking can be switched on or off in Settings any time']},
  {v:'13.6',hu:['🔒 Új: rövid adatvédelmi tájékoztató – a súgóban is megtalálod','🆕 Frissítés után megmutatjuk, mi újság – a súgó „Újdonságok” részében visszaolvasható','📖 A súgó fejezetei ikont kaptak'],en:['🔒 New: a short privacy note – also in Help','🆕 After an update we show what’s new – you can reread it under “What’s new” in Help','📖 Help sections got icons']},
@@ -5509,7 +5514,7 @@ function startInfo(){
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='13.8';
+const APP_VERSION='13.9';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
