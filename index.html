@@ -417,7 +417,11 @@ body.advanced .adv.grid{display:grid}
 .scrim.game{align-items:stretch}
 .sheet.gsheet{max-height:none;height:100%;border-radius:0;padding:0;gap:0;overflow:hidden;touch-action:none}
 .sheet.gsheet>header{margin:0;padding:12px 16px 10px;top:0}
-.gwrap{position:relative;flex:1 1 auto!important;min-height:0;overflow:hidden}
+.gwrap{position:relative;flex:1 1 auto!important;min-height:0;overflow:hidden;width:100%;margin:0 auto}
+.gsheet.wide{background:#0d0f18}.gsheet.wide .gwrap{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 40px rgba(0,0,0,.5)}
+.grot{position:absolute;inset:0;z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:rgba(13,15,24,.92);color:#fff;font-weight:800;text-align:center;padding:20px}
+.grot span{font-size:2.6rem;animation:grot 1.6s ease-in-out infinite}@keyframes grot{50%{transform:rotate(-90deg)}}
+@media (orientation:landscape) and (max-height:520px){.grot{display:flex}}
 #gCan{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none}
 .gpanel{position:absolute;inset:0;overflow-y:auto;touch-action:pan-y;display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 18px calc(18px + env(safe-area-inset-bottom,0px));background:var(--bg);color:var(--ink);text-align:center;box-sizing:border-box}
 .gpanel .gpet svg{width:130px;height:122px}
@@ -672,7 +676,8 @@ body.modal{overflow:hidden}
 
     <div>
       <h2 data-t="fxSec"></h2>
-      <div class="opt3">
+      <div class="opt2" style="grid-template-columns:repeat(2,1fr)">
+        <button class="chip" data-fx="auto"><span data-t="fxAuto"></span><small class="small" id="fxAutoNow" style="display:block"></small></button>
         <button class="chip" data-fx="low" data-t="fxLow"></button>
         <button class="chip" data-fx="mid" data-t="fxMid"></button>
         <button class="chip" data-fx="full" data-t="fxFull"></button>
@@ -940,7 +945,7 @@ body.modal{overflow:hidden}
 <div class="scrim game" id="gameScrim" hidden>
   <div class="sheet gsheet" role="dialog" aria-modal="true" aria-labelledby="gTitle">
     <header><h3 id="gTitle" data-t="gTitle"></h3><span style="display:flex;gap:8px"><button class="icon" id="gMusicBtn" data-ta="gMusicA" hidden>🎵</button><button class="icon" id="gHelpBtn" data-ta="gHelpTitle" hidden style="font-weight:900">?</button><button class="icon" data-close="gameScrim" data-ta="close">✕</button></span></header>
-    <div class="gwrap"><canvas id="gCan" aria-label="game"></canvas><div class="gtools" id="gTools" hidden><button id="gUndo"><span data-t="gUndo"></span></button><button id="gRestart"><span data-t="gRestart"></span></button><button id="gQuit"><span data-t="gQuit"></span></button></div><div class="gpanel" id="gPanel" hidden></div><div class="ghelp" id="gHelpBox" hidden></div></div>
+    <div class="gwrap"><canvas id="gCan" aria-label="game"></canvas><div class="gtools" id="gTools" hidden><button id="gUndo"><span data-t="gUndo"></span></button><button id="gRestart"><span data-t="gRestart"></span></button><button id="gQuit"><span data-t="gQuit"></span></button></div><div class="gpanel" id="gPanel" hidden></div><div class="ghelp" id="gHelpBox" hidden></div><div class="grot" aria-live="polite"><span>📱</span><div data-t="rotateMsg"></div></div></div>
   </div>
 </div>
 <div class="scrim center" id="goalScrim" hidden>
@@ -1177,7 +1182,7 @@ hu:{
   today:'Ma', tapToEdit:'Koppints egy sorra a javításhoz.', last7:'Utolsó 7 nap',
   streak:'Sorozat', hits30:'30 napból sikeres', avg7:'Heti átlag', avg30:'Havi átlag', avg7Note:'utolsó 7 nap', avg30Note:'utolsó 30 nap', dayU:'nap',
   display:'Kijelző', vGlass:'Mérőpohár', vRing:'Gyűrű', vBottle:'Kulacs', vCups:'Pohársor', vLine:'Idővonal', vTank:'Akvárium',
-  fxSec:'Vizuális effektek', fxLow:'Egyszerű', fxMid:'Közepes', fxFull:'Teljes', fxNote:'Lassabb telefonon válaszd az Egyszerűt vagy a Közepest: kevesebb animáció, eső- és hópehely, kisebb felbontás a játékokban, így gyorsabb és kíméli az akkut.',
+  fxSec:'Vizuális effektek', fxAuto:'Automatikus', fxLow:'Egyszerű', fxMid:'Közepes', fxFull:'Teljes', fxNote:'Automatikus módban az app a készülékhez igazítja, és ha egy játék akad, magától lejjebb vesz. Lassabb telefonon kézzel is választhatod az Egyszerűt vagy a Közepest: kevesebb animáció és csapadék, kisebb felbontás – gyorsabb és kíméli az akkut.',
   displayNote:'Így látod a mai mennyiséget. A főképernyőn a rajzot oldalra húzva vagy rákoppintva is válthatsz.', tapSwitch:'húzd oldalra vagy koppints',
   ofGoal:a=>'a mai '+a+'ből', leftShort:a=>'még '+a+' a célig', bottleCap:a=>'kulacs: '+a, planNow:a=>'terv most: '+a,
   cupsCount:(n,m)=>n+' / '+m+' pohár', cupSize:a=>'egy pohár = '+a, cupsLeft:n=>'még '+n+' pohár', nextCup:'a következő',
@@ -1287,7 +1292,7 @@ en:{
   today:'Today', tapToEdit:'Tap a row to edit it.', last7:'Last 7 days',
   streak:'Streak', hits30:'Goal met (30 days)', avg7:'Weekly average', avg30:'Monthly average', avg7Note:'last 7 days', avg30Note:'last 30 days', dayU:'days',
   display:'Display', vGlass:'Measuring glass', vRing:'Ring', vBottle:'Bottle', vCups:'Glasses', vLine:'Timeline', vTank:'Aquarium',
-  fxSec:'Visual effects', fxLow:'Simple', fxMid:'Medium', fxFull:'Full', fxNote:'On slower phones pick Simple or Medium: fewer animations, rain drops and snowflakes, lower game resolution – smoother and easier on the battery.',
+  fxSec:'Visual effects', fxAuto:'Automatic', fxLow:'Simple', fxMid:'Medium', fxFull:'Full', fxNote:'In Automatic mode the app adapts to your device and steps down by itself if a game stutters. On slower phones you can also pick Simple or Medium yourself: fewer animations and rain, lower resolution – smoother and easier on the battery.',
   displayNote:'How you see today’s amount. On the main screen you can also swipe or tap the drawing to switch.', tapSwitch:'swipe or tap',
   ofGoal:a=>'of today’s '+a, leftShort:a=>a+' to go', bottleCap:a=>'bottle: '+a, planNow:a=>'plan now: '+a,
   cupsCount:(n,m)=>n+' / '+m+' glasses', cupSize:a=>'one glass = '+a, cupsLeft:n=>n+(n===1?' glass':' glasses')+' to go', nextCup:'next',
@@ -2002,6 +2007,7 @@ function gSfx(kind,x){
   }catch(e){}
 }
 function gResize(){
+  try{gameFit()}catch(e){}
   const cv=$('gCan'),r=cv.parentElement.getBoundingClientRect(),dpr=Math.min(state.fx==='low'?1:state.fx==='mid'?1.5:2.5,window.devicePixelRatio||1);
   GM.W=Math.max(200,r.width);GM.H=Math.max(300,r.height);cv.width=GM.W*dpr;cv.height=GM.H*dpr;GM.ctx=cv.getContext('2d');GM.ctx.setTransform(dpr,0,0,dpr,0,0);
   const g=GM.id&&ARC[GM.id];if(g&&g.resize&&GM.on)g.resize();
@@ -2015,11 +2021,12 @@ function arcNew(id,opts){
   gLoadImgs();$('gPanel').hidden=true;$('gTitle').textContent=t('gn_'+id);state.game.plays++;saveLocal();
   $('gTools').hidden=g.kind!=='puzzle';GM.view='play';
   if(g.kind==='puzzle'){GM.level=opts.daily?(g.dailyLevel||6):Math.max(1,state.game.lv[id]||1);GM.st.solved=0}
-  g.init();wxStart(g);if(g.arena)arenaStart();musStart(id);$('gHelpBtn').hidden=false;$('gMusicBtn').hidden=false;musBtn();if(!state.game.seen[id])gHelp(true);
+  try{fxMonReset()}catch(e){}g.init();wxStart(g);if(g.arena)arenaStart();musStart(id);$('gHelpBtn').hidden=false;$('gMusicBtn').hidden=false;musBtn();if(!state.game.seen[id])gHelp(true);
   cancelAnimationFrame(GM.raf);GM.last=performance.now();GM.raf=requestAnimationFrame(gLoop);
 }
 function gLoop(now){
-  const dt=Math.min(.05,(now-GM.last)/1000);GM.last=now;
+  const raw=(now-GM.last)/1000,dt=Math.min(.05,raw);try{fxMon(raw)}catch(e){}GM.last=now;
+  const rot=window.innerWidth>window.innerHeight&&window.innerHeight<520;if(rot&&GM.on&&!GM.paused&&ARC[GM.id].kind==='action')GM.paused=true;
   if(!GM.paused&&GM.on)gStep(dt);
   wxAmb();
   gDraw(dt);
@@ -5078,7 +5085,7 @@ document.querySelectorAll('#helpScrim details').forEach(d=>d.addEventListener('t
 $('nameSet').oninput=()=>{state.name=cleanName($('nameSet').value);render();writeSettings()};
 document.querySelectorAll('[data-lang-btn]').forEach(b=>b.onclick=()=>{state.lang=b.dataset.langBtn;applyLang();renderSettings();render();writeSettings()});
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{state.view=b.dataset.view;renderSettings();render();writeSettings()});
-document.querySelectorAll('[data-fx]').forEach(b=>b.onclick=()=>{state.fx=b.dataset.fx;applyTheme();renderSettings();writeSettings();if(typeof gResize==='function'&&!$('gameScrim').hidden)gResize()});
+document.querySelectorAll('[data-fx]').forEach(b=>b.onclick=()=>{if(b.dataset.fx==='auto'){state.fxUser=false;state.fx=fxEstimate()}else{state.fxUser=true;state.fx=b.dataset.fx}fxPressed();applyTheme();renderSettings();writeSettings();if(typeof gResize==='function'&&!$('gameScrim').hidden)gResize()});
 document.querySelectorAll('[data-ui]').forEach(b=>b.onclick=()=>{state.ui=b.dataset.ui;applyTheme();renderSettings();render();writeSettings()});
 document.querySelectorAll('[data-unit]').forEach(b=>b.onclick=()=>{state.unit=b.dataset.unit;applyTheme();buildEditor();renderSettings();render();writeSettings()});
 document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;applyTheme();renderSettings();writeSettings()});
@@ -5098,7 +5105,7 @@ function renderSettings(){
   document.querySelectorAll('[data-lang-btn]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.langBtn===(state.lang||'hu')));
   document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===(state.view||'glass')));
   document.querySelectorAll('[data-ui]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.ui===state.ui));
-  document.querySelectorAll('[data-fx]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.fx===(state.fx||'full')));
+  fxPressed();
   document.querySelectorAll('[data-unit]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.unit===state.unit));
   document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===state.mode));
   document.querySelectorAll('[data-accent]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.accent===state.accent));
@@ -5450,8 +5457,29 @@ $('trackOn').onclick=openGoalSheet;
 $('trackGames').onclick=()=>openGame();
 $('goalWizard').onclick=openGoalSheet;
 $('trackTg').onchange=()=>{if($('trackTg').checked){$('trackTg').checked=false;openGoalSheet()}else{state.track=false;writeSettings();render()}};
+
+/* --- automatikus effektszint: becslés + mérés játék közben --- */
+Object.assign(I18N.hu,{fxAutoDown:l=>'Kicsit akadt, ezért átállítottam: '+l+'. A Beállítások → Vizuális effektek alatt visszaállíthatod.',fxAutoNow:l=>'most: '+l,rotateMsg:'Fordítsd álló helyzetbe a telefont a játékhoz!'});
+Object.assign(I18N.en,{fxAutoDown:l=>'It stuttered a bit, so I switched to: '+l+'. You can change it under Settings → Visual effects.',fxAutoNow:l=>'now: '+l,rotateMsg:'Turn your phone upright to play!'});
+try{applyLang()}catch(e){}
+function fxEstimate(){const c=navigator.hardwareConcurrency||4,m=navigator.deviceMemory,ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  if(m&&m<=2)return 'low';if(m&&m<=4)return 'mid';if(c<=4)return 'mid';if(ios)return c>=6?'full':'mid';return 'full'}
+function fxPressed(){const L={low:'fxLow',mid:'fxMid',full:'fxFull'};document.querySelectorAll('[data-fx]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.fx==='auto'?!state.fxUser:(!!state.fxUser&&b.dataset.fx===state.fx)));
+  const n=$('fxAutoNow');if(n)n.textContent=state.fxUser?'':t('fxAutoNow',t(L[state.fx]||'fxFull'))}
+if(!state.fxUser&&!state.fxAutoSet){state.fx=fxEstimate();state.fxAutoSet=1;try{saveLocal()}catch(e){}applyTheme()}
+const FXM={warm:0,n:0,sum:0};
+function fxMonReset(){FXM.warm=0;FXM.n=0;FXM.sum=0}
+function fxMon(raw){
+  if(state.fxUser||!GM.on||GM.paused||state.fx==='low'||raw>.25||raw<=0)return;
+  FXM.warm+=raw;if(FXM.warm<2.5)return;FXM.sum+=raw;FXM.n++;
+  if(FXM.sum>=4){const fps=FXM.n/FXM.sum;FXM.sum=0;FXM.n=0;
+    if(fps<40){state.fx=state.fx==='full'?'mid':'low';applyTheme();saveLocal();fxPressed();gResize();FXM.warm=0;toast(t('fxAutoDown',t(state.fx==='mid'?'fxMid':'fxLow')))}}
+}
+function gameFit(){const sh=document.querySelector('#gameScrim .gsheet'),wr=sh&&sh.querySelector('.gwrap');if(!wr)return;
+  const maxW=Math.round(Math.min(560,Math.max(320,window.innerHeight*.7))),wide=window.innerWidth>maxW+24;wr.style.maxWidth=wide?maxW+'px':'';sh.classList.toggle('wide',wide)}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'13.8',hu:['⚙️ Új „Automatikus” effektszint: a készülékhez igazodik, és ha egy játék akad, magától lejjebb vesz','📱 Tableten és fekvő telefonon a játéktér telefonnyi szélességű, középen','🔄 Fekvő telefonon a játék kéri, hogy fordítsd álló helyzetbe'],en:['⚙️ New “Automatic” effects level: adapts to your device and steps down by itself if a game stutters','📱 On tablets and landscape phones the game area is phone-sized and centered','🔄 On a landscape phone the game asks you to turn it upright']},
  {v:'13.7',hu:['💧 Első indításkor választhatsz: vízivás követése, vagy csak kedvenc és játékok','🎂 Napi cél életkor alapján is – gyerekeknek ez a javasolt, nem kell testsúly','⚙️ A vízivás követése a Beállításokban bármikor be- és kikapcsolható'],en:['💧 On first start you choose: drink tracking, or just buddy and games','🎂 Daily goal by age too – recommended for kids, no weight needed','⚙️ Drink tracking can be switched on or off in Settings any time']},
  {v:'13.6',hu:['🔒 Új: rövid adatvédelmi tájékoztató – a súgóban is megtalálod','🆕 Frissítés után megmutatjuk, mi újság – a súgó „Újdonságok” részében visszaolvasható','📖 A súgó fejezetei ikont kaptak'],en:['🔒 New: a short privacy note – also in Help','🆕 After an update we show what’s new – you can reread it under “What’s new” in Help','📖 Help sections got icons']},
  {v:'13.5',hu:['🎵 A zene hangerejét minden játék külön megjegyzi','🛠️ Javítva: a zene hangereje újraindítás után is megmarad'],en:['🎵 Each game remembers its own music volume','🛠️ Fixed: music volume is kept after a restart']},
@@ -5481,7 +5509,7 @@ function startInfo(){
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='13.7';
+const APP_VERSION='13.8';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
