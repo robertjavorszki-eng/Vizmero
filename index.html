@@ -517,6 +517,11 @@ body.modal{overflow:hidden}
 .help p{margin:0 0 8px;max-width:62ch}
 .help p:last-child{margin-bottom:0}
 .help ul{margin:0 0 8px;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+.hic{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--surface);flex:none;font-size:15px}
+.privkid{list-style:none;margin:6px 0;padding:0;display:flex;flex-direction:column;gap:8px;text-align:left}.privkid li{background:var(--bg);border-radius:12px;padding:9px 12px;font-weight:600;line-height:1.35}
+.privmore{text-align:left;margin:4px 0 6px;align-self:stretch}.privmore>summary{cursor:pointer;font-weight:800;color:var(--water);padding:6px 0}.privmore p{font-size:.9rem;margin:6px 0;line-height:1.4}
+.sheet.info{max-height:86vh;overflow:auto}.newslist{list-style:none;margin:6px 0;padding:0;display:flex;flex-direction:column;gap:7px;text-align:left}.newslist li{background:var(--bg);border-radius:12px;padding:8px 12px;font-weight:600;line-height:1.35}
+.newsv{font-size:.78rem;font-weight:800;letter-spacing:.06em;color:var(--muted);margin:10px 0 2px}.newsv:first-child{margin-top:0}
 .hsec{flex-shrink:0;border:1px solid var(--line);border-radius:14px;background:var(--bg);overflow:hidden}
 .hsec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:13px 14px;font-weight:700;font-size:1rem;color:var(--ink);-webkit-tap-highlight-color:transparent}
 .hsec>summary::-webkit-details-marker{display:none}
@@ -895,6 +900,15 @@ body.modal{overflow:hidden}
         <li data-t="priv3"></li>
       </ul>
       <p class="small" data-t="privMore"></p>
+      <details class="privmore"><summary data-t="privMoreBtn"></summary><div data-lang="hu"><p><b>Mit tárol az app?</b> Az ivásaidat, a beállításaidat, a kedvenced nevét és a játékpontjaidat – mindezt a böngésző saját tárhelyén, a te telefonodon.</p>
+      <p><b>Mit nem kér?</b> Se helyzetet, se kamerát, se mikrofont, se névjegyeket. Nincs reklám, nincs látogatottság-mérés, nincs követés.</p>
+      <p><b>Internet:</b> az app csak azt nézi meg, van-e új verziója – ebben semmi sincs rólad. Az appot a GitHub Pages tárolja; mint minden weboldal tárhelye, megnyitáskor technikailag látja a készülék IP-címét.</p>
+      <p><b>Törlés és mentés:</b> ha törlöd az appot vagy a böngésző adatait, minden adatod eltűnik. Biztonsági mentést a Beállítások → Haladó mód → Adatok résznél készíthetsz.</p>
+      <p><b>Kérdésed van?</b> Kérdezd meg azt, akitől az appot kaptad.</p></div><div data-lang="en"><p><b>What does the app store?</b> Your drinks, your settings, your buddy’s name and your game scores – all in the browser’s own storage, on your phone.</p>
+      <p><b>What doesn’t it ask for?</b> No location, camera, microphone or contacts. No ads, no analytics, no tracking.</p>
+      <p><b>Internet:</b> the app only checks whether a new version is out – that contains nothing about you. The app is hosted on GitHub Pages; like any website host, it technically sees the device’s IP address when the page opens.</p>
+      <p><b>Deleting and backup:</b> if you delete the app or the browser data, all your data is gone. You can make a backup under Settings → Advanced mode → Data.</p>
+      <p><b>Questions?</b> Ask the person who shared the app with you.</p></div></details>
       <button class="primary" id="onbDone" style="width:100%" data-t="start2"></button>
     </div>
   </div>
@@ -907,27 +921,43 @@ body.modal{overflow:hidden}
     <div class="gwrap"><canvas id="gCan" aria-label="game"></canvas><div class="gtools" id="gTools" hidden><button id="gUndo"><span data-t="gUndo"></span></button><button id="gRestart"><span data-t="gRestart"></span></button><button id="gQuit"><span data-t="gQuit"></span></button></div><div class="gpanel" id="gPanel" hidden></div><div class="ghelp" id="gHelpBox" hidden></div></div>
   </div>
 </div>
+<div class="scrim center" id="infoScrim" hidden>
+  <div class="sheet onb info" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+    <div class="drop" id="infoDrop" aria-hidden="true"></div>
+    <h3 id="infoTitle"></h3>
+    <div id="infoBody"></div>
+    <button class="primary" id="infoOk" style="width:100%"></button>
+  </div>
+</div>
 <div class="scrim" id="helpScrim" hidden>
   <div class="sheet help" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
     <header><h3 id="helpTitle" data-t="help"></h3><button class="icon" data-close="helpScrim" data-ta="close">✕</button></header>
 
     <div data-lang="hu" style="display:contents">
-    <details class="hsec"><summary>Mire jó a Lefety?</summary><div class="hbody">
+    <details class="hsec" id="hNewsHu"><summary><span class="hic">🆕</span>Újdonságok</summary><div class="hbody" data-news="hu"></div></details>
+    <details class="hsec"><summary><span class="hic">💧</span>Mire jó a Lefety?</summary><div class="hbody">
       <p>Segít nyomon követni, mennyi folyadékot iszol egy nap. Minden alkalommal, amikor iszol, egy koppintással rögzíted, és mindig látod, hol tartasz a napi célodhoz képest, és hogyan érdemes beosztani a nap hátralévő részét.</p>
     </div></details>
-    <details class="hsec"><summary>Tedd ki ikonként a telefonra</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">📱</span>Tedd ki ikonként a telefonra</summary><div class="hbody">
       <ul>
         <li><b>Android (Chrome):</b> jobb felül ⋮ menü, majd „Hozzáadás a kezdőképernyőhöz”.</li>
         <li><b>iPhone (Safari):</b> alul a Megosztás gomb, majd „Főképernyőhöz adás”.</li>
       </ul>
       <p>Így egy koppintással megnyílik, mint egy app.</p>
     </div></details>
-    <details class="hsec"><summary>Hová mentődnek az adatok?</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">💾</span>Hová mentődnek az adatok?</summary><div class="hbody">
       <p>A naplód <b>csak ezen a telefonon</b> tárolódik. Az app nem küldi el sehova, senkivel nem osztja meg, nincs fiók, nincs reklám. Első megnyitás után internet nélkül is működik.</p>
       <p>Mivel az adatok a telefonon vannak, érdemes néha <b>biztonsági mentést</b> készíteni: beállítások → Mód: Haladó → Adatok → Mentés fájlba. Új telefonon ugyanitt a „Betöltés fájlból” hozza vissza.</p>
       <p>Ha törlöd a böngésző adatait vagy az ikont, a napló is törlődhet, ezért jó, ha van mentésed.</p>
     </div></details>
-    <details class="hsec"><summary>Egyszerű és haladó mód</summary><div class="hbody">
+    <details class="hsec" id="hPrivHu"><summary><span class="hic">🔒</span>Adatvédelem</summary><div class="hbody"><ul class="privkid"><li>📱 Minden, amit beírsz, <b>csak ezen a telefonon</b> marad.</li><li>🙅 Senkinek nem küldjük el – és mi sem látjuk.</li><li>👤 Nem kell fiók, e-mail vagy jelszó.</li><li>🚫 Nincs reklám, és nem figyel senki.</li></ul>
+      <p><b>Mit tárol az app?</b> Az ivásaidat, a beállításaidat, a kedvenced nevét és a játékpontjaidat – mindezt a böngésző saját tárhelyén, a te telefonodon.</p>
+      <p><b>Mit nem kér?</b> Se helyzetet, se kamerát, se mikrofont, se névjegyeket. Nincs reklám, nincs látogatottság-mérés, nincs követés.</p>
+      <p><b>Internet:</b> az app csak azt nézi meg, van-e új verziója – ebben semmi sincs rólad. Az appot a GitHub Pages tárolja; mint minden weboldal tárhelye, megnyitáskor technikailag látja a készülék IP-címét.</p>
+      <p><b>Törlés és mentés:</b> ha törlöd az appot vagy a böngésző adatait, minden adatod eltűnik. Biztonsági mentést a Beállítások → Haladó mód → Adatok résznél készíthetsz.</p>
+      <p><b>Kérdésed van?</b> Kérdezd meg azt, akitől az appot kaptad.</p>
+    </div></details>
+    <details class="hsec"><summary><span class="hic">🎚️</span>Egyszerű és haladó mód</summary><div class="hbody">
       <p>Az app <b>egyszerű</b> módban indul: pohár, javaslat, négy gomb, mai lista és heti grafikon. A beállításokban bármikor átválthatsz <b>haladó</b> módra, ami ezeket is tudja:</p>
       <ul>
         <li>italtípus választása ikonnal (víz, tea, kávé, gyümölcslé, tej, egyéb),</li>
@@ -938,23 +968,23 @@ body.modal{overflow:hidden}
         <li>mentés fájlba és visszatöltés.</li>
       </ul>
     </div></details>
-    <details class="hsec"><summary>Ivás rögzítése</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">➕</span>Ivás rögzítése</summary><div class="hbody">
       <p>Koppints a <b>+1</b>, <b>+2</b>, <b>+3</b> vagy <b>+5 dl</b> gombra (literben +0,1 / +0,2 / +0,3 / +0,5 l). Egy átlagos pohár kb. 2–2,5 dl, egy bögre kb. 3 dl, egy kis üveg víz 5 dl.</p>
       <p>Haladó módban előbb válaszd ki fent, mit iszol; a gombok azzal az itallal rögzítenek. A kávé, a tea és a többi ital is beszámít a napi célba.</p>
     </div></details>
-    <details class="hsec"><summary>Italaim és saját gombok</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🥤</span>Italaim és saját gombok</summary><div class="hbody">
       <p>A beállításokban az <b>Italaim szerkesztése</b> gombbal választhatod ki, mely italok jelenjenek meg (pl. szénsavas víz, gyógytea, tejeskávé, növényi tej, kakaó, leves, sportital, alkoholmentes sör). A kapcsolóval mutatod vagy elrejted, a nyilakkal rendezed, a névre koppintva átnevezheted, és ikont, színt adhatsz neki. A <b>+ Saját ital</b> gombbal teljesen újat is felvehetsz. Minden ital beszámít a napi célba.</p>
       <p>A <b>Gombok</b> részben a négy gyorsgomb mennyiségét és italát állíthatod, pl. „2 dl tejeskávé”. Ha egy gombhoz italt rendelsz, kis ikon jelzi rajta, és mindig azzal rögzít. A „kiválasztott ital” beállítású gomb haladó módban a „Mit iszol?” sorban kijelölt italt rögzíti, egyszerű módban vizet.</p>
       <p>Tejes kávénál nem kell külön felvenni a tejet: rögzítsd az egész csészét egyben. A kávé és a tea is beszámít a folyadékbevitelbe.</p>
     </div></details>
-    <details class="hsec"><summary>Kedvenc: kisállat vagy jármű</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🐾</span>Kedvenc: kisállat vagy jármű</summary><div class="hbody">
       <p>A főoldalon egy kis kedvenc társalog veled: pislog, lélegzik, csóválja a farkát, és a helyzet szerint viselkedik. Ha jó a tempó, vidám; ha lemaradtál vagy régóta nem ittál, szomjas, és odatolja az üres tálját; a napi időszakon kívül alszik; ha megvan a cél, ünnepel. Ital hozzáadásakor ő is ugrik egyet, és ha megsimogatod (rákoppintasz), szívecskéket küld.</p>
       <p>A beállítások <b>Kedvenc</b> részében 20 állat közül választhatsz (köztük dínó, cápa, farkas, sárkány és tigris is), nevet adhatsz neki, öltöztetheted (fejre: baseballsapka, kötött sapka, korona, cilinder, masni; szemre: napszemüveg vagy szemüveg; nyakba: csokornyakkendő, sál, nyakörv; plusz fejhallgató, mindez kombinálható), és kikapcsolhatod a szövegbuborékot vagy az egész kedvencet.</p>
       <p>Állat helyett <b>jármű</b> is lehet: autó, versenyautó, markoló, traktor, tűzoltóautó, busz, mozdony, repülő, rakéta vagy kukásautó, 9 szín közül választva. A jármű tankja mutatja, mennyit ittál ma: ha lemaradtál, villog a tanklámpa („Tankolj!”), este lekapcsolja a lámpáit és alszik, a célnál dudál és ünnepel.</p>
       <p><b>Trükkök:</b> koppints a kedvencedre, és mutat valamit: az állatok pörögnek, szaltóznak, ugranak, táncolnak; a járművek egykerekeznek, driftelnek, a repülő és a rakéta bukfencet ír le. Minden trükknek saját vicces hangja van.</p>
       <p>Mindegyik állatnak saját hangja van: a kutya vakkant, a cica nyávog, a madárka csiripel, a dínó és a sárkány bömböl, a farkas vonyít, a cápa csattog. A járművek dudálnak, berregnek, szirénáznak, a mozdony fütyül. A <b>Hangja</b> résznél választhatod, hogy soha, csak koppintásra, eseményeknél is (ital hozzáadása, cél teljesítése), vagy néha magától is megszólaljon.</p>
     </div></details>
-    <details class="hsec"><summary>Játékterem és napi kihívás</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🎮</span>Játékterem és napi kihívás</summary><div class="hbody">
       <p>A kedvenced alatti <b>Napi kihívás</b> gomb a Játékterembe visz. Itt ügyességi játékok (pl. Cseppfogó, Feltörő) és fejtörők (Csőszerelő, Színes italok, Kancsók, Dugó, Csúszós jég, Ládatologató, Cseppösszevonó, Italos sudoku) közül választhatsz. Az ügyességiek: Cseppfogó, Feltörő, Buborék lövő, Repkedő, Kacskaringós út, Csepp-futam, Felhőugró, Tizenegyes, Kosárdobó (szemből és oldalról), Párkereső. Minden játék első indításakor egy rövid útmutató mondja el, mit kell csinálni, és később is bármikor elolvashatod a fenti <b>?</b> gombbal (addig a játék megáll). Mindegyikben a saját kedvenced szerepel, és a szintek egyre nehezebbek. A fejtörők ott folytatódnak, ahol abbahagytad, és van bennük visszalépés és újrakezdés.</p>
       <p>Minden nap más játékból jön a <b>napi kihívás</b>. Az ügyességi játékokban ez egy feladat (pl. „Kapj el 35 cseppet”), a fejtörőknél egy közös napi feladvány, ami mindenkinek ugyanaz. Így a családban össze lehet hasonlítani, ki hány lépésből oldotta meg. Ha teljesíted a kihívást, nő a <b>széria</b>. Ha kimarad egy nap, egy <b>szériabefagyasztó</b> ❄️ megmenti: az elején kapsz egyet, és minden 7 napos széria után még egyet (legfeljebb kettő lehet nálad). A játékok eredményei csak ezen a telefonon tárolódnak.</p>
       <p>A szabadtéri játékokban (Cseppfogó, Cseppvadász, Feltörő, Buborék lövő, Repkedő, Kacskaringós út, Csepp-futam, Felhőugró, Tizenegyes) <b>változik az időjárás és a napszak</b>: van napsütés, borús őszi idő, zápor szivárvánnyal, vihar villámlással, hóesés, szél és köd, reggeltől éjszakáig. Közben madarak és repülők húznak el, néha legyek, szúnyogok, darazsak zümmögnek, és halk madár-, állat- vagy városi hangok szólnak. Az idő csak a látványt változtatja, a szél legfeljebb kicsit sodorja a lehulló dolgokat. A Játékterem tetején ki is kapcsolhatod.</p>
@@ -962,24 +992,24 @@ body.modal{overflow:hidden}
       <p>A két kosaras játék egy <b>aréna</b>: parketta kék festett zónával, sötét csarnok, nézők táblákkal, néha valaki felpattan szurkolni vagy fotóz (vaku), pásztázó spotlámpák és csillogó parketta. A hangok: morajlás, sípszó kezdéskor, fütty és ujjongás jó dobás után, cipőcsikorgás, orgona szintlépéskor. A palánk fölötti LED-es kijelző (mint az NBA shot clock) mutatja a hátralévő időt: az utolsó 10 másodpercben pittyen, a végén duda szól. A spotlámpák, vakuk és tükröződés a Vizuális effektek beállítást követik.</p>
       <p>A <b>Cseppvadász</b> egy függőleges lövöldözős játék: a kedvenced rét, erdő, tavak, tengerpart, város, havas hegyek és sivatag felett repül, és magától lő. Lődd le és gyűjtsd be a cseppeket, kerüld a visszalövő ellenfeleket, szedd fel az extrákat (szórt lövés, gyorstüzelés, rakéták, vízsugár, pajzs, mágnes, segítő drónok, élet), a 🌊 gombbal pedig letakaríthatod a képernyőt. Időnként főellenfél jön.</p>
     </div></details>
-    <details class="hsec"><summary>Hangok és rezgés</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🔊</span>Hangok és rezgés</summary><div class="hbody">
       <p>Az app rövid hangot ad ital hozzáadásakor, törléskor vagy visszavonáskor, és egy kis dallamot, amikor meglesz a napi cél. A beállítások <b>Hangok és rezgés</b> részében kikapcsolhatod, eseményenként is, választhatsz hangkészletet (Vízcsepp, Buborék, Dallam), állíthatod a hangerőt, és a lejátszás gombbal meg is hallgathatod.</p>
       <p>Alapból a napi időszakon kívül (pl. késő este) csendben marad. Androidon koppintáskor röviden rezeg is; iPhone-on ezt a böngésző nem engedi. iPhone-on a néma kapcsoló a hangokat is elnémítja. A hangerőt a telefon médiahangereje szabályozza (a hangerőgombok, amíg az app van előtérben), és ha közben zenét hallgatsz, az app hangjai nem állítják le. Ha az app a háttérből jön vissza, a hang az első koppintással újraindul.</p>
     </div></details>
-    <details class="hsec"><summary>Hatféle kijelző</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">📊</span>Hatféle kijelző</summary><div class="hbody">
       <p>A mennyiséget hatféleképpen nézheted: <b>Mérőpohár</b>, <b>Gyűrű</b>, <b>Kulacs</b>, <b>Pohársor</b> (2 dl-es poharakban számolva), <b>Idővonal</b> (a nap grafikonja a tervhez képest) és <b>Akvárium</b>. A rajzot balra húzva a következőre, jobbra húzva az előzőre vált (koppintással is lapozhatsz), a beállítások „Kijelző” részében pedig közvetlenül választhatsz. A pontok a rajz alatt mutatják, melyiknél jársz.</p>
     </div></details>
-    <details class="hsec"><summary>Javaslat a nap hátralévő részére</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">💡</span>Javaslat a nap hátralévő részére</summary><div class="hbody">
       <p>A pohár alatti kártya megmondja, hogy jó tempóban vagy-e, és mennyit érdemes inni a nap hátralévő részében (pl. „kb. 50 percenként egy 2 dl-es pohár”).</p>
       <p>A pohárban a narancssárga szaggatott vonal mutatja, hol kéne most tartanod, ha a napi célt egyenletesen osztanád el a napi időszakra.</p>
     </div></details>
-    <details class="hsec"><summary>Napi időszak</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🕒</span>Napi időszak</summary><div class="hbody">
       <p>A beállításokban megadhatod, mikor kezdődik és ér véget a napod (alapból 7:00 és 22:00). A tempó-javaslat erre az időszakra osztja el a célt. Ezen kívül is nyugodtan rögzítheted, amit iszol, az is beleszámít.</p>
     </div></details>
-    <details class="hsec"><summary>Lista, törlés és javítás</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">📝</span>Lista, törlés és javítás</summary><div class="hbody">
       <p>A „Ma” alatt minden ivás szerepel időponttal. A sor végén lévő <b>×</b> törli, utána néhány másodpercig a lap alján megjelenik a <b>Visszavonás</b> gomb. Haladó módban a sorra koppintva a mennyiséget, az italt és az időpontot is javíthatod.</p>
     </div></details>
-    <details class="hsec"><summary>Mai nap: mozgás és meleg</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🏃</span>Mai nap: mozgás és meleg</summary><div class="hbody">
       <ul>
         <li><b>Ülő:</b> nincs plusz</li>
         <li><b>Közepes:</b> +3 dl (séta, könnyebb munka)</li>
@@ -988,35 +1018,43 @@ body.modal{overflow:hidden}
       </ul>
       <p>Ez csak az adott napra szól, másnap újra „Ülő”-ről indul.</p>
     </div></details>
-    <details class="hsec"><summary>A napi cél</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🎯</span>A napi cél</summary><div class="hbody">
       <p>A napi cél az <b>alapcél</b> plusz a mai mozgás és meleg. Az alapcélt a beállításokban adhatod meg: a <b>testsúlyod</b> alapján a program javasol egyet (testsúly × 30 ml, ennek kb. 80%-a italból, a többi az ételekből jön), vagy a <b>−</b> és <b>+</b> gombbal kézzel állíthatod.</p>
       <p>Jó visszajelzés a vizelet színe: a halvány szalmasárga megfelelő, a sötétsárga kevés folyadékot jelez. Ha valamilyen betegség miatt az orvosod korlátozta a folyadékot, az ő javaslata az irányadó.</p>
     </div></details>
-    <details class="hsec"><summary>Utolsó 7 nap és statisztika</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">📅</span>Utolsó 7 nap és statisztika</summary><div class="hbody">
       <p>Az oszlopok a napi mennyiséget mutatják. A színes, telt oszlop azt jelenti, hogy aznap meglett a cél. A szaggatott vonal az alapcél. Haladó módban alatta a <b>sorozat</b> (hány egymást követő napon lett meg a cél), a sikeres napok száma és az átlagok is látszanak. Az átlag csak azokat a napokat számolja, amikor rögzítettél valamit.</p>
     </div></details>
-    <details class="hsec"><summary>Beállítások</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">⚙️</span>Beállítások</summary><div class="hbody">
       <p>Itt választhatsz <b>nyelvet</b> (magyar vagy angol), megadhatod vagy átírhatod a keresztneved, ezzel köszönt az app, és itt állíthatod a <b>mértékegységet</b> is: deciliter vagy liter. A megjelenés lehet <b>Nappali</b>, <b>Éjszakai</b> vagy <b>Rendszer</b> (ez a telefonod világos vagy sötét módját követi), és hat szín közül választhatsz: Óceán, Menta, Korall, Levendula, a színes <b>Vidám</b>, és a mindig sötét, élénk <b>Neon</b>.</p>
     </div></details>
     </div>
 
     <div data-lang="en" style="display:contents">
-    <details class="hsec"><summary>What is Slurp for?</summary><div class="hbody">
+    <details class="hsec" id="hNewsEn"><summary><span class="hic">🆕</span>What’s new</summary><div class="hbody" data-news="en"></div></details>
+    <details class="hsec"><summary><span class="hic">💧</span>What is Slurp for?</summary><div class="hbody">
       <p>It helps you keep track of how much you drink in a day. Every time you drink, log it with one tap. You always see where you are against your daily goal, and how to spread out the rest of the day.</p>
     </div></details>
-    <details class="hsec"><summary>Add it to your home screen</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">📱</span>Add it to your home screen</summary><div class="hbody">
       <ul>
         <li><b>Android (Chrome):</b> ⋮ menu at the top right, then “Add to Home screen”.</li>
         <li><b>iPhone (Safari):</b> the Share button at the bottom, then “Add to Home Screen”.</li>
       </ul>
       <p>Then it opens with one tap, just like an app.</p>
     </div></details>
-    <details class="hsec"><summary>Where is my data stored?</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">💾</span>Where is my data stored?</summary><div class="hbody">
       <p>Your log is stored <b>only on this phone</b>. The app doesn’t send it anywhere or share it with anyone. No account, no ads. After the first visit it also works offline.</p>
       <p>Because the data lives on your phone, make a <b>backup</b> now and then: Settings → Mode: Advanced → Data → Save to file. On a new phone, “Load from file” in the same place brings it back.</p>
       <p>If you clear your browser data or remove the icon, the log may be deleted too, so a backup is a good idea.</p>
     </div></details>
-    <details class="hsec"><summary>Simple and advanced mode</summary><div class="hbody">
+    <details class="hsec" id="hPrivEn"><summary><span class="hic">🔒</span>Privacy</summary><div class="hbody"><ul class="privkid"><li>📱 Everything you enter stays <b>only on this phone</b>.</li><li>🙅 We don’t send it to anyone – and we can’t see it either.</li><li>👤 No account, e-mail or password needed.</li><li>🚫 No ads, and nobody is watching.</li></ul>
+      <p><b>What does the app store?</b> Your drinks, your settings, your buddy’s name and your game scores – all in the browser’s own storage, on your phone.</p>
+      <p><b>What doesn’t it ask for?</b> No location, camera, microphone or contacts. No ads, no analytics, no tracking.</p>
+      <p><b>Internet:</b> the app only checks whether a new version is out – that contains nothing about you. The app is hosted on GitHub Pages; like any website host, it technically sees the device’s IP address when the page opens.</p>
+      <p><b>Deleting and backup:</b> if you delete the app or the browser data, all your data is gone. You can make a backup under Settings → Advanced mode → Data.</p>
+      <p><b>Questions?</b> Ask the person who shared the app with you.</p>
+    </div></details>
+    <details class="hsec"><summary><span class="hic">🎚️</span>Simple and advanced mode</summary><div class="hbody">
       <p>The app starts in <b>simple</b> mode: glass, suggestion, four buttons, today’s list and the weekly chart. You can switch to <b>advanced</b> mode in Settings at any time, which adds:</p>
       <ul>
         <li>drink type with an icon (water, tea, coffee, juice, milk, other),</li>
@@ -1027,23 +1065,23 @@ body.modal{overflow:hidden}
         <li>saving to a file and loading it back.</li>
       </ul>
     </div></details>
-    <details class="hsec"><summary>Logging a drink</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">➕</span>Logging a drink</summary><div class="hbody">
       <p>Tap <b>+1</b>, <b>+2</b>, <b>+3</b> or <b>+5 dl</b> (in liters: +0.1 / +0.2 / +0.3 / +0.5 l). An average glass is about 2–2.5 dl, a mug about 3 dl, a small bottle of water 5 dl. (1 dl = 100 ml.)</p>
       <p>In advanced mode, first pick what you’re drinking at the top; the buttons log that drink. Coffee, tea and other drinks also count towards your daily goal.</p>
     </div></details>
-    <details class="hsec"><summary>My drinks and custom buttons</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🥤</span>My drinks and custom buttons</summary><div class="hbody">
       <p>In Settings, <b>Edit my drinks</b> lets you choose which drinks appear (e.g. sparkling water, herbal tea, milk coffee, plant milk, cocoa, soup, sports drink, alcohol-free beer). Use the switch to show or hide one, the arrows to reorder, and tap a name to rename it and pick an icon and color. <b>+ Custom drink</b> adds a brand-new one. Every drink counts towards your daily goal.</p>
       <p>Under <b>Buttons</b> you can set the amount and drink of the four quick buttons, e.g. “2 dl milk coffee”. A button with a drink shows a small icon and always logs that drink. A button set to “selected drink” logs the drink chosen under “What are you drinking?” in advanced mode, and water in simple mode.</p>
       <p>For coffee with milk there’s no need to log the milk separately: log the whole cup at once. Coffee and tea count towards your fluid intake too.</p>
     </div></details>
-    <details class="hsec"><summary>Buddy: pet or vehicle</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🐾</span>Buddy: pet or vehicle</summary><div class="hbody">
       <p>A little pet keeps you company on the main screen: it blinks, breathes, wags its tail and reacts to how you’re doing. On pace it’s happy; if you’re behind or haven’t had a drink for a while, it’s thirsty and pushes its empty bowl towards you; outside your daily window it sleeps; when you reach your goal, it celebrates. It hops when you add a drink, and sends hearts when you pet it (tap it).</p>
       <p>Under <b>Buddy</b> in Settings you can pick from 20 animals (including a dino, shark, wolf, dragon and tiger), give it a name, dress it up (head: baseball cap, beanie, crown, top hat, bow; eyes: sunglasses or glasses; neck: bow tie, scarf, collar; plus headphones, all combinable), and turn off the speech bubble or the buddy altogether.</p>
       <p>Instead of an animal you can pick a <b>vehicle</b>: car, race car, digger, tractor, fire truck, bus, train, plane, rocket or garbage truck, in 9 colors. Its fuel tank shows how much you’ve drunk today: when you’re behind the fuel light blinks (“Fill me up!”), in the evening it turns its lights off and sleeps, and at your goal it honks and celebrates.</p>
       <p><b>Tricks:</b> tap your buddy and it shows off: animals spin, flip, jump and dance; vehicles pop wheelies and drift, and the plane and rocket loop the loop. Every trick has its own funny sound.</p>
       <p>Every animal has its own sound: the dog barks, the cat meows, the bird chirps, the dino and dragon roar, the wolf howls, the shark chomps. Vehicles honk, rev, wail their sirens, and the train whistles. Under <b>Its sound</b> choose whether it never makes a sound, only when tapped, on events too (adding a drink, reaching your goal), or now and then on its own.</p>
     </div></details>
-    <details class="hsec"><summary>Arcade and daily challenge</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🎮</span>Arcade and daily challenge</summary><div class="hbody">
       <p>The <b>Daily challenge</b> button under your buddy opens the Arcade, with action games (e.g. Drop Catcher, Brick Breaker) and puzzles (Pipe Fixer, Drink Sort, Jugs, Traffic Jam, Slippery Ice, Crate Pusher, Drop Merge, Drink Sudoku). Action games: Drop Catcher, Brick Breaker, Bubble Shooter, Flappy Flyer, Twisty Road, Drop Dash, Cloud Jumper, Penalty Kick, Hoop Shot (front and side), Memory. Each game shows a short how-to the first time you play it, and you can reread it anytime with the <b>?</b> button at the top (the game pauses meanwhile). Your own buddy stars in each, and the levels get harder and harder. Puzzles continue where you left off and have undo and restart.</p>
       <p>Every day the <b>daily challenge</b> comes from a different game: a task in action games (e.g. “Catch 35 drops”), or a shared daily puzzle that is the same for everyone, so the family can compare who needed the fewest moves. Complete it to grow your <b>streak</b>. If you miss a day, a <b>streak freeze</b> ❄️ saves it: you start with one and earn another with every 7-day streak (you can hold two at most). Game results are stored only on this phone.</p>
       <p>Outdoor games (Drop Catcher, Drop Hunter, Brick Breaker, Bubble Shooter, Flappy Flyer, Twisty Road, Drop Dash, Cloud Jumper, Penalty Kick) get <b>changing weather and time of day</b>: sunshine, cloudy autumn, showers with a rainbow, storms with lightning, snow, wind and fog, from morning to night. Birds and planes pass by, flies, mosquitoes and wasps buzz around now and then, with soft bird, animal or city sounds. Weather is mostly visual – wind only nudges falling items a little. You can switch it off at the top of the Arcade.</p>
@@ -1051,24 +1089,24 @@ body.modal{overflow:hidden}
       <p>Both basketball games take place in an <b>arena</b>: parquet floor with a blue painted lane, a dark hall, fans with signs who sometimes jump up or take photos (flash), sweeping spotlights and a glossy floor. Sounds: crowd murmur, a whistle at the start, whistles and cheers after good shots, sneaker squeaks, an organ riff on level-up. The LED display above the backboard (like an NBA shot clock) shows the time left: it beeps in the last 10 seconds and the buzzer sounds at the end. Spotlights, flashes and reflections follow the Visual effects setting.</p>
       <p><b>Drop Hunter</b> is a vertical shooter: your buddy flies over meadows, forests, lakes, beaches, a city, snowy peaks and desert, firing on its own. Shoot and collect the drops, dodge enemies that shoot back, grab power-ups (spread, rapid fire, rockets, water beam, shield, magnet, helper drones, life) and clear the screen with the 🌊 button. A boss shows up now and then.</p>
     </div></details>
-    <details class="hsec"><summary>Sounds and vibration</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🔊</span>Sounds and vibration</summary><div class="hbody">
       <p>The app plays a short sound when you add a drink, delete or undo, and a little tune when you reach your daily goal. Under <b>Sounds and vibration</b> in Settings you can turn them off (per event too), pick a sound set (Water drop, Bubble, Melody), set the volume and preview each one with the play button.</p>
       <p>By default it stays quiet outside your daily window (e.g. late at night). On Android it also gives a short buzz when you tap; the browser doesn’t allow that on iPhone. On iPhone the silent switch also mutes the sounds. Volume follows the phone’s media volume (the volume buttons while the app is in front), and the app’s sounds don’t stop your music. When the app comes back from the background, sound restarts with your first tap.</p>
     </div></details>
-    <details class="hsec"><summary>Six display styles</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">📊</span>Six display styles</summary><div class="hbody">
       <p>You can view your progress six ways: <b>Measuring glass</b>, <b>Ring</b>, <b>Bottle</b>, <b>Glasses</b> (counted in 2 dl glasses), <b>Timeline</b> (your day charted against the plan) and <b>Aquarium</b>. Swipe the drawing left for the next one or right for the previous one (a tap also moves on), or pick one directly under “Display” in Settings. The dots below the drawing show which one you’re on.</p>
     </div></details>
-    <details class="hsec"><summary>Suggestion for the rest of the day</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">💡</span>Suggestion for the rest of the day</summary><div class="hbody">
       <p>The card below the glass tells you whether you’re on pace and how much to drink for the rest of the day (e.g. “about one 2 dl glass every 50 minutes”).</p>
       <p>The orange dashed line in the glass shows where you should be right now if you spread your goal evenly across your daily window.</p>
     </div></details>
-    <details class="hsec"><summary>Daily window</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🕒</span>Daily window</summary><div class="hbody">
       <p>In Settings you can set when your day starts and ends (7:00 and 22:00 by default). The pace suggestion spreads your goal across this window. You can still log drinks outside it, and they count too.</p>
     </div></details>
-    <details class="hsec"><summary>List, delete and edit</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">📝</span>List, delete and edit</summary><div class="hbody">
       <p>Every drink appears under “Today” with its time. The <b>×</b> at the end of a row deletes it, and an <b>Undo</b> button appears at the bottom for a few seconds. In advanced mode, tap a row to change the amount, the drink or the time.</p>
     </div></details>
-    <details class="hsec"><summary>Today: activity and heat</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🏃</span>Today: activity and heat</summary><div class="hbody">
       <ul>
         <li><b>Resting:</b> no extra</li>
         <li><b>Moderate:</b> +3 dl (walking, light work)</li>
@@ -1077,14 +1115,14 @@ body.modal{overflow:hidden}
       </ul>
       <p>This only applies to the current day; the next day starts again at “Resting”.</p>
     </div></details>
-    <details class="hsec"><summary>Your daily goal</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">🎯</span>Your daily goal</summary><div class="hbody">
       <p>Your daily goal is your <b>base goal</b> plus today’s activity and heat. Set the base goal in Settings: the app suggests one from your <b>body weight</b> (weight × 30 ml, about 80% of which comes from drinks and the rest from food), or set it by hand with the <b>−</b> and <b>+</b> buttons.</p>
       <p>Urine color is a good check: pale straw yellow is fine, dark yellow means too little fluid. If a doctor has limited your fluid intake because of a medical condition, follow their advice.</p>
     </div></details>
-    <details class="hsec"><summary>Last 7 days and statistics</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">📅</span>Last 7 days and statistics</summary><div class="hbody">
       <p>The bars show the daily amount. A solid colored bar means you reached your goal that day. The dashed line is your base goal. In advanced mode you also see your <b>streak</b> (how many days in a row you hit your goal), the number of successful days and averages. Averages only count days on which you logged something.</p>
     </div></details>
-    <details class="hsec"><summary>Settings</summary><div class="hbody">
+    <details class="hsec"><summary><span class="hic">⚙️</span>Settings</summary><div class="hbody">
       <p>Choose the <b>language</b> (Hungarian or English), enter or change your first name for the greeting, and pick the <b>unit</b>: deciliters or liters. Appearance can be <b>Light</b>, <b>Dark</b> or <b>System</b> (follows your phone’s light or dark mode), with six color themes: Ocean, Mint, Coral, Lavender, the colorful <b>Cheerful</b>, and the always-dark, vivid <b>Neon</b>.</p>
     </div></details>
     </div>
@@ -4998,7 +5036,7 @@ function onbStep2(){state.name=cleanName($('nameOnb').value);render();showOnb(2)
 $('onbNext').onclick=onbStep2;
 $('onbSkip').onclick=()=>{$('nameOnb').value='';onbStep2()};
 $('nameOnb').addEventListener('keydown',e=>{if(e.key==='Enter')onbStep2()});
-$('onbDone').onclick=()=>{state.onboarded=true;closeSheet('onbScrim');render();writeSettings()};
+$('onbDone').onclick=()=>{state.onboarded=true;state.privSeen=1;state.seenVer=APP_VERSION;closeSheet('onbScrim');render();writeSettings()};
 
 /* --- beállítások --- */
 $('openSet').onclick=()=>{buildBtnCfg();renderSound();renderPetSettings();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderSettings();openSheet('setScrim')};
@@ -5329,13 +5367,42 @@ loadLocal();normalizeDrinks();normalizeSound();normalizePet();normalizeGame();ga
 if(!state.lang&&state.onboarded)state.lang='hu';
 applyLang();applyTheme();render();
 if(!state.onboarded)startOnb();
+setTimeout(()=>{try{renderNewsHelp();startInfo()}catch(e){}},700);
 setInterval(render,60000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
 
+
+/* --- újdonságok és adatvédelmi tájékoztató --- */
+const CHANGES=[
+ {v:'13.6',hu:['🔒 Új: rövid adatvédelmi tájékoztató – a súgóban is megtalálod','🆕 Frissítés után megmutatjuk, mi újság – a súgó „Újdonságok” részében visszaolvasható','📖 A súgó fejezetei ikont kaptak'],en:['🔒 New: a short privacy note – also in Help','🆕 After an update we show what’s new – you can reread it under “What’s new” in Help','📖 Help sections got icons']},
+ {v:'13.5',hu:['🎵 A zene hangerejét minden játék külön megjegyzi','🛠️ Javítva: a zene hangereje újraindítás után is megmarad'],en:['🎵 Each game remembers its own music volume','🛠️ Fixed: music volume is kept after a restart']},
+ {v:'13.4',hu:['🎯 Cseppvadász: keményebb főellenfél lézerrel, rakétákkal, energiagömbbel és dühös fázissal'],en:['🎯 Drop Hunter: tougher boss with lasers, missiles, an energy orb and a rage phase']},
+ {v:'13.3',hu:['🎯 Cseppvadász: szintenként nehezedik, páncélos lövedékek és lecsapó varjak'],en:['🎯 Drop Hunter: harder each level, armored shots and diving crows']},
+ {v:'13.1',hu:['🎯 Új játék: Cseppvadász – repülj tájak felett, lőj, gyűjts extrákat, győzd le a főellenfelet!'],en:['🎯 New game: Drop Hunter – fly over landscapes, shoot, grab power-ups and beat the boss!']},
+ {v:'13.0',hu:['🏀 Kosár oldalról: pályafestés oldalnézetből, rombusz szövésű háló, új labdák, NBA-s shot clock'],en:['🏀 Side-view hoops: side-on court lines, diamond-weave net, new balls, NBA-style shot clock']}
+];
+Object.assign(I18N.hu,{infoPrivTitle:'🔒 A te adataid csak a tieid',infoNewsTitle:v=>'🆕 Frissült az app! ('+v+')',infoOk:'Értem!',infoNewsOk:'Szuper!',privMoreBtn:'Bővebben',infoNewsMore:'Korábbi újdonságok: Súgó → Újdonságok'});
+Object.assign(I18N.en,{infoPrivTitle:'🔒 Your data is yours only',infoNewsTitle:v=>'🆕 The app was updated! ('+v+')',infoOk:'Got it!',infoNewsOk:'Great!',privMoreBtn:'Read more',infoNewsMore:'Earlier news: Help → What’s new'});
+try{applyLang()}catch(e){}
+function newsHTML(c){const L=state.lang==='en'?'en':'hu';return '<ul class="newslist">'+c[L].map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>'}
+function renderNewsHelp(){document.querySelectorAll('[data-news]').forEach(el=>{const L=el.dataset.news;el.innerHTML=CHANGES.map(c=>'<p class="newsv">v'+c.v+'</p><ul class="newslist">'+c[L].map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>').join('')})}
+function showInfo(kind,next){
+  const L=state.lang==='en'?'en':'hu',b=$('infoBody');$('infoDrop').className='drop'+(kind==='priv'?' shield':'');
+  if(kind==='priv'){$('infoTitle').textContent=t('infoPrivTitle');const src=$(L==='en'?'hPrivEn':'hPrivHu').querySelector('.hbody').innerHTML,i=src.indexOf('</ul>')+5;
+    b.innerHTML=src.slice(0,i)+'<details class="privmore"><summary>'+esc(t('privMoreBtn'))+'</summary>'+src.slice(i)+'</details>';$('infoOk').textContent=t('infoOk')}
+  else{const c=CHANGES[0];$('infoTitle').textContent=t('infoNewsTitle',c.v);b.innerHTML=newsHTML(c)+'<p class="small">'+esc(t('infoNewsMore'))+'</p>';$('infoOk').textContent=t('infoNewsOk')}
+  $('infoOk').onclick=()=>{if(kind==='priv')state.privSeen=1;else state.seenVer=APP_VERSION;writeSettings();closeSheet('infoScrim');if(next)setTimeout(next,250)};
+  openSheet('infoScrim',$('infoOk'));
+}
+function startInfo(){
+  if(!state.onboarded)return;
+  const news=()=>{if(state.seenVer!==APP_VERSION&&CHANGES[0].v===APP_VERSION)showInfo('news');else if(state.seenVer!==APP_VERSION){state.seenVer=APP_VERSION;writeSettings()}};
+  if(!state.privSeen)showInfo('priv',news);else news();
+}
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='13.5';
+const APP_VERSION='13.6';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
@@ -5363,7 +5430,7 @@ if('serviceWorker' in navigator){
     }).catch(()=>{});
   });
 }
-try{if(sessionStorage.getItem('vizmero.updated')){sessionStorage.removeItem('vizmero.updated');setTimeout(()=>toast(t('tUpdated')),400)}}catch(e){}
+try{if(sessionStorage.getItem('vizmero.updated')){sessionStorage.removeItem('vizmero.updated');if(state.seenVer===APP_VERSION)setTimeout(()=>toast(t('tUpdated')),400)}}catch(e){}
 </script>
 
 </body>
