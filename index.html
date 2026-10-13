@@ -5797,6 +5797,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.8',hu:['🔄 Frissítéskor az app már csak egyszer töltődik újra, nem kétszer.'],en:['🔄 When updating, the app now reloads only once, not twice.']},
  {v:'14.7',hu:['🕒 A Napi időszak időmezői már nem érnek össze, az idő középen van és nagyobb betűvel látszik.'],en:['🕒 The Daily window time fields no longer touch, and the time is centered and larger.']},
  {v:'14.5',hu:['🕒 Külön napi időszak hétvégére: a Beállítások → Napi időszak alatt bekapcsolhatod a „Hétvégén másik időszak” kapcsolót, és szombatra–vasárnapra más kezdést és véget adhatsz meg.'],en:['🕒 Separate daily window for weekends: in Settings → Daily window turn on “Different window on weekends” and set another start and end for Saturday–Sunday.']},
  {v:'14.4',hu:['✅ A kiválasztott gombok (Mai nap, Mit iszol?) most sötét módban is jól látszanak: vastagabb keret, fény és egy kis pipa.'],en:['✅ Selected buttons (Today, What are you drinking?) are now easy to see in dark mode too: thicker border, glow and a small check mark.']},
@@ -5835,29 +5836,38 @@ function startInfo(){
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.7';
+const APP_VERSION='14.8';
+/* egyetlen frissítés: ha már folyamatban van, vagy az oldal már a legújabb, nem töltünk újra */
+let updReloading=false;
+function latestVer(){return fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>j&&j.v||null).catch(()=>null)}
 function checkVersion(){
-  fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
-    if(!j||!j.v||j.v===APP_VERSION)return;
-    if(new URLSearchParams(location.search).get('v')===j.v)return;
-    try{sessionStorage.setItem('vizmero.updated','1')}catch(e){}
-    location.replace(location.pathname+'?v='+encodeURIComponent(j.v));
-  }).catch(()=>{});
+  if(updReloading)return;
+  latestVer().then(v=>{
+    if(!v||v===APP_VERSION||updReloading)return;
+    if(new URLSearchParams(location.search).get('v')===v)return;
+    updReloading=true;try{sessionStorage.setItem('vizmero.updated','1')}catch(e){}
+    location.replace(location.pathname+'?v='+encodeURIComponent(v));
+  });
 }
 if(!('serviceWorker' in navigator))document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkVersion()});
 if('serviceWorker' in navigator){
-  const hadController=!!navigator.serviceWorker.controller;let reloading=false;
+  const hadController=!!navigator.serviceWorker.controller;
+  /* az új háttér-szolgáltatás átvette: csak akkor töltünk újra, ha ez az oldal még a régi verzió
+     (iPhone-on megnyitáskor az oldal már frissen jön, ilyenkor fölösleges lenne a második újratöltés) */
   navigator.serviceWorker.addEventListener('controllerchange',()=>{
-    if(!hadController||reloading)return;reloading=true;
-    try{sessionStorage.setItem('vizmero.updated','1')}catch(e){}
-    location.reload();
+    if(!hadController||updReloading)return;
+    latestVer().then(v=>{
+      if(updReloading||!v||v===APP_VERSION)return;
+      updReloading=true;try{sessionStorage.setItem('vizmero.updated','1')}catch(e){}
+      location.reload();
+    });
   });
   window.addEventListener('load',()=>{
     navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(reg=>{
       const nudge=w=>{if(w&&navigator.serviceWorker.controller)w.postMessage('skipWaiting')};
       nudge(reg.waiting);
       reg.addEventListener('updatefound',()=>{const w=reg.installing;if(w)w.addEventListener('statechange',()=>{if(w.state==='installed')nudge(w)})});
-      const check=()=>{reg.update().catch(()=>{});checkVersion()};
+      const check=()=>{if(updReloading)return;reg.update().catch(()=>{});checkVersion()};
       document.addEventListener('visibilitychange',()=>{if(!document.hidden)check()});
       setInterval(check,30*60*1000);
     }).catch(()=>{});
