@@ -508,6 +508,7 @@ body.modal{overflow:hidden}
 .base output{font-weight:700;font-size:1.1rem;font-variant-numeric:tabular-nums;min-width:3.6em;text-align:center}
 .text,.time{width:100%;height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:500 1rem var(--body);padding-inline:14px}
 .text:focus,.time:focus{border-color:var(--water);outline:none}
+.tsub{margin:4px 0 8px;font-weight:800;font-size:.85rem;color:var(--ink)}
 .times{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .times label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;color:var(--muted)}
 .amount{display:flex;align-items:center;justify-content:center;gap:18px}
@@ -783,9 +784,18 @@ body.modal{overflow:hidden}
 
     <div>
       <h2 data-t="window"></h2>
+      <p class="tsub" id="wkdLbl" data-t="wkDays" hidden></p>
       <div class="times">
         <label><span data-t="start"></span><input class="time" type="time" id="tStart" value="07:00"></label>
         <label><span data-t="end"></span><input class="time" type="time" id="tEnd" value="22:00"></label>
+      </div>
+      <div class="srow" style="margin-top:10px"><span data-t="wkOn"></span><label class="tg"><input type="checkbox" id="wkOn"><i></i></label></div>
+      <div id="wkBox" hidden>
+        <p class="tsub" data-t="wkEnd"></p>
+        <div class="times">
+          <label><span data-t="start"></span><input class="time" type="time" id="wStart" value="09:00"></label>
+          <label><span data-t="end"></span><input class="time" type="time" id="wEnd" value="23:00"></label>
+        </div>
       </div>
       <p class="small" style="margin-top:8px" data-t="windowNote"></p>
     </div>
@@ -1070,6 +1080,7 @@ body.modal{overflow:hidden}
     </div></details>
     <details class="hsec"><summary><span class="hic">🕒</span>Napi időszak</summary><div class="hbody">
       <p>A beállításokban megadhatod, mikor kezdődik és ér véget a napod (alapból 7:00 és 22:00). A tempó-javaslat erre az időszakra osztja el a célt. Ezen kívül is nyugodtan rögzítheted, amit iszol, az is beleszámít.</p>
+      <p>Ha hétvégén máskor kelsz vagy fekszel, kapcsold be a <b>Hétvégén másik időszak</b> kapcsolót, és adj meg külön kezdést és véget szombatra és vasárnapra. A tempó-javaslat, a kedvenced alvása és az esti csend is ehhez igazodik.</p>
     </div></details>
     <details class="hsec"><summary><span class="hic">📝</span>Lista, törlés és javítás</summary><div class="hbody">
       <p>A „Ma” alatt minden ivás szerepel időponttal. A sor végén lévő <b>×</b> törli, utána néhány másodpercig a lap alján megjelenik a <b>Visszavonás</b> gomb. Haladó módban a sorra koppintva a mennyiséget, az italt és az időpontot is javíthatod.</p>
@@ -1170,6 +1181,7 @@ body.modal{overflow:hidden}
     </div></details>
     <details class="hsec"><summary><span class="hic">🕒</span>Daily window</summary><div class="hbody">
       <p>In Settings you can set when your day starts and ends (7:00 and 22:00 by default). The pace suggestion spreads your goal across this window. You can still log drinks outside it, and they count too.</p>
+      <p>If you get up or go to bed at other times on weekends, turn on <b>Different window on weekends</b> and set a separate start and end for Saturday and Sunday. The pace suggestion, your buddy’s sleep and the evening quiet all follow it.</p>
     </div></details>
     <details class="hsec"><summary><span class="hic">📝</span>List, delete and edit</summary><div class="hbody">
       <p>Every drink appears under “Today” with its time. The <b>×</b> at the end of a row deletes it, and an <b>Undo</b> button appears at the bottom for a few seconds. In advanced mode, tap a row to change the amount, the drink or the time.</p>
@@ -1227,7 +1239,7 @@ hu:{
   language:'Nyelv', nameQ:'Hogyan szólíthatlak?', namePhOpt:'Keresztnév (nem kötelező)', namePh:'Keresztnév',
   mode:'Mód', simple:'Egyszerű', advanced:'Haladó', modeNote:'A haladó mód italtípust, egyéni mennyiséget, javítást, részletes tempót és statisztikát is mutat.',
   unit:'Mértékegység', unitDl:'Deciliter (dl)', unitL:'Liter (l)', unitNote:'1 liter = 10 deciliter. Csak a kijelzés változik, a naplód ugyanaz marad.',
-  window:'Napi időszak', start:'Kezdés', end:'Vége', windowNote:'Erre az időszakra osztja el a napi célt a tempó-javaslat. Ezen kívül is bármikor rögzítheted az ivást.',
+  window:'Napi időszak', start:'Kezdés', end:'Vége', wkOn:'Hétvégén másik időszak', wkDays:'Hétköznap (hétfő–péntek)', wkEnd:'Hétvége (szombat–vasárnap)', windowNote:'Erre az időszakra osztja el a napi célt a tempó-javaslat. Ezen kívül is bármikor rögzítheted az ivást.',
   appearance:'Megjelenés', mSystem:'Rendszer', mLight:'Nappali', mDark:'Éjszakai',
   color:'Téma', sOpenAll:'Mind kinyit', sCloseAll:'Mind becsuk', sReorder:'Sorrend', sReorderDone:'Kész', sMoveUp:'Feljebb', sMoveDown:'Lejjebb', sReorderNote:'A nyilakkal rendezheted a részeket. A sorrendet megjegyzem.', cOcean:'Óceán', cMint:'Menta', cCoral:'Korall', cLavender:'Levendula',
   calcTitle:'Alapcél számítása', weight:'Testsúly', suggested:'Javasolt alapcél', useSugg:'Beállítom alapcélnak',
@@ -1337,7 +1349,7 @@ en:{
   language:'Language', nameQ:'What should I call you?', namePhOpt:'First name (optional)', namePh:'First name',
   mode:'Mode', simple:'Simple', advanced:'Advanced', modeNote:'Advanced mode adds drink types, custom amounts, editing, detailed pace and statistics.',
   unit:'Unit', unitDl:'Deciliters (dl)', unitL:'Liters (l)', unitNote:'1 liter = 10 deciliters. Only the display changes, your log stays the same.',
-  window:'Daily window', start:'Start', end:'End', windowNote:'The pace suggestion spreads your daily goal across this window. You can log drinks outside it at any time.',
+  window:'Daily window', start:'Start', end:'End', wkOn:'Different window on weekends', wkDays:'Weekdays (Mon–Fri)', wkEnd:'Weekend (Sat–Sun)', windowNote:'The pace suggestion spreads your daily goal across this window. You can log drinks outside it at any time.',
   appearance:'Appearance', mSystem:'System', mLight:'Light', mDark:'Dark',
   color:'Theme', sOpenAll:'Expand all', sCloseAll:'Collapse all', sReorder:'Reorder', sReorderDone:'Done', sMoveUp:'Move up', sMoveDown:'Move down', sReorderNote:'Use the arrows to reorder sections. I’ll remember the order.', cOcean:'Ocean', cMint:'Mint', cCoral:'Coral', cLavender:'Lavender',
   calcTitle:'Calculate base goal', weight:'Body weight', suggested:'Suggested base goal', useSugg:'Use as base goal',
@@ -1508,7 +1520,7 @@ function svgIcon(key){return '<svg viewBox="0 0 24 24" fill="none" stroke="curre
 function iconEl(id,cls){const d=drinkOf(id),w=document.createElement('span');w.className=cls||'dic';w.style.setProperty('--dc',d.c);w.innerHTML=svgIcon(d.icon);return w}
 
 /* days: {'2026-10-09': {entries:[{t,dl,type}], act:0|3|6, hot:bool}} */
-let state={goal:20,weight:80,mode:'system',accent:'ocean',name:'',onboarded:false,lang:null,unit:'dl',view:'glass',ui:'simple',fx:'full',start:'07:00',end:'22:00',drink:'water',drinkOrder:null,drinkShow:null,custom:{},dover:{},buttons:null,sound:null,pet:null,days:{}};
+let state={goal:20,weight:80,mode:'system',accent:'ocean',name:'',onboarded:false,lang:null,unit:'dl',view:'glass',ui:'simple',fx:'full',start:'07:00',end:'22:00',wkOn:false,wkStart:'09:00',wkEnd:'23:00',drink:'water',drinkOrder:null,drinkShow:null,custom:{},dover:{},buttons:null,sound:null,pet:null,days:{}};
 let col=null;
 const $=id=>document.getElementById(id);
 const root=document.documentElement;
@@ -1532,6 +1544,9 @@ function goalOf(d){return state.goal+(d.act||0)+(d.hot?5:0)}
 function suggested(w){return Math.round(w*30*0.8/100)}
 function pick(arr,seed){let h=0;for(const ch of seed)h=(h*31+ch.charCodeAt(0))|0;return arr[Math.abs(h)%arr.length]}
 
+function isWkend(d){const w=(d||new Date()).getDay();return w===0||w===6}
+function dStart(d){return state.wkOn&&isWkend(d)&&state.wkStart?state.wkStart:state.start}
+function dEnd(d){return state.wkOn&&isWkend(d)&&state.wkEnd?state.wkEnd:state.end}
 function loadLocal(){
   try{const s=JSON.parse(localStorage.getItem(LS));if(s&&s.days){state=Object.assign(state,s);return}}catch(e){}
   try{const o=JSON.parse(localStorage.getItem(LS_OLD));if(o&&o.days){state.goal=o.goal||20;for(const k in o.days)state.days[k]={entries:o.days[k],act:0,hot:false}}}catch(e){}
@@ -1873,7 +1888,7 @@ function compSVG(kind,mood,fill){const P=state.pet;return isVeh(kind)?vehSVG(kin
 
 let petKey='',petTemp=null,petTempTimer=null,petLastMood='';
 function petMood(now,d,tot,g,p){
-  const S=mins(state.start)??420,E=mins(state.end)??1320,N=now.getHours()*60+now.getMinutes();
+  const S=mins(dStart(now))??420,E=mins(dEnd(now))??1320,N=now.getHours()*60+now.getMinutes();
   if(tot>=g)return 'party';
   if(N<S||N>=E)return 'sleep';
   const last=d.entries.length?d.entries[d.entries.length-1].t:null,since=last?(now-last)/60000:(N-S);
@@ -1899,7 +1914,7 @@ function renderPet(now,d,tot,g,p){
   let txt;
   if(petTemp)txt=petTemp;
   else{
-    const S=mins(state.start)??420,N=now.getHours()*60+now.getMinutes(),last=d.entries.length?d.entries[d.entries.length-1].t:null,since=last?(now-last)/60000:null;
+    const S=mins(dStart(now))??420,N=now.getHours()*60+now.getMinutes(),last=d.entries.length?d.entries[d.entries.length-1].t:null,since=last?(now-last)/60000:null;
     const vars={r:amt(Math.max(0,r1(g-tot))),h:since!=null?Math.floor(since/60):''};
     if(!tracking())txt=petText('idle',vars);
     else if(mood==='happy'&&tot===0&&N-S<150)txt=petText('start',vars);
@@ -5081,7 +5096,7 @@ function petVoice(force,delay){
 }
 function petVoiceOn(level){const order={off:0,tap:1,events:2,random:3};return order[state.pet.voice]>=order[level]}
 setInterval(()=>{if(!document.hidden&&actx&&petVoiceOn('random')&&Math.random()<.18)petVoice(false)},60000);
-function quietNow(){if(!state.sound.quiet)return false;const n=new Date(),N=n.getHours()*60+n.getMinutes(),S=mins(state.start)??420,E=mins(state.end)??1320;return N<S||N>=E}
+function quietNow(){if(!state.sound.quiet)return false;const n=new Date(),N=n.getHours()*60+n.getMinutes(),S=mins(dStart(n))??420,E=mins(dEnd(n))??1320;return N<S||N>=E}
 function play(ev,force){
   const S=state.sound;if(!force&&(!S.on||!S.ev[ev]||quietNow()))return;
   const c=audio();if(!c)return;try{SOUNDS[S.set][ev](c,c.currentTime+.02,S.vol*.45)}catch(e){}
@@ -5276,7 +5291,7 @@ $('useFun').onclick=()=>finishOnb(false);
 $('useTrack').onclick=()=>{showOnb(4);goalSetup($('onbGoal'),()=>finishOnb(true))};
 
 /* --- beállítások --- */
-$('openSet').onclick=()=>{buildBtnCfg();renderSound();renderPetSettings();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderSettings();openSheet('setScrim')};
+$('openSet').onclick=()=>{buildBtnCfg();renderSound();renderPetSettings();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderWk();renderSettings();openSheet('setScrim')};
 $('openHelp').onclick=()=>{document.querySelectorAll('#helpScrim details[open]').forEach(d=>d.open=false);openSheet('helpScrim')};
 document.querySelectorAll('#helpScrim details').forEach(d=>d.addEventListener('toggle',()=>{if(d.open){document.querySelectorAll('#helpScrim details[open]').forEach(o=>{if(o!==d)o.open=false});setTimeout(()=>d.scrollIntoView({block:'nearest',behavior:'smooth'}),30)}}));
 $('nameSet').oninput=()=>{state.name=cleanName($('nameSet').value);render();writeSettings()};
@@ -5294,6 +5309,10 @@ function onTimes(){
   state.start=s;state.end=e;render();writeSettings();
 }
 $('tStart').onchange=onTimes;$('tEnd').onchange=onTimes;
+function renderWk(){$('wkOn').checked=!!state.wkOn;$('wkBox').hidden=!state.wkOn;$('wkdLbl').hidden=!state.wkOn;$('wStart').value=state.wkStart||'09:00';$('wEnd').value=state.wkEnd||'23:00'}
+$('wkOn').onchange=()=>{state.wkOn=$('wkOn').checked;renderWk();render();writeSettings()};
+function onWkTimes(){const s=$('wStart').value,e=$('wEnd').value,ms=mins(s),me=mins(e);if(ms==null||me==null)return;if(me-ms<120){toast(t('tWindow'));return}state.wkStart=s;state.wkEnd=e;render();writeSettings()}
+$('wStart').onchange=onWkTimes;$('wEnd').onchange=onWkTimes;
 $('kg').oninput=()=>{state.weight=+$('kg').value;renderSettings();writeSettings()};
 $('useSugg').onclick=()=>{state.goal=suggested(state.weight);render();renderSettings();writeSettings();toast(t('tBase',amtL(state.goal)))};
 $('goalMinus').onclick=()=>{if(state.goal>5){state.goal--;render();renderSettings();writeSettings()}};
@@ -5315,7 +5334,7 @@ function renderSettings(){
 /* export / import */
 $('exportBtn').onclick=async()=>{
   const data=JSON.stringify({app:'vizmero',version:7,exported:new Date().toISOString(),
-    settings:{pet:state.pet,sound:state.sound,goal:state.goal,weight:state.weight,name:state.name,lang:state.lang,unit:state.unit,start:state.start,end:state.end,custom:state.custom,dover:state.dover,drinkOrder:state.drinkOrder,drinkShow:state.drinkShow,buttons:state.buttons},days:state.days},null,1);
+    settings:{pet:state.pet,sound:state.sound,goal:state.goal,weight:state.weight,name:state.name,lang:state.lang,unit:state.unit,start:state.start,end:state.end,wkOn:state.wkOn,wkStart:state.wkStart,wkEnd:state.wkEnd,custom:state.custom,dover:state.dover,drinkOrder:state.drinkOrder,drinkShow:state.drinkShow,buttons:state.buttons},days:state.days},null,1);
   const fname=t('backupName')+keyOf(new Date())+'.json';
   try{
     const file=new File([data],fname,{type:'application/json'});
@@ -5349,7 +5368,7 @@ $('importFile').onchange=async()=>{
 /* --- tempó és motiváció --- */
 function pace(now,d,tot,g){
   const P=L().p;
-  const S=mins(state.start)??420,E=mins(state.end)??1320,N=now.getHours()*60+now.getMinutes();
+  const S=mins(dStart(now))??420,E=mins(dEnd(now))??1320,N=now.getHours()*60+now.getMinutes();
   const last=d.entries.length?d.entries[d.entries.length-1].t:null;
   const sinceMin=last?(now.getTime()-last)/60000:null;
   const seed=keyOf(now)+':'+now.getHours();
@@ -5360,7 +5379,7 @@ function pace(now,d,tot,g){
     res.tip=P.doneTip;res.motto=pick(P.doneM,seed);res.exp=g;return res;
   }
   if(N<S){
-    res.head=P.preHead;res.pill=state.start;res.tip=P.preTip(state.start);res.motto=pick(P.preM,seed);res.exp=0;return res;
+    res.head=P.preHead;res.pill=dStart(now);res.tip=P.preTip(dStart(now));res.motto=pick(P.preM,seed);res.exp=0;return res;
   }
   if(N>=E){
     res.head=P.postHead;res.pill=P.postTag(amt(remaining));res.cls='behind';res.tip=P.postTip;res.motto=pick(P.postM,seed);res.exp=g;return res;
@@ -5372,7 +5391,7 @@ function pace(now,d,tot,g){
   if(every<25){glass=3;every=glass/perHour*60}
   if(every<25){glass=5;every=glass/perHour*60}
   const ev=every>=90?t('every',num(Math.round(every/30)/2),'h'):t('every',Math.max(10,Math.round(every/5)*5),'m');
-  res.tip=perHour>4?P.tooMuch(amt(remaining),state.end):P.tip(amt(remaining),state.end,ev,t('glass',glass,state.unit,uv(glass)));
+  res.tip=perHour>4?P.tooMuch(amt(remaining),dEnd(now)):P.tip(amt(remaining),dEnd(now),ev,t('glass',glass,state.unit,uv(glass)));
   if(tot===0&&N-S<120){res.head=P.startHead;res.pill=amt(0);res.motto=pick(P.startM,seed)}
   else if(diff>=1){res.head=P.aheadHead;res.pill='+'+amt(half(diff));res.cls='ok';res.motto=pick(P.aheadM,seed)}
   else if(diff>-1){res.head=P.okHead;res.pill=P.okTag;res.cls='ok';res.motto=pick(P.okM,seed)}
@@ -5453,7 +5472,7 @@ function vCups(d,tot,g,adv){
     '<div class="legend"><span><i style="border:2px dashed var(--water);width:10px;height:10px;border-radius:3px;box-sizing:border-box"></i>'+esc(t('nextCup'))+'</span></div>'
 }
 function vLine(d,tot,g,now,adv){
-  const S=mins(state.start)??420,E=mins(state.end)??1320,N=now.getHours()*60+now.getMinutes();
+  const S=mins(dStart(now))??420,E=mins(dEnd(now))??1320,N=now.getHours()*60+now.getMinutes();
   const X0=30,X1=332,ymax=Math.max(g,tot)*1.08,Y=v=>190-v/ymax*176,Xm=m=>X0+Math.max(0,Math.min(1,(m-S)/(E-S)))*(X1-X0);
   const mOf=tm=>{const x=new Date(tm);return x.getHours()*60+x.getMinutes()};
   let v=0,path='M'+X0+' '+Y(0).toFixed(1),dots='';const nowX=Xm(Math.min(N,E));
@@ -5773,6 +5792,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.5',hu:['🕒 Külön napi időszak hétvégére: a Beállítások → Napi időszak alatt bekapcsolhatod a „Hétvégén másik időszak” kapcsolót, és szombatra–vasárnapra más kezdést és véget adhatsz meg.'],en:['🕒 Separate daily window for weekends: in Settings → Daily window turn on “Different window on weekends” and set another start and end for Saturday–Sunday.']},
  {v:'14.4',hu:['✅ A kiválasztott gombok (Mai nap, Mit iszol?) most sötét módban is jól látszanak: vastagabb keret, fény és egy kis pipa.'],en:['✅ Selected buttons (Today, What are you drinking?) are now easy to see in dark mode too: thicker border, glow and a small check mark.']},
  {v:'14.3',hu:['🧊 Új játék: Kockaeső! Forgasd és tologasd a hulló zselékockákat, a teli sorok kifröccsennek. Négy sor egyszerre: szökőár! 🌊','📦 Van tartalék doboz, előre látod a következő darabokat, és a halvány körvonal mutatja, hová esik a darab.'],en:['🧊 New game: Block Rain! Turn and slide the falling jelly blocks, full rows splash away. Four rows at once: tsunami! 🌊','📦 There’s a hold box, you can see the next pieces, and a faint outline shows where the piece will land.']},
  {v:'14.2',hu:['🏀 Szemből kosár: puhább gyűrű, könnyebben bemegy a labda.','🏀 Oldalról kosár: kicsit kisebb gyűrű, és közelről már nem pattan vissza alulról a perem.'],en:['🏀 Front hoops: softer rim, the ball goes in more easily.','🏀 Side hoops: slightly smaller rim, and close shots no longer bounce off the rim from below.']},
@@ -5809,7 +5829,7 @@ function startInfo(){
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.4';
+const APP_VERSION='14.5';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
