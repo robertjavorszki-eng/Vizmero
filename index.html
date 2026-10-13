@@ -506,11 +506,14 @@ body.modal{overflow:hidden}
 .step{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:600 1.3rem var(--body);cursor:pointer;flex:none}
 .base{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .base output{font-weight:700;font-size:1.1rem;font-variant-numeric:tabular-nums;min-width:3.6em;text-align:center}
-.text,.time{width:100%;height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:500 1rem var(--body);padding-inline:14px}
+.text,.time{width:100%;height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:500 1rem var(--body);padding-inline:14px;box-sizing:border-box;max-width:100%;min-width:0}
 .text:focus,.time:focus{border-color:var(--water);outline:none}
 .tsub{margin:4px 0 8px;font-weight:800;font-size:.85rem;color:var(--ink)}
-.times{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.times label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;color:var(--muted)}
+.times{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.times label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;color:var(--muted);min-width:0}
+/* iPhone: az idő mező alapból szélesebb a helyénél – így nem lóg egymásba */
+.times .time{display:block;box-sizing:border-box;width:100%;min-width:0;max-width:100%;-webkit-appearance:none;appearance:none;text-align:center}
+.times .time::-webkit-date-and-time-value{text-align:center}
 .amount{display:flex;align-items:center;justify-content:center;gap:18px}
 .amount output{font-family:var(--display);font-weight:800;font-size:3.4rem;line-height:1;color:var(--water-deep);min-width:3.2em;text-align:center;font-variant-numeric:tabular-nums}
 .amount output small{font-size:1.4rem;color:var(--ink);margin-left:4px}
@@ -5792,6 +5795,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.6',hu:['🕒 A Napi időszak időmezői már nem érnek össze, rendesen elférnek egymás mellett.'],en:['🕒 The Daily window time fields no longer touch, they fit side by side properly.']},
  {v:'14.5',hu:['🕒 Külön napi időszak hétvégére: a Beállítások → Napi időszak alatt bekapcsolhatod a „Hétvégén másik időszak” kapcsolót, és szombatra–vasárnapra más kezdést és véget adhatsz meg.'],en:['🕒 Separate daily window for weekends: in Settings → Daily window turn on “Different window on weekends” and set another start and end for Saturday–Sunday.']},
  {v:'14.4',hu:['✅ A kiválasztott gombok (Mai nap, Mit iszol?) most sötét módban is jól látszanak: vastagabb keret, fény és egy kis pipa.'],en:['✅ Selected buttons (Today, What are you drinking?) are now easy to see in dark mode too: thicker border, glow and a small check mark.']},
  {v:'14.3',hu:['🧊 Új játék: Kockaeső! Forgasd és tologasd a hulló zselékockákat, a teli sorok kifröccsennek. Négy sor egyszerre: szökőár! 🌊','📦 Van tartalék doboz, előre látod a következő darabokat, és a halvány körvonal mutatja, hová esik a darab.'],en:['🧊 New game: Block Rain! Turn and slide the falling jelly blocks, full rows splash away. Four rows at once: tsunami! 🌊','📦 There’s a hold box, you can see the next pieces, and a faint outline shows where the piece will land.']},
@@ -5829,7 +5833,7 @@ function startInfo(){
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.5';
+const APP_VERSION='14.6';
 function checkVersion(){
   fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!j||!j.v||j.v===APP_VERSION)return;
