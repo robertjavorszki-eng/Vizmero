@@ -228,12 +228,22 @@ body.d3 .glass::before{content:"";position:absolute;left:-3px;right:-3px;top:-10
 body.d3 .glass::after{content:"";position:absolute;right:11px;top:12px;bottom:18px;width:7px;border-radius:6px;background:linear-gradient(rgba(255,255,255,.85),rgba(255,255,255,.2));pointer-events:none;z-index:3}
 body.d3 .ticks{background:linear-gradient(90deg,rgba(0,0,0,.13),transparent 24%,transparent 70%,rgba(0,0,0,.17))}
 body.d3 .fill::before{height:12px;top:-6px;opacity:.95;background:radial-gradient(ellipse at 38% 40%,rgba(255,255,255,.7),transparent 62%),var(--top,var(--water))}
-body.d3t .fill{left:-45%;right:-45%;box-sizing:content-box;padding-bottom:60px;bottom:-60px;background:var(--botc,transparent);transform:rotate(calc(var(--tl,0) * 1deg));transform-origin:50% 0;will-change:transform}
-body.d3t .fill::before{left:23.7%;right:23.7%}
+body.d3t .fill{left:-150%;right:-150%;box-sizing:content-box;padding-bottom:60px;bottom:-60px;background:var(--botc,transparent);transform:rotate(calc(var(--tl,0) * 1deg));transform-origin:50% 0;will-change:transform}
+body.d3t .fill::before{left:37.5%;right:37.5%}
+/* palack, tartály, poharak: a folyadék a felszíne körül fordul, alul sosem marad üres hely */
+.liq{position:absolute;inset:0;pointer-events:none}
+body.d3t .liq{transform:rotate(calc(var(--tl,0) * 1deg));transform-origin:50% calc(100% - var(--lvl,0%));will-change:transform}
+body.d3t .liq.full{transform:none}
+body.d3t .tank .liq{transform:rotate(calc(var(--tl,0) * .5deg))}
+body.d3t .tank .liq.full{transform:none}
+body.d3t .fill.full{transform:none}
+body.d3t .liq.has .wfill{box-shadow:0 600px 0 600px var(--water)}
+body.d3t .liq.has .wfill.wdeep{box-shadow:0 600px 0 600px var(--water-deep)}
+body.d3t .cupliq{transform:rotate(calc(var(--tl,0) * 1deg))}
 /* kedvenc: árnyék alatta, döntésre arrébb fordul */
 body.d3p #petSvg{filter:drop-shadow(calc(var(--tl,0) * -.25px) 9px 7px rgba(30,20,70,.28))}
 body.d3p.d3t .petbox{transform:translateX(calc(var(--tl,0) * .3px)) rotate(calc(var(--tl,0) * .25deg))}
-@media (prefers-reduced-motion: reduce){body.d3t .fill{transform:none}body.d3p.d3t .petbox{transform:none}}
+@media (prefers-reduced-motion: reduce){body.d3t .fill,body.d3t .liq,body.d3t .cupliq{transform:none}body.d3p.d3t .petbox{transform:none}}
 @media (prefers-reduced-motion: reduce){.wave,.bubs i,.gwave,.rprog,.rdot,.slosh,.march,.nowpulse{animation:none!important}.bubs{display:none}}
 .fx-mid .bubs{display:none}.fx-mid .march{animation:none!important}
 .fx-low .wave,.fx-low .gwave,.fx-low .rprog,.fx-low .rdot,.fx-low .slosh,.fx-low .march,.fx-low .nowpulse,.fx-low .petbox *,.fx-low .hearts i{animation:none!important}.fx-low .bubs{display:none}
@@ -5508,7 +5518,7 @@ function vBottle(d,tot,g,p){
   const ex=(p.exp!=null&&p.exp>0&&p.exp<g&&tot<g)?'<div class="bline" style="bottom:'+(p.exp/g*100).toFixed(1)+'%"></div>':'';
   const wave=f>0&&f<100?'<svg class="wave" data-lv="bottom|1|-6px" viewBox="0 0 140 18" preserveAspectRatio="none" style="bottom:calc('+f.toFixed(1)+'% - 6px)" aria-hidden="true"><path d="M0 9 Q 17.5 0 35 9 T 70 9 T 105 9 T 140 9 V 18 H 0 Z" style="fill:var(--water)"></path></svg>':'';
   const bubs=bubsHTML(f,6,false);
-  return '<div class="bottle-wrap"><div class="bottle"><div class="cap"></div><div class="neck"></div><div class="body"><div class="wfill" data-lv="height|1|0" style="height:'+f.toFixed(1)+'%"></div>'+wave+bubs+ex+'</div></div>'+
+  return '<div class="bottle-wrap"><div class="bottle"><div class="cap"></div><div class="neck"></div><div class="body"><div class="liq'+(f>0?' has':'')+(f>=100?' full':'')+'" style="--lvl:'+f.toFixed(1)+'%"><div class="wfill" data-lv="height|1|0" style="height:'+f.toFixed(1)+'%"></div>'+wave+bubs+'</div>'+ex+'</div></div>'+
     '<div class="bscale"><span>'+lbl[0]+'</span><span>'+lbl[1]+'</span><span>'+lbl[2]+'</span><span>'+lbl[3]+'</span><span></span></div></div>'+vsum(tot,g)+
     (ex?'<div class="legend"><span><i style="border-top:2px dashed var(--warn)"></i>'+esc(t('planNow',amt(half(p.exp))))+'</span></div>':'')
 }
@@ -5521,7 +5531,7 @@ function vCups(d,tot,g,adv){
     const path='M'+(w*.12).toFixed(1)+' 3 H'+(w*.88).toFixed(1)+' L'+(w*.78).toFixed(1)+' '+(h-3)+' H'+(w*.22).toFixed(1)+' Z';
     const fillH=(h-6)*f;
     html+='<svg width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'" aria-hidden="true"><clipPath id="cg'+i+'"><path d="'+path+'"></path></clipPath>'+
-      '<path d="'+path+'" style="fill:var(--surface)"></path>'+(f>0?'<g clip-path="url(#cg'+i+')"><rect'+(f<1||i===n-1||(i+1)*cs>=tot?' class="slosh"':'')+' x="-4" y="'+(h-3-fillH).toFixed(1)+'" width="'+(w+8)+'" height="'+(fillH+4).toFixed(1)+'" style="fill:'+col+'"></rect></g>':'')+
+      '<path d="'+path+'" style="fill:var(--surface)"></path>'+(f>0?'<g clip-path="url(#cg'+i+')"><g'+(f<1?' class="cupliq" style="transform-origin:'+(w/2)+'px '+(h-3-fillH).toFixed(1)+'px"':'')+'><rect'+(f<1||i===n-1||(i+1)*cs>=tot?' class="slosh"':'')+' x="'+(-w)+'" y="'+(h-3-fillH).toFixed(1)+'" width="'+(w*3)+'" height="'+(fillH+h).toFixed(1)+'" style="fill:'+col+'"></rect></g></g>':'')+
       '<path d="'+path+'" fill="none" style="stroke:'+(f>=1?'var(--ink)':next?'var(--water)':'var(--line)')+'" stroke-width="2.5" stroke-linejoin="round"'+(next&&f<1?' stroke-dasharray="5 4"':'')+'></path></svg>';
   }
   const full=Math.floor(Math.min(tot,g)/cs),left=Math.max(0,Math.ceil(r1(g-tot)/cs));
@@ -5558,11 +5568,11 @@ function vTank(d,tot,g,p){
   const f=Math.min(tot/g,1)*100,left=r1(g-tot);
   const wave=f>0&&f<100?'<svg class="wave" data-lv="bottom|1|-6px" viewBox="0 0 358 18" preserveAspectRatio="none" style="bottom:calc('+f.toFixed(1)+'% - 6px)" aria-hidden="true"><path d="M0 9 Q 45 0 90 9 T 179 9 T 269 9 T 358 9 V 18 H 0 Z" style="fill:var(--water)"></path></svg>'+
     '<svg class="wave" data-lv="bottom|1|-10px" viewBox="0 0 358 18" preserveAspectRatio="none" style="bottom:calc('+f.toFixed(1)+'% - 10px);opacity:.45" aria-hidden="true"><path d="M0 9 Q 45 18 90 9 T 179 9 T 269 9 T 358 9 V 18 H 0 Z" style="fill:var(--water-deep)"></path></svg>':'';
-  const deep=f>0?'<div class="wfill" data-lv="height|.4|0" style="height:'+(f*.4).toFixed(1)+'%;background:var(--water-deep);opacity:.35"></div>':'';
+  const deep=f>0?'<div class="wfill wdeep" data-lv="height|.4|0" style="height:'+(f*.4).toFixed(1)+'%;background:var(--water-deep);opacity:.35"></div>':'';
   const bubs=bubsHTML(f,9,true);
   const ex=(p.exp!=null&&p.exp>0&&p.exp<g&&tot<g)?'<div class="bline" style="bottom:'+(p.exp/g*100).toFixed(1)+'%;border-color:var(--warn);left:auto;width:42%"></div><span class="tag" style="bottom:calc('+(p.exp/g*100).toFixed(1)+'% + 6px)">'+esc(t('planNow',amt(half(p.exp))))+'</span>':'';
   const bc='var(--ink)';
-  return '<div class="tank"><div class="wfill" data-lv="height|1|0" style="height:'+f.toFixed(1)+'%"></div>'+deep+wave+bubs+ex+
+  return '<div class="tank"><div class="liq'+(f>0?' has':'')+(f>=100?' full':'')+'" style="--lvl:'+f.toFixed(1)+'%"><div class="wfill" data-lv="height|1|0" style="height:'+f.toFixed(1)+'%"></div>'+deep+wave+bubs+'</div>'+ex+
     '<div class="top"><span class="vnum" style="font-size:3.8rem">'+esc(amt(tot))+'</span><span style="font-weight:700">'+esc(t('ofGoal',amtL(g)))+'</span></div>'+
     '<div class="bottom" style="color:'+bc+'"><span>'+(left>0?esc(t('leftShort',amt(left))):esc(t('done')))+'</span>'+
     (p.exp!=null&&left>0&&tot-p.exp>=1?'<span style="font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.22)">'+esc(t('aheadBy',amt(half(tot-p.exp))))+'</span>':'')+'</div></div>'
@@ -5610,7 +5620,7 @@ function render(){
   if(tot>0){let acc=0;for(const e of d.entries){if(acc>=g)break;const part=Math.min(e.dl,g-acc);acc+=part;
     const s=document.createElement('div');s.className='seg-w';s.style.height=(part/Math.min(tot,g)*100)+'%';
     const c=drinkOf(adv?e.type:'water').c;s.style.background=c==='var(--liquid)'?'linear-gradient(var(--liquid-top),var(--liquid-deep))':c;lastColor=c;fill.appendChild(s)}}
-  fill.style.setProperty('--top',lastColor);{const f0=fill.firstChild;fill.style.setProperty('--botc',f0?f0.style.background:'transparent')}
+  fill.style.setProperty('--top',lastColor);fill.classList.toggle('full',tot>=g);{const f0=fill.firstChild;fill.style.setProperty('--botc',f0?f0.style.background:'transparent')}
   if(tot>0&&tot<g){const wv=document.createElement('div');wv.className='gwave';fill.appendChild(wv)}
   if(tot>0){const bb=document.createElement('div');bb.innerHTML=bubsHTML(100,5,false);const el=bb.firstChild;if(el){el.removeAttribute('data-lv');fill.appendChild(el)}}
   drawTicks(g);
@@ -5851,6 +5861,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.10',hu:['🧊 3D mód: döntéskor a pohár alján már nem marad üres hely.','🍼 A palack, a poharak és a tartály kijelzőn is vízszintes marad a folyadék, ha megdöntöd a telefont. Teli edénynél nem billen.'],en:['🧊 3D mode: no more empty gap at the bottom of the glass when tilting.','🍼 The bottle, cups and tank displays also keep the liquid level when you tilt the phone. Full containers don’t tilt.']},
  {v:'14.9',hu:['🧊 Új: 3D mód (haladó módban, Beállítások → 3D mód). Domború, benyomódó gombok, üvegszerű pohár, árnyékos kedvenc.','📱 Ha megdöntöd a telefont, a pohárban a víz vízszintes marad és lötyög – ezt külön is ki lehet kapcsolni.'],en:['🧊 New: 3D mode (advanced mode, Settings → 3D mode). Raised buttons that press in, a glass-like glass and a buddy with a shadow.','📱 Tilt the phone and the water stays level and sloshes – this can be turned off separately.']},
  {v:'14.8',hu:['🔄 Frissítéskor az app már csak egyszer töltődik újra, nem kétszer.'],en:['🔄 When updating, the app now reloads only once, not twice.']},
  {v:'14.7',hu:['🕒 A Napi időszak időmezői már nem érnek össze, az idő középen van és nagyobb betűvel látszik.'],en:['🕒 The Daily window time fields no longer touch, and the time is centered and larger.']},
@@ -5931,7 +5942,7 @@ try{applyD3();render()}catch(e){}
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.9';
+const APP_VERSION='14.10';
 /* egyetlen frissítés: ha már folyamatban van, vagy az oldal már a legújabb, nem töltünk újra */
 let updReloading=false;
 function latestVer(){return fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>j&&j.v||null).catch(()=>null)}
