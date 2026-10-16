@@ -150,6 +150,20 @@ h2{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mu
 .day .v{font-size:.72rem;font-weight:700;font-variant-numeric:tabular-nums}
 .day .w{font-size:.72rem;color:var(--muted)}
 .day.today .w{color:var(--ink);font-weight:700}
+.week .day{cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:8px}
+.week .day:active .bar,.week .day:focus-visible .bar{filter:brightness(1.12)}
+.week .day:focus-visible{outline:2px solid var(--water);outline-offset:2px}
+.dsheet h3{margin:0 0 2px}
+.dsum{margin:0 0 10px;color:var(--muted);font-weight:600}
+.dsum b{color:var(--ink)}.dsum .ok{color:var(--ok);font-weight:800}
+.drow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.drow:last-of-type{border-bottom:none}
+.drow .dn{font-weight:700;min-width:0}.drow .dn small{display:block;font-weight:500;color:var(--muted);font-size:.75rem;margin-top:1px}
+.drow .da{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dbar{grid-column:2/4;height:6px;border-radius:999px;background:var(--line);overflow:hidden}.dbar i{display:block;height:100%;border-radius:999px}
+.dextra{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}.dextra span{font-size:.8rem;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--water-soft);color:var(--ink)}
+.dempty{margin:6px 0 12px;color:var(--muted)}
+#dayBody{margin-bottom:14px}
 .goalline{position:absolute;left:12px;right:12px;border-top:1.5px dashed var(--muted);opacity:.6}
 .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
 .kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -1053,6 +1067,14 @@ body.modal{overflow:hidden}
 <div class="scrim center" id="goalScrim" hidden>
   <div class="sheet onb info" role="dialog" aria-modal="true"><div id="goalSheetBody"></div></div>
 </div>
+<div class="scrim center" id="dayScrim" hidden>
+  <div class="sheet onb info dsheet" role="dialog" aria-modal="true" aria-labelledby="dayTitle">
+    <h3 id="dayTitle"></h3>
+    <p class="dsum" id="daySum"></p>
+    <div id="dayBody"></div>
+    <button class="primary" id="dayOk" style="width:100%"></button>
+  </div>
+</div>
 <div class="scrim center" id="infoScrim" hidden>
   <div class="sheet onb info" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
     <div class="drop" id="infoDrop" aria-hidden="true"></div>
@@ -1162,6 +1184,7 @@ body.modal{overflow:hidden}
       <p>Ha csak a kedvenc és a játékok érdekelnek, a <b>Vízivás követése</b> kapcsolóval kikapcsolhatod a naplót, és bármikor visszakapcsolhatod.</p>
     </div></details>
     <details class="hsec"><summary><span class="hic">📅</span>Utolsó 7 nap és statisztika</summary><div class="hbody">
+      <p>Ha egy oszlopra koppintasz, kis ablakban látod, aznap miből mennyit ittál és mikor.</p>
       <p>Az oszlopok a napi mennyiséget mutatják. A színes, telt oszlop azt jelenti, hogy aznap meglett a cél. A szaggatott vonal az alapcél. Haladó módban alatta a <b>sorozat</b> (hány egymást követő napon lett meg a cél), a sikeres napok száma és az átlagok is látszanak. Az átlag csak azokat a napokat számolja, amikor rögzítettél valamit.</p>
       <p>A főoldal alján az <b>Érdekességek</b> az utolsó 30 napodból mutatnak érdekes dolgokat: átlagokat, mikor iszol a legtöbbet, a napod ritmusát, az italaid arányát és a hét napjait. A diagramok között oldalra húzva (vagy a pöttyökre koppintva) válthatsz. Pár nap ivás után jelennek meg.</p>
     </div></details>
@@ -1267,6 +1290,7 @@ body.modal{overflow:hidden}
       <p>If you only want the buddy and the games, switch off <b>Track my drinking</b> – you can turn it back on any time.</p>
     </div></details>
     <details class="hsec"><summary><span class="hic">📅</span>Last 7 days and statistics</summary><div class="hbody">
+      <p>Tap a bar to see what and how much you drank that day, and when.</p>
       <p>The bars show the daily amount. A solid colored bar means you reached your goal that day. The dashed line is your base goal. In advanced mode you also see your <b>streak</b> (how many days in a row you hit your goal), the number of successful days and averages. Averages only count days on which you logged something.</p>
       <p>At the bottom of the main screen, <b>Fun facts</b> show interesting things from your last 30 days: averages, when you drink the most, your daily rhythm, your drinks and the days of the week. Swipe sideways (or tap the dots) to switch charts. They appear after a few days of drinking.</p>
     </div></details>
@@ -1296,6 +1320,7 @@ hu:{
   today:'Ma', tapToEdit:'Koppints egy sorra a javításhoz.', last7:'Utolsó 7 nap',
   streak:'Sorozat', hits30:'30 napból sikeres', avg7:'Heti átlag', avg30:'Havi átlag', avg7Note:'utolsó 7 nap', avg30Note:'utolsó 30 nap', dayU:'nap',
   display:'Kijelző', vGlass:'Mérőpohár', vRing:'Gyűrű', vBottle:'Kulacs', vCups:'Pohársor', vLine:'Idővonal', vTank:'Akvárium',
+  dayHead:(m,d,wd)=>m+' '+d+'., '+wd, daySum:(a,g)=>'<b>'+a+'</b> a '+g+'-es célból', dayHit:'Cél teljesítve ✓', dayTimes:n=>n+'×', dayEmpty:'Ezen a napon nem rögzítettél ivást.', dayAct:a=>'🏃 Mozgás: +'+a+' a célhoz', dayHot:'☀️ Meleg nap', dayOk:'Bezár', dayAria:(d,a)=>d+': '+a+'. Koppints a részletekért.',
   d3Sec:'3D mód', d3On:'3D mód bekapcsolása', d3Tilt:'A pohár mozog a telefonnal', d3Pet:'Mélység a kedvencnél', d3Btn:'Domború gombok', d3Note:'Domború, benyomódó gombok, térhatású pohár és kedvenc. Csak haladó módban működik, és az Egyszerű vizuális effekteknél nem látszik. iPhone-on a pohár mozgásához egyszer engedélyt kér a mozgásérzékelőre.', tD3Deny:'A mozgásérzékelő nincs engedélyezve, ezért a pohár nem mozog a telefonnal.',
   fxSec:'Vizuális effektek', fxAuto:'Automatikus', fxLow:'Egyszerű', fxMid:'Közepes', fxFull:'Teljes', fxNote:'Automatikus módban az app a készülékhez igazítja, és ha egy játék akad, magától lejjebb vesz. Lassabb telefonon kézzel is választhatod az Egyszerűt vagy a Közepest: kevesebb animáció és csapadék, kisebb felbontás – gyorsabb és kíméli az akkut.',
   displayNote:'Így látod a mai mennyiséget. A főképernyőn a rajzot oldalra húzva vagy rákoppintva is válthatsz.', tapSwitch:'húzd oldalra vagy koppints',
@@ -1407,6 +1432,7 @@ en:{
   today:'Today', tapToEdit:'Tap a row to edit it.', last7:'Last 7 days',
   streak:'Streak', hits30:'Goal met (30 days)', avg7:'Weekly average', avg30:'Monthly average', avg7Note:'last 7 days', avg30Note:'last 30 days', dayU:'days',
   display:'Display', vGlass:'Measuring glass', vRing:'Ring', vBottle:'Bottle', vCups:'Glasses', vLine:'Timeline', vTank:'Aquarium',
+  dayHead:(m,d,wd)=>wd+', '+m+' '+d, daySum:(a,g)=>'<b>'+a+'</b> of your '+g+' goal', dayHit:'Goal reached ✓', dayTimes:n=>n+'×', dayEmpty:'No drinks logged on this day.', dayAct:a=>'🏃 Activity: +'+a+' to the goal', dayHot:'☀️ Hot day', dayOk:'Close', dayAria:(d,a)=>d+': '+a+'. Tap for details.',
   d3Sec:'3D mode', d3On:'Turn on 3D mode', d3Tilt:'The glass moves with the phone', d3Pet:'Depth for your buddy', d3Btn:'Raised buttons', d3Note:'Raised buttons that press in, a glass and buddy with depth. Only in advanced mode, and not shown with Simple visual effects. On iPhone it asks once for motion sensor access so the glass can move.', tD3Deny:'Motion sensor access is off, so the glass won’t move with the phone.',
   fxSec:'Visual effects', fxAuto:'Automatic', fxLow:'Simple', fxMid:'Medium', fxFull:'Full', fxNote:'In Automatic mode the app adapts to your device and steps down by itself if a game stutters. On slower phones you can also pick Simple or Medium yourself: fewer animations and rain, lower resolution – smoother and easier on the battery.',
   displayNote:'How you see today’s amount. On the main screen you can also swipe or tap the drawing to switch.', tapSwitch:'swipe or tap',
@@ -5677,6 +5703,8 @@ function render(){
     const v=document.createElement('span');v.className='v';v.textContent=x.v?uv(x.v):'';
     const bar=document.createElement('div');bar.className='bar'+(x.v>=x.g&&x.v>0?' hit':'');bar.style.height=(x.v/max*plot)+'px';bar.title=uv(x.v)+' / '+amt(x.g);
     const w=document.createElement('span');w.className='w';w.textContent=i===6?Ld.todayShort:Ld.short[x.dt.getDay()];
+    const dk=keyOf(x.dt);c.tabIndex=0;c.setAttribute('role','button');c.setAttribute('aria-label',t('dayAria',i===6?Ld.todayShort:Ld.short[x.dt.getDay()],amt(x.v)));
+    c.onclick=()=>showDay(dk);c.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();showDay(dk)}};
     c.append(v,bar,w);wk.appendChild(c);
   });
 
@@ -5861,6 +5889,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.11',hu:['📅 Az Utolsó 7 nap oszlopaira koppintva kis ablakban látod, aznap miből mennyit ittál, és mikor.'],en:['📅 Tap a bar in Last 7 days to see what and how much you drank that day, and when.']},
  {v:'14.10',hu:['🧊 3D mód: döntéskor a pohár alján már nem marad üres hely.','🍼 A palack, a poharak és a tartály kijelzőn is vízszintes marad a folyadék, ha megdöntöd a telefont. Teli edénynél nem billen.'],en:['🧊 3D mode: no more empty gap at the bottom of the glass when tilting.','🍼 The bottle, cups and tank displays also keep the liquid level when you tilt the phone. Full containers don’t tilt.']},
  {v:'14.9',hu:['🧊 Új: 3D mód (haladó módban, Beállítások → 3D mód). Domború, benyomódó gombok, üvegszerű pohár, árnyékos kedvenc.','📱 Ha megdöntöd a telefont, a pohárban a víz vízszintes marad és lötyög – ezt külön is ki lehet kapcsolni.'],en:['🧊 New: 3D mode (advanced mode, Settings → 3D mode). Raised buttons that press in, a glass-like glass and a buddy with a shadow.','📱 Tilt the phone and the water stays level and sloshes – this can be turned off separately.']},
  {v:'14.8',hu:['🔄 Frissítéskor az app már csak egyszer töltődik újra, nem kétszer.'],en:['🔄 When updating, the app now reloads only once, not twice.']},
@@ -5894,6 +5923,29 @@ function showInfo(kind,next){
   $('infoOk').onclick=()=>{if(kind==='priv')state.privSeen=1;else state.seenVer=APP_VERSION;writeSettings();closeSheet('infoScrim');if(next)setTimeout(next,250)};
   openSheet('infoScrim',$('infoOk'));
 }
+/* az utolsó 7 nap egy oszlopára koppintva: aznap miből mennyit */
+function showDay(k){
+  const d=dayOf(k),tot=sum(d),g=goalOf(d),dt=new Date(k+'T12:00:00'),Ld=L(),adv=state.ui==='advanced';
+  $('dayTitle').textContent=t('dayHead',Ld.months[dt.getMonth()],dt.getDate(),Ld.days[dt.getDay()]);
+  $('daySum').innerHTML=t('daySum',esc(amt(tot)),esc(amt(g)))+(tot>=g&&tot>0?' · <span class="ok">'+esc(t('dayHit'))+'</span>':'');
+  const box=$('dayBody');box.textContent='';
+  const grp={};(d.entries||[]).forEach(e=>{const id=adv?(e.type||'water'):'water';(grp[id]=grp[id]||{dl:0,ts:[]}).dl+=e.dl;grp[id].ts.push(e.t)});
+  const ids=Object.keys(grp).sort((a,b)=>grp[b].dl-grp[a].dl);
+  if(!ids.length){const p=document.createElement('p');p.className='dempty';p.textContent=t('dayEmpty');box.appendChild(p)}
+  ids.forEach(id=>{const G=grp[id],row=document.createElement('div');row.className='drow';
+    const nm=document.createElement('div');nm.className='dn';nm.textContent=drinkName(id);
+    const sm=document.createElement('small');sm.textContent=t('dayTimes',G.ts.length)+' · '+G.ts.sort((a,b)=>a-b).map(hhmm).join(', ');nm.appendChild(sm);
+    const a=document.createElement('div');a.className='da';a.textContent=amt(r1(G.dl));
+    const br=document.createElement('div');br.className='dbar';const bi=document.createElement('i');const c=drinkOf(id).c;
+    bi.style.background=c==='var(--liquid)'?'var(--water)':c;bi.style.width=(tot?G.dl/tot*100:0).toFixed(1)+'%';br.appendChild(bi);
+    row.append(iconEl(id),nm,a,br);box.appendChild(row)});
+  if(d.act||d.hot){const ex=document.createElement('div');ex.className='dextra';
+    if(d.act){const s2=document.createElement('span');s2.textContent=t('dayAct',amt(d.act));ex.appendChild(s2)}
+    if(d.hot){const s3=document.createElement('span');s3.textContent=t('dayHot');ex.appendChild(s3)}box.appendChild(ex)}
+  $('dayOk').textContent=t('dayOk');$('dayOk').onclick=()=>closeSheet('dayScrim');
+  openSheet('dayScrim',$('dayOk'));
+}
+$('dayScrim').addEventListener('click',e=>{if(e.target===$('dayScrim'))closeSheet('dayScrim')});
 function startInfo(){
   if(!state.onboarded)return;
   const news=()=>{if(state.seenVer!==APP_VERSION&&CHANGES[0].v===APP_VERSION)showInfo('news');else if(state.seenVer!==APP_VERSION){state.seenVer=APP_VERSION;writeSettings()}};
@@ -5942,7 +5994,7 @@ try{applyD3();render()}catch(e){}
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.10';
+const APP_VERSION='14.11';
 /* egyetlen frissítés: ha már folyamatban van, vagy az oldal már a legújabb, nem töltünk újra */
 let updReloading=false;
 function latestVer(){return fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>j&&j.v||null).catch(()=>null)}
