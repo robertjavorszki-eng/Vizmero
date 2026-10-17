@@ -794,6 +794,7 @@ body.modal{overflow:hidden}
       <div class="srow"><span data-t="d3On"></span><label class="tg"><input type="checkbox" id="d3On"><i></i></label></div>
       <div id="d3Sub" hidden>
         <div class="srow"><span data-t="d3Tilt"></span><label class="tg"><input type="checkbox" id="d3Tilt"><i></i></label></div>
+        <div id="d3Perm" hidden style="margin:2px 0 8px"><p class="small" id="d3PermTxt" style="margin:0 0 6px"></p><button type="button" class="ghost" id="d3PermBtn" data-t="d3PermBtn" style="width:100%"></button></div>
         <div class="srow"><span data-t="d3Pet"></span><label class="tg"><input type="checkbox" id="d3Pet"><i></i></label></div>
         <div class="srow"><span data-t="d3Btn"></span><label class="tg"><input type="checkbox" id="d3Btn"><i></i></label></div>
       </div>
@@ -1329,6 +1330,7 @@ hu:{
   streak:'Sorozat', hits30:'30 napból sikeres', avg7:'Heti átlag', avg30:'Havi átlag', avg7Note:'utolsó 7 nap', avg30Note:'utolsó 30 nap', dayU:'nap',
   display:'Kijelző', vGlass:'Mérőpohár', vRing:'Gyűrű', vBottle:'Kulacs', vCups:'Pohársor', vLine:'Idővonal', vTank:'Akvárium',
   dayHead:(m,d,wd)=>m+' '+d+'., '+wd, daySum:(a,g)=>'<b>'+a+'</b> a '+g+'-es célból', dayHit:'Cél teljesítve ✓', dayTimes:n=>n+'×', dayEmpty:'Ezen a napon nem rögzítettél ivást.', dayAct:a=>'🏃 Mozgás: +'+a+' a célhoz', dayHot:'☀️ Meleg nap', dayOk:'Bezár', dayAria:(d,a)=>d+': '+a+'. Koppints a részletekért.',
+  d3PermAsk:'iPhone-on a pohár mozgásához engedélyezni kell a mozgásérzékelőt. Ha nem mozog, koppints a gombra.', d3PermDenied:'A mozgásérzékelő le van tiltva. Zárd be teljesen az appot, nyisd meg újra, és koppints a gombra, majd válaszd az Engedélyezést.', d3PermBtn:'Mozgásérzékelő engedélyezése',
   d3Sec:'3D mód', d3On:'3D mód bekapcsolása', d3Tilt:'A pohár mozog a telefonnal', d3Pet:'Mélység a kedvencnél', d3Btn:'Domború gombok', d3Note:'Domború, benyomódó gombok, térhatású pohár és kedvenc. Csak haladó módban működik, és az Egyszerű vizuális effekteknél nem látszik. iPhone-on a pohár mozgásához egyszer engedélyt kér a mozgásérzékelőre.', tD3Deny:'A mozgásérzékelő nincs engedélyezve, ezért a pohár nem mozog a telefonnal.',
   fxSec:'Vizuális effektek', fxAuto:'Automatikus', fxLow:'Egyszerű', fxMid:'Közepes', fxFull:'Teljes', fxNote:'Automatikus módban az app a készülékhez igazítja, és ha egy játék akad, magától lejjebb vesz. Lassabb telefonon kézzel is választhatod az Egyszerűt vagy a Közepest: kevesebb animáció és csapadék, kisebb felbontás – gyorsabb és kíméli az akkut.',
   displayNote:'Így látod a mai mennyiséget. A főképernyőn a rajzot oldalra húzva vagy rákoppintva is válthatsz.', tapSwitch:'húzd oldalra vagy koppints',
@@ -1443,6 +1445,7 @@ en:{
   streak:'Streak', hits30:'Goal met (30 days)', avg7:'Weekly average', avg30:'Monthly average', avg7Note:'last 7 days', avg30Note:'last 30 days', dayU:'days',
   display:'Display', vGlass:'Measuring glass', vRing:'Ring', vBottle:'Bottle', vCups:'Glasses', vLine:'Timeline', vTank:'Aquarium',
   dayHead:(m,d,wd)=>wd+', '+m+' '+d, daySum:(a,g)=>'<b>'+a+'</b> of your '+g+' goal', dayHit:'Goal reached ✓', dayTimes:n=>n+'×', dayEmpty:'No drinks logged on this day.', dayAct:a=>'🏃 Activity: +'+a+' to the goal', dayHot:'☀️ Hot day', dayOk:'Close', dayAria:(d,a)=>d+': '+a+'. Tap for details.',
+  d3PermAsk:'On iPhone the motion sensor must be allowed for the glass to move. If it doesn’t move, tap the button.', d3PermDenied:'The motion sensor is blocked. Fully close the app, open it again, tap the button and choose Allow.', d3PermBtn:'Allow motion sensor',
   d3Sec:'3D mode', d3On:'Turn on 3D mode', d3Tilt:'The glass moves with the phone', d3Pet:'Depth for your buddy', d3Btn:'Raised buttons', d3Note:'Raised buttons that press in, a glass and buddy with depth. Only in advanced mode, and not shown with Simple visual effects. On iPhone it asks once for motion sensor access so the glass can move.', tD3Deny:'Motion sensor access is off, so the glass won’t move with the phone.',
   fxSec:'Visual effects', fxAuto:'Automatic', fxLow:'Simple', fxMid:'Medium', fxFull:'Full', fxNote:'In Automatic mode the app adapts to your device and steps down by itself if a game stutters. On slower phones you can also pick Simple or Medium yourself: fewer animations and rain, lower resolution – smoother and easier on the battery.',
   displayNote:'How you see today’s amount. On the main screen you can also swipe or tap the drawing to switch.', tapSwitch:'swipe or tap',
@@ -5911,6 +5914,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.13',hu:['🧊 3D mód: iPhone-on most már megbízhatóan működik a billenés. Ha mégsem mozog a víz, a Beállítások → 3D mód alatt egy gombbal engedélyezheted a mozgásérzékelőt.'],en:['🧊 3D mode: tilting now works reliably on iPhone. If the water still doesn’t move, allow the motion sensor with the button under Settings → 3D mode.']},
  {v:'14.12',hu:['😴 Ha a napi időszakon kívül iszol (korán reggel vagy éjjel), a kedvenced álmosan felébred, örül egy kicsit, aztán lassan visszaalszik.'],en:['😴 If you drink outside your daily window (early morning or at night), your buddy wakes up sleepily, is a little happy, then slowly dozes off again.']},
  {v:'14.11',hu:['📅 Az Utolsó 7 nap oszlopaira koppintva kis ablakban látod, aznap miből mennyit ittál, és mikor.'],en:['📅 Tap a bar in Last 7 days to see what and how much you drank that day, and when.']},
  {v:'14.10',hu:['🧊 3D mód: döntéskor a pohár alján már nem marad üres hely.','🍼 A palack, a poharak és a tartály kijelzőn is vízszintes marad a folyadék, ha megdöntöd a telefont. Teli edénynél nem billen.'],en:['🧊 3D mode: no more empty gap at the bottom of the glass when tilting.','🍼 The bottle, cups and tank displays also keep the liquid level when you tilt the phone. Full containers don’t tilt.']},
@@ -5996,7 +6000,7 @@ const TILT={on:false,t:0,a:0,v:0,raf:0,last:0,has:false,lastW:null,asked:false};
 function d3TiltSync(){const want=document.body.classList.contains('d3t')&&!document.hidden;
   if(want&&!TILT.on){TILT.on=true;window.addEventListener('deviceorientation',onTiltEv);TILT.last=performance.now();TILT.raf=requestAnimationFrame(tiltLoop)}
   else if(!want&&TILT.on){TILT.on=false;window.removeEventListener('deviceorientation',onTiltEv);cancelAnimationFrame(TILT.raf);TILT.a=TILT.v=TILT.t=0;TILT.lastW=null;document.documentElement.style.setProperty('--tl','0')}}
-function onTiltEv(e){if(e.beta==null||e.gamma==null)return;TILT.has=true;const b=e.beta*Math.PI/180,g=e.gamma*Math.PI/180,gx=Math.sin(g)*Math.cos(b),gy=Math.sin(b);
+function onTiltEv(e){if(e.beta==null||e.gamma==null)return;if(!TILT.has){TILT.has=true;try{renderD3Perm()}catch(_){}}const b=e.beta*Math.PI/180,g=e.gamma*Math.PI/180,gx=Math.sin(g)*Math.cos(b),gy=Math.sin(b);
   const ang=-Math.atan2(gx,Math.max(gy,.35))*180/Math.PI;TILT.t=Math.max(-28,Math.min(28,ang))}
 function tiltKick(p){if(TILT.on)TILT.v+=p}
 function tiltLoop(now){if(!TILT.on)return;const dt=Math.min(.05,(now-TILT.last)/1000);TILT.last=now;
@@ -6004,20 +6008,26 @@ function tiltLoop(now){if(!TILT.on)return;const dt=Math.min(.05,(now-TILT.last)/
   if(w!==TILT.lastW){TILT.lastW=w;document.documentElement.style.setProperty('--tl',w)}
   TILT.raf=requestAnimationFrame(tiltLoop)}
 document.addEventListener('visibilitychange',()=>{try{d3TiltSync()}catch(e){}});
-function d3AskMotion(manual){const D=window.DeviceOrientationEvent;TILT.asked=true;
-  if(D&&typeof D.requestPermission==='function')D.requestPermission().then(r=>{if(r!=='granted'&&manual)toast(t('tD3Deny'))}).catch(()=>{})}
-/* iPhone: új indítás után az első érintésnél újra elkérjük (ha már engedélyezte, nem kérdez) */
-document.addEventListener('pointerdown',()=>{if(!TILT.asked&&!TILT.has&&document.body.classList.contains('d3t'))d3AskMotion(false)},{passive:true});
-function renderD3Set(){$('d3On').checked=!!state.d3;$('d3Sub').hidden=!state.d3;$('d3Tilt').checked=state.d3Tilt!==false;$('d3Pet').checked=state.d3Pet!==false;$('d3Btn').checked=state.d3Btn!==false}
+function d3NeedPerm(){const D=window.DeviceOrientationEvent;return !!(D&&typeof D.requestPermission==='function')}
+function d3AskMotion(manual){if(!d3NeedPerm())return;
+  window.DeviceOrientationEvent.requestPermission().then(r=>{TILT.perm=r;if(r!=='granted'&&manual)toast(t('tD3Deny'));try{renderD3Perm()}catch(e){}}).catch(()=>{})}
+/* iPhone: minden indítás után újra kell kérni, és csak valódi koppintásra (touchend/click) adja meg.
+   Addig próbáljuk, amíg mozgásadat nem érkezik, vagy a felhasználó nemet nem mond. */
+const tiltGesture=()=>{if(TILT.has||TILT.perm==='denied'||!d3NeedPerm()||!document.body.classList.contains('d3t'))return;d3AskMotion(false)};
+document.addEventListener('touchend',tiltGesture,{passive:true});document.addEventListener('click',tiltGesture);
+function renderD3Perm(){const el=$('d3Perm');if(!el)return;const show=d3NeedPerm()&&state.d3&&state.d3Tilt!==false&&!TILT.has;el.hidden=!show;
+  $('d3PermTxt').textContent=TILT.perm==='denied'?t('d3PermDenied'):t('d3PermAsk')}
+function renderD3Set(){setTimeout(()=>{try{renderD3Perm()}catch(e){}},0);$('d3On').checked=!!state.d3;$('d3Sub').hidden=!state.d3;$('d3Tilt').checked=state.d3Tilt!==false;$('d3Pet').checked=state.d3Pet!==false;$('d3Btn').checked=state.d3Btn!==false}
 $('d3On').onchange=()=>{state.d3=$('d3On').checked;if(state.d3&&state.d3Tilt!==false)d3AskMotion(true);renderD3Set();applyTheme();render();writeSettings()};
 $('d3Tilt').onchange=()=>{state.d3Tilt=$('d3Tilt').checked;if(state.d3Tilt)d3AskMotion(true);applyTheme();render();writeSettings()};
 $('d3Pet').onchange=()=>{state.d3Pet=$('d3Pet').checked;applyTheme();render();writeSettings()};
+$('d3PermBtn').onclick=()=>d3AskMotion(true);
 $('d3Btn').onchange=()=>{state.d3Btn=$('d3Btn').checked;applyTheme();render();writeSettings()};
 try{applyD3();render()}catch(e){}
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.12';
+const APP_VERSION='14.13';
 /* egyetlen frissítés: ha már folyamatban van, vagy az oldal már a legújabb, nem töltünk újra */
 let updReloading=false;
 function latestVer(){return fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>j&&j.v||null).catch(()=>null)}
