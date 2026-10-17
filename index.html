@@ -391,6 +391,14 @@ html:root[data-accent="vidam"] .add{box-shadow:0 4px 0 rgba(0,0,0,.18)}
 .hearts{position:absolute;inset:0;pointer-events:none}
 .hearts i{position:absolute;left:50%;top:40%;width:16px;height:16px;color:#ff5f8f;animation:petHeart 1.1s ease-out forwards}
 .hearts i svg{width:16px;height:16px;fill:currentColor}
+/* álmos ébredés és visszaalvás */
+.petbox.drowsy .blink{animation:none;transform:scaleY(.42);transition:transform .6s ease-out}
+.petbox.drowsy .breathe{animation-duration:4.8s}
+.petbox.drowsy .wag{animation-duration:2.8s}
+.petbox.drowsy.nod .blink{transform:scaleY(.06);transition:transform 3.2s ease-in}
+.petbox.drowsy.nod #petSvg{animation:petNod 3.6s ease-in-out forwards}
+@keyframes petNod{0%{transform:none}30%{transform:rotate(-5deg) translateY(2px)}55%{transform:rotate(2deg) translateY(1px)}80%{transform:rotate(-3deg) translateY(4px)}100%{transform:rotate(0) translateY(3px)}}
+.fx-low .petbox.drowsy.nod #petSvg{animation:none}
 @keyframes petBreathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.02,.985)}}
 @keyframes petBlink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
 @keyframes petWag{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(8deg)}}
@@ -1358,6 +1366,7 @@ hu:{
   vehNames:{car:'Autó',racecar:'Versenyautó',digger:'Markoló',tractor:'Traktor',firetruck:'Tűzoltóautó',bus:'Busz',train:'Mozdony',plane:'Repülő',rocket:'Rakéta',garbage:'Kukásautó'},
   vehColNames:{red:'Piros',orange:'Narancs',yellow:'Sárga',green:'Zöld',blue:'Kék',purple:'Lila',pink:'Rózsaszín',black:'Fekete',white:'Fehér'},
   vehMsg:{
+    drowsy:['Brrr… motor bemelegítve, köszi a kortyot, {n}! 😴','Hoaam… finom volt… még pihen a motor egy kicsit…','Ilyen korán? *ásít* Jólesett… zzz','Egy korty… aztán vissza a garázsba szundítani…'],
     start:['Jó reggelt, {n}! Tankoljunk fel egy pohár vízzel?','Új nap, üres tank! Indulhatunk?'],
     happy:['Teljes gőzzel, {n}!','Jól haladunk, még {r} a célig.','Szuper tempó, csak így tovább!','Zöld a lámpa, {n}! Még {r}.'],
     thirsty:['Tankolj! Mindjárt kifogyok…','Lemaradtunk, még {r}. Gázt adunk?','Pislog a tanklámpa, igyunk egyet!','Üres a tank, te nem vagy szomjas?'],
@@ -1368,6 +1377,7 @@ hu:{
     pet:['Tütü! Szia, {n}!','Brrrm-brrrm!','Csillogok, mint új koromban!','Köszi a mosást, {n}!','Nézd, mit tudok!']
   },
   petMsg:{
+    drowsy:['Hoaam… köszi a kortyot, {n}! 😴','Mmm… finom volt… még szundítok egy kicsit…','Ilyen korán? *ásít* Jólesett… zzz','Egy korty… aztán vissza álmodni…'],
     start:['Jó reggelt, {n}! Kezdjük egy pohár vízzel?','Új nap, tiszta tál! Iszunk egyet?'],
     happy:['Szuper tempó, {n}!','Jó ütemben vagyunk, még {r}.','Ügyes vagy! Csak így tovább.','Jól haladunk, {n}. Még {r} a célig.'],
     thirsty:['Üres a tálam… iszunk egyet?','Kicsit lemaradtunk, még {r}. Pótoljuk?','Egy pohár víz most jólesne!','Szomjas vagyok, te nem?'],
@@ -1470,6 +1480,7 @@ en:{
   vehNames:{car:'Car',racecar:'Race car',digger:'Digger',tractor:'Tractor',firetruck:'Fire truck',bus:'Bus',train:'Train',plane:'Plane',rocket:'Rocket',garbage:'Garbage truck'},
   vehColNames:{red:'Red',orange:'Orange',yellow:'Yellow',green:'Green',blue:'Blue',purple:'Purple',pink:'Pink',black:'Black',white:'White'},
   vehMsg:{
+    drowsy:['Brrr… engine warmed up, thanks for the sip, {n}! 😴','Yaawn… that was nice… the engine rests a bit more…','So early? *yawn* That was good… zzz','One sip… then back to the garage for a nap…'],
     start:['Good morning, {n}! Shall we fill up with a glass of water?','New day, empty tank! Ready to roll?'],
     happy:['Full steam ahead, {n}!','Going well, {r} to go.','Great pace, keep it up!','Green light, {n}! {r} left.'],
     thirsty:['Fill me up! I’m running low…','We’re behind, {r} to go. Step on it?','The fuel light is blinking, let’s drink!','Empty tank. Aren’t you thirsty?'],
@@ -1480,6 +1491,7 @@ en:{
     pet:['Beep-beep! Hi, {n}!','Vroom-vroom!','Shiny like new!','Thanks for the wash, {n}!','Watch this!']
   },
   petMsg:{
+    drowsy:['Yaawn… thanks for the sip, {n}! 😴','Mmm… that was nice… I’ll nap a little longer…','So early? *yawn* That was good… zzz','One sip… then back to dreaming…'],
     start:['Good morning, {n}! Shall we start with a glass of water?','New day, fresh bowl! Shall we drink?'],
     happy:['Great pace, {n}!','We’re on track, {r} to go.','Nice work! Keep it up.','Going well, {n}. {r} left.'],
     thirsty:['My bowl is empty… shall we drink?','We’re a bit behind, {r} to go. Catch up?','A glass of water would be nice now!','I’m thirsty, aren’t you?'],
@@ -1759,10 +1771,11 @@ const PETS={
 };
 const PET_KEYS=Object.keys(PETS);
 function petSVG(kind,mood,acc){
+  const dz=mood==='drowsy';if(dz)mood='happy';
   const A=acc&&typeof acc==='object'?acc:{head:acc==='cap'?'cap':'none',eyes:acc==='glasses'?'sun':'none',neck:'none',phones:acc==='headphones'};
   const p=PETS[kind]||PETS.dog,sp=p.sp||[],has=x=>sp.includes(x);
   const B=p.b,Lc=p.l,D=p.d,N=p.n,ey=p.ey||95,hr=p.hr||[56,48],ink='#2b2233';
-  const droop=(mood==='thirsty'||mood==='sleep');
+  const droop=(dz||mood==='thirsty'||mood==='sleep');
   const mir=s=>'<g transform="translate(200 0) scale(-1 1)">'+s+'</g>';
   const both=s=>s+mir(s);
   let back='',tail='',ears='',head='',face='',top='',fx='';
@@ -1888,6 +1901,7 @@ function isVeh(k){return k in VEHICLES}
 function shade(hex,f){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;
   const m=v=>Math.max(0,Math.min(255,Math.round(f<0?v*(1+f):v+(255-v)*f)));return '#'+((1<<24)+(m(r)<<16)+(m(g)<<8)+m(b)).toString(16).slice(1)}
 function vehSVG(kind,mood,color,fill){
+  if(mood==='drowsy')mood='happy';
   const C=VEH_COLORS[color]||VEH_COLORS[VEHICLES[kind]]||'#e0403a',Dk=shade(C,-.28),Lt=shade(C,.45),ink='#2b2233',win='#bfe6ff',winD='#8fcdf2',tire='#2b2b36',hub='#d7dbe6';
   const light=mood==='sleep'?'#9a9aa8':'#ffe36e';
   const wheel=(x,y,r)=>'<g class="wheel"><circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+tire+'"/><circle cx="'+x+'" cy="'+y+'" r="'+(r*.45)+'" fill="'+hub+'"/><path d="M'+(x-r*.42)+' '+y+' H'+(x+r*.42)+' M'+x+' '+(y-r*.42)+' V'+(y+r*.42)+'" stroke="#9aa0b0" stroke-width="2.5"/></g>';
@@ -1999,8 +2013,9 @@ function renderPet(now,d,tot,g,p){
   const P=state.pet,card=$('petCard');
   if(!P.on){card.hidden=true;return}
   card.hidden=false;
-  const mood=tracking()?petMood(now,d,tot,g,p):'happy',fill=Math.min(1,tot/Math.max(g,.1)),key=P.kind+'|'+mood+'|'+(isVeh(P.kind)?P.vcol[P.kind]+Math.round(fill*20):JSON.stringify(P.acc));
-  if(key!==petKey){petKey=key;$('petSvg').innerHTML=d3PetSVG(compSVG(P.kind,mood,fill));const box=$('petBox');box.classList.remove('happy','thirsty','sleep','party');box.classList.add(mood)}
+  let mood=tracking()?petMood(now,d,tot,g,p):'happy';if(mood==='sleep'&&Date.now()<petWake)mood='drowsy';
+  const fill=Math.min(1,tot/Math.max(g,.1)),key=P.kind+'|'+mood+'|'+(isVeh(P.kind)?P.vcol[P.kind]+Math.round(fill*20):JSON.stringify(P.acc));
+  if(key!==petKey){petKey=key;$('petSvg').innerHTML=d3PetSVG(compSVG(P.kind,mood,fill));const box=$('petBox');box.classList.remove('happy','thirsty','sleep','party','drowsy');if(mood!=='drowsy')box.classList.remove('nod');box.classList.add(mood)}
   $('petBox').setAttribute('aria-label',t('petTapAria')+': '+(P.name||compName(P.kind)));
   $('petNameLbl').textContent=P.name||'';$('petNameLbl').hidden=!P.name;
   const bub=$('petBubble');bub.hidden=!P.talk;$('petCard').style.gridTemplateColumns=P.talk?'':'auto';
@@ -2013,12 +2028,19 @@ function renderPet(now,d,tot,g,p){
     if(!tracking())txt=petText('idle',vars);
     else if(mood==='happy'&&tot===0&&N-S<150)txt=petText('start',vars);
     else if(mood==='thirsty'&&since!=null&&since>=120)txt=petText('gap',vars);
+    else if(mood==='drowsy')txt=petDrowsyTxt||petText('sleep',vars);
     else txt=petText(mood,vars);
   }
   if(bub.textContent!==txt){bub.textContent=txt;if(petLastMood){bub.classList.remove('pop');void bub.offsetWidth;bub.classList.add('pop')}}
   petLastMood=mood;
 }
-function petSay(txt){if(!state.pet.on||!state.pet.talk)return;petTemp=txt;clearTimeout(petTempTimer);petTempTimer=setTimeout(()=>{petTemp=null;render()},4500);render()}
+function petSay(txt,ms){if(!state.pet.on||!state.pet.talk)return;petTemp=txt;clearTimeout(petTempTimer);petTempTimer=setTimeout(()=>{petTemp=null;render()},ms||4500);render()}
+/* alvó kedvenc: ivásra álmosan felébred, örül egy kicsit, aztán lassan visszaalszik */
+let petWake=0,petDrowsyTxt='',petWakeT=[];
+function petWakeUp(){petWakeT.forEach(clearTimeout);petWakeT=[];const box=$('petBox');box.classList.remove('nod');
+  petWake=Date.now()+11500;petDrowsyTxt=petTextRand('drowsy',{});petSay(petDrowsyTxt,11000);
+  petWakeT.push(setTimeout(()=>box.classList.add('nod'),7600));
+  petWakeT.push(setTimeout(()=>{petWake=0;petDrowsyTxt='';box.classList.remove('nod');render()},11600))}
 function petHop(){const b=$('petBox');b.classList.remove('sip');void b.offsetWidth;b.classList.add('sip');setTimeout(()=>b.classList.remove('sip'),800)}
 const TRICKS_PET=['spin','flip','jump','dance'],TRICKS_VEH={car:['wheelie','drift','jump'],racecar:['wheelie','drift','spin'],digger:['dance','jump','wheelie'],tractor:['wheelie','jump','dance'],
   firetruck:['drift','jump','dance'],bus:['jump','dance','drift'],train:['jump','dance'],plane:['loop','spin','dance'],rocket:['loop','spin','jump'],garbage:['jump','dance','drift']};
@@ -5218,7 +5240,7 @@ function add(dl,type,tm){
   const when=tm||Date.now(),k=keyOf(new Date(when)),d=ensure(k),before=sum(d),g=goalOf(d);
   d.entries.push({t:when,dl,type:type||'water'});d.entries.sort((a,b)=>a.t-b.t);render();writeDay(k);
   const isToday=k===keyOf(new Date());
-  if(isToday&&before<g&&sum(d)>=g){play('goal');buzz([30,60,30,60,60]);petHop();if(petVoiceOn('events'))petVoice(false,.7)}else{play('add');buzz(15);if(isToday){petHop();petSay(petTextRand('sip',{a:amt(dl)}));if(petVoiceOn('events')&&Math.random()<.5)petVoice(false,.3)}}
+  if(isToday&&before<g&&sum(d)>=g){play('goal');buzz([30,60,30,60,60]);petHop();if(petVoiceOn('events'))petVoice(false,.7)}else{play('add');buzz(15);if(isToday){petHop();if(tracking()&&petMood(new Date(),d,sum(d),g,null)==='sleep')petWakeUp();else{petSay(petTextRand('sip',{a:amt(dl)}));if(petVoiceOn('events')&&Math.random()<.5)petVoice(false,.3)}}}
 }
 let undo=null,toastTimer;
 function delEntry(k,i){
@@ -5889,6 +5911,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.12',hu:['😴 Ha a napi időszakon kívül iszol (korán reggel vagy éjjel), a kedvenced álmosan felébred, örül egy kicsit, aztán lassan visszaalszik.'],en:['😴 If you drink outside your daily window (early morning or at night), your buddy wakes up sleepily, is a little happy, then slowly dozes off again.']},
  {v:'14.11',hu:['📅 Az Utolsó 7 nap oszlopaira koppintva kis ablakban látod, aznap miből mennyit ittál, és mikor.'],en:['📅 Tap a bar in Last 7 days to see what and how much you drank that day, and when.']},
  {v:'14.10',hu:['🧊 3D mód: döntéskor a pohár alján már nem marad üres hely.','🍼 A palack, a poharak és a tartály kijelzőn is vízszintes marad a folyadék, ha megdöntöd a telefont. Teli edénynél nem billen.'],en:['🧊 3D mode: no more empty gap at the bottom of the glass when tilting.','🍼 The bottle, cups and tank displays also keep the liquid level when you tilt the phone. Full containers don’t tilt.']},
  {v:'14.9',hu:['🧊 Új: 3D mód (haladó módban, Beállítások → 3D mód). Domború, benyomódó gombok, üvegszerű pohár, árnyékos kedvenc.','📱 Ha megdöntöd a telefont, a pohárban a víz vízszintes marad és lötyög – ezt külön is ki lehet kapcsolni.'],en:['🧊 New: 3D mode (advanced mode, Settings → 3D mode). Raised buttons that press in, a glass-like glass and a buddy with a shadow.','📱 Tilt the phone and the water stays level and sloshes – this can be turned off separately.']},
@@ -5994,7 +6017,7 @@ try{applyD3();render()}catch(e){}
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.11';
+const APP_VERSION='14.12';
 /* egyetlen frissítés: ha már folyamatban van, vagy az oldal már a legújabb, nem töltünk újra */
 let updReloading=false;
 function latestVer(){return fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>j&&j.v||null).catch(()=>null)}
