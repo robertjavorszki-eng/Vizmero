@@ -1463,6 +1463,7 @@ hu:{
   vp_aloe:'Aloe gél', vp_probio:'Probiotikum', vp_fish:'Halolaj', vp_multi:'Daily multivitamin', vp_kids:'Kids', vp_greens:'Zöldség tabletta', vp_vitc:'C-vitamin', vp_vitd:'D-vitamin', vp_magn:'Magnézium',
   vitClDose:(m,r)=>m===r?'Minimum '+m+' cl':'Minimum '+m+' · ajánlott '+r+' cl', vitInWater:'beleszámít a folyadékba', vitClMinus:'1 cl-rel kevesebb', vitClMinOk:n=>'A minimum megvan, még '+n+' cl az ajánlotthoz.', vitClLess:n=>'Még '+n+' cl a minimumhoz.', vitMinCl:'Minimum (cl)', vitRecCl:'Ajánlott (cl)', vitWaterL:'Beleszámít a napi folyadékba', vitWaterN:'Bekapcsolva a megivott mennyiség a víz-oldalon is megjelenik a mai listában, és beleszámít a napi célba.',
   vsTitle:'Érdekességek', vsHowT:'Mennyire sikerül?', vsHowS:'Utolsó 30 nap – hány napon lett meg legalább a minimum', vsHowCap:p=>'Összesen a napok '+p+'%-án megvolt legalább a minimum.', vsStrT:'Sorozatok', vsStrS:'Hány napja egyfolytában (szünet nem szakítja meg)', vsBest:n=>'legjobb: '+n, vsStrCap:(n,c)=>c?n+': már '+c+' napja egyfolytában! 🔥':'Ma kezdődhet egy új sorozat!', vsGelT:n=>n+': melyik fajta?', vsGelS:n=>'Utolsó 30 nap · '+n+' napon ittál belőle', vsDays:'nap', vsGelCap:(cl,dl)=>'Összesen '+cl+' cl ('+dl+' dl) az utolsó 30 napban.', vsWdT:'A hét napjai', vsWdS:'Melyik napon sikerül a legjobban?', vsWdCap:d=>d.charAt(0).toUpperCase()+d.slice(1)+' marad ki a legtöbb.',
+  vitAllOut:'Most minden fajta elfogyott – a ceruzával jelölheted, ha újra van itthon.',
   vitPetGood:n=>n+' megvan! 💪', vitPetGel:'Egészségedre! Jöhet utána egy pohár víz is? 💧', vitPetGelQ:n=>'Megvan már a reggeli '+n+'?', vitPetLeft:x=>'Ne felejtsd: '+x+' még hátra van!', vitPetDone:'Mára minden vitamin megvan! 🎉',
 
   d3PermAsk:'iPhone-on a pohár mozgásához engedélyezni kell a mozgásérzékelőt. Ha nem mozog, koppints a gombra.', d3PermDenied:'A mozgásérzékelő le van tiltva. Zárd be teljesen az appot, nyisd meg újra, és koppints a gombra, majd válaszd az Engedélyezést.', d3PermBtn:'Mozgásérzékelő engedélyezése',
@@ -1592,6 +1593,7 @@ en:{
   vp_aloe:'Aloe gel', vp_probio:'Probiotic', vp_fish:'Fish oil', vp_multi:'Daily multivitamin', vp_kids:'Kids', vp_greens:'Greens tablet', vp_vitc:'Vitamin C', vp_vitd:'Vitamin D', vp_magn:'Magnesium',
   vitClDose:(m,r)=>m===r?'Minimum '+m+' cl':'Minimum '+m+' · recommended '+r+' cl', vitInWater:'counts as fluid', vitClMinus:'1 cl less', vitClMinOk:n=>'Minimum reached, '+n+' cl more for the recommended amount.', vitClLess:n=>n+' cl more to the minimum.', vitMinCl:'Minimum (cl)', vitRecCl:'Recommended (cl)', vitWaterL:'Counts toward daily fluids', vitWaterN:'When on, the amount you drink also shows on the water page in today’s list and counts toward your daily goal.',
   vsTitle:'Fun facts', vsHowT:'How’s it going?', vsHowS:'Last 30 days – days with at least the minimum', vsHowCap:p=>'Overall you reached at least the minimum on '+p+'% of days.', vsStrT:'Streaks', vsStrS:'Days in a row (pauses don’t break it)', vsBest:n=>'best: '+n, vsStrCap:(n,c)=>c?n+': '+c+' days in a row! 🔥':'A new streak can start today!', vsGelT:n=>n+': which kind?', vsGelS:n=>'Last 30 days · drunk on '+n+' days', vsDays:'days', vsGelCap:(cl,dl)=>cl+' cl ('+dl+' dl) in total over the last 30 days.', vsWdT:'Days of the week', vsWdS:'Which day goes best?', vsWdCap:d=>'Most missed on '+d+'s.',
+  vitAllOut:'All kinds are out right now – use the pencil to mark one as back at home.',
   vitPetGood:n=>n+' done! 💪', vitPetGel:'Cheers! How about a glass of water too? 💧', vitPetGelQ:n=>'Had your morning '+n+' yet?', vitPetLeft:x=>'Don’t forget: '+x+' still to go!', vitPetDone:'All vitamins done for today! 🎉',
 
   d3PermAsk:'On iPhone the motion sensor must be allowed for the glass to move. If it doesn’t move, tap the button.', d3PermDenied:'The motion sensor is blocked. Fully close the app, open it again, tap the button and choose Allow.', d3PermBtn:'Allow motion sensor',
@@ -6141,7 +6143,10 @@ function vitCard(it,k){
   if(it.kind==='group'){const sel=vitVal(it,k),so=it.opts.find(o=>o.id===sel);
     const cl=vitGroupCl(it,k),hasAmt=it.minCl>0;
     let h='<div class="vcard '+st+'"><div class="vtop">'+pillSVG('liquid',so?so.c:it.c,null)+'<div class="vn"><b>'+esc(it.name)+'</b><span>'+esc(hasAmt?t('vitClDose',it.minCl,it.recCl)+(it.water?' · '+t('vitInWater'):''):(so?t('vitGelDone',so.name):t('vitGelPick')))+'</span></div>'+(hasAmt?'<span class="vbadge '+st+'">'+uvCl(cl)+'/'+uvCl(Math.max(it.recCl,it.minCl))+' cl</span>':st==='full'?'<span class="vbadge full">✓</span>':'')+ed+'</div><div class="vopts">';
-    it.opts.forEach(o=>{h+='<button class="vopt'+(o.id===sel?' on':'')+(o.paused?' off':'')+'" data-vopt="'+it.id+'|'+o.id+'"'+(o.paused?' disabled':'')+'><i style="background:'+o.c+'"></i>'+esc(o.name)+(o.paused?' <small>'+esc(t('vitOut'))+'</small>':'')+'</button>'});
+    /* az elfogyott fajták nem foglalják a helyet (csak ha ma épp abból ittál) */
+    const vis=it.opts.filter(o=>!o.paused||o.id===sel);
+    vis.forEach(o=>{h+='<button class="vopt'+(o.id===sel?' on':'')+'" data-vopt="'+it.id+'|'+o.id+'"><i style="background:'+o.c+'"></i>'+esc(o.name)+'</button>'});
+    if(!vis.length)h+='<p class="vmsg muted">'+esc(t('vitAllOut'))+'</p>';
     h+='</div>';
     if(hasAmt&&sel){const mx=Math.max(it.recCl,it.minCl,cl)*1.15,pm=it.minCl/mx*100,pr=Math.max(it.recCl,it.minCl)/mx*100;
       h+='<div class="vrow"><button class="vbtn" data-vcl="'+it.id+'|-1" aria-label="'+esc(t('vitClMinus'))+'">–</button><div class="vclbar"><i style="width:'+(cl/mx*100).toFixed(1)+'%;background:'+(so?so.c:it.c)+'"></i><em style="left:'+pm.toFixed(1)+'%"></em>'+(pr>pm+1?'<em class="r" style="left:'+pr.toFixed(1)+'%"></em>':'')+'<span>'+uvCl(cl)+' cl</span></div><button class="vbtn plus" data-vcl="'+it.id+'|1">+1 cl</button></div>';
@@ -6482,6 +6487,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.19',hu:['🥤 Az elfogyott aloés fajták nem jelennek meg a Vitaminok oldalon, így nem foglalják a helyet. A szerkesztőben továbbra is ott vannak, és visszakapcsolhatók.'],en:['🥤 Aloe kinds that ran out no longer show on the Vitamins page, so they don’t take up space. They stay in the editor and can be switched back on.']},
  {v:'14.18',hu:['🥤 Az aloés gél most beleszámít a napi folyadékba, és megjelenik a víz-oldal mai listájában is. Minimum és ajánlott mennyiség állítható centiliterben, és többet is ihatsz (+1 cl).','📊 Érdekességek: új „Ma miből mennyit?” kártya a mai italaidról.','💊 A Vitaminok oldalon is vannak érdekességek: mennyire sikerül, sorozatok, melyik aloés fajtát iszod, és a hét napjai.'],en:['🥤 Aloe gel now counts toward your daily fluids and shows in today’s list on the water page. Set minimum and recommended amounts in cl, and drink more if you like (+1 cl).','📊 Fun facts: a new “Today: what and how much?” card.','💊 The Vitamins page has fun facts too: how it’s going, streaks, which aloe kind you drink, and days of the week.']},
  {v:'14.16',hu:['💊 Új: Vitaminok és kiegészítők! Beállítások → Vitaminok. Naponta pipálhatod, mit vettél be, ajánlott és minimum adaggal, saját formával és színnel.','🥤 Az aloés gélekhez: több fajtából elég az egyik éhgyomorra. Ami elfogyott, szüneteltethető – szürkén látszik.','📅 Heti áttekintés, és a kedvenced is emlékeztet.'],en:['💊 New: Vitamins and supplements! Settings → Vitamins. Tick off what you took each day, with recommended and minimum doses, your own shapes and colors.','🥤 For aloe gels: one of several kinds on an empty stomach is enough. Anything that ran out can be paused – it shows greyed out.','📅 Weekly overview, and your buddy reminds you too.']},
  {v:'14.15',hu:['🏆 Minden ügyességi játék végén statisztika: hányszor játszottad, átlagpont, legjobb, és a 10 legjobb eredményed listája dátummal. A mostani eredményed kiemelve látszik, ha bekerült.','📋 A lista a játék indítása előtt is megnézhető.'],en:['🏆 Every skill game now ends with stats: games played, average score, best, and your top 10 scores with dates. Your latest score is highlighted if it made the list.','📋 You can also see the list before starting a game.']},
@@ -6599,7 +6605,7 @@ try{applyD3();render()}catch(e){}
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.18';
+const APP_VERSION='14.19';
 /* egyetlen frissítés: ha már folyamatban van, vagy az oldal már a legújabb, nem töltünk újra */
 let updReloading=false;
 function latestVer(){return fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>j&&j.v||null).catch(()=>null)}
