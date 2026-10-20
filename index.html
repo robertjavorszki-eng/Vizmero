@@ -218,6 +218,77 @@ h2{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mu
 @keyframes march{to{stroke-dashoffset:-14}}
 .nowpulse{transform-box:fill-box;transform-origin:center;animation:rdot 2s ease-in-out infinite}
 
+/* ===== Vitaminok ===== */
+.vtabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--line);border-radius:14px;padding:4px}
+.vtabs button{height:44px;border:0;border-radius:11px;background:transparent;color:var(--muted);font:700 .95rem var(--body);display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
+.vtabs button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.12)}
+body.vview .wrap > :is(section,div,p,button):not(.petcard):not(.vitpage):not(.greet):not(.vtabs){display:none!important}
+.vitmini{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px 14px;color:var(--ink);font:inherit;cursor:pointer}
+.vitmini .vmt{display:flex;flex-direction:column;gap:2px;min-width:0}.vitmini .vmt span{font-size:.82rem;color:var(--muted)}
+.vitpage{display:flex;flex-direction:column;gap:10px}
+.vsumm{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px 14px}
+.vsumm>div{display:flex;flex-direction:column;gap:3px;min-width:0}.vsumm b{font-size:1.05rem}.vsumm span{font-size:.88rem;color:var(--muted)}
+.vring{flex:none}
+.vslot{margin:8px 0 0;font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.vcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.vcard.full{box-shadow:0 0 0 2px var(--ok) inset;border-color:transparent}
+.vcard.min{box-shadow:0 0 0 2px color-mix(in srgb,var(--ok) 45%,transparent) inset;border-color:transparent}
+.vcard.paused{flex-direction:row;align-items:center;gap:10px}
+.vcard.paused>svg,.vcard.paused .vn{opacity:.5;filter:grayscale(1)}
+.vtop{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:10px;align-items:center}
+.vn{display:flex;flex-direction:column;gap:1px;min-width:0}.vn b{font-size:1rem}.vn span{font-size:.8rem;color:var(--muted)}
+.vcard.paused .vn{flex:1}
+.vbadge{font-weight:800;font-size:.82rem;padding:5px 10px;border-radius:999px;background:var(--line);color:var(--ink);white-space:nowrap}
+.vbadge.full{background:color-mix(in srgb,var(--ok) 22%,var(--surface));color:var(--ok)}.vbadge.min{background:color-mix(in srgb,var(--ok) 12%,var(--surface))}
+.vedit{width:36px;height:36px;border-radius:10px;border:0;background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.vrow{display:flex;align-items:center;gap:8px}
+.vbtn{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:800 1.3rem var(--body);cursor:pointer;flex:none}
+.vbtn:disabled{opacity:.35}
+.vbtn.plus{width:auto;padding:0 16px;background:var(--water);border-color:transparent;color:#fff;font-size:1rem}
+.vdots{flex:1;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:2px;min-width:0}
+.vdot{width:34px;height:34px;border-radius:10px;border:0;background:transparent;padding:0;display:grid;place-items:center;cursor:pointer;opacity:.25;filter:grayscale(.7)}
+.vdot.on{opacity:1;filter:none}.vdot.extra{outline:2px dashed var(--warn);outline-offset:-3px}
+.vminl{display:block;width:2px;height:24px;border-radius:2px;background:var(--ok);opacity:.75;margin:0 2px}
+.vmsg{margin:0;font-size:.82rem;font-weight:700;color:var(--ok)}
+.vopts{display:flex;flex-wrap:wrap;gap:6px}
+.vopt{min-height:40px;padding:6px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:600 .88rem var(--body);display:flex;align-items:center;gap:6px;cursor:pointer}
+.vopt i{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.25) inset;flex:none}
+.vopt.on{border:2.5px solid var(--ok);font-weight:800;background:color-mix(in srgb,var(--ok) 12%,var(--surface))}
+.vopt.off{opacity:.45;filter:grayscale(1);cursor:default}.vopt.off small{font-weight:700}
+.vres{height:40px;padding:0 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:700 .88rem var(--body);cursor:pointer;flex:none}
+.vadd{height:48px;border-radius:14px;border:1.5px dashed var(--muted);background:transparent;color:var(--water-deep);font:800 .95rem var(--body);cursor:pointer;margin-top:6px}
+.vweek{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:5px}
+.vwr{display:grid;grid-template-columns:minmax(0,1.7fr) repeat(7,minmax(0,1fr));gap:4px;align-items:center}
+.vwr.head span{font-size:.7rem;font-weight:700;color:var(--muted);text-align:center}
+.vwn{font-size:.8rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vc{display:block;height:20px;border-radius:6px;box-sizing:border-box}
+.vc.full{background:var(--ok)}.vc.min{background:color-mix(in srgb,var(--ok) 40%,var(--surface))}.vc.none,.vc.opt{border:2px dashed var(--line)}.vc.pz{background:repeating-linear-gradient(45deg,var(--line) 0 4px,transparent 4px 8px)}.vc.pre{background:transparent}
+.vleg{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;font-size:.72rem;font-weight:700;color:var(--muted)}.vleg span{display:flex;align-items:center;gap:5px}.vleg .vc{width:14px;height:14px;border-radius:4px}
+.vited .vlab{display:flex;flex-direction:column;gap:6px;margin:12px 0 6px;font-size:.85rem;font-weight:700;color:var(--muted)}
+.vchips{display:flex;flex-wrap:wrap;gap:6px}
+.vchips button{min-height:38px;padding:6px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:600 .88rem var(--body);cursor:pointer}
+.vchips button[aria-pressed="true"]{border:2px solid var(--water);background:var(--water-soft);font-weight:800}
+.vchips.seg{display:grid;grid-template-columns:1fr 1fr}
+.vprev{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:end;margin-top:6px}.vprev .vlab{margin:0}
+.vforms{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.vforms button{height:62px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:2px}
+.vforms small{font-size:.66rem;font-weight:700;color:var(--muted)}
+.vforms button[aria-pressed="true"]{border:2px solid var(--water);background:var(--water-soft)}
+.vcols{display:flex;flex-wrap:wrap;gap:8px}
+.vcols button{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(0,0,0,.18);cursor:pointer}
+.vcols button[aria-pressed="true"]{box-shadow:0 0 0 3px var(--surface),0 0 0 5px var(--water)}
+.vsteps{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vstep{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border-radius:14px;padding:4px}
+.vstep button{width:44px;height:44px;border-radius:11px;border:0;background:var(--surface);color:var(--ink);font:800 1.3rem var(--body);cursor:pointer}.vstep b{font-size:1.4rem}
+.vols{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.vol{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:6px;align-items:center}
+.vol .text{height:42px}
+.vocol{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(0,0,0,.2);cursor:pointer}
+.vopz{height:36px;padding:0 10px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:700 .75rem var(--body);cursor:pointer;white-space:nowrap}
+.vopz[aria-pressed="true"]{background:var(--line);color:var(--muted)}
+.vol.off .text{opacity:.5;text-decoration:line-through}
+.vodel{width:34px;height:34px;border-radius:10px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.ghost.danger{color:#c43c2c}
 /* ===== 3D mód ===== */
 #b1{--btc:var(--b1)}#b2{--btc:var(--b2)}#b3{--btc:var(--b3)}#b5{--btc:var(--b4)}
 html:root[data-accent="neon"] .add{--btc:var(--bc)}
@@ -671,6 +742,7 @@ body.modal{overflow:hidden}
       </button>
     </div>
   </header>
+  <nav class="vtabs" id="vTabs" hidden><button type="button" data-vt="water"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg><span data-t="vtWater"></span></button><button type="button" data-vt="vit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="9" width="18" height="7" rx="3.5" transform="rotate(-35 12 12.5)"/><path d="M9.6 8.2l4.2 6.2"/></svg><span data-t="vtVit"></span></button></nav>
 
   <p class="greet" id="greet" hidden></p>
 
@@ -679,6 +751,7 @@ body.modal{overflow:hidden}
     <div class="bubwrap"><p class="bubble" id="petBubble" aria-live="polite"></p><span class="petname" id="petNameLbl"></span><button class="gamebtn" id="gameBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10.5v4M5 12.5h4"/><circle cx="15.5" cy="11.5" r="1" fill="currentColor"/><circle cx="18" cy="13.5" r="1" fill="currentColor"/></svg><span id="gameBtnTxt"></span><b id="gameStreak"></b></button></div>
   </section>
 
+  <section class="vitpage" id="vitPage" hidden></section>
   <section class="trackoff" id="trackOff" hidden>
     <div class="toic" aria-hidden="true">💧</div>
     <p class="totxt" data-t="trackOffTxt"></p>
@@ -695,6 +768,7 @@ body.modal{overflow:hidden}
 
   <section class="alt viz trk" id="vizAlt" hidden></section>
   <div class="vizdots trk" id="vizDots" aria-hidden="true"></div>
+  <button type="button" class="vitmini" id="vitMini" hidden></button>
 
   <section class="pace trk" aria-live="polite">
     <div class="head"><span id="paceHead"></span><span class="pill" id="pacePill"></span></div>
@@ -869,6 +943,12 @@ body.modal{overflow:hidden}
         <button class="chip ic" id="unit-l" data-unit="l"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2h4v3h-4z"/><path d="M9 5h6l1 3v13H8V8z"/></svg><span data-t="unitL"></span></button>
       </div>
       <p class="small" style="margin-top:8px" data-t="unitNote"></p>
+    </div>
+
+    <div>
+      <h2 data-t="vitSec"></h2>
+      <div class="srow first"><span data-t="vitOnL"></span><label class="tg"><input type="checkbox" id="vitOn"><i></i></label></div>
+      <p class="small" style="margin-top:8px" data-t="vitOnN"></p>
     </div>
 
     <div>
@@ -1085,6 +1165,12 @@ body.modal{overflow:hidden}
 <div class="scrim center" id="goalScrim" hidden>
   <div class="sheet onb info" role="dialog" aria-modal="true"><div id="goalSheetBody"></div></div>
 </div>
+<div class="scrim" id="vitEdScrim" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="vitEdTitle">
+    <header><h3 id="vitEdTitle"></h3><button class="icon" data-close="vitEdScrim" data-ta="close">✕</button></header>
+    <div id="vitEdBody" class="vited"></div>
+  </div>
+</div>
 <div class="scrim center" id="dayScrim" hidden>
   <div class="sheet onb info dsheet" role="dialog" aria-modal="true" aria-labelledby="dayTitle">
     <h3 id="dayTitle"></h3>
@@ -1167,6 +1253,12 @@ body.modal{overflow:hidden}
     <details class="hsec"><summary><span class="hic">🔊</span>Hangok és rezgés</summary><div class="hbody">
       <p>Az app rövid hangot ad ital hozzáadásakor, törléskor vagy visszavonáskor, és egy kis dallamot, amikor meglesz a napi cél. A beállítások <b>Hangok és rezgés</b> részében kikapcsolhatod, eseményenként is, választhatsz hangkészletet (Vízcsepp, Buborék, Dallam), állíthatod a hangerőt, és a lejátszás gombbal meg is hallgathatod.</p>
       <p>Alapból a napi időszakon kívül (pl. késő este) csendben marad. Androidon koppintáskor röviden rezeg is; iPhone-on ezt a böngésző nem engedi. iPhone-on a néma kapcsoló a hangokat is elnémítja. A hangerőt a telefon médiahangereje szabályozza (a hangerőgombok, amíg az app van előtérben), és ha közben zenét hallgatsz, az app hangjai nem állítják le. Ha az app a háttérből jön vissza, a hang az első koppintással újraindul.</p>
+    </div></details>
+    <details class="hsec"><summary><span class="hic">💊</span>Vitaminok és kiegészítők</summary><div class="hbody">
+      <p>A Beállítások → <b>Vitaminok</b> alatt kapcsolhatod be. Ekkor fent megjelenik a <b>Víz | Vitaminok</b> váltó, a víz-oldalon pedig egy kis kártya mutatja, hány van meg mára.</p>
+      <p>Minden kiegészítőnél megadhatod a nevét, formáját és színét, az <b>ajánlott</b> és a <b>minimum</b> napi adagot, az egységet és hogy mikor szeded. A <b>+1</b> gombbal vagy a kis bogyókra koppintva jelölöd, mennyit vettél be. Ha megvan a minimum, világoszöld, ha az ajánlott is, sötétzöld keretet kap.</p>
+      <p>Az <b>ital, több fajtából egy</b> típus például az aloés gélekhez jó: felveheted az összes fajtát (Aloe Vera Gel, Berry, Freedom…), és elég, ha aznap az egyiket megiszod. Amelyik elfogyott, azt a szerkesztőben „elfogyott”-ra állíthatod.</p>
+      <p>Ha egy kiegészítő elfogy, kapcsold <b>Szünetel</b>-re: szürkén látszik, nem számít bele a napiba, és a „Folytatom” gombbal bármikor visszakapcsolhatod. Készletet az app nem számol. Az adagokat te adod meg a termék alapján, az app nem ajánl adagot.</p>
     </div></details>
     <details class="hsec"><summary><span class="hic">🧊</span>3D mód</summary><div class="hbody">
       <p>Haladó módban a Beállítások → <b>3D mód</b> alatt kapcsolhatod be (alapból ki van kapcsolva). Ilyenkor a gombok domborúak és megnyomva benyomódnak, a kiválasztott választók benyomva maradnak, a pohár üvegszerű, a kedvenced pedig árnyékot vet.</p>
@@ -1274,6 +1366,12 @@ body.modal{overflow:hidden}
       <p>The app plays a short sound when you add a drink, delete or undo, and a little tune when you reach your daily goal. Under <b>Sounds and vibration</b> in Settings you can turn them off (per event too), pick a sound set (Water drop, Bubble, Melody), set the volume and preview each one with the play button.</p>
       <p>By default it stays quiet outside your daily window (e.g. late at night). On Android it also gives a short buzz when you tap; the browser doesn’t allow that on iPhone. On iPhone the silent switch also mutes the sounds. Volume follows the phone’s media volume (the volume buttons while the app is in front), and the app’s sounds don’t stop your music. When the app comes back from the background, sound restarts with your first tap.</p>
     </div></details>
+    <details class="hsec"><summary><span class="hic">💊</span>Vitamins and supplements</summary><div class="hbody">
+      <p>Turn it on under Settings → <b>Vitamins</b>. A <b>Water | Vitamins</b> switch appears at the top, and a small card on the water page shows how many are done today.</p>
+      <p>For each supplement you can set its name, shape and color, the <b>recommended</b> and <b>minimum</b> daily dose, the unit and when you take it. Tap <b>+1</b> or the little pills to mark how many you took. Reaching the minimum gives a light green frame, the recommended dose a dark green one.</p>
+      <p>The <b>drink – one of several</b> type suits aloe gels: add all kinds (Aloe Vera Gel, Berry, Freedom…), and drinking any one of them counts for the day. Mark a kind as “out” in the editor when it runs out.</p>
+      <p>If a supplement runs out, set it to <b>Paused</b>: it shows greyed out, doesn’t count toward the day, and “Resume” brings it back any time. The app doesn’t count stock. You enter the doses from the product; the app doesn’t suggest doses.</p>
+    </div></details>
     <details class="hsec"><summary><span class="hic">🧊</span>3D mode</summary><div class="hbody">
       <p>In advanced mode you can turn it on under Settings → <b>3D mode</b> (it’s off by default). Buttons become raised and press in, selected options stay pressed, the glass looks like real glass and your buddy casts a shadow.</p>
       <p>With <b>The glass moves with the phone</b>, the water stays level when you tilt the phone and sloshes when you add a drink. On iPhone it asks once for motion sensor access. Each part can be turned on or off separately. With Simple visual effects 3D mode isn’t shown, so weaker phones stay smooth.</p>
@@ -1339,6 +1437,18 @@ hu:{
   streak:'Sorozat', hits30:'30 napból sikeres', avg7:'Heti átlag', avg30:'Havi átlag', avg7Note:'utolsó 7 nap', avg30Note:'utolsó 30 nap', dayU:'nap',
   display:'Kijelző', vGlass:'Mérőpohár', vRing:'Gyűrű', vBottle:'Kulacs', vCups:'Pohársor', vLine:'Idővonal', vTank:'Akvárium',
   dayHead:(m,d,wd)=>m+' '+d+'., '+wd, daySum:(a,g)=>'<b>'+a+'</b> a '+g+'-es célból', dayHit:'Cél teljesítve ✓', dayTimes:n=>n+'×', dayEmpty:'Ezen a napon nem rögzítettél ivást.', dayAct:a=>'🏃 Mozgás: +'+a+' a célhoz', dayHot:'☀️ Meleg nap', dayOk:'Bezár', dayAria:(d,a)=>d+': '+a+'. Koppints a részletekért.',
+  vtWater:'Víz', vtVit:'Vitaminok', vitSec:'Vitaminok', vitOnL:'Vitaminok és kiegészítők követése', vitOnN:'Bekapcsolva a víz mellett megjelenik egy Vitaminok oldal, ahol naponta pipálhatod, mit vettél be. Készletet nem számol, csak a saját napi szedésedet követi.', vitOnToast:'Kész! Fent válthatsz a Víz és a Vitaminok között.',
+  vitMiniT:(a,n)=>'Vitaminok: '+a+'/'+n, vitLeft:x=>'Hátra: '+x, vitAllDone:'Mára minden megvan! 🎉', vitAllDoneS:'Ügyes vagy, holnap folytatjuk.', vitSumT:a=>a?'Szép, már '+a+' megvan!':'Kezdjük a mai adagot!', vitEmptyT:'Még nincs kiegészítőd', vitEmptyS:'Vegyél fel egyet lent.',
+  vs_empty:'Reggel, éhgyomorra', vs_morning:'Reggel', vs_day:'Napközben', vs_evening:'Este', vs_bed:'Lefekvés előtt',
+  vitAdd:'Új kiegészítő', vitEditA:n=>n+' szerkesztése', vitPausedS:'Szünetel – most nincs itthon', vitResume:'Folytatom', vitGelDone:n=>'ma: '+n+' ✓', vitGelPick:'koppints arra, amelyiket ittad', vitOut:'elfogyott', vitHave:'van itthon', vitMinOk:n=>'A minimum megvan, még '+n+' az ajánlotthoz.',
+  vitDose:(r,m,u)=>m>0&&m<r?'Ajánlott '+r+' · minimum '+m+' '+u:m===0?'Ajánlott '+r+' '+u+' · nem kötelező':'Napi '+r+' '+u, vitMinus:'Eggyel kevesebb',
+  vitWeekT:'Elmúlt 7 nap', vitLegFull:'ajánlott', vitLegMin:'minimum', vitLegNone:'kimaradt', vitLegPause:'szünetelt',
+  vitEdT:'Kiegészítő szerkesztése', vitNewT:'Új kiegészítő', vitQuick:'Gyors választás', vitName:'Név', vitKind:'Típus', vitKindPill:'Bogyó, adag', vitKindGroup:'Ital – több fajtából egy', vitForm:'Forma', vitColor:'Szín', vitColor1:'Szín (egyik fele)', vitColor2:'Szín (másik fele)', vitRec:'Ajánlott napi adag', vitMin:'Minimum adag', vitUnit:'Egység', vitAmount:'Mennyiség (pl. ½ pohár)', vitOpts:'Fajták', vitOptsNote:'Elég, ha ezek közül egyet megiszol. A színes körre koppintva színt válthatsz, és jelölheted, ha valamelyik elfogyott.', vitOptAdd:'Új fajta', vitWhen:'Mikor?', vitPauseL:'Szünetel (elfogyott)', vitPauseN:'Szünet alatt szürkén látszik, és nem számít bele a napiba. Bármikor folytathatod.', vitSave:'Mentés', vitDelItem:'Törlés', vitDel:'Törlés', vitDelQ:n=>'Biztosan törlöd: '+n+'?', vitAdded:n=>n+' felvéve', vitUnnamed:'Kiegészítő', vitHalfGlass:'½ pohár',
+  vf_capsule:'Kapszula', vf_softgel:'Lágy kapszula', vf_oval:'Ovális', vf_round:'Kerek', vf_chew:'Rágó', vf_beads:'Gyöngyök', vf_liquid:'Ital', vf_drops:'Csepp',
+  vu_db:n=>'db', vu_caps:n=>'kapszula', vu_tab:n=>'tabletta', vu_dose:n=>'adag', vu_glass:n=>'pohár', vu_ml:n=>'ml',
+  vp_aloe:'Aloe gél', vp_probio:'Probiotikum', vp_fish:'Halolaj', vp_multi:'Daily multivitamin', vp_kids:'Kids', vp_greens:'Zöldség tabletta', vp_vitc:'C-vitamin', vp_vitd:'D-vitamin', vp_magn:'Magnézium',
+  vitPetGood:n=>n+' megvan! 💪', vitPetGel:'Egészségedre! Jöhet utána egy pohár víz is? 💧', vitPetGelQ:n=>'Megvan már a reggeli '+n+'?', vitPetLeft:x=>'Ne felejtsd: '+x+' még hátra van!', vitPetDone:'Mára minden vitamin megvan! 🎉',
+
   d3PermAsk:'iPhone-on a pohár mozgásához engedélyezni kell a mozgásérzékelőt. Ha nem mozog, koppints a gombra.', d3PermDenied:'A mozgásérzékelő le van tiltva. Zárd be teljesen az appot, nyisd meg újra, és koppints a gombra, majd válaszd az Engedélyezést.', d3PermBtn:'Mozgásérzékelő engedélyezése',
   d3Sec:'3D mód', d3On:'3D mód bekapcsolása', d3Tilt:'A pohár mozog a telefonnal', d3Pet:'Mélység a kedvencnél', d3Btn:'Domború gombok', d3Note:'Domború, benyomódó gombok, térhatású pohár és kedvenc. Csak haladó módban működik, és az Egyszerű vizuális effekteknél nem látszik. iPhone-on a pohár mozgásához egyszer engedélyt kér a mozgásérzékelőre.', tD3Deny:'A mozgásérzékelő nincs engedélyezve, ezért a pohár nem mozog a telefonnal.',
   fxSec:'Vizuális effektek', fxAuto:'Automatikus', fxLow:'Egyszerű', fxMid:'Közepes', fxFull:'Teljes', fxNote:'Automatikus módban az app a készülékhez igazítja, és ha egy játék akad, magától lejjebb vesz. Lassabb telefonon kézzel is választhatod az Egyszerűt vagy a Közepest: kevesebb animáció és csapadék, kisebb felbontás – gyorsabb és kíméli az akkut.',
@@ -1454,6 +1564,18 @@ en:{
   streak:'Streak', hits30:'Goal met (30 days)', avg7:'Weekly average', avg30:'Monthly average', avg7Note:'last 7 days', avg30Note:'last 30 days', dayU:'days',
   display:'Display', vGlass:'Measuring glass', vRing:'Ring', vBottle:'Bottle', vCups:'Glasses', vLine:'Timeline', vTank:'Aquarium',
   dayHead:(m,d,wd)=>wd+', '+m+' '+d, daySum:(a,g)=>'<b>'+a+'</b> of your '+g+' goal', dayHit:'Goal reached ✓', dayTimes:n=>n+'×', dayEmpty:'No drinks logged on this day.', dayAct:a=>'🏃 Activity: +'+a+' to the goal', dayHot:'☀️ Hot day', dayOk:'Close', dayAria:(d,a)=>d+': '+a+'. Tap for details.',
+  vtWater:'Water', vtVit:'Vitamins', vitSec:'Vitamins', vitOnL:'Track vitamins and supplements', vitOnN:'When on, a Vitamins page appears next to water where you tick off what you took each day. It doesn’t count stock, it only tracks your own daily intake.', vitOnToast:'Done! Switch between Water and Vitamins at the top.',
+  vitMiniT:(a,n)=>'Vitamins: '+a+'/'+n, vitLeft:x=>'Left: '+x, vitAllDone:'All done for today! 🎉', vitAllDoneS:'Great job, see you tomorrow.', vitSumT:a=>a?'Nice, '+a+' done already!':'Let’s start today’s doses!', vitEmptyT:'No supplements yet', vitEmptyS:'Add one below.',
+  vs_empty:'Morning, empty stomach', vs_morning:'Morning', vs_day:'During the day', vs_evening:'Evening', vs_bed:'Before bed',
+  vitAdd:'New supplement', vitEditA:n=>'Edit '+n, vitPausedS:'Paused – none at home now', vitResume:'Resume', vitGelDone:n=>'today: '+n+' ✓', vitGelPick:'tap the one you drank', vitOut:'out', vitHave:'at home', vitMinOk:n=>'Minimum reached, '+n+' more for the recommended dose.',
+  vitDose:(r,m,u)=>m>0&&m<r?'Recommended '+r+' · minimum '+m+' '+u:m===0?'Recommended '+r+' '+u+' · optional':r+' '+u+' a day', vitMinus:'One less',
+  vitWeekT:'Last 7 days', vitLegFull:'recommended', vitLegMin:'minimum', vitLegNone:'missed', vitLegPause:'paused',
+  vitEdT:'Edit supplement', vitNewT:'New supplement', vitQuick:'Quick pick', vitName:'Name', vitKind:'Type', vitKindPill:'Pill, dose', vitKindGroup:'Drink – one of several', vitForm:'Shape', vitColor:'Color', vitColor1:'Color (one half)', vitColor2:'Color (other half)', vitRec:'Recommended daily dose', vitMin:'Minimum dose', vitUnit:'Unit', vitAmount:'Amount (e.g. ½ glass)', vitOpts:'Kinds', vitOptsNote:'Drinking any one of these is enough. Tap the colored dot to change color, and mark one as out when it runs out.', vitOptAdd:'New kind', vitWhen:'When?', vitPauseL:'Paused (ran out)', vitPauseN:'While paused it shows greyed out and doesn’t count toward the day. Resume any time.', vitSave:'Save', vitDelItem:'Delete', vitDel:'Delete', vitDelQ:n=>'Delete '+n+'?', vitAdded:n=>n+' added', vitUnnamed:'Supplement', vitHalfGlass:'½ glass',
+  vf_capsule:'Capsule', vf_softgel:'Softgel', vf_oval:'Oval', vf_round:'Round', vf_chew:'Chewable', vf_beads:'Beads', vf_liquid:'Drink', vf_drops:'Drops',
+  vu_db:n=>'pcs', vu_caps:n=>n===1?'capsule':'capsules', vu_tab:n=>n===1?'tablet':'tablets', vu_dose:n=>n===1?'dose':'doses', vu_glass:n=>n===1?'glass':'glasses', vu_ml:n=>'ml',
+  vp_aloe:'Aloe gel', vp_probio:'Probiotic', vp_fish:'Fish oil', vp_multi:'Daily multivitamin', vp_kids:'Kids', vp_greens:'Greens tablet', vp_vitc:'Vitamin C', vp_vitd:'Vitamin D', vp_magn:'Magnesium',
+  vitPetGood:n=>n+' done! 💪', vitPetGel:'Cheers! How about a glass of water too? 💧', vitPetGelQ:n=>'Had your morning '+n+' yet?', vitPetLeft:x=>'Don’t forget: '+x+' still to go!', vitPetDone:'All vitamins done for today! 🎉',
+
   d3PermAsk:'On iPhone the motion sensor must be allowed for the glass to move. If it doesn’t move, tap the button.', d3PermDenied:'The motion sensor is blocked. Fully close the app, open it again, tap the button and choose Allow.', d3PermBtn:'Allow motion sensor',
   d3Sec:'3D mode', d3On:'Turn on 3D mode', d3Tilt:'The glass moves with the phone', d3Pet:'Depth for your buddy', d3Btn:'Raised buttons', d3Note:'Raised buttons that press in, a glass and buddy with depth. Only in advanced mode, and not shown with Simple visual effects. On iPhone it asks once for motion sensor access so the glass can move.', tD3Deny:'Motion sensor access is off, so the glass won’t move with the phone.',
   fxSec:'Visual effects', fxAuto:'Automatic', fxLow:'Simple', fxMid:'Medium', fxFull:'Full', fxNote:'In Automatic mode the app adapts to your device and steps down by itself if a game stutters. On slower phones you can also pick Simple or Medium yourself: fewer animations and rain, lower resolution – smoother and easier on the battery.',
@@ -1671,7 +1793,7 @@ function loadLocal(){
 function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){}}
 
 /* --- beállítás-ikonok --- */
-const SET_ICONS={"d3Sec":["#5b3fd6","<path d=\"M12 2.5 3.5 7v10L12 21.5 20.5 17V7Z\"/><path d=\"M3.5 7 12 11.5 20.5 7\"/><path d=\"M12 11.5v10\"/>"],"fxSec":["#e0a800","<path d=\"M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z\"/><path d=\"M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z\"/><path d=\"M5 16l.6 1.4L7 18l-1.4.6L5 20l-.6-1.4L3 18l1.4-.6z\"/>"],"petSec":["#d26d08","<circle cx=\"7\" cy=\"9\" r=\"2.2\"/><circle cx=\"11\" cy=\"5.5\" r=\"2.2\"/><circle cx=\"15.5\" cy=\"6.5\" r=\"2.2\"/><circle cx=\"18\" cy=\"11\" r=\"2.2\"/><path d=\"M8.5 16.5c0-2.6 2-4.5 4.2-4.5s4.3 1.9 4.3 4.3c0 2-1.5 3.2-3.4 3.2-1 0-1.6-.4-2.4-.4s-1.2.4-2 .4c-1.6 0-2.7-1.2-2.7-3z\"/>"],"language": ["#3fa9f5", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z\"/>"], "nameQ": ["#ff5f8f", "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5\"/>"], "display": ["#14b8a6", "<path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/>"], "mode": ["#8a5cf6", "<path d=\"M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12\"/><circle cx=\"16\" cy=\"6\" r=\"2\"/><circle cx=\"10\" cy=\"12\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>"], "drinksSec": ["#22a861", "<path d=\"M7 4h10l-1.2 16H8.2z\"/><path d=\"M7.5 9h9\"/>"], "buttonsSec": ["#f08a1c", "<rect x=\"3\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"13\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"3\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"13\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\"/>"], "unit": ["#3fa9f5", "<path d=\"M3 17L17 3l4 4L7 21z\"/><path d=\"M7 13l2 2M10 10l2 2M13 7l2 2\"/>"], "window": ["#14b8a6", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/>"], "soundSec": ["#f08a1c", "<path d=\"M4 9v6h4l5 4V5L8 9z\"/><path d=\"M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11\"/>"], "appearance": ["#ff5f8f", "<circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/>"], "color": ["#d946a8", "<path d=\"M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.9 1.8-1.8 0-1.3-1-1.5-1-2.6 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.7 17 3 12 3z\"/><circle cx=\"7.5\" cy=\"11\" r=\"1.2\"/><circle cx=\"10\" cy=\"7\" r=\"1.2\"/><circle cx=\"15\" cy=\"7\" r=\"1.2\"/>"], "calcTitle": ["#8a5cf6", "<path d=\"M5 20h14l-2-12H7z\"/><circle cx=\"12\" cy=\"5\" r=\"2\"/>"], "baseManual": ["#5b3fd6", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><circle cx=\"12\" cy=\"12\" r=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"1.3\"/>"], "data": ["#64748b", "<ellipse cx=\"12\" cy=\"5.5\" rx=\"7.5\" ry=\"2.5\"/><path d=\"M4.5 5.5v13c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-13M4.5 12c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5\"/>"]};
+const SET_ICONS={"vitSec":["#1d8a5b","<rect x=\"3\" y=\"9\" width=\"18\" height=\"7\" rx=\"3.5\" transform=\"rotate(-35 12 12.5)\"/><path d=\"M9.6 8.2l4.2 6.2\"/>"],"d3Sec":["#5b3fd6","<path d=\"M12 2.5 3.5 7v10L12 21.5 20.5 17V7Z\"/><path d=\"M3.5 7 12 11.5 20.5 7\"/><path d=\"M12 11.5v10\"/>"],"fxSec":["#e0a800","<path d=\"M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z\"/><path d=\"M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z\"/><path d=\"M5 16l.6 1.4L7 18l-1.4.6L5 20l-.6-1.4L3 18l1.4-.6z\"/>"],"petSec":["#d26d08","<circle cx=\"7\" cy=\"9\" r=\"2.2\"/><circle cx=\"11\" cy=\"5.5\" r=\"2.2\"/><circle cx=\"15.5\" cy=\"6.5\" r=\"2.2\"/><circle cx=\"18\" cy=\"11\" r=\"2.2\"/><path d=\"M8.5 16.5c0-2.6 2-4.5 4.2-4.5s4.3 1.9 4.3 4.3c0 2-1.5 3.2-3.4 3.2-1 0-1.6-.4-2.4-.4s-1.2.4-2 .4c-1.6 0-2.7-1.2-2.7-3z\"/>"],"language": ["#3fa9f5", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z\"/>"], "nameQ": ["#ff5f8f", "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5\"/>"], "display": ["#14b8a6", "<path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/>"], "mode": ["#8a5cf6", "<path d=\"M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12\"/><circle cx=\"16\" cy=\"6\" r=\"2\"/><circle cx=\"10\" cy=\"12\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>"], "drinksSec": ["#22a861", "<path d=\"M7 4h10l-1.2 16H8.2z\"/><path d=\"M7.5 9h9\"/>"], "buttonsSec": ["#f08a1c", "<rect x=\"3\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"13\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"3\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\"/><rect x=\"13\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\"/>"], "unit": ["#3fa9f5", "<path d=\"M3 17L17 3l4 4L7 21z\"/><path d=\"M7 13l2 2M10 10l2 2M13 7l2 2\"/>"], "window": ["#14b8a6", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/>"], "soundSec": ["#f08a1c", "<path d=\"M4 9v6h4l5 4V5L8 9z\"/><path d=\"M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11\"/>"], "appearance": ["#ff5f8f", "<circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/>"], "color": ["#d946a8", "<path d=\"M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.9 1.8-1.8 0-1.3-1-1.5-1-2.6 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.7 17 3 12 3z\"/><circle cx=\"7.5\" cy=\"11\" r=\"1.2\"/><circle cx=\"10\" cy=\"7\" r=\"1.2\"/><circle cx=\"15\" cy=\"7\" r=\"1.2\"/>"], "calcTitle": ["#8a5cf6", "<path d=\"M5 20h14l-2-12H7z\"/><circle cx=\"12\" cy=\"5\" r=\"2\"/>"], "baseManual": ["#5b3fd6", "<circle cx=\"12\" cy=\"12\" r=\"9\"/><circle cx=\"12\" cy=\"12\" r=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"1.3\"/>"], "data": ["#64748b", "<ellipse cx=\"12\" cy=\"5.5\" rx=\"7.5\" ry=\"2.5\"/><path d=\"M4.5 5.5v13c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-13M4.5 12c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5\"/>"]};
 function setSecKey(sec){const h=sec.querySelector(':scope>h2'),el=h&&(h.querySelector('[data-t]')||h);return el?el.dataset.t:''}
 function normSetUI(){const u=state.setUI&&typeof state.setUI==='object'?state.setUI:{};state.setUI={open:Array.isArray(u.open)?u.open:[],order:Array.isArray(u.order)?u.order:[]}}
 function initSetSections(){
@@ -2037,7 +2159,9 @@ function renderPet(now,d,tot,g,p){
   else{
     const S=mins(dStart(now))??420,N=now.getHours()*60+now.getMinutes(),last=d.entries.length?d.entries[d.entries.length-1].t:null,since=last?(now-last)/60000:null;
     const vars={r:amt(Math.max(0,r1(g-tot))),h:since!=null?Math.floor(since/60):''};
-    if(!tracking())txt=petText('idle',vars);
+    const vpm=(()=>{try{return mood!=='sleep'&&mood!=='drowsy'?vitPetMsg(now):''}catch(e){return ''}})();
+    if(vpm&&(state.vview==='vit'||(now.getHours()+now.getDate())%2===0))txt=vpm;
+    else if(!tracking())txt=petText('idle',vars);
     else if(mood==='happy'&&tot===0&&N-S<150)txt=petText('start',vars);
     else if(mood==='thirsty'&&since!=null&&since>=120)txt=petText('gap',vars);
     else if(mood==='drowsy')txt=petDrowsyTxt||petText('sleep',vars);
@@ -5629,7 +5753,7 @@ $('useFun').onclick=()=>finishOnb(false);
 $('useTrack').onclick=()=>{showOnb(4);goalSetup($('onbGoal'),()=>finishOnb(true))};
 
 /* --- beállítások --- */
-$('openSet').onclick=()=>{try{renderD3Set()}catch(e){}buildBtnCfg();renderSound();renderPetSettings();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderWk();renderSettings();openSheet('setScrim')};
+$('openSet').onclick=()=>{try{$('vitOn').checked=!!state.vit.on}catch(e){}try{renderD3Set()}catch(e){}buildBtnCfg();renderSound();renderPetSettings();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderWk();renderSettings();openSheet('setScrim')};
 $('openHelp').onclick=()=>{document.querySelectorAll('#helpScrim details[open]').forEach(d=>d.open=false);openSheet('helpScrim')};
 document.querySelectorAll('#helpScrim details').forEach(d=>d.addEventListener('toggle',()=>{if(d.open){document.querySelectorAll('#helpScrim details[open]').forEach(o=>{if(o!==d)o.open=false});setTimeout(()=>d.scrollIntoView({block:'nearest',behavior:'smooth'}),30)}}));
 $('nameSet').oninput=()=>{state.name=cleanName($('nameSet').value);render();writeSettings()};
@@ -5876,6 +6000,145 @@ function drawTicks(g){
   }
 }
 function setKpi(id,val,unit){const el=$(id);el.textContent=val;const s=document.createElement('small');s.textContent=unit;el.appendChild(s)}
+/* ===== Vitaminok és táplálékkiegészítők ===== */
+const VIT_FORMS=['capsule','softgel','oval','round','chew','beads','liquid','drops'];
+const VIT_COLS=['#ffffff','#f3ead7','#d8c08c','#f0a32a','#ff9f1c','#ffc061','#e0403a','#f29bb0','#8a5cf6','#3f7cf5','#7cc8f2','#4c8a3a','#9ad16a','#e9f2c4','#7a4a2a','#2b2233'];
+const VIT_UNITS=['db','caps','tab','dose','glass','ml'];
+const VIT_SLOTS=['empty','morning','day','evening','bed'];
+const VIT_PRESETS=[
+  {k:'aloe',kind:'group',form:'liquid',c:'#e9f2c4',slot:'empty',note:'½',opts:[['Aloe Vera Gel','#e9f2c4'],['Aloe Berry Nectar','#f29bb0'],['Freedom','#ffc061'],['Aloe Peaches','#ffb38a']]},
+  {k:'probio',form:'capsule',c:'#ffffff',c2:'#ffffff',unit:'caps'},
+  {k:'fish',form:'softgel',c:'#f0a32a',unit:'caps'},
+  {k:'multi',form:'oval',c:'#d8c08c',unit:'tab'},
+  {k:'kids',form:'chew',c:'#8a5cf6',unit:'tab'},
+  {k:'greens',form:'round',c:'#4c8a3a',unit:'tab'},
+  {k:'vitc',form:'round',c:'#ff9f1c',unit:'tab'},
+  {k:'vitd',form:'drops',c:'#ffc061',unit:'dose'},
+  {k:'magn',form:'round',c:'#ffffff',unit:'tab'}
+];
+function vitId(){return 'v'+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36)}
+function normalizeVit(){const v=state.vit&&typeof state.vit==='object'?state.vit:{};
+  state.vit={on:!!v.on,items:Array.isArray(v.items)?v.items.filter(x=>x&&x.id):[],log:v.log&&typeof v.log==='object'?v.log:{}};
+  state.vit.items.forEach(x=>{x.rec=Math.max(1,+x.rec||1);x.min=Math.max(0,Math.min(x.rec,x.min==null?1:+x.min));if(!VIT_FORMS.includes(x.form))x.form='round';if(!VIT_SLOTS.includes(x.slot))x.slot='day';
+    if(!Array.isArray(x.pauses))x.pauses=[];if(x.kind==='group'&&!Array.isArray(x.opts))x.opts=[]})}
+function vitFromPreset(k){const p=VIT_PRESETS.find(x=>x.k===k)||{},it={id:vitId(),kind:p.kind||'pill',name:t('vp_'+k),form:p.form||'round',c:p.c||'#ffffff',c2:p.c2||p.c||'#ffffff',
+  rec:1,min:1,unit:p.unit||'db',slot:p.slot||'day',note:p.note?t('vitHalfGlass'):'',paused:false,pauses:[],created:keyOf(new Date())};
+  if(it.kind==='group')it.opts=p.opts.map(([n,c])=>({id:vitId(),name:n,c,paused:false}));return it}
+function vitDefaults(){return ['aloe','probio','fish','multi','kids','greens'].map(vitFromPreset)}
+function pillSVG(f,c,c2,s){s=s||40;const st='stroke="rgba(0,0,0,.2)" stroke-width=".8"';let b='';
+  if(f==='softgel')b='<ellipse cx="14" cy="14" rx="11.5" ry="6.5" fill="'+c+'" '+st+' transform="rotate(-30 14 14)"/><ellipse cx="10.5" cy="11" rx="3.8" ry="1.5" fill="#fff" opacity=".6" transform="rotate(-30 10.5 11)"/>';
+  else if(f==='capsule')b='<g transform="rotate(-35 14 14)"><rect x="4" y="10" width="20" height="8" rx="4" fill="'+c+'" '+st+'/><path d="M14 10h6a4 4 0 0 1 0 8h-6z" fill="'+(c2||c)+'" '+st+'/><rect x="6" y="11.3" width="6" height="1.4" rx=".7" fill="#fff" opacity=".6"/></g>';
+  else if(f==='oval')b='<ellipse cx="14" cy="14" rx="11" ry="6" fill="'+c+'" '+st+' transform="rotate(-30 14 14)"/><ellipse cx="10.5" cy="11.5" rx="3.6" ry="1.3" fill="#fff" opacity=".5" transform="rotate(-30 10.5 11.5)"/>';
+  else if(f==='round')b='<circle cx="14" cy="14" r="9.5" fill="'+c+'" '+st+'/><path d="M8 14h12" stroke="rgba(0,0,0,.22)" stroke-width="1"/><circle cx="11" cy="10.5" r="2.2" fill="#fff" opacity=".35"/>';
+  else if(f==='chew')b='<circle cx="14" cy="14" r="9.5" fill="'+c+'" '+st+'/><circle cx="14" cy="14" r="6.2" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.4"/><circle cx="11" cy="10.5" r="2" fill="#fff" opacity=".4"/>';
+  else if(f==='beads')b=[[9,11],[16,9],[13,16],[20,15],[17,21]].map(([x,y])=>'<circle cx="'+x+'" cy="'+y+'" r="3.4" fill="'+c+'" '+st+'/>').join('');
+  else if(f==='liquid')b='<path d="M7 5h14l-1.6 18H8.6z" fill="#ffffff" stroke="#3b3566" stroke-width="1.3" stroke-linejoin="round"/><path d="M7.9 13.5h12.2l-.8 9.5H8.7z" fill="'+c+'"/><path d="M8 13.5 Q14 12.2 20 13.5" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1"/>';
+  else b='<path d="M14 5s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z" fill="'+c+'" '+st+'/><ellipse cx="11.6" cy="14" rx="1.4" ry="2.4" fill="#fff" opacity=".6"/>';
+  return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 28 28" aria-hidden="true">'+b+'</svg>'}
+function vitLog(k){return state.vit.log[k]||(state.vit.log[k]={})}
+function vitVal(it,k){const v=(state.vit.log[k]||{})[it.id];return it.kind==='group'?(v||null):(+v||0)}
+function vitPausedOn(it,k){return (it.pauses||[]).some(([a,b])=>k>=a&&(!b||k<b))}
+function vitStatus(it,k){if(it.kind==='group')return vitVal(it,k)?'full':'none';const v=vitVal(it,k);return v>=it.rec?'full':v>=Math.max(1,it.min)?'min':it.min===0?'opt':'none'}
+function vitActive(){return state.vit.items.filter(x=>!x.paused)}
+function vitUnit(it,n){return t('vu_'+(it.unit||'db'),n)}
+function vitPending(k){return vitActive().filter(it=>vitStatus(it,k)==='none')}
+function vitSet(it,v){const k=keyOf(new Date()),L=vitLog(k);if(v==null||v===0)delete L[it.id];else L[it.id]=v;writeSettings();renderVit()}
+function vitPause(it,on){const k=keyOf(new Date());it.paused=on;if(on)it.pauses.push([k,null]);else{const p=it.pauses[it.pauses.length-1];if(p&&!p[1])p[1]=k}writeSettings();renderVit()}
+let vitEdit=null;
+function renderVit(){
+  const V=state.vit,on=!!V.on,view=on&&state.vview==='vit';
+  document.body.classList.toggle('vview',view);$('vTabs').hidden=!on;$('vitPage').hidden=!view;
+  document.querySelectorAll('#vTabs button').forEach(b=>b.setAttribute('aria-pressed',(b.dataset.vt==='vit')===view));
+  const k=keyOf(new Date()),act=vitActive(),done=act.filter(it=>vitStatus(it,k)!=='none'),pend=act.filter(it=>vitStatus(it,k)==='none');
+  const mini=$('vitMini');mini.hidden=!on||view||!act.length;
+  if(on&&!view&&act.length){mini.innerHTML=vitRing(done.length,act.length,44)+'<span class="vmt"><b>'+esc(t('vitMiniT',done.length,act.length))+'</b><span>'+esc(pend.length?t('vitLeft',pend.map(x=>x.name).join(', ')):t('vitAllDone'))+'</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>'}
+  if(!view)return;
+  const P=$('vitPage');let h='<div class="vsumm">'+vitRing(done.length,act.length,78)+'<div><b>'+esc(!act.length?t('vitEmptyT'):pend.length?t('vitSumT',done.length):t('vitAllDone'))+'</b><span>'+esc(!act.length?t('vitEmptyS'):pend.length?t('vitLeft',pend.map(x=>x.name).join(', ')):t('vitAllDoneS'))+'</span></div></div>';
+  VIT_SLOTS.forEach(sl=>{const its=V.items.filter(x=>x.slot===sl);if(!its.length)return;h+='<p class="vslot">'+esc(t('vs_'+sl))+'</p>';its.forEach(it=>{h+=vitCard(it,k)})});
+  h+='<button class="vadd" id="vitAdd">+ '+esc(t('vitAdd'))+'</button>';
+  if(V.items.length)h+=vitWeek();
+  P.innerHTML=h;
+  P.querySelectorAll('[data-vplus]').forEach(b=>b.onclick=()=>{const it=vitById(b.dataset.vplus);vitSet(it,Math.min(it.rec+5,vitVal(it,k)+1));buzz(12);if(vitStatus(it,k)==='full'&&state.pet.on)petSay(t('vitPetGood',it.name))});
+  P.querySelectorAll('[data-vminus]').forEach(b=>b.onclick=()=>{const it=vitById(b.dataset.vminus);vitSet(it,Math.max(0,vitVal(it,k)-1))});
+  P.querySelectorAll('[data-vdot]').forEach(b=>b.onclick=()=>{const [id,n]=b.dataset.vdot.split('|'),it=vitById(id);vitSet(it,vitVal(it,k)===+n?+n-1:+n);buzz(10)});
+  P.querySelectorAll('[data-vopt]').forEach(b=>b.onclick=()=>{const [id,o]=b.dataset.vopt.split('|'),it=vitById(id);vitSet(it,vitVal(it,k)===o?null:o);buzz(12);if(vitVal(it,k)&&state.pet.on)petSay(t('vitPetGel'))});
+  P.querySelectorAll('[data-vedit]').forEach(b=>b.onclick=()=>vitOpenEd(b.dataset.vedit));
+  P.querySelectorAll('[data-vresume]').forEach(b=>b.onclick=()=>vitPause(vitById(b.dataset.vresume),false));
+  $('vitAdd').onclick=()=>vitOpenEd(null);
+}
+function vitById(id){return state.vit.items.find(x=>x.id===id)}
+function vitRing(a,n,s){const r=s*.4,c=2*Math.PI*r,f=n?a/n:0;return '<svg class="vring" width="'+s+'" height="'+s+'" viewBox="0 0 '+s+' '+s+'" role="img" aria-label="'+esc(t('vitMiniT',a,n))+'"><circle cx="'+s/2+'" cy="'+s/2+'" r="'+r+'" fill="none" stroke="var(--line)" stroke-width="'+s*.12+'"/><circle cx="'+s/2+'" cy="'+s/2+'" r="'+r+'" fill="none" stroke="var(--water)" stroke-width="'+s*.12+'" stroke-linecap="round" stroke-dasharray="'+(c*f).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 '+s/2+' '+s/2+')"/>'+(s>60?'<text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" style="fill:var(--ink);font:900 '+s*.22+'px var(--body)">'+a+'/'+n+'</text>':'')+'</svg>'}
+function vitCard(it,k){
+  const ed='<button class="vedit" data-vedit="'+it.id+'" aria-label="'+esc(t('vitEditA',it.name))+'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button>';
+  if(it.paused)return '<div class="vcard paused">'+pillSVG(it.form,it.c,it.c2)+'<div class="vn"><b>'+esc(it.name)+'</b><span>'+esc(t('vitPausedS'))+'</span></div><button class="vres" data-vresume="'+it.id+'">'+esc(t('vitResume'))+'</button>'+ed+'</div>';
+  const st=vitStatus(it,k);
+  if(it.kind==='group'){const sel=vitVal(it,k),so=it.opts.find(o=>o.id===sel);
+    let h='<div class="vcard '+st+'"><div class="vtop">'+pillSVG('liquid',so?so.c:it.c,null)+'<div class="vn"><b>'+esc(it.name)+'</b><span>'+esc((it.note?it.note+' · ':'')+(so?t('vitGelDone',so.name):t('vitGelPick')))+'</span></div>'+(st==='full'?'<span class="vbadge full">✓</span>':'')+ed+'</div><div class="vopts">';
+    it.opts.forEach(o=>{h+='<button class="vopt'+(o.id===sel?' on':'')+(o.paused?' off':'')+'" data-vopt="'+it.id+'|'+o.id+'"'+(o.paused?' disabled':'')+'><i style="background:'+o.c+'"></i>'+esc(o.name)+(o.paused?' <small>'+esc(t('vitOut'))+'</small>':'')+'</button>'});
+    return h+'</div></div>'}
+  const v=vitVal(it,k);let dots='';for(let i=1;i<=Math.max(it.rec,v);i++){if(it.min>0&&i===it.min+1&&it.min<it.rec)dots+='<i class="vminl" aria-hidden="true"></i>';
+    dots+='<button class="vdot'+(i<=v?' on':'')+(i>it.rec?' extra':'')+'" data-vdot="'+it.id+'|'+i+'" aria-label="'+i+'" style="--pc:'+it.c+'">'+pillSVG(it.form,it.c,it.c2,28)+'</button>'}
+  const msg=st==='full'?'':st==='min'?t('vitMinOk',it.rec-v):'';
+  return '<div class="vcard '+st+'"><div class="vtop">'+pillSVG(it.form,it.c,it.c2)+'<div class="vn"><b>'+esc(it.name)+'</b><span>'+esc(t('vitDose',it.rec,it.min,vitUnit(it,it.rec)))+'</span></div><span class="vbadge '+st+'">'+v+'/'+it.rec+'</span>'+ed+'</div>'+
+    '<div class="vrow"><button class="vbtn" data-vminus="'+it.id+'" aria-label="'+esc(t('vitMinus'))+'"'+(v?'':' disabled')+'>–</button><div class="vdots">'+dots+'</div><button class="vbtn plus" data-vplus="'+it.id+'">+1</button></div>'+(msg?'<p class="vmsg">'+esc(msg)+'</p>':'')+'</div>'}
+function vitWeek(){const days=[],now=new Date(),Ld=L();for(let n=6;n>=0;n--){const d=new Date(now);d.setDate(now.getDate()-n);days.push({k:keyOf(d),l:n?Ld.short[d.getDay()]:Ld.todayShort})}
+  let h='<p class="vslot">'+esc(t('vitWeekT'))+'</p><div class="vweek"><div class="vwr head"><span></span>'+days.map(d=>'<span>'+esc(d.l)+'</span>').join('')+'</div>';
+  state.vit.items.forEach(it=>{h+='<div class="vwr"><span class="vwn">'+esc(it.name)+'</span>'+days.map(d=>{const c=it.created&&d.k<it.created?'pre':vitPausedOn(it,d.k)?'pz':vitStatus(it,d.k);return '<i class="vc '+c+'"></i>'}).join('')+'</div>'});
+  return h+'<div class="vleg"><span><i class="vc full"></i>'+esc(t('vitLegFull'))+'</span><span><i class="vc min"></i>'+esc(t('vitLegMin'))+'</span><span><i class="vc none"></i>'+esc(t('vitLegNone'))+'</span><span><i class="vc pz"></i>'+esc(t('vitLegPause'))+'</span></div></div>'}
+/* --- szerkesztő --- */
+function vitOpenEd(id){const src=id?vitById(id):null;vitEdit=src?JSON.parse(JSON.stringify(src)):vitFromPreset('x');if(!src){vitEdit.name='';vitEdit.isNew=true}
+  $('vitEdTitle').textContent=t(src?'vitEdT':'vitNewT');vitEdRender();openSheet('vitEdScrim',$('vitEdName'))}
+function vitEdRender(){const e=vitEdit,b=$('vitEdBody');let h='';
+  if(e.isNew){h+='<p class="vlab">'+esc(t('vitQuick'))+'</p><div class="vchips">'+VIT_PRESETS.map(p=>'<button type="button" data-vpre="'+p.k+'">'+esc(t('vp_'+p.k))+'</button>').join('')+'</div>'}
+  h+='<div class="vprev">'+pillSVG(e.kind==='group'?'liquid':e.form,e.c,e.c2,84)+'<label class="vlab">'+esc(t('vitName'))+'<input class="text" id="vitEdName" maxlength="40" value="'+esc(e.name)+'"></label></div>';
+  h+='<p class="vlab">'+esc(t('vitKind'))+'</p><div class="vchips seg"><button type="button" data-vkind="pill" aria-pressed="'+(e.kind!=='group')+'">'+esc(t('vitKindPill'))+'</button><button type="button" data-vkind="group" aria-pressed="'+(e.kind==='group')+'">'+esc(t('vitKindGroup'))+'</button></div>';
+  if(e.kind!=='group'){
+    h+='<p class="vlab">'+esc(t('vitForm'))+'</p><div class="vforms">'+VIT_FORMS.map(f=>'<button type="button" data-vform="'+f+'" aria-pressed="'+(e.form===f)+'" aria-label="'+esc(t('vf_'+f))+'">'+pillSVG(f,e.c,e.c2,30)+'<small>'+esc(t('vf_'+f))+'</small></button>').join('')+'</div>';
+    h+='<p class="vlab">'+esc(t(e.form==='capsule'?'vitColor1':'vitColor'))+'</p><div class="vcols">'+VIT_COLS.map(c=>'<button type="button" data-vcol="'+c+'" aria-pressed="'+(e.c===c)+'" style="background:'+c+'" aria-label="'+c+'"></button>').join('')+'</div>';
+    if(e.form==='capsule')h+='<p class="vlab">'+esc(t('vitColor2'))+'</p><div class="vcols">'+VIT_COLS.map(c=>'<button type="button" data-vcol2="'+c+'" aria-pressed="'+(e.c2===c)+'" style="background:'+c+'" aria-label="'+c+'"></button>').join('')+'</div>';
+    h+='<div class="vsteps"><div><p class="vlab">'+esc(t('vitRec'))+'</p><div class="vstep"><button type="button" data-vst="rec|-1">–</button><b>'+e.rec+'</b><button type="button" data-vst="rec|1">+</button></div></div><div><p class="vlab">'+esc(t('vitMin'))+'</p><div class="vstep"><button type="button" data-vst="min|-1">–</button><b>'+e.min+'</b><button type="button" data-vst="min|1">+</button></div></div></div>';
+    h+='<p class="vlab">'+esc(t('vitUnit'))+'</p><div class="vchips">'+VIT_UNITS.map(u=>'<button type="button" data-vunit="'+u+'" aria-pressed="'+(e.unit===u)+'">'+esc(t('vu_'+u,2))+'</button>').join('')+'</div>';
+  }else{
+    h+='<label class="vlab">'+esc(t('vitAmount'))+'<input class="text" id="vitEdNote" maxlength="30" value="'+esc(e.note||'')+'"></label>';
+    h+='<p class="vlab">'+esc(t('vitOpts'))+'</p><p class="small" style="margin:-4px 0 6px">'+esc(t('vitOptsNote'))+'</p><div class="vols">';
+    e.opts.forEach((o,i)=>{h+='<div class="vol'+(o.paused?' off':'')+'"><button type="button" class="vocol" data-vocol="'+i+'" style="background:'+o.c+'" aria-label="'+esc(t('vitColor'))+'"></button><input class="text" data-voname="'+i+'" value="'+esc(o.name)+'" maxlength="30"><button type="button" class="vopz" data-vopz="'+i+'" aria-pressed="'+!!o.paused+'">'+esc(t(o.paused?'vitOut':'vitHave'))+'</button><button type="button" class="vodel" data-vodel="'+i+'" aria-label="'+esc(t('vitDel'))+'">✕</button></div>'});
+    h+='</div><button type="button" class="ghost" id="vitOptAdd" style="width:100%">+ '+esc(t('vitOptAdd'))+'</button>';
+  }
+  h+='<p class="vlab">'+esc(t('vitWhen'))+'</p><div class="vchips">'+VIT_SLOTS.map(s=>'<button type="button" data-vslot="'+s+'" aria-pressed="'+(e.slot===s)+'">'+esc(t('vs_'+s))+'</button>').join('')+'</div>';
+  if(!e.isNew)h+='<div class="srow" style="margin-top:12px"><span>'+esc(t('vitPauseL'))+'</span><label class="tg"><input type="checkbox" id="vitEdPause"'+(e.paused?' checked':'')+'><i></i></label></div><p class="small" style="margin:0">'+esc(t('vitPauseN'))+'</p>';
+  h+='<button class="primary" id="vitEdSave" style="width:100%;margin-top:14px">'+esc(t('vitSave'))+'</button>';
+  if(!e.isNew)h+='<button class="ghost danger" id="vitEdDel" style="width:100%;margin-top:8px">'+esc(t('vitDelItem'))+'</button>';
+  b.innerHTML=h;
+  const keep=()=>{const n=$('vitEdName');if(n)e.name=n.value;const no=$('vitEdNote');if(no)e.note=no.value;b.querySelectorAll('[data-voname]').forEach(x=>{e.opts[+x.dataset.voname].name=x.value})};
+  const re=()=>{keep();const sc=b.closest('.sheet').scrollTop;vitEdRender();b.closest('.sheet').scrollTop=sc};
+  b.querySelectorAll('[data-vpre]').forEach(x=>x.onclick=()=>{const n=vitFromPreset(x.dataset.vpre);n.isNew=true;n.id=e.id;vitEdit=n;re()});
+  b.querySelectorAll('[data-vkind]').forEach(x=>x.onclick=()=>{e.kind=x.dataset.vkind;if(e.kind==='group'){if(!e.opts||!e.opts.length)e.opts=[{id:vitId(),name:'',c:e.c||'#e9f2c4',paused:false}];e.form='liquid'}else if(e.form==='liquid')e.form='round';re()});
+  b.querySelectorAll('[data-vform]').forEach(x=>x.onclick=()=>{e.form=x.dataset.vform;re()});
+  b.querySelectorAll('[data-vcol]').forEach(x=>x.onclick=()=>{e.c=x.dataset.vcol;if(e.form!=='capsule')e.c2=e.c;re()});
+  b.querySelectorAll('[data-vcol2]').forEach(x=>x.onclick=()=>{e.c2=x.dataset.vcol2;re()});
+  b.querySelectorAll('[data-vst]').forEach(x=>x.onclick=()=>{const [f,d]=x.dataset.vst.split('|');e[f]=Math.max(f==='rec'?1:0,Math.min(20,e[f]+ +d));if(e.min>e.rec){if(f==='min')e.rec=e.min;else e.min=e.rec}re()});
+  b.querySelectorAll('[data-vunit]').forEach(x=>x.onclick=()=>{e.unit=x.dataset.vunit;re()});
+  b.querySelectorAll('[data-vslot]').forEach(x=>x.onclick=()=>{e.slot=x.dataset.vslot;re()});
+  b.querySelectorAll('[data-vocol]').forEach(x=>x.onclick=()=>{const o=e.opts[+x.dataset.vocol],i=VIT_COLS.indexOf(o.c);o.c=VIT_COLS[(i+1)%VIT_COLS.length];re()});
+  b.querySelectorAll('[data-vopz]').forEach(x=>x.onclick=()=>{const o=e.opts[+x.dataset.vopz];o.paused=!o.paused;re()});
+  b.querySelectorAll('[data-vodel]').forEach(x=>x.onclick=()=>{e.opts.splice(+x.dataset.vodel,1);re()});
+  if($('vitOptAdd'))$('vitOptAdd').onclick=()=>{e.opts.push({id:vitId(),name:'',c:VIT_COLS[(e.opts.length*3+5)%VIT_COLS.length],paused:false});re()};
+  $('vitEdSave').onclick=()=>{keep();e.name=(e.name||'').trim()||t('vitUnnamed');if(e.kind==='group'){e.opts=e.opts.filter(o=>o.name.trim());e.opts.forEach(o=>o.name=o.name.trim());const f=e.opts.find(o=>!o.paused)||e.opts[0];if(f)e.c=f.c}
+    const pz=$('vitEdPause')?$('vitEdPause').checked:false,isNew=e.isNew;delete e.isNew;const V=state.vit,i=V.items.findIndex(x=>x.id===e.id);
+    if(i>=0){const old=V.items[i];e.paused=old.paused;e.pauses=old.pauses;V.items[i]=e;if(pz!==old.paused){closeSheet('vitEdScrim');vitPause(e,pz);return}}else{e.created=keyOf(new Date());V.items.push(e)}
+    writeSettings();closeSheet('vitEdScrim');renderVit();if(isNew)toast(t('vitAdded',e.name))};
+  if($('vitEdDel'))$('vitEdDel').onclick=()=>{if(!confirm(t('vitDelQ',e.name)))return;state.vit.items=state.vit.items.filter(x=>x.id!==e.id);writeSettings();closeSheet('vitEdScrim');renderVit()};
+}
+/* a kedvenc emlékeztet: reggel az aloéra, délután/este a hátralévő bogyókra */
+function vitPetMsg(now){if(!state.vit||!state.vit.on)return '';const k=keyOf(now),h=now.getHours(),pend=vitPending(k);if(!vitActive().length)return '';
+  if(!pend.length)return state.vview==='vit'?t('vitPetDone'):'';
+  const gel=pend.find(x=>x.slot==='empty');if(gel&&h<11)return t('vitPetGelQ',gel.name);
+  const rest=pend.filter(x=>x.slot!=='empty');if(rest.length&&(h>=15||state.vview==='vit'))return t('vitPetLeft',rest.slice(0,2).map(x=>x.name).join(', '));
+  return state.vview==='vit'&&gel?t('vitPetGelQ',gel.name):''}
+document.querySelectorAll('#vTabs button').forEach(b=>b.onclick=()=>{state.vview=b.dataset.vt;writeSettings();render();window.scrollTo({top:0})});
+$('vitMini').onclick=()=>{state.vview='vit';writeSettings();render();window.scrollTo({top:0})};
+$('vitOn').onchange=()=>{const V=state.vit;V.on=$('vitOn').checked;if(V.on&&!V.items.length)V.items=vitDefaults();if(V.on){state.vview='vit'}else state.vview='water';writeSettings();render();if(V.on)toast(t('vitOnToast'))};
+
 function render(){
   document.body.classList.toggle('notrack',!tracking());$('trackOff').hidden=tracking()||!state.onboarded;try{$('trackTg').checked=tracking()}catch(e){}
   const now=new Date(),k=keyOf(now),d=dayOf(k),tot=sum(d),g=goalOf(d),adv=state.ui==='advanced',Ld=L();
@@ -5909,7 +6172,7 @@ function render(){
 
   const p=pace(now,d,tot,g);
   renderViz(now,d,tot,g,p,adv);
-  renderPet(now,d,tot,g,p);renderGameBtn();
+  renderPet(now,d,tot,g,p);renderGameBtn();try{renderVit()}catch(e){console.error(e)}
   $('paceHead').textContent=p.head;$('pacePill').textContent=p.pill;$('pacePill').className='pill '+(p.cls||'');
   $('paceTip').textContent=p.tip;$('paceMotto').textContent=p.motto;
   const ex=$('expect');if(p.exp!=null&&tot<g&&p.exp>0&&p.exp<g){ex.hidden=false;ex.style.bottom=(p.exp/g*100)+'%'}else ex.hidden=true;
@@ -5961,7 +6224,7 @@ function render(){
 }
 
 /* --- indulás --- */
-loadLocal();normalizeDrinks();normalizeSound();normalizePet();normalizeGame();gameStreakCheck();
+loadLocal();normalizeDrinks();normalizeSound();normalizePet();normalizeGame();normalizeVit();gameStreakCheck();
 if(!state.lang&&state.onboarded)state.lang='hu';
 applyLang();applyTheme();render();
 if(!state.onboarded)startOnb();
@@ -6132,6 +6395,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.16',hu:['💊 Új: Vitaminok és kiegészítők! Beállítások → Vitaminok. Naponta pipálhatod, mit vettél be, ajánlott és minimum adaggal, saját formával és színnel.','🥤 Az aloés gélekhez: több fajtából elég az egyik éhgyomorra. Ami elfogyott, szüneteltethető – szürkén látszik.','📅 Heti áttekintés, és a kedvenced is emlékeztet.'],en:['💊 New: Vitamins and supplements! Settings → Vitamins. Tick off what you took each day, with recommended and minimum doses, your own shapes and colors.','🥤 For aloe gels: one of several kinds on an empty stomach is enough. Anything that ran out can be paused – it shows greyed out.','📅 Weekly overview, and your buddy reminds you too.']},
  {v:'14.15',hu:['🏆 Minden ügyességi játék végén statisztika: hányszor játszottad, átlagpont, legjobb, és a 10 legjobb eredményed listája dátummal. A mostani eredményed kiemelve látszik, ha bekerült.','📋 A lista a játék indítása előtt is megnézhető.'],en:['🏆 Every skill game now ends with stats: games played, average score, best, and your top 10 scores with dates. Your latest score is highlighted if it made the list.','📋 You can also see the list before starting a game.']},
  {v:'14.14',hu:['🎳 Új játék: Bowling! Húzd fel az ujjad a pályán – amerre és amilyen gyorsan húzod, úgy gurul. Ívelt húzással csavarodik a golyó.','📋 10 keret valódi pontozással: strike (X), spare (/), és a 10. keretben ráadás dobás.'],en:['🎳 New game: Bowling! Swipe up the lane – the ball rolls the way and as hard as you swipe. Curve your swipe to hook it.','📋 10 frames with real scoring: strike (X), spare (/), and a bonus roll in frame 10.']},
  {v:'14.13',hu:['🧊 3D mód: iPhone-on most már megbízhatóan működik a billenés. Ha mégsem mozog a víz, a Beállítások → 3D mód alatt egy gombbal engedélyezheted a mozgásérzékelőt.'],en:['🧊 3D mode: tilting now works reliably on iPhone. If the water still doesn’t move, allow the motion sensor with the button under Settings → 3D mode.']},
@@ -6247,7 +6511,7 @@ try{applyD3();render()}catch(e){}
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.15';
+const APP_VERSION='14.16';
 /* egyetlen frissítés: ha már folyamatban van, vagy az oldal már a legújabb, nem töltünk újra */
 let updReloading=false;
 function latestVer(){return fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>j&&j.v||null).catch(()=>null)}
