@@ -517,6 +517,15 @@ body.advanced .adv.grid{display:grid}
 .gstats span{background:var(--surface);border-radius:14px;padding:8px 4px;font-size:.75rem;font-weight:600;color:var(--muted);display:flex;flex-direction:column;gap:2px}
 .gstats b{font-size:1.1rem;color:var(--ink)}
 .gpanel .gh{max-width:360px;color:var(--muted);margin:0}
+.gtop{width:100%;max-width:360px;background:var(--surface);border-radius:16px;padding:12px 14px;box-sizing:border-box}
+.gtop .gtt{margin:0 0 6px;font-weight:800;font-size:.95rem;color:var(--ink)}
+.gtop ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.gtop li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:8px;padding:6px 8px;border-radius:10px;font-variant-numeric:tabular-nums}
+.gtop li:nth-child(odd){background:color-mix(in srgb,var(--line) 35%,transparent)}
+.gtop li.me{background:color-mix(in srgb,#ffd23b 40%,var(--surface));box-shadow:0 0 0 2px #ffb000 inset}
+.gtop .gr{font-weight:800;color:var(--muted);text-align:center}.gtop b{font-size:1.05rem;color:var(--ink)}
+.gtop .gd{font-size:.78rem;color:var(--muted);font-weight:600;white-space:nowrap}.gtop .gd em{font-style:normal;color:#b36b00;font-weight:800}
+.gtop .gh{margin:8px 0 0;text-align:center}
 .gpanel .primary{width:100%;max-width:360px;flex-shrink:0;background:var(--water)}
 .ghelp{position:absolute;inset:0;z-index:5;background:rgba(29,26,51,.45);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
 .ghcard{background:var(--surface);color:var(--ink);border-radius:22px;padding:18px 18px 16px;max-width:360px;width:100%;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 12px 40px rgba(0,0,0,.25);max-height:100%;overflow-y:auto;box-sizing:border-box}
@@ -2104,7 +2113,7 @@ function normalizeGame(){
   const lv=g.lv&&typeof g.lv==='object'?g.lv:{};
   state.game={streak:+g.streak||0,bestStreak:+g.bestStreak||0,last:typeof g.last==='string'?g.last:'',
     freezes:g.freezes==null?1:Math.max(0,Math.min(2,+g.freezes||0)),frozen:Array.isArray(g.frozen)?g.frozen.slice(-30):[],plays:+g.plays||0,
-    bests,lv,seen:g.seen&&typeof g.seen==='object'?g.seen:{},dailyMoves:g.dailyMoves&&g.dailyMoves.d===keyOf(new Date())?g.dailyMoves:null,wx:g.wx!==false,music:g.music!==false,mvol:g.mvol==null?60:Math.max(0,Math.min(100,+g.mvol||0)),mvolG:g.mvolG&&typeof g.mvolG==='object'?g.mvolG:{},sfx:g.sfx==='cute'?'cute':'bold'};
+    bests,lv,seen:g.seen&&typeof g.seen==='object'?g.seen:{},dailyMoves:g.dailyMoves&&g.dailyMoves.d===keyOf(new Date())?g.dailyMoves:null,wx:g.wx!==false,music:g.music!==false,mvol:g.mvol==null?60:Math.max(0,Math.min(100,+g.mvol||0)),mvolG:g.mvolG&&typeof g.mvolG==='object'?g.mvolG:{},hist:g.hist&&typeof g.hist==='object'?g.hist:{},sfx:g.sfx==='cute'?'cute':'bold'};
 }
 function dayDiff(a,b){const p=k=>{const x=k.split('-').map(Number);return Date.UTC(x[0],x[1]-1,x[2])};return Math.round((p(b)-p(a))/864e5)}
 function gameStreakCheck(){
@@ -2238,7 +2247,9 @@ function arcSolved(){
 function arcOver(why){
   if(!GM.on)return;GM.on=false;wxAmb();musStop();arenaStop();gHelp(false);$('gHelpBtn').hidden=true;$('gMusicBtn').hidden=true;const g=ARC[GM.id];if(why!=='daily'&&why!=='quit')gSfx('over');
   const B=state.game.bests,val=g.kind==='puzzle'?Math.max(B[GM.id]||0,state.game.lv[GM.id]||1):GM.score,rec=g.kind!=='puzzle'&&GM.score>(B[GM.id]||0);
-  B[GM.id]=g.kind==='puzzle'?val:Math.max(B[GM.id]||0,GM.score);saveLocal();
+  B[GM.id]=g.kind==='puzzle'?val:Math.max(B[GM.id]||0,GM.score);GM.rank=-1;GM.histRec=false;
+  if(g.kind!=='puzzle'&&why!=='quit'){GM.rank=gHistAdd(GM.id,GM.score);GM.histRec=true}
+  saveLocal();
   GM.lastWhy=why;$('gTools').hidden=true;gDraw(0);gPanel('over',rec);
 }
 /* --- rajzolás: közös elemek --- */
@@ -2315,6 +2326,18 @@ function gDailyCard(){
   return '<button class="gch'+(done?' ok':'')+'" id="gDailyGo">'+gIcon(dc.game)+'<span class="gcht"><b>'+esc(t('gDaily'))+' · '+esc(t('gn_'+dc.game))+'</b><span>'+esc(chText(dc))+'</span>'+
     '<em>'+(done?esc(t('gDoneShort'))+(dm&&dm.g===dc.game?' · '+esc(t('gMoves',dm.m)):''):esc(t('gPlayNow')))+'</em></span></button>';
 }
+/* játékonkénti statisztika és a 10 legjobb eredmény */
+function gHist(id){const G=state.game,H=G.hist[id];if(H&&Array.isArray(H.top))return H;
+  const b=G.bests[id]||0;return G.hist[id]={n:0,sum:0,top:b>0?[{s:b,d:null}]:[]}}
+function gHistAdd(id,sc){const H=gHist(id);H.n=(H.n||0)+1;H.sum=(H.sum||0)+sc;const e={s:sc,d:Date.now()};
+  H.top.push(e);H.top.sort((a,b)=>b.s-a.s||(a.d||0)-(b.d||0));H.top=H.top.slice(0,10);return H.top.indexOf(e)}
+function gDateS(ms){if(!ms)return t('gEarlier');const d=new Date(ms),Ld=L();return t('gDateS',Ld.months[d.getMonth()],d.getDate())}
+function gTopHTML(id,cur){const H=gHist(id);if(!H.top.length&&!H.n)return '';let h='';
+  if(H.n){h+='<div class="gstats"><span><b>'+H.n+'</b>'+esc(t('gPlayedN'))+'</span><span><b>'+Math.round(H.sum/H.n)+'</b>'+esc(t('gAvgS'))+'</span><span><b>'+(H.top[0]?H.top[0].s:0)+'</b>'+esc(t('gBestS'))+'</span></div>'}
+  if(H.top.length){h+='<div class="gtop"><p class="gtt">🏆 '+esc(t('gTopT'))+'</p><ol>';
+    H.top.forEach((e,i)=>{const me=cur!=null&&i===cur;h+='<li'+(me?' class="me"':'')+'><span class="gr">'+(i<3?['🥇','🥈','🥉'][i]:(i+1)+'.')+'</span><b>'+e.s+'</b><span class="gd">'+esc(gDateS(e.d))+(me?' · <em>'+esc(t('gNowS'))+'</em>':'')+'</span></li>'});
+    h+='</ol>';if(cur===-1&&GM.histRec&&H.top.length>=10)h+='<p class="small gh">'+esc(t('gNotTop',H.top[9].s+1))+'</p>';h+='</div>'}
+  return h}
 function gPanel(kind,rec,id){
   if(GM.view==='menu'&&kind!=='menu'&&!$('gPanel').hidden)GM.menuScroll=$('gPanel').scrollTop;
   GM.view=kind;
@@ -2350,6 +2373,7 @@ function gPanel(kind,rec,id){
     if(isDaily)h+=gDailyCard();
     h+='<div class="gstats two"><span><b>'+(g.kind==='puzzle'?(G.lv[id]||1):(G.bests[id]||0))+'</b>'+esc(t(g.kind==='puzzle'?'gReached':'gBest'))+'</span><span><b>🔥 '+G.streak+'</b>'+esc(t('gStreak'))+'</span></div>';
     h+='<button class="primary" id="gGo">'+esc(g.kind==='puzzle'?t('gContinue',G.lv[id]||1):t('gStart'))+'</button>';
+    if(g.kind!=='puzzle')h+=gTopHTML(id,null);
     if(g.kind==='puzzle'&&isDaily&&dc.ty==='daily')h+='<button class="primary alt" id="gGoDaily">'+esc(t('gTodayPuzzle'))+'</button>';
   }else{
     const pz=g.kind==='puzzle';
@@ -2359,7 +2383,9 @@ function gPanel(kind,rec,id){
     else h+='<p class="gscore">'+(pz?t('gSolvedN',GM.st.solved||0):GM.score)+'</p>'+(rec?'<p class="gnote rec">'+esc(t('gRecord'))+'</p>':'');
     if(GM.earned)h+='<p class="gnote ice">'+esc(t('gEarned'))+'</p>';
     if(isDaily&&(dc.ty!=='daily'||gameDoneToday())){h+=gDailyCard();if(!gameDoneToday()&&GM.ch)h+='<p class="small gh">'+esc(t('gChProg',Math.min(g.prog(dc.ty),dc.n),dc.n))+'</p>'}
+    if(!pz&&GM.histRec&&GM.rank>0&&!rec)h+='<p class="gnote rec">'+esc(t('gRankN',GM.rank+1))+'</p>';
     h+=gStatsHTML()+'<button class="primary" id="gGo">'+esc(pz?t('gContinue',G.lv[id]||1):t('gAgain'))+'</button>';
+    if(!pz)h+=gTopHTML(id,GM.histRec?GM.rank:null);
   }
   h+='<button class="ghost" id="gMenu">'+esc(t('gBackMenu'))+'</button>';
   P.innerHTML=h;P.hidden=false;P.scrollTop=0;
@@ -2617,6 +2643,12 @@ Object.assign(I18N.en,{gn_bowl:'Bowling',
   ch_bowl_score:n=>'Score '+n+' points in one game',ch_bowl_strikes:n=>n>1?'Roll '+n+' strikes in one game':'Roll a strike',ch_bowl_spares:n=>'Roll '+n+' spares in one game',
   bwFrame:n=>'Frame '+n+' / 10',bwGutter:'Gutter ball! 😅',bwHint:'Swipe up to roll · sideways: move the ball',gOver_bowl:'All 10 frames done!'});
 I18N.en.gTips.bowl=['👆 Swipe up: the ball rolls the way you swipe.','⚡ The faster you swipe, the harder the roll.','↪️ Curve your swipe and the ball hooks in near the pins – that makes strikes easier.','↔️ Before rolling, drag sideways to move the ball.','🎳 Strike (X): all 10 pins on the first roll – your next two rolls count extra. Spare (/): all 10 in two rolls – your next roll counts extra.','🔟 In frame 10 a strike or spare earns you an extra roll.'];
+
+/* játékstatisztika szövegek */
+Object.assign(I18N.hu,{gPlayedN:'játék',gAvgS:'átlagpont',gBestS:'legjobb',gTopT:'A 10 legjobb eredményed',gNowS:'most',gEarlier:'korábban',
+  gDateS:(m,d)=>m.slice(0,3)+'. '+d+'.',gNotTop:n=>'Most nem került be a top 10-be – a 10. helyhez legalább '+n+' pont kell.',gRankN:r=>'Ez a '+r+'. legjobb eredményed! 🎉'});
+Object.assign(I18N.en,{gPlayedN:'games',gAvgS:'avg score',gBestS:'best',gTopT:'Your top 10 scores',gNowS:'now',gEarlier:'earlier',
+  gDateS:(m,d)=>m.slice(0,3)+' '+d,gNotTop:n=>'Not in your top 10 this time – you need '+n+' points for 10th place.',gRankN:r=>'Your #'+r+' best score! 🎉'});
 
 /* Időjárás a szabadtéri játékokban */
 const WX_TYPES={
@@ -6100,6 +6132,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.15',hu:['🏆 Minden ügyességi játék végén statisztika: hányszor játszottad, átlagpont, legjobb, és a 10 legjobb eredményed listája dátummal. A mostani eredményed kiemelve látszik, ha bekerült.','📋 A lista a játék indítása előtt is megnézhető.'],en:['🏆 Every skill game now ends with stats: games played, average score, best, and your top 10 scores with dates. Your latest score is highlighted if it made the list.','📋 You can also see the list before starting a game.']},
  {v:'14.14',hu:['🎳 Új játék: Bowling! Húzd fel az ujjad a pályán – amerre és amilyen gyorsan húzod, úgy gurul. Ívelt húzással csavarodik a golyó.','📋 10 keret valódi pontozással: strike (X), spare (/), és a 10. keretben ráadás dobás.'],en:['🎳 New game: Bowling! Swipe up the lane – the ball rolls the way and as hard as you swipe. Curve your swipe to hook it.','📋 10 frames with real scoring: strike (X), spare (/), and a bonus roll in frame 10.']},
  {v:'14.13',hu:['🧊 3D mód: iPhone-on most már megbízhatóan működik a billenés. Ha mégsem mozog a víz, a Beállítások → 3D mód alatt egy gombbal engedélyezheted a mozgásérzékelőt.'],en:['🧊 3D mode: tilting now works reliably on iPhone. If the water still doesn’t move, allow the motion sensor with the button under Settings → 3D mode.']},
  {v:'14.12',hu:['😴 Ha a napi időszakon kívül iszol (korán reggel vagy éjjel), a kedvenced álmosan felébred, örül egy kicsit, aztán lassan visszaalszik.'],en:['😴 If you drink outside your daily window (early morning or at night), your buddy wakes up sleepily, is a little happy, then slowly dozes off again.']},
@@ -6214,7 +6247,7 @@ try{applyD3();render()}catch(e){}
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.14';
+const APP_VERSION='14.15';
 /* egyetlen frissítés: ha már folyamatban van, vagy az oldal már a legújabb, nem töltünk újra */
 let updReloading=false;
 function latestVer(){return fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>j&&j.v||null).catch(()=>null)}
