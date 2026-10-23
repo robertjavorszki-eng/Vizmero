@@ -940,6 +940,8 @@ body.modal{overflow:hidden}
       <h2 data-t="drinksSec"></h2>
       <button class="ghost" id="openDrinks" style="width:100%" data-t="editDrinks"></button>
       <p class="small" style="margin-top:8px" data-t="drinksNote"></p>
+      <div class="srow" style="margin-top:10px"><span data-t="drinkBackL"></span><label class="tg"><input type="checkbox" id="drinkBack"><i></i></label></div>
+      <p class="small" style="margin-top:4px" data-t="drinkBackN"></p>
     </div>
 
     <div>
@@ -1531,6 +1533,7 @@ hu:{
   quietOn:'Csend a napi időszakon kívül', whenSound:'Mikor szóljon?', evAdd:'Ital hozzáadása', evDel:'Törlés, visszavonás', evGoal:'Cél teljesítve',
   soundSet:'Hangkészlet', sDrop:'Vízcsepp', sBubble:'Buborék', sMelody:'Dallam', volume:'Hangerő', play:'Meghallgatás',
   soundNote:'iPhone-on a néma kapcsoló elnémítja a hangokat. A hangokat az app maga hozza létre, nem tölt le semmit.',
+  drinkBackL:'Ivás után vissza a vízre', drinkBackN:'Ha más italt (pl. kávét) könyvelsz, utána a „Mit iszol?” magától visszaáll vízre.', tDrinkBack:'Visszaálltam vízre 💧',
   drinksSec:'Italok', editDrinks:'Italaim szerkesztése', drinksNote:'Melyik italok jelenjenek meg, milyen sorrendben, milyen néven és ikonnal. Saját italt is felvehetsz.',
   buttonsSec:'Gombok', buttonsNote:'A négy gyorsgomb mennyisége és itala. A „kiválasztott ital” a „Mit iszol?” sorban kijelölt italt rögzíti (egyszerű módban vizet).',
   selDrink:'Kiválasztott ital', btnAria:(a,d)=>'Hozzáadás: '+a+(d?', '+d:''),
@@ -1662,6 +1665,7 @@ en:{
   quietOn:'Quiet outside your daily window', whenSound:'When should it play?', evAdd:'Adding a drink', evDel:'Delete, undo', evGoal:'Goal reached',
   soundSet:'Sound set', sDrop:'Water drop', sBubble:'Bubble', sMelody:'Melody', volume:'Volume', play:'Preview',
   soundNote:'On iPhone the silent switch mutes the sounds. The app makes the sounds itself and downloads nothing.',
+  drinkBackL:'Back to water after a drink', drinkBackN:'After you log another drink (e.g. coffee), “What are you drinking?” switches back to water by itself.', tDrinkBack:'Back to water 💧',
   drinksSec:'Drinks', editDrinks:'Edit my drinks', drinksNote:'Choose which drinks appear, in what order, with what name and icon. You can add your own too.',
   buttonsSec:'Buttons', buttonsNote:'Amount and drink of the four quick buttons. “Selected drink” logs the drink chosen under “What are you drinking?” (water in simple mode).',
   selDrink:'Selected drink', btnAria:(a,d)=>'Add '+a+(d?', '+d:''),
@@ -5603,6 +5607,7 @@ let volT;$('snVol').oninput=()=>{state.sound.vol=+$('snVol').value/100;$('snVolO
 
 /* --- rögzítés --- */
 function add(dl,type,tm){
+  try{const dflt=visibleDrinks().includes('water')?'water':visibleDrinks()[0];if(state.drinkBack!==false&&state.ui==='advanced'&&type&&type===state.drink&&dflt&&type!==dflt){state.drink=dflt;setTimeout(()=>{try{renderDrinkRow();writeSettings()}catch(e){}},0)}}catch(e){}
   try{tiltKick((Math.random()<.5?-1:1)*(40+dl*8))}catch(e){}
   const when=tm||Date.now(),k=keyOf(new Date(when)),d=ensure(k),before=sum(d),g=goalOf(d);
   d.entries.push({t:when,dl,type:type||'water'});d.entries.sort((a,b)=>a.t-b.t);render();writeDay(k);
@@ -5775,7 +5780,7 @@ $('useFun').onclick=()=>finishOnb(false);
 $('useTrack').onclick=()=>{showOnb(4);goalSetup($('onbGoal'),()=>finishOnb(true))};
 
 /* --- beállítások --- */
-$('openSet').onclick=()=>{try{$('vitOn').checked=!!state.vit.on}catch(e){}try{renderD3Set()}catch(e){}buildBtnCfg();renderSound();renderPetSettings();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderWk();renderSettings();openSheet('setScrim')};
+$('openSet').onclick=()=>{try{$('drinkBack').checked=state.drinkBack!==false}catch(e){}try{$('vitOn').checked=!!state.vit.on}catch(e){}try{renderD3Set()}catch(e){}buildBtnCfg();renderSound();renderPetSettings();$('kg').value=state.weight;$('nameSet').value=state.name||'';$('tStart').value=state.start;$('tEnd').value=state.end;renderWk();renderSettings();openSheet('setScrim')};
 $('openHelp').onclick=()=>{document.querySelectorAll('#helpScrim details[open]').forEach(d=>d.open=false);openSheet('helpScrim')};
 document.querySelectorAll('#helpScrim details').forEach(d=>d.addEventListener('toggle',()=>{if(d.open){document.querySelectorAll('#helpScrim details[open]').forEach(o=>{if(o!==d)o.open=false});setTimeout(()=>d.scrollIntoView({block:'nearest',behavior:'smooth'}),30)}}));
 $('nameSet').oninput=()=>{state.name=cleanName($('nameSet').value);render();writeSettings()};
@@ -6492,6 +6497,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.21',hu:['💧 Ha más italt (pl. kávét vagy teát) könyvelsz, utána a „Mit iszol?” magától visszaáll vízre. A Beállítások → Italok alatt kikapcsolható.'],en:['💧 After logging another drink (e.g. coffee or tea), “What are you drinking?” switches back to water by itself. You can turn this off under Settings → Drinks.']},
  {v:'14.20',hu:['📅 Vitaminok: a beállítás napja még nem számít bele a statisztikába és a sorozatokba – a számolás a következő naptól indul.'],en:['📅 Vitamins: the day you set it up doesn’t count in the stats and streaks yet – counting starts the next day.']},
  {v:'14.19',hu:['🥤 Az elfogyott aloés fajták nem jelennek meg a Vitaminok oldalon, így nem foglalják a helyet. A szerkesztőben továbbra is ott vannak, és visszakapcsolhatók.'],en:['🥤 Aloe kinds that ran out no longer show on the Vitamins page, so they don’t take up space. They stay in the editor and can be switched back on.']},
  {v:'14.18',hu:['🥤 Az aloés gél most beleszámít a napi folyadékba, és megjelenik a víz-oldal mai listájában is. Minimum és ajánlott mennyiség állítható centiliterben, és többet is ihatsz (+1 cl).','📊 Érdekességek: új „Ma miből mennyit?” kártya a mai italaidról.','💊 A Vitaminok oldalon is vannak érdekességek: mennyire sikerül, sorozatok, melyik aloés fajtát iszod, és a hét napjai.'],en:['🥤 Aloe gel now counts toward your daily fluids and shows in today’s list on the water page. Set minimum and recommended amounts in cl, and drink more if you like (+1 cl).','📊 Fun facts: a new “Today: what and how much?” card.','💊 The Vitamins page has fun facts too: how it’s going, streaks, which aloe kind you drink, and days of the week.']},
@@ -6605,13 +6611,14 @@ function renderD3Set(){setTimeout(()=>{try{renderD3Perm()}catch(e){}},0);$('d3On
 $('d3On').onchange=()=>{state.d3=$('d3On').checked;if(state.d3&&state.d3Tilt!==false)d3AskMotion(true);renderD3Set();applyTheme();render();writeSettings()};
 $('d3Tilt').onchange=()=>{state.d3Tilt=$('d3Tilt').checked;if(state.d3Tilt)d3AskMotion(true);applyTheme();render();writeSettings()};
 $('d3Pet').onchange=()=>{state.d3Pet=$('d3Pet').checked;applyTheme();render();writeSettings()};
+$('drinkBack').onchange=()=>{state.drinkBack=$('drinkBack').checked;writeSettings()};
 $('d3PermBtn').onclick=()=>d3AskMotion(true);
 $('d3Btn').onchange=()=>{state.d3Btn=$('d3Btn').checked;applyTheme();render();writeSettings()};
 try{applyD3();render()}catch(e){}
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.20';
+const APP_VERSION='14.21';
 /* egyetlen frissítés: ha már folyamatban van, vagy az oldal már a legújabb, nem töltünk újra */
 let updReloading=false;
 function latestVer(){return fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>j&&j.v||null).catch(()=>null)}
