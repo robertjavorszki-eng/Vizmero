@@ -249,6 +249,9 @@ body.vview .wrap > :is(section,div,p,button):not(.petcard):not(.vitpage):not(.gr
 .vdot{width:34px;height:34px;border-radius:10px;border:0;background:transparent;padding:0;display:grid;place-items:center;cursor:pointer;opacity:.25;filter:grayscale(.7)}
 .vdot.on{opacity:1;filter:none}.vdot.extra{outline:2px dashed var(--warn);outline-offset:-3px}
 .vminl{display:block;width:2px;height:24px;border-radius:2px;background:var(--ok);opacity:.75;margin:0 2px}
+.vconf{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}.vconf i{position:absolute;top:-12px;width:9px;height:14px;border-radius:3px;animation:vconf 1.6s ease-in forwards}
+@keyframes vconf{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(105vh) rotate(540deg);opacity:.7}}
+@media (prefers-reduced-motion: reduce){.vconf{display:none}}
 .vmsg{margin:0;font-size:.82rem;font-weight:700;color:var(--ok)}.vmsg.warn{color:var(--warn)}.vmsg.muted{color:var(--muted);font-weight:600}
 .vclbar{flex:1;position:relative;height:30px;border-radius:999px;background:var(--line);overflow:hidden;min-width:0}
 .vclbar i{position:absolute;left:0;top:0;bottom:0;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
@@ -6079,7 +6082,7 @@ function vitGroupSet(it,oid,cl){const k=keyOf(new Date()),L=vitLog(k),o=it.opts.
   if(it.water){const d=ensure(k),i=d.entries.findIndex(e=>e.vit===it.id),dl=Math.round(cl)/10,type=o?vitDrinkId(o):'water';
     if(!cl){if(i>=0)d.entries.splice(i,1)}
     else if(i>=0){d.entries[i].dl=dl;d.entries[i].type=type}
-    else{const before=sum(d),g=goalOf(d);d.entries.push({t:Date.now(),dl,type,vit:it.id});d.entries.sort((a,b)=>a.t-b.t);play('add');if(before<g&&sum(d)>=g)play('goal')}
+    else{const before=sum(d),g=goalOf(d);d.entries.push({t:Date.now(),dl,type,vit:it.id});d.entries.sort((a,b)=>a.t-b.t);if(before<g&&sum(d)>=g)vitWGoal=true}
     writeDay(k);petHop()}
   writeSettings();render()}
 function vitPausedOn(it,k){return (it.pauses||[]).some(([a,b])=>k>=a&&(!b||k<b))}
@@ -6103,13 +6106,13 @@ function renderVit(){
   h+='<button class="vadd" id="vitAdd">+ '+esc(t('vitAdd'))+'</button>';
   if(V.items.length)h+=vitWeek()+vitStats();
   P.innerHTML=h;if($('vsCar'))stWire('vsCar','vsDots','vitCard');
-  P.querySelectorAll('[data-vplus]').forEach(b=>b.onclick=()=>{const it=vitById(b.dataset.vplus);vitSet(it,Math.min(it.rec+5,vitVal(it,k)+1));buzz(12);if(vitStatus(it,k)==='full'&&state.pet.on)petSay(t('vitPetGood',it.name))});
-  P.querySelectorAll('[data-vminus]').forEach(b=>b.onclick=()=>{const it=vitById(b.dataset.vminus);vitSet(it,Math.max(0,vitVal(it,k)-1))});
-  P.querySelectorAll('[data-vdot]').forEach(b=>b.onclick=()=>{const [id,n]=b.dataset.vdot.split('|'),it=vitById(id);vitSet(it,vitVal(it,k)===+n?+n-1:+n);buzz(10)});
+  P.querySelectorAll('[data-vplus]').forEach(b=>b.onclick=()=>{const it=vitById(b.dataset.vplus);vitAct(it,()=>vitSet(it,Math.min(it.rec+5,vitVal(it,k)+1)));buzz(12);if(vitStatus(it,k)==='full'&&state.pet.on)petSay(t('vitPetGood',it.name))});
+  P.querySelectorAll('[data-vminus]').forEach(b=>b.onclick=()=>{const it=vitById(b.dataset.vminus);vitAct(it,()=>vitSet(it,Math.max(0,vitVal(it,k)-1)))});
+  P.querySelectorAll('[data-vdot]').forEach(b=>b.onclick=()=>{const [id,n]=b.dataset.vdot.split('|'),it=vitById(id);vitAct(it,()=>vitSet(it,vitVal(it,k)===+n?+n-1:+n));buzz(10)});
   P.querySelectorAll('[data-vopt]').forEach(b=>b.onclick=()=>{const [id,o]=b.dataset.vopt.split('|'),it=vitById(id);buzz(12);
-    if(!(it.minCl>0)){vitSet(it,vitVal(it,k)===o?null:o);if(vitVal(it,k)&&state.pet.on)petSay(t('vitPetGel'));return}
-    const cur=vitGroupCl(it,k),was=vitVal(it,k);if(was===o&&cur>0)return;vitGroupSet(it,o,cur>0?cur:it.minCl);if(!cur&&state.pet.on)petSay(t('vitPetGel'))});
-  P.querySelectorAll('[data-vcl]').forEach(b=>b.onclick=()=>{const [id,dd]=b.dataset.vcl.split('|'),it=vitById(id),o=vitVal(it,k);if(!o)return;vitGroupSet(it,o,vitGroupCl(it,k)+ +dd);buzz(8)});
+    if(!(it.minCl>0)){vitAct(it,()=>vitSet(it,vitVal(it,k)===o?null:o));if(vitVal(it,k)&&state.pet.on)petSay(t('vitPetGel'));return}
+    const cur=vitGroupCl(it,k),was=vitVal(it,k);if(was===o&&cur>0)return;if(cur>0){vitGroupSet(it,o,cur);vplay('gel',.5);return}vitAct(it,()=>vitGroupSet(it,o,it.minCl));if(state.pet.on)petSay(t('vitPetGel'))});
+  P.querySelectorAll('[data-vcl]').forEach(b=>b.onclick=()=>{const [id,dd]=b.dataset.vcl.split('|'),it=vitById(id),o=vitVal(it,k);if(!o)return;vitAct(it,()=>vitGroupSet(it,o,vitGroupCl(it,k)+ +dd),true);buzz(8)});
   P.querySelectorAll('[data-vedit]').forEach(b=>b.onclick=()=>vitOpenEd(b.dataset.vedit));
   P.querySelectorAll('[data-vresume]').forEach(b=>b.onclick=()=>vitPause(vitById(b.dataset.vresume),false));
   $('vitAdd').onclick=()=>vitOpenEd(null);
@@ -6144,6 +6147,33 @@ function vitStats(){const V=state.vit,now=new Date(),today=keyOf(now),days=[];fo
   if(valid.length>=3){const Ld=L(),lo=pc.reduce((bi,v,i,a)=>v!=null&&(bi<0||v<a[bi])?i:bi,-1);
     cards.push('<div class="stcard"><h3>'+esc(t('vsWdT'))+'</h3><p class="sub2">'+esc(t('vsWdS'))+'</p><div class="vwd">'+pc.map((v,i)=>'<div><span>'+(v==null?'':Math.round(v*100)+'%')+'</span><i class="'+(i===lo?'lo':'')+'" style="height:'+(v==null?0:Math.max(4,v*90)).toFixed(0)+'px"></i>'+esc(Ld.stWd[i])+'</div>').join('')+'</div><p class="cap">'+esc(t('vsWdCap',Ld.stWdOn[lo]))+'</p></div>')}
   return '<p class="vslot">'+esc(t('vsTitle'))+'</p><div class="stcar" id="vsCar">'+cards.join('')+'</div><div class="stdots" id="vsDots">'+cards.map((_,i)=>'<button aria-label="'+(i+1)+'"></button>').join('')+'</div>'}
+/* hangok a vitaminokhoz: bogyó koccanás, gél kortyolás, visszavonás visszafelé, célok csilingelése */
+let vitWGoal=false;
+function vplay(kind,soft){const S=state.sound,ev=/Undo$/.test(kind)?'del':/Goal|All/.test(kind)?'goal':'add';if(!S.on||!S.ev[ev]||quietNow())return;const c=audio();if(!c)return;
+  const t0=c.currentTime+.02,v=S.vol*.45*(soft||1);
+  try{
+    if(kind==='pill'){tone(c,t0,1900,1650,.045,'triangle',v*.55);tone(c,t0+.06,2500,2300,.035,'triangle',v*.4);tone(c,t0+.02,520,980,.08,'sine',v*.7)}
+    else if(kind==='pillUndo'){tone(c,t0,980,520,.09,'sine',v*.7);tone(c,t0+.07,1650,1400,.05,'triangle',v*.4)}
+    else if(kind==='gel'){[[300,540],[370,620],[440,720]].forEach(([a,b],i)=>tone(c,t0+i*.09,a,b,.085,'sine',v*.8));try{vnoise(c,t0,.3,v*.12,900,'lowpass')}catch(e){}}
+    else if(kind==='gelSip'){tone(c,t0,380,640,.08,'sine',v*.7)}
+    else if(kind==='gelUndo'){[[720,440],[620,370],[540,300]].forEach(([a,b],i)=>tone(c,t0+i*.09,a,b,.085,'sine',v*.75))}
+    else if(kind==='minGoal'){tone(c,t0,1047,1047,.22,'triangle',v*.75);tone(c,t0+.1,1319,1319,.28,'triangle',v*.6)}
+    else if(kind==='itemGoal'){[1319,1568,2093].forEach((f,i)=>tone(c,t0+i*.07,f,f,.25,'triangle',v*.7));tone(c,t0+.24,2637,2637,.35,'sine',v*.35)}
+    else if(kind==='vitAll'){[523,659,784,1047,1319,1568].forEach((f,i)=>tone(c,t0+i*.09,f,f*1.01,.32,'triangle',v*.8));[2093,2637,3136].forEach((f,i)=>tone(c,t0+.6+i*.05,f,f,.4,'sine',v*.3))}
+  }catch(e){}}
+function vitAllDone(k){const a=vitActive();return a.length>0&&a.every(it=>vitStatus(it,k)!=='none')}
+function vitAct(it,fn,small){const k=keyOf(new Date()),lv=x=>({none:0,opt:0,min:1,full:2})[x]||0,num=()=>it.kind==='group'?vitGroupCl(it,k)+(vitVal(it,k)?.001:0):vitVal(it,k);
+  const s0=lv(vitStatus(it,k)),n0=num(),a0=vitAllDone(k);vitWGoal=false;fn();const s1=lv(vitStatus(it,k)),n1=num(),a1=vitAllDone(k),g=it.kind==='group';
+  if(n1<n0){vplay(g?'gelUndo':'pillUndo');buzz(8);return}
+  if(n1===n0)return;
+  if(a1&&!a0){vplay('vitAll');buzz([30,40,30,40,80]);try{gConfettiMain()}catch(e){}return}
+  if(vitWGoal){play('goal');buzz([30,60,30,60,60]);return}
+  if(s1===2&&s0<2){vplay('itemGoal');buzz([20,30,20]);return}
+  if(s1===1&&s0<1&&it.min<it.rec){vplay('minGoal');return}
+  vplay(g?(small?'gelSip':'gel'):'pill')}
+function gConfettiMain(){const P=$('vitPage');if(!P||P.hidden)return;const box=document.createElement('div');box.className='vconf';box.setAttribute('aria-hidden','true');
+  for(let i=0;i<26;i++){const e=document.createElement('i');e.style.left=Math.random()*100+'%';e.style.background=['#ff5f8f','#ffd23b','#4fe0c2','#3fa9f5','#8a5cf6'][i%5];e.style.animationDelay=(Math.random()*.3)+'s';box.appendChild(e)}
+  document.body.appendChild(box);setTimeout(()=>box.remove(),1800)}
 function vitById(id){return state.vit.items.find(x=>x.id===id)}
 function vitRing(a,n,s){const r=s*.4,c=2*Math.PI*r,f=n?a/n:0;return '<svg class="vring" width="'+s+'" height="'+s+'" viewBox="0 0 '+s+' '+s+'" role="img" aria-label="'+esc(t('vitMiniT',a,n))+'"><circle cx="'+s/2+'" cy="'+s/2+'" r="'+r+'" fill="none" stroke="var(--line)" stroke-width="'+s*.12+'"/><circle cx="'+s/2+'" cy="'+s/2+'" r="'+r+'" fill="none" stroke="var(--water)" stroke-width="'+s*.12+'" stroke-linecap="round" stroke-dasharray="'+(c*f).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 '+s/2+' '+s/2+')"/>'+(s>60?'<text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" style="fill:var(--ink);font:900 '+s*.22+'px var(--body)">'+a+'/'+n+'</text>':'')+'</svg>'}
 function vitCard(it,k){
@@ -6497,6 +6527,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.22',hu:['🔊 Vitaminok hangokkal: a bogyók koccannak, az aloés gél kortyol, a visszavonás „visszafelé” szól.','🎉 Csilingel, ha egy kiegészítőnél megvan a minimum vagy az ajánlott adag, és fanfár szól konfettivel, ha mára minden vitamin megvan. Ha az aloe miatt meglesz a napi folyadékcél, a cél-hang szól.'],en:['🔊 Vitamins with sounds: pills clink, aloe gel gulps, and undo plays “backwards”.','🎉 A chime when a supplement reaches its minimum or recommended dose, and a fanfare with confetti when all vitamins are done for today. If aloe completes your daily fluid goal, the goal sound plays.']},
  {v:'14.21',hu:['💧 Ha más italt (pl. kávét vagy teát) könyvelsz, utána a „Mit iszol?” magától visszaáll vízre. A Beállítások → Italok alatt kikapcsolható.'],en:['💧 After logging another drink (e.g. coffee or tea), “What are you drinking?” switches back to water by itself. You can turn this off under Settings → Drinks.']},
  {v:'14.20',hu:['📅 Vitaminok: a beállítás napja még nem számít bele a statisztikába és a sorozatokba – a számolás a következő naptól indul.'],en:['📅 Vitamins: the day you set it up doesn’t count in the stats and streaks yet – counting starts the next day.']},
  {v:'14.19',hu:['🥤 Az elfogyott aloés fajták nem jelennek meg a Vitaminok oldalon, így nem foglalják a helyet. A szerkesztőben továbbra is ott vannak, és visszakapcsolhatók.'],en:['🥤 Aloe kinds that ran out no longer show on the Vitamins page, so they don’t take up space. They stay in the editor and can be switched back on.']},
@@ -6618,7 +6649,7 @@ try{applyD3();render()}catch(e){}
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.21';
+const APP_VERSION='14.22';
 /* egyetlen frissítés: ha már folyamatban van, vagy az oldal már a legújabb, nem töltünk újra */
 let updReloading=false;
 function latestVer(){return fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>j&&j.v||null).catch(()=>null)}
