@@ -249,6 +249,9 @@ body.vview .wrap > :is(section,div,p,button):not(.petcard):not(.vitpage):not(.gr
 .vdot{width:34px;height:34px;border-radius:10px;border:0;background:transparent;padding:0;display:grid;place-items:center;cursor:pointer;opacity:.25;filter:grayscale(.7)}
 .vdot.on{opacity:1;filter:none}.vdot.extra{outline:2px dashed var(--warn);outline-offset:-3px}
 .vminl{display:block;width:2px;height:24px;border-radius:2px;background:var(--ok);opacity:.75;margin:0 2px}
+.vdaybar{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:8px;text-align:center}.vdaybar b{font-size:1.05rem}
+.vpast{margin:-4px 0 0;font-size:.85rem;font-weight:600;color:var(--warn);text-align:center}.vpast button{border:0;background:none;color:var(--water-deep);font:800 .85rem var(--body);text-decoration:underline;cursor:pointer}
+.vwh{border:0;background:none;font:700 .7rem var(--body);color:var(--muted);padding:4px 0;border-radius:6px;cursor:pointer}.vwh.on{background:var(--water-soft);color:var(--ink)}
 .vconf{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}.vconf i{position:absolute;top:-12px;width:9px;height:14px;border-radius:3px;animation:vconf 1.6s ease-in forwards}
 @keyframes vconf{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(105vh) rotate(540deg);opacity:.7}}
 @media (prefers-reduced-motion: reduce){.vconf{display:none}}
@@ -1107,6 +1110,11 @@ body.modal{overflow:hidden}
       <h2 data-t="drink"></h2>
       <div class="dgrid" id="drinkGrid"></div>
     </div>
+    <div id="amDayBox">
+      <h2 data-t="amDayL"></h2>
+      <div class="vchips" id="amDays"></div>
+      <input class="time" type="date" id="amDate" hidden style="margin-top:8px">
+    </div>
     <div>
       <h2><label for="amTime" data-t="time"></label></h2>
       <input class="time" type="time" id="amTime">
@@ -1244,6 +1252,7 @@ body.modal{overflow:hidden}
       </ul>
     </div></details>
     <details class="hsec"><summary><span class="hic">➕</span>Ivás rögzítése</summary><div class="hbody">
+      <p><b>Elmaradt könyvelés?</b> A „+ Egyéni mennyiség vagy korábbi időpont” ablakban kiválaszthatod a napot is (ma, tegnap, tegnapelőtt vagy bármelyik korábbi nap), vagy az Utolsó 7 nap egy oszlopára koppintva „Ivás hozzáadása erre a napra”. A Vitaminok oldalon felül a nyilakkal lapozhatsz vissza korábbi napokra.</p>
       <p>Koppints a <b>+1</b>, <b>+2</b>, <b>+3</b> vagy <b>+5 dl</b> gombra (literben +0,1 / +0,2 / +0,3 / +0,5 l). Egy átlagos pohár kb. 2–2,5 dl, egy bögre kb. 3 dl, egy kis üveg víz 5 dl.</p>
       <p>Haladó módban előbb válaszd ki fent, mit iszol; a gombok azzal az itallal rögzítenek. A kávé, a tea és a többi ital is beszámít a napi célba.</p>
     </div></details>
@@ -1357,6 +1366,7 @@ body.modal{overflow:hidden}
       </ul>
     </div></details>
     <details class="hsec"><summary><span class="hic">➕</span>Logging a drink</summary><div class="hbody">
+      <p><b>Forgot to log?</b> In “+ Custom amount or earlier time” you can also pick the day (today, yesterday, the day before or any earlier date), or tap a bar in Last 7 days and choose “Add a drink to this day”. On the Vitamins page use the arrows at the top to go back to earlier days.</p>
       <p>Tap <b>+1</b>, <b>+2</b>, <b>+3</b> or <b>+5 dl</b> (in liters: +0.1 / +0.2 / +0.3 / +0.5 l). An average glass is about 2–2.5 dl, a mug about 3 dl, a small bottle of water 5 dl. (1 dl = 100 ml.)</p>
       <p>In advanced mode, first pick what you’re drinking at the top; the buttons log that drink. Coffee, tea and other drinks also count towards your daily goal.</p>
     </div></details>
@@ -1468,6 +1478,7 @@ hu:{
   vp_aloe:'Aloe gél', vp_probio:'Probiotikum', vp_fish:'Halolaj', vp_multi:'Daily multivitamin', vp_kids:'Kids', vp_greens:'Zöldség tabletta', vp_vitc:'C-vitamin', vp_vitd:'D-vitamin', vp_magn:'Magnézium',
   vitClDose:(m,r)=>m===r?'Minimum '+m+' cl':'Minimum '+m+' · ajánlott '+r+' cl', vitInWater:'beleszámít a folyadékba', vitClMinus:'1 cl-rel kevesebb', vitClMinOk:n=>'A minimum megvan, még '+n+' cl az ajánlotthoz.', vitClLess:n=>'Még '+n+' cl a minimumhoz.', vitMinCl:'Minimum (cl)', vitRecCl:'Ajánlott (cl)', vitWaterL:'Beleszámít a napi folyadékba', vitWaterN:'Bekapcsolva a megivott mennyiség a víz-oldalon is megjelenik a mai listában, és beleszámít a napi célba.',
   vsTitle:'Érdekességek', vsHowT:'Mennyire sikerül?', vsHowS:'Utolsó 30 nap – hány napon lett meg legalább a minimum', vsHowCap:p=>'Összesen a napok '+p+'%-án megvolt legalább a minimum.', vsStrT:'Sorozatok', vsStrS:'Hány napja egyfolytában (szünet nem szakítja meg)', vsBest:n=>'legjobb: '+n, vsStrCap:(n,c)=>c?n+': már '+c+' napja egyfolytában! 🔥':'Ma kezdődhet egy új sorozat!', vsGelT:n=>n+': melyik fajta?', vsGelS:n=>'Utolsó 30 nap · '+n+' napon ittál belőle', vsDays:'nap', vsGelCap:(cl,dl)=>'Összesen '+cl+' cl ('+dl+' dl) az utolsó 30 napban.', vsWdT:'A hét napjai', vsWdS:'Melyik napon sikerül a legjobban?', vsWdCap:d=>d.charAt(0).toUpperCase()+d.slice(1)+' marad ki a legtöbb.',
+  dToday:'Ma', dYesterday:'Tegnap', dDayBefore:'Tegnapelőtt', dOther:'Másik nap…', dPrev:'Előző nap', dNext:'Következő nap', amDayL:'Melyik napra?', dayAddHere:'Ivás hozzáadása erre a napra', vitPastNote:'Korábbi napot szerkesztesz.', vitBackToday:'Vissza a mai napra', vitPastT:(a,n)=>'Aznap '+a+'/'+n+' megvolt',
   vsFromTomorrow:'A statisztika holnaptól indul – a mai nap még csak próba, nem számít bele.',
   vitAllOut:'Most minden fajta elfogyott – a ceruzával jelölheted, ha újra van itthon.',
   vitPetGood:n=>n+' megvan! 💪', vitPetGel:'Egészségedre! Jöhet utána egy pohár víz is? 💧', vitPetGelQ:n=>'Megvan már a reggeli '+n+'?', vitPetLeft:x=>'Ne felejtsd: '+x+' még hátra van!', vitPetDone:'Mára minden vitamin megvan! 🎉',
@@ -1600,6 +1611,7 @@ en:{
   vp_aloe:'Aloe gel', vp_probio:'Probiotic', vp_fish:'Fish oil', vp_multi:'Daily multivitamin', vp_kids:'Kids', vp_greens:'Greens tablet', vp_vitc:'Vitamin C', vp_vitd:'Vitamin D', vp_magn:'Magnesium',
   vitClDose:(m,r)=>m===r?'Minimum '+m+' cl':'Minimum '+m+' · recommended '+r+' cl', vitInWater:'counts as fluid', vitClMinus:'1 cl less', vitClMinOk:n=>'Minimum reached, '+n+' cl more for the recommended amount.', vitClLess:n=>n+' cl more to the minimum.', vitMinCl:'Minimum (cl)', vitRecCl:'Recommended (cl)', vitWaterL:'Counts toward daily fluids', vitWaterN:'When on, the amount you drink also shows on the water page in today’s list and counts toward your daily goal.',
   vsTitle:'Fun facts', vsHowT:'How’s it going?', vsHowS:'Last 30 days – days with at least the minimum', vsHowCap:p=>'Overall you reached at least the minimum on '+p+'% of days.', vsStrT:'Streaks', vsStrS:'Days in a row (pauses don’t break it)', vsBest:n=>'best: '+n, vsStrCap:(n,c)=>c?n+': '+c+' days in a row! 🔥':'A new streak can start today!', vsGelT:n=>n+': which kind?', vsGelS:n=>'Last 30 days · drunk on '+n+' days', vsDays:'days', vsGelCap:(cl,dl)=>cl+' cl ('+dl+' dl) in total over the last 30 days.', vsWdT:'Days of the week', vsWdS:'Which day goes best?', vsWdCap:d=>'Most missed on '+d+'s.',
+  dToday:'Today', dYesterday:'Yesterday', dDayBefore:'Day before', dOther:'Other day…', dPrev:'Previous day', dNext:'Next day', amDayL:'Which day?', dayAddHere:'Add a drink to this day', vitPastNote:'You’re editing an earlier day.', vitBackToday:'Back to today', vitPastT:(a,n)=>a+'/'+n+' done that day',
   vsFromTomorrow:'Stats start tomorrow – today is just a trial and doesn’t count.',
   vitAllOut:'All kinds are out right now – use the pencil to mark one as back at home.',
   vitPetGood:n=>n+' done! 💪', vitPetGel:'Cheers! How about a glass of water too? 💧', vitPetGelQ:n=>'Had your morning '+n+' yet?', vitPetLeft:x=>'Don’t forget: '+x+' still to go!', vitPetDone:'All vitamins done for today! 🎉',
@@ -5684,10 +5696,16 @@ function renderEditor(){
   document.querySelectorAll('#drinkGrid .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.drink===ed.type));
   document.querySelectorAll('#amQuick .chip').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===ed.dl));
 }
-function openEditor(k,i){
-  if(k==null){ed={mode:'new',k:null,i:-1,dl:2,type:state.drink||'water'};$('amTime').value=hhmm(Date.now());
+function amDayLabel(k){const today=keyOf(new Date()),y=new Date();y.setDate(y.getDate()-1);if(k===today)return t('dToday');if(k===keyOf(y))return t('dYesterday');const d=new Date(k+'T12:00:00'),Ld=L();return t('dayHead',Ld.months[d.getMonth()],d.getDate(),Ld.days[d.getDay()])}
+function amRenderDays(){const box=$('amDays'),today=new Date(),ks=[0,1,2].map(n=>{const d=new Date(today);d.setDate(today.getDate()-n);return keyOf(d)});
+  const other=!ks.includes(ed.day);box.innerHTML=ks.map((k,i)=>'<button type="button" data-amday="'+k+'" aria-pressed="'+(ed.day===k)+'">'+esc(i===0?t('dToday'):i===1?t('dYesterday'):t('dDayBefore'))+'</button>').join('')+'<button type="button" data-amday="other" aria-pressed="'+other+'">'+esc(other?amDayLabel(ed.day):t('dOther'))+'</button>';
+  const di=$('amDate');di.max=keyOf(today);di.hidden=!other;if(other)di.value=ed.day;
+  box.querySelectorAll('[data-amday]').forEach(b=>b.onclick=()=>{if(b.dataset.amday==='other'){$('amDate').hidden=false;try{$('amDate').showPicker()}catch(e){$('amDate').focus()}return}ed.day=b.dataset.amday;amRenderDays()})}
+$('amDate').onchange=()=>{const v=$('amDate').value;if(v&&v<=keyOf(new Date())){ed.day=v;amRenderDays()}};
+function openEditor(k,i,day){
+  if(k==null){ed={mode:'new',k:null,i:-1,dl:2,type:state.drink||'water',day:day||keyOf(new Date())};$('amTime').value=day&&day!==keyOf(new Date())?'20:00':hhmm(Date.now());$('amDayBox').hidden=false;amRenderDays();
     $('entryTitle').textContent=t('customTitle');$('amSave').textContent=t('add');$('amDelete').hidden=true}
-  else{const e=state.days[k].entries[i];ed={mode:'edit',k,i,dl:e.dl,type:e.type||'water'};$('amTime').value=hhmm(e.t);
+  else{const e=state.days[k].entries[i];ed={mode:'edit',k,i,dl:e.dl,type:e.type||'water'};$('amTime').value=hhmm(e.t);$('amDayBox').hidden=true;
     $('entryTitle').textContent=t('editTitle');$('amSave').textContent=t('save');$('amDelete').hidden=false}
   buildEditor();renderEditor();openSheet('entryScrim');
 }
@@ -5696,7 +5714,7 @@ $('amMinus').onclick=()=>{ed.dl=Math.max(.5,r1(ed.dl-.5));renderEditor()};
 $('amPlus').onclick=()=>{ed.dl=Math.min(20,r1(ed.dl+.5));renderEditor()};
 function timeOnDay(k,hm){const [y,mo,da]=k.split('-').map(Number),m=mins(hm);if(m==null)return null;return new Date(y,mo-1,da,Math.floor(m/60),m%60,0).getTime()}
 $('amSave').onclick=()=>{
-  if(ed.mode==='new'){const k=keyOf(new Date()),tm=timeOnDay(k,$('amTime').value)||Date.now();closeSheet('entryScrim');add(ed.dl,ed.type,tm);toast(t('tLogged',amt(ed.dl),drinkName(ed.type),hhmm(tm)))}
+  if(ed.mode==='new'){const k=ed.day||keyOf(new Date()),tm=timeOnDay(k,$('amTime').value)||Date.now();closeSheet('entryScrim');add(ed.dl,ed.type,tm);toast(t('tLogged',amt(ed.dl),drinkName(ed.type),hhmm(tm))+(k!==keyOf(new Date())?' · '+amDayLabel(k):''))}
   else{const d=state.days[ed.k],e=d&&d.entries[ed.i];if(!e){closeSheet('entryScrim');return}
     e.dl=ed.dl;e.type=ed.type;const tm=timeOnDay(ed.k,$('amTime').value);if(tm)e.t=tm;d.entries.sort((a,b)=>a.t-b.t);
     closeSheet('entryScrim');render();writeDay(ed.k);toast(t('tEdited'))}
@@ -6048,6 +6066,9 @@ const VIT_PRESETS=[
 ];
 function vitNextDay(k){const d=new Date(k+'T12:00:00');d.setDate(d.getDate()+1);return keyOf(d)}
 function vitCounts(k){return !state.vit.since||k>=state.vit.since}
+let vitDay=null;const VIT_SLOT_TIME={empty:'07:00',morning:'08:00',day:'13:00',evening:'19:00',bed:'22:00'};
+function vitDayKey(){const td=keyOf(new Date());if(!vitDay||vitDay>=td){vitDay=null;return td}return vitDay}
+function vitShiftDay(n){const d=new Date(vitDayKey()+'T12:00:00');d.setDate(d.getDate()+n);const k=keyOf(d);vitDay=k>=keyOf(new Date())?null:k;renderVit()}
 function vitId(){return 'v'+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36)}
 function normalizeVit(){const v=state.vit&&typeof state.vit==='object'?state.vit:{};
   state.vit={on:!!v.on,items:Array.isArray(v.items)?v.items.filter(x=>x&&x.id):[],log:v.log&&typeof v.log==='object'?v.log:{},since:typeof v.since==='string'?v.since:null};
@@ -6077,12 +6098,12 @@ function vitHexName(h){const n=parseInt(String(h).replace('#',''),16);if(isNaN(n
   if(d<.12)return 'grey';let hu=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4;hu=(hu*60+360)%360;
   if(hu<15||hu>=340)return 'red';if(hu<45)return mx<.55?'brown':'orange';if(hu<70)return 'yellow';if(hu<160)return 'green';if(hu<195)return 'teal';if(hu<235)return 'water';if(hu<290)return 'purple';return 'pink'}
 function vitDrinkId(o){const id='cx'+String(o.id).slice(-10);state.custom[id]=Object.assign(state.custom[id]||{},{name:o.name,icon:'smoothie',color:vitHexName(o.c),removed:true});return id}
-function vitGroupSet(it,oid,cl){const k=keyOf(new Date()),L=vitLog(k),o=it.opts.find(x=>x.id===oid);cl=Math.max(0,Math.round(cl*10)/10);
+function vitGroupSet(it,oid,cl){const k=vitDayKey(),L=vitLog(k),o=it.opts.find(x=>x.id===oid);cl=Math.max(0,Math.round(cl*10)/10);
   if(!cl){delete L[it.id]}else L[it.id]=it.water?{o:oid}:{o:oid,cl};
   if(it.water){const d=ensure(k),i=d.entries.findIndex(e=>e.vit===it.id),dl=Math.round(cl)/10,type=o?vitDrinkId(o):'water';
     if(!cl){if(i>=0)d.entries.splice(i,1)}
     else if(i>=0){d.entries[i].dl=dl;d.entries[i].type=type}
-    else{const before=sum(d),g=goalOf(d);d.entries.push({t:Date.now(),dl,type,vit:it.id});d.entries.sort((a,b)=>a.t-b.t);if(before<g&&sum(d)>=g)vitWGoal=true}
+    else{const before=sum(d),g=goalOf(d);d.entries.push({t:k===keyOf(new Date())?Date.now():timeOnDay(k,VIT_SLOT_TIME[it.slot]||'12:00'),dl,type,vit:it.id});d.entries.sort((a,b)=>a.t-b.t);if(before<g&&sum(d)>=g)vitWGoal=true}
     writeDay(k);petHop()}
   writeSettings();render()}
 function vitPausedOn(it,k){return (it.pauses||[]).some(([a,b])=>k>=a&&(!b||k<b))}
@@ -6090,22 +6111,26 @@ function vitStatus(it,k){if(it.kind==='group'){const o=vitVal(it,k),cl=vitGroupC
 function vitActive(){return state.vit.items.filter(x=>!x.paused)}
 function vitUnit(it,n){return t('vu_'+(it.unit||'db'),n)}
 function vitPending(k){return vitActive().filter(it=>vitStatus(it,k)==='none')}
-function vitSet(it,v){const k=keyOf(new Date()),L=vitLog(k);if(v==null||v===0)delete L[it.id];else L[it.id]=v;writeSettings();renderVit()}
+function vitSet(it,v){const k=vitDayKey(),L=vitLog(k);if(v==null||v===0)delete L[it.id];else L[it.id]=v;writeSettings();renderVit()}
 function vitPause(it,on){const k=keyOf(new Date());it.paused=on;if(on)it.pauses.push([k,null]);else{const p=it.pauses[it.pauses.length-1];if(p&&!p[1])p[1]=k}writeSettings();renderVit()}
 let vitEdit=null;
 function renderVit(){
   const V=state.vit,on=!!V.on,view=on&&state.vview==='vit';
   document.body.classList.toggle('vview',view);$('vTabs').hidden=!on;$('vitPage').hidden=!view;
   document.querySelectorAll('#vTabs button').forEach(b=>b.setAttribute('aria-pressed',(b.dataset.vt==='vit')===view));
-  const k=keyOf(new Date()),act=vitActive(),done=act.filter(it=>vitStatus(it,k)!=='none'),pend=act.filter(it=>vitStatus(it,k)==='none');
+  const kT=keyOf(new Date()),k=vitDayKey(),isT=k===kT,act=vitActive(),done=act.filter(it=>vitStatus(it,k)!=='none'),pend=act.filter(it=>vitStatus(it,k)==='none');
+  const doneT=act.filter(it=>vitStatus(it,kT)!=='none'),pendT=act.filter(it=>vitStatus(it,kT)==='none');
   const mini=$('vitMini');mini.hidden=!on||view||!act.length;
-  if(on&&!view&&act.length){mini.innerHTML=vitRing(done.length,act.length,44)+'<span class="vmt"><b>'+esc(t('vitMiniT',done.length,act.length))+'</b><span>'+esc(pend.length?t('vitLeft',pend.map(x=>x.name).join(', ')):t('vitAllDone'))+'</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>'}
+  if(on&&!view&&act.length){mini.innerHTML=vitRing(doneT.length,act.length,44)+'<span class="vmt"><b>'+esc(t('vitMiniT',doneT.length,act.length))+'</b><span>'+esc(pendT.length?t('vitLeft',pendT.map(x=>x.name).join(', ')):t('vitAllDone'))+'</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>'}
   if(!view)return;
-  const P=$('vitPage');let h='<div class="vsumm">'+vitRing(done.length,act.length,78)+'<div><b>'+esc(!act.length?t('vitEmptyT'):pend.length?t('vitSumT',done.length):t('vitAllDone'))+'</b><span>'+esc(!act.length?t('vitEmptyS'):pend.length?t('vitLeft',pend.map(x=>x.name).join(', ')):t('vitAllDoneS'))+'</span></div></div>';
+  const P=$('vitPage');let h='<div class="vdaybar"><button type="button" class="vbtn" data-vday="-1" aria-label="'+esc(t('dPrev'))+'">‹</button><b>'+esc(amDayLabel(k))+'</b><button type="button" class="vbtn" data-vday="1" aria-label="'+esc(t('dNext'))+'"'+(isT?' disabled':'')+'>›</button></div>'+(isT?'':'<p class="vpast">'+esc(t('vitPastNote'))+' <button type="button" id="vitToday">'+esc(t('vitBackToday'))+'</button></p>')+
+    '<div class="vsumm">'+vitRing(done.length,act.length,78)+'<div><b>'+esc(!act.length?t('vitEmptyT'):!isT?t('vitPastT',done.length,act.length):pend.length?t('vitSumT',done.length):t('vitAllDone'))+'</b><span>'+esc(!act.length?t('vitEmptyS'):pend.length?t('vitLeft',pend.map(x=>x.name).join(', ')):t('vitAllDoneS'))+'</span></div></div>';
   VIT_SLOTS.forEach(sl=>{const its=V.items.filter(x=>x.slot===sl);if(!its.length)return;h+='<p class="vslot">'+esc(t('vs_'+sl))+'</p>';its.forEach(it=>{h+=vitCard(it,k)})});
   h+='<button class="vadd" id="vitAdd">+ '+esc(t('vitAdd'))+'</button>';
   if(V.items.length)h+=vitWeek()+vitStats();
   P.innerHTML=h;if($('vsCar'))stWire('vsCar','vsDots','vitCard');
+  P.querySelectorAll('[data-vday]').forEach(b=>b.onclick=()=>vitShiftDay(+b.dataset.vday));if($('vitToday'))$('vitToday').onclick=()=>{vitDay=null;renderVit()};
+  P.querySelectorAll('[data-vwk]').forEach(b=>b.onclick=()=>{const kk=b.dataset.vwk;vitDay=kk>=keyOf(new Date())?null:kk;renderVit();window.scrollTo({top:0,behavior:'smooth'})});
   P.querySelectorAll('[data-vplus]').forEach(b=>b.onclick=()=>{const it=vitById(b.dataset.vplus);vitAct(it,()=>vitSet(it,Math.min(it.rec+5,vitVal(it,k)+1)));buzz(12);if(vitStatus(it,k)==='full'&&state.pet.on)petSay(t('vitPetGood',it.name))});
   P.querySelectorAll('[data-vminus]').forEach(b=>b.onclick=()=>{const it=vitById(b.dataset.vminus);vitAct(it,()=>vitSet(it,Math.max(0,vitVal(it,k)-1)))});
   P.querySelectorAll('[data-vdot]').forEach(b=>b.onclick=()=>{const [id,n]=b.dataset.vdot.split('|'),it=vitById(id);vitAct(it,()=>vitSet(it,vitVal(it,k)===+n?+n-1:+n));buzz(10)});
@@ -6162,7 +6187,7 @@ function vplay(kind,soft){const S=state.sound,ev=/Undo$/.test(kind)?'del':/Goal|
     else if(kind==='vitAll'){[523,659,784,1047,1319,1568].forEach((f,i)=>tone(c,t0+i*.09,f,f*1.01,.32,'triangle',v*.8));[2093,2637,3136].forEach((f,i)=>tone(c,t0+.6+i*.05,f,f,.4,'sine',v*.3))}
   }catch(e){}}
 function vitAllDone(k){const a=vitActive();return a.length>0&&a.every(it=>vitStatus(it,k)!=='none')}
-function vitAct(it,fn,small){const k=keyOf(new Date()),lv=x=>({none:0,opt:0,min:1,full:2})[x]||0,num=()=>it.kind==='group'?vitGroupCl(it,k)+(vitVal(it,k)?.001:0):vitVal(it,k);
+function vitAct(it,fn,small){const k=vitDayKey(),lv=x=>({none:0,opt:0,min:1,full:2})[x]||0,num=()=>it.kind==='group'?vitGroupCl(it,k)+(vitVal(it,k)?.001:0):vitVal(it,k);
   const s0=lv(vitStatus(it,k)),n0=num(),a0=vitAllDone(k);vitWGoal=false;fn();const s1=lv(vitStatus(it,k)),n1=num(),a1=vitAllDone(k),g=it.kind==='group';
   if(n1<n0){vplay(g?'gelUndo':'pillUndo');buzz(8);return}
   if(n1===n0)return;
@@ -6199,7 +6224,7 @@ function vitCard(it,k){
   return '<div class="vcard '+st+'"><div class="vtop">'+pillSVG(it.form,it.c,it.c2)+'<div class="vn"><b>'+esc(it.name)+'</b><span>'+esc(t('vitDose',it.rec,it.min,vitUnit(it,it.rec)))+'</span></div><span class="vbadge '+st+'">'+v+'/'+it.rec+'</span>'+ed+'</div>'+
     '<div class="vrow"><button class="vbtn" data-vminus="'+it.id+'" aria-label="'+esc(t('vitMinus'))+'"'+(v?'':' disabled')+'>–</button><div class="vdots">'+dots+'</div><button class="vbtn plus" data-vplus="'+it.id+'">+1</button></div>'+(msg?'<p class="vmsg">'+esc(msg)+'</p>':'')+'</div>'}
 function vitWeek(){const days=[],now=new Date(),Ld=L();for(let n=6;n>=0;n--){const d=new Date(now);d.setDate(now.getDate()-n);days.push({k:keyOf(d),l:n?Ld.short[d.getDay()]:Ld.todayShort})}
-  let h='<p class="vslot">'+esc(t('vitWeekT'))+'</p><div class="vweek"><div class="vwr head"><span></span>'+days.map(d=>'<span>'+esc(d.l)+'</span>').join('')+'</div>';
+  let h='<p class="vslot">'+esc(t('vitWeekT'))+'</p><div class="vweek"><div class="vwr head"><span></span>'+days.map(d=>'<button type="button" class="vwh'+(d.k===vitDayKey()?' on':'')+'" data-vwk="'+d.k+'">'+esc(d.l)+'</button>').join('')+'</div>';
   state.vit.items.forEach(it=>{h+='<div class="vwr"><span class="vwn">'+esc(it.name)+'</span>'+days.map(d=>{const c=(it.created&&d.k<it.created)||!vitCounts(d.k)?'pre':vitPausedOn(it,d.k)?'pz':vitStatus(it,d.k);return '<i class="vc '+c+'"></i>'}).join('')+'</div>'});
   return h+'<div class="vleg"><span><i class="vc full"></i>'+esc(t('vitLegFull'))+'</span><span><i class="vc min"></i>'+esc(t('vitLegMin'))+'</span><span><i class="vc none"></i>'+esc(t('vitLegNone'))+'</span><span><i class="vc pz"></i>'+esc(t('vitLegPause'))+'</span></div></div>'}
 /* --- szerkesztő --- */
@@ -6527,6 +6552,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
+ {v:'14.23',hu:['📅 Korábbi napra is könyvelhetsz: a „+ Egyéni mennyiség vagy korábbi időpont” ablakban kiválaszthatod a napot (ma, tegnap, tegnapelőtt vagy bármelyik nap), és az Utolsó 7 nap oszlopára koppintva is hozzáadhatsz arra a napra.','💊 A Vitaminok oldalon felül nyilakkal lapozhatsz a korábbi napokra, vagy az Elmúlt 7 nap fejlécében egy napra koppintva odaugorhatsz, és utólag bejelölheted, mit vettél be.'],en:['📅 You can log to earlier days: in “+ Custom amount or earlier time” pick the day (today, yesterday, the day before or any date), or tap a bar in Last 7 days to add to that day.','💊 On the Vitamins page use the arrows at the top to go back to earlier days, or tap a day in Last 7 days, and tick off what you took afterwards.']},
  {v:'14.22',hu:['🔊 Vitaminok hangokkal: a bogyók koccannak, az aloés gél kortyol, a visszavonás „visszafelé” szól.','🎉 Csilingel, ha egy kiegészítőnél megvan a minimum vagy az ajánlott adag, és fanfár szól konfettivel, ha mára minden vitamin megvan. Ha az aloe miatt meglesz a napi folyadékcél, a cél-hang szól.'],en:['🔊 Vitamins with sounds: pills clink, aloe gel gulps, and undo plays “backwards”.','🎉 A chime when a supplement reaches its minimum or recommended dose, and a fanfare with confetti when all vitamins are done for today. If aloe completes your daily fluid goal, the goal sound plays.']},
  {v:'14.21',hu:['💧 Ha más italt (pl. kávét vagy teát) könyvelsz, utána a „Mit iszol?” magától visszaáll vízre. A Beállítások → Italok alatt kikapcsolható.'],en:['💧 After logging another drink (e.g. coffee or tea), “What are you drinking?” switches back to water by itself. You can turn this off under Settings → Drinks.']},
  {v:'14.20',hu:['📅 Vitaminok: a beállítás napja még nem számít bele a statisztikába és a sorozatokba – a számolás a következő naptól indul.'],en:['📅 Vitamins: the day you set it up doesn’t count in the stats and streaks yet – counting starts the next day.']},
@@ -6590,6 +6616,7 @@ function showDay(k){
   if(d.act||d.hot){const ex=document.createElement('div');ex.className='dextra';
     if(d.act){const s2=document.createElement('span');s2.textContent=t('dayAct',amt(d.act));ex.appendChild(s2)}
     if(d.hot){const s3=document.createElement('span');s3.textContent=t('dayHot');ex.appendChild(s3)}box.appendChild(ex)}
+  {const ab=document.createElement('button');ab.className='ghost';ab.style.width='100%';ab.style.marginTop='10px';ab.textContent='+ '+t('dayAddHere');ab.onclick=()=>{closeSheet('dayScrim');setTimeout(()=>openEditor(null,-1,k),200)};box.appendChild(ab)}
   $('dayOk').textContent=t('dayOk');$('dayOk').onclick=()=>closeSheet('dayScrim');
   openSheet('dayScrim',$('dayOk'));
 }
@@ -6649,7 +6676,7 @@ try{applyD3();render()}catch(e){}
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.22';
+const APP_VERSION='14.23';
 /* egyetlen frissítés: ha már folyamatban van, vagy az oldal már a legújabb, nem töltünk újra */
 let updReloading=false;
 function latestVer(){return fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>j&&j.v||null).catch(()=>null)}
