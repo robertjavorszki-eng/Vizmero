@@ -2,7 +2,7 @@
 <html lang="hu">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Lefety</title>
 <meta name="description" content="Lefety – egyszerű, reklámmentes folyadéknapló. Az adataid a telefonodon maradnak.">
 <meta name="theme-color" content="#eaf2f7">
@@ -172,8 +172,8 @@ h2{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mu
 .kpi b small{font-family:var(--body);font-size:.85rem;font-weight:600;color:var(--ink);margin-left:3px}
 .kpi em{font-style:normal;font-size:.78rem;color:var(--muted)}
 /* választható kijelzők */
-/* iPhone: dupla koppintásra ne nagyítson (a két ujjas nagyítás megmarad) */
-html,body{touch-action:manipulation}
+/* iPhone: se dupla koppintásra, se két ujjal ne nagyítson */
+html,body{touch-action:pan-x pan-y}
 button,a,input,select,label,.chip,.add,.day{touch-action:manipulation}
 .viz{cursor:pointer;-webkit-user-select:none;user-select:none;touch-action:pan-y}
 .viz.in-next{animation:vzNext .28s ease-out}
@@ -6555,7 +6555,7 @@ function renderStats(){
 statKey='';try{render()}catch(e){}
 /* --- újdonságok és adatvédelmi tájékoztató --- */
 const CHANGES=[
- {v:'14.24',hu:['👆 Dupla koppintásra már nem nagyít ki az oldal – így a gombokat gyorsan egymás után is nyomkodhatod. Két ujjal továbbra is nagyíthatsz.'],en:['👆 Double-tapping no longer zooms the page – so you can tap buttons quickly one after another. Pinch-to-zoom still works.']},
+ {v:'14.25',hu:['👆 Az oldal már nem nagyít ki – se dupla koppintásra, se két ujjal. Így a gombokat gyorsan egymás után is nyomkodhatod.'],en:['👆 The page no longer zooms – neither on double-tap nor with two fingers, so you can tap buttons quickly one after another.']},
  {v:'14.23',hu:['📅 Korábbi napra is könyvelhetsz: a „+ Egyéni mennyiség vagy korábbi időpont” ablakban kiválaszthatod a napot (ma, tegnap, tegnapelőtt vagy bármelyik nap), és az Utolsó 7 nap oszlopára koppintva is hozzáadhatsz arra a napra.','💊 A Vitaminok oldalon felül nyilakkal lapozhatsz a korábbi napokra, vagy az Elmúlt 7 nap fejlécében egy napra koppintva odaugorhatsz, és utólag bejelölheted, mit vettél be.'],en:['📅 You can log to earlier days: in “+ Custom amount or earlier time” pick the day (today, yesterday, the day before or any date), or tap a bar in Last 7 days to add to that day.','💊 On the Vitamins page use the arrows at the top to go back to earlier days, or tap a day in Last 7 days, and tick off what you took afterwards.']},
  {v:'14.22',hu:['🔊 Vitaminok hangokkal: a bogyók koccannak, az aloés gél kortyol, a visszavonás „visszafelé” szól.','🎉 Csilingel, ha egy kiegészítőnél megvan a minimum vagy az ajánlott adag, és fanfár szól konfettivel, ha mára minden vitamin megvan. Ha az aloe miatt meglesz a napi folyadékcél, a cél-hang szól.'],en:['🔊 Vitamins with sounds: pills clink, aloe gel gulps, and undo plays “backwards”.','🎉 A chime when a supplement reaches its minimum or recommended dose, and a fanfare with confetti when all vitamins are done for today. If aloe completes your daily fluid goal, the goal sound plays.']},
  {v:'14.21',hu:['💧 Ha más italt (pl. kávét vagy teát) könyvelsz, utána a „Mit iszol?” magától visszaáll vízre. A Beállítások → Italok alatt kikapcsolható.'],en:['💧 After logging another drink (e.g. coffee or tea), “What are you drinking?” switches back to water by itself. You can turn this off under Settings → Drinks.']},
@@ -6677,10 +6677,13 @@ $('drinkBack').onchange=()=>{state.drinkBack=$('drinkBack').checked;writeSetting
 $('d3PermBtn').onclick=()=>d3AskMotion(true);
 $('d3Btn').onchange=()=>{state.d3Btn=$('d3Btn').checked;applyTheme();render();writeSettings()};
 try{applyD3();render()}catch(e){}
+/* nagyítás tiltása iPhone-on: a Safari a két ujjas mozdulatot „gesture” eseményként adja */
+['gesturestart','gesturechange','gestureend'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
+document.addEventListener('touchmove',e=>{if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});
 /* tartós tárolás kérése és offline működés */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 /* új verzió keresése: ha a szerveren újabb van, betöltjük */
-const APP_VERSION='14.24';
+const APP_VERSION='14.25';
 /* egyetlen frissítés: ha már folyamatban van, vagy az oldal már a legújabb, nem töltünk újra */
 let updReloading=false;
 function latestVer(){return fetch('version.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>j&&j.v||null).catch(()=>null)}
