@@ -103,7 +103,7 @@ textarea.tx{min-height:72px;resize:none}
 .th b{display:block;font-size:15px}.th small{font-size:12px;color:var(--mut)}
 .msg{padding:40px 16px;text-align:center;color:var(--mut);font-size:15px}
 .card,.tr{cursor:pointer}.card:focus-visible,.tr:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-.lnk{display:inline-flex;align-items:center;gap:4px;color:var(--acc);font-weight:700;text-decoration:underline;text-underline-offset:2px;word-break:break-all}
+.lnk{display:inline-flex;align-items:center;gap:4px;color:var(--acc);font-weight:700;text-decoration:underline;text-underline-offset:2px;word-break:normal;overflow-wrap:anywhere}
 .lnk svg{stroke:currentColor;flex:none}
 .sec{height:48px;border-radius:14px;border:1.5px solid var(--acc);background:transparent;color:var(--acc);font-weight:800;font-size:15px}
 .sec:disabled,.go:disabled{opacity:.5}
@@ -135,12 +135,16 @@ textarea.tx{min-height:72px;resize:none}
 .pane .lb{width:52px;min-height:52px}
 .pane label.f,.pane .f>label,.pane .f>span{font-size:15px!important}
 .pane .seg button{height:46px;font-size:16px}
+.hdr{position:sticky;top:0;z-index:10;background:var(--bg);margin:-16px -16px 0;padding:12px 16px 10px;display:flex;flex-direction:column;gap:12px;transition:box-shadow .2s}
+.hdr.sh{box-shadow:0 6px 12px -8px rgba(0,0,0,.25)}
+#sub{display:flex;flex-direction:column;gap:10px}#sub:empty{display:none}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;font-size:14px;z-index:30}
 .toast[hidden]{display:none}
 </style>
 </head>
 <body>
 <div class="wrap">
+ <div class="hdr" id="hdr">
   <div class="top">
     <div class="t"><span>Családi terv</span><b id="yr">2027</b></div>
     <div style="display:flex;gap:8px">
@@ -151,8 +155,10 @@ textarea.tx{min-height:72px;resize:none}
   <div class="tabs" role="group" aria-label="Nézet">
     <button data-v="het">Hét</button><button data-v="ho">Hónap</button><button data-v="ev">Év</button><button data-v="sor">Sorok</button>
   </div>
+  <div id="sub"></div>
+ </div>
   <div id="main"><div class="msg">Betöltés…</div></div>
-  <p class="small">Felület v7 · 2026.11.07.</p>
+  <p class="small">Felület v8 · 2026.11.07.</p>
 </div>
 
 <div class="sheet" id="sheet" hidden><div class="pane" id="pane"></div></div>
@@ -238,13 +244,13 @@ function legend(){return '<div class="legend">'+WHO.map(function(w){return '<spa
 function vWeek(){
   var mon=add(S.cur,-wd(S.cur)),sun=add(mon,6),a=pd(mon),b=pd(sun);
   var rng=HN[a.getMonth()]+' '+a.getDate()+'. – '+(a.getMonth()!==b.getMonth()?HN[b.getMonth()]+' ':'')+b.getDate()+'.';
-  var h='<div class="nav"><button class="ib" data-mv="-7" aria-label="Előző hét">'+chev(1)+'</button><div class="c"><b>'+isoW(mon)+'. hét</b><span>'+rng+'</span>'+(S.map[S.today]?'<button class="ma" data-goto="today">Ma</button>':'')+'</div><button class="ib" data-mv="7" aria-label="Következő hét">'+chev(0)+'</button></div>'+legend();
+  var h='<div class="nav"><button class="ib" data-mv="-7" aria-label="Előző hét">'+chev(1)+'</button><div class="c"><b>'+isoW(mon)+'. hét</b><span>'+rng+'</span>'+(S.map[S.today]?'<button class="ma" data-goto="today">Ma</button>':'')+'</div><button class="ib" data-mv="7" aria-label="Következő hét">'+chev(0)+'</button></div>'+legend()+'<!--SPLIT-->';
   h+='<div class="wk">';for(var i=0;i<7;i++)h+=card(add(mon,i));h+='</div>';
   return '<div style="display:flex;flex-direction:column;gap:10px">'+h+'</div>';
 }
 function vMonth(){
   var c=pd(S.cur),y=c.getFullYear(),m=c.getMonth(),first=new Date(y,m,1),len=new Date(y,m+1,0).getDate(),lead=(first.getDay()+6)%7;
-  var h='<div class="nav"><button class="ib" data-mm="-1" aria-label="Előző hónap">'+chev(1)+'</button><div class="c"><b>'+HNB[m]+'</b>'+(S.map[S.today]?'<button class="ma" data-goto="today">Ma</button>':'')+'</div><button class="ib" data-mm="1" aria-label="Következő hónap">'+chev(0)+'</button></div>';
+  var h='<div class="nav"><button class="ib" data-mm="-1" aria-label="Előző hónap">'+chev(1)+'</button><div class="c"><b>'+HNB[m]+'</b>'+(S.map[S.today]?'<button class="ma" data-goto="today">Ma</button>':'')+'</div><button class="ib" data-mm="1" aria-label="Következő hónap">'+chev(0)+'</button></div><!--SPLIT-->';
   h+='<div class="box"><div class="mgrid">'+['H','K','Sze','Cs','P','Szo','V'].map(function(s){return '<span class="mh">'+s+'</span>'}).join('');
   for(var i=0;i<lead;i++)h+='<span class="mc blank"></span>';
   for(var d=1;d<=len;d++){
@@ -293,7 +299,7 @@ function vRows(){
   if(S.flt!=='gy')cols=cols.concat([['R','Robi szabi',56],['K','Krisz szabi',56],['h','Hotline',64]]);
   if(S.flt==='all')cols.push(['n','Megjegyzés',200]);
   var tpl=cols.map(function(c){return c[2]+'px'}).join(' ');
-  var h='<div class="flt"><button data-f="all" aria-pressed="'+(S.flt==='all')+'">Minden oszlop</button><button data-f="gy" aria-pressed="'+(S.flt==='gy')+'">Csak gyerekek</button><button data-f="sz" aria-pressed="'+(S.flt==='sz')+'">Csak szabi + hotline</button></div>';
+  var h='<div class="flt"><button data-f="all" aria-pressed="'+(S.flt==='all')+'">Minden oszlop</button><button data-f="gy" aria-pressed="'+(S.flt==='gy')+'">Csak gyerekek</button><button data-f="sz" aria-pressed="'+(S.flt==='sz')+'">Csak szabi + hotline</button></div><!--SPLIT-->';
   h+='<div class="tbl" id="tbl"><div class="tr h" style="grid-template-columns:'+tpl+'">'+cols.map(function(c){return '<span class="'+(c[0]==='dc'?'dc':(c[2]<70?'c':''))+'">'+c[1]+'</span>'}).join('')+'</div>';
   S.data.days.forEach(function(x){
     var d=pd(x.d),w=wd(x.d),bg=isHol(x)?'var(--hol)':(x.s?'var(--brk)':(w>=5?'var(--we)':'var(--card)'));
@@ -316,7 +322,9 @@ function render(){
   if(!S.data)return;
   document.querySelectorAll('.tabs button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.v===S.view)});
   var f={het:vWeek,ho:vMonth,ev:vYear,sor:vRows}[S.view]||vWeek;
-  $('main').innerHTML=f();
+  var out=f(),i=out.indexOf('<!--SPLIT-->'),sub='';
+  if(i>=0){var a=out.indexOf('>')+1;sub=out.slice(a,i);out=out.slice(0,a)+out.slice(i+12)}
+  $('sub').innerHTML=sub;$('main').innerHTML=out;
   if(S.view==='sor'){var t=$('tbl'),r=$('r'+S.cur);if(t&&r)t.scrollTop=Math.max(0,r.offsetTop-44)}
 }
 
@@ -438,6 +446,7 @@ document.addEventListener('click',function(e){
   if(t.id==='bRef'){toast('Frissítés…');load();return}
 });
 document.addEventListener('keydown',function(e){var t=e.target;if((e.key==='Enter'||e.key===' ')&&t&&t.dataset&&t.dataset.day&&t.getAttribute('role')==='button'){e.preventDefault();openDay(t.dataset.day)}});
+window.addEventListener('scroll',function(){var h=$('hdr');if(h)h.classList.toggle('sh',window.scrollY>4)},{passive:true});
 document.addEventListener('gesturestart',function(e){e.preventDefault()});
 load();
 })();
