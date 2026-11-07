@@ -43,8 +43,23 @@ function tulajdonos_() {
   } catch (e) { return false; }
 }
 
-function napObj_(sor, r, tz) {
+// szöveges mezők: oszlop indexe a G..N tartományban (0 = G)
+const SZOVEG_MEZOK = { k: 0, p: 1, o: 2, f: 3, n: 7 };
+
+function link_(rt) {
+  if (!rt) return '';
+  const egesz = rt.getLinkUrl();
+  if (egesz) return egesz;
+  const runs = rt.getRuns();
+  for (let i = 0; i < runs.length; i++) { const u = runs[i].getLinkUrl(); if (u) return u; }
+  return '';
+}
+
+function napObj_(sor, r, tz, rich) {
+  const L = {};
+  if (rich) Object.keys(SZOVEG_MEZOK).forEach(function (m) { const u = link_(rich[SZOVEG_MEZOK[m]]); if (u) L[m] = u; });
   return {
+    L: L,
     row: sor,
     d: Utilities.formatDate(r[0], tz, 'yyyy-MM-dd'),
     u: szoveg_(r[4]), s: szoveg_(r[5]),
@@ -68,8 +83,9 @@ function getData() {
   const tz = ss.getSpreadsheetTimeZone();
   const db = Math.max(0, sh.getLastRow() - ELSO_SOR + 1);
   const vals = db ? sh.getRange(ELSO_SOR, 1, db, 14).getValues() : [];
+  const rich = db ? sh.getRange(ELSO_SOR, 7, db, 8).getRichTextValues() : [];
   const days = [];
-  vals.forEach(function (r, i) { if (r[0] instanceof Date) days.push(napObj_(ELSO_SOR + i, r, tz)); });
+  vals.forEach(function (r, i) { if (r[0] instanceof Date) days.push(napObj_(ELSO_SOR + i, r, tz, rich[i])); });
   const k = keretek_(sh);
   return { owner: tulajdonos_(), days: days, robi: k.robi, krisz: k.krisz };
 }
@@ -87,10 +103,23 @@ function saveDay(row, d, x) {
       throw new Error('A táblázat sorai elcsúsztak – frissítsd az appot.');
     }
     const u = function (v) { return v === null || v === undefined ? '' : v; };
-    sh.getRange(row, 7, 1, 8).setValues([[u(x.k), u(x.p), u(x.o), u(x.f), u(x.R), u(x.K), u(x.h), u(x.n)]]);
+    const L = x.L || {};
+    const rt = function (m) {
+      const t = String(u(x[m]));
+      const url = /^https?:\/\//i.test(L[m] || '') ? L[m] : '';
+      const b = SpreadsheetApp.newRichTextValue().setText(t || url);
+      if (url && (t || url)) b.setLinkUrl(url);
+      return b.build();
+    };
+    sh.getRange(row, 7, 1, 4).setRichTextValues([[rt('k'), rt('p'), rt('o'), rt('f')]]);
+    sh.getRange(row, 11, 1, 3).setValues([[u(x.R), u(x.K), u(x.h)]]);
+    sh.getRange(row, 14).setRichTextValue(rt('n'));
     SpreadsheetApp.flush();
     const k = keretek_(sh);
-    return { day: napObj_(row, sh.getRange(row, 1, 1, 14).getValues()[0], tz), robi: k.robi, krisz: k.krisz };
+    return {
+      day: napObj_(row, sh.getRange(row, 1, 1, 14).getValues()[0], tz, sh.getRange(row, 7, 1, 8).getRichTextValues()[0]),
+      robi: k.robi, krisz: k.krisz
+    };
   } finally { lock.releaseLock(); }
 }
 
