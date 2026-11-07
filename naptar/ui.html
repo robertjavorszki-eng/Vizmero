@@ -102,6 +102,17 @@ textarea.tx{min-height:72px;resize:none}
 .th .sw{display:flex;gap:4px}.th .sw i{width:22px;height:22px;border-radius:7px;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
 .th b{display:block;font-size:15px}.th small{font-size:12px;color:var(--mut)}
 .msg{padding:40px 16px;text-align:center;color:var(--mut);font-size:15px}
+.card,.tr{cursor:pointer}.card:focus-visible,.tr:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.lnk{display:inline-flex;align-items:center;gap:4px;color:var(--acc);font-weight:700;text-decoration:underline;text-underline-offset:2px;word-break:break-all}
+.lnk svg{stroke:currentColor;flex:none}
+.sec{height:48px;border-radius:14px;border:1.5px solid var(--acc);background:transparent;color:var(--acc);font-weight:800;font-size:15px}
+.sec:disabled,.go:disabled{opacity:.5}
+.cf{display:flex;flex-wrap:wrap;gap:6px}
+.cf button{min-height:38px;max-width:100%;padding:6px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--bg);font-size:13px;font-weight:600;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cf button[aria-pressed="true"]{border:2px solid var(--acc);font-weight:800}
+.pk .mc{height:44px;justify-content:center}
+.pk .mc[aria-pressed="true"]{background:var(--acc);border-color:var(--acc)}.pk .mc[aria-pressed="true"] .n{color:#fff;font-weight:800}
+.pk .mc.src{opacity:.35}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;font-size:14px;z-index:30}
 .toast[hidden]{display:none}
 </style>
@@ -119,7 +130,7 @@ textarea.tx{min-height:72px;resize:none}
     <button data-v="het">Hét</button><button data-v="ho">Hónap</button><button data-v="ev">Év</button><button data-v="sor">Sorok</button>
   </div>
   <div id="main"><div class="msg">Betöltés…</div></div>
-  <p class="small">Felület v2 · 2026.11.07.</p>
+  <p class="small">Felület v3 · 2026.11.07.</p>
 </div>
 
 <div class="sheet" id="sheet" hidden><div class="pane" id="pane"></div></div>
@@ -148,6 +159,8 @@ function kd(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+(
 function add(k,n){var d=pd(k);d.setDate(d.getDate()+n);return kd(d)}
 function wd(k){return (pd(k).getDay()+6)%7}
 function isoW(k){var d=pd(k);d.setDate(d.getDate()+3-(d.getDay()+6)%7);var j=new Date(d.getFullYear(),0,4);return 1+Math.round(((d-j)/864e5-3+(j.getDay()+6)%7)/7)}
+var LI='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
+function lk(s){return esc(s).replace(/https?:\/\/[^\s<]+/g,function(u){var h=u.replace(/^https?:\/\/(www\.)?/,'').split(/[\/?#]/)[0];return '<a class="lnk" href="'+u+'" target="_blank" rel="noopener">'+LI+h+'</a>'})}
 function isHol(x){return x&&x.u&&!/munkanap/i.test(x.u)}
 function fmtN(v){return v==null?'':String(v).replace('.',',')}
 function toast(t){var e=$('toast');e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){e.hidden=true},2200)}
@@ -181,20 +194,20 @@ function tagsOf(x){
 }
 function itemsOf(x){
   var o=[];if(!x)return o;
-  WHO.forEach(function(w){if(x[w[0]])o.push('<div class="it"><i class="dot" style="background:var(--c'+w[2]+')"></i><span><b>'+w[1]+'</b> · '+esc(x[w[0]])+'</span></div>')});
+  WHO.forEach(function(w){if(x[w[0]])o.push('<div class="it"><i class="dot" style="background:var(--c'+w[2]+')"></i><span><b>'+w[1]+'</b> · '+lk(x[w[0]])+'</span></div>')});
   return o;
 }
 function dayBody(x){
   var t=tagsOf(x),i=itemsOf(x),h='';
   if(t.length)h+='<div class="tags">'+t.join('')+'</div>';
   h+=i.length?i.join(''):'<span class="empty">Nincs bejegyzés</span>';
-  if(x&&x.n)h+='<span class="note">'+esc(x.n)+'</span>';
+  if(x&&x.n)h+='<span class="note">'+lk(x.n)+'</span>';
   return h;
 }
 function card(k){
   var x=S.map[k],d=pd(k),w=wd(k);
   var cls='card'+(w>=5?' we':'')+(k===S.today?' today':'');
-  return '<button class="'+cls+'" data-day="'+k+'"><div class="dcol"><span>'+NR[d.getDay()]+'</span><b class="'+(isHol(x)||d.getDay()===0?'red':'')+'">'+d.getDate()+'</b></div><div class="body">'+dayBody(x)+'</div></button>';
+  return '<div role="button" tabindex="0" class="'+cls+'" data-day="'+k+'"><div class="dcol"><span>'+NR[d.getDay()]+'</span><b class="'+(isHol(x)||d.getDay()===0?'red':'')+'">'+d.getDate()+'</b></div><div class="body">'+dayBody(x)+'</div></div>';
 }
 var chev=function(l){return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+(l?'M15 5l-7 7 7 7':'M9 5l7 7-7 7')+'"/></svg>'};
 function legend(){return '<div class="legend">'+WHO.map(function(w){return '<span class="chip"><i class="dot" style="background:var(--c'+w[2]+')"></i>'+w[1]+'</span>'}).join('')+'</div>'}
@@ -262,15 +275,15 @@ function vRows(){
   S.data.days.forEach(function(x){
     var d=pd(x.d),w=wd(x.d),bg=isHol(x)?'var(--hol)':(x.s?'var(--brk)':(w>=5?'var(--we)':'var(--card)'));
     if(isHol(x)||x.s){bg=isHol(x)?'var(--hol)':'color-mix(in srgb,var(--brk) 60%,var(--card))'}
-    h+='<button class="tr'+(x.d===S.today?' today':'')+'" data-day="'+x.d+'" id="r'+x.d+'" style="grid-template-columns:'+tpl+';background:'+bg+';border-left:0;border-right:0;border-bottom:0;padding:0;text-align:left;width:100%'+(d.getDate()===1?';border-top:2px solid var(--acc)':'')+'">';
+    h+='<div role="button" tabindex="0" class="tr'+(x.d===S.today?' today':'')+'" data-day="'+x.d+'" id="r'+x.d+'" style="grid-template-columns:'+tpl+';background:'+bg+';border-left:0;border-right:0;border-bottom:0;padding:0;text-align:left;width:100%'+(d.getDate()===1?';border-top:2px solid var(--acc)':'')+'">';
     cols.forEach(function(c){
       if(c[0]==='dc'){h+='<span class="dc" style="background:'+bg+'"><b>'+('0'+(d.getMonth()+1)).slice(-2)+'.'+('0'+d.getDate()).slice(-2)+'.</b><small>'+NR[d.getDay()]+'</small>'+(x.u?'<span class="hl">'+esc(x.u)+'</span>':'')+'</span>';return}
       var v=x[c[0]];
       if(c[0]==='R'||c[0]==='K'){h+='<span class="c" style="'+(v?'background:var(--'+(c[0]==='R'?'rs':'ks')+');color:var(--'+(c[0]==='R'?'rs':'ks')+'I)':'')+'">'+(v?'✓':'')+'</span>';return}
       if(c[0]==='h'){h+='<span class="c" style="'+(v?'background:var(--hot);color:var(--hotI)':'')+'">'+esc(v)+'</span>';return}
-      h+='<span style="'+(v&&c[3]?'background:var(--'+c[3]+')':'')+(c[0]==='n'?';color:var(--mut)':'')+'">'+esc(v)+'</span>';
+      h+='<span style="'+(v&&c[3]?'background:var(--'+c[3]+')':'')+(c[0]==='n'?';color:var(--mut)':'')+'">'+lk(v)+'</span>';
     });
-    h+='</button>';
+    h+='</div>';
   });
   h+='</div><span class="small">A dátum oszlop helyben marad, a többit oldalra húzod.</span>';
   return '<div style="display:flex;flex-direction:column;gap:12px">'+h+'</div>';
@@ -284,8 +297,8 @@ function render(){
   if(S.view==='sor'){var t=$('tbl'),r=$('r'+S.cur);if(t&&r)t.scrollTop=Math.max(0,r.offsetTop-44)}
 }
 
-function openDay(k){
-  var x=S.map[k];if(!x)return;S.cur=k;
+function openDay(k,ov){
+  var x=S.map[k];if(!x)return;S.cur=k;if(ov)x=Object.assign({},x,ov);
   var d=pd(k),own=S.data.owner;
   var h='<span class="grab"></span><div class="ph"><div style="display:flex;flex-direction:column;gap:6px"><b>'+HNB[d.getMonth()]+' '+d.getDate()+'., '+NN[d.getDay()]+'</b>';
   var tg=[];if(x.u)tg.push('<span class="tag '+(isHol(x)?'t-hol':'t-wd')+'">'+esc(x.u)+'</span>');if(x.s)tg.push('<span class="tag t-brk">'+esc(x.s)+'</span>');
@@ -298,19 +311,66 @@ function openDay(k){
     h+='<div class="two"><div class="f" style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--mut)">Robi szabi</span>'+seg('R',[['','–'],['1','Szabi']],x.R?'1':'')+'</div><div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--mut)">Krisz szabi</span>'+seg('K',[['','–'],['1','Szabi']],x.K?'1':'')+'</div></div>';
     h+='<div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--mut)">Robi hotline</span>'+seg('h',[['','nincs'],['H','H'],['H1','H1'],['H2','H2']],x.h)+'</div>';
     h+='<label class="f">Megjegyzés / terv<textarea class="tx" data-k="n">'+esc(x.n)+'</textarea></label>';
-    h+='<button class="go" id="bSave">Mentés a táblázatba</button>';
+    h+='<span class="small" style="text-align:left;margin-top:-6px">Linket (https://…) bármelyik mezőbe írhatsz – az appban koppintható lesz.</span>';
+    h+='<button class="go" id="bSave">Mentés a táblázatba</button><button class="sec" id="bCopy">Mentés és másolás más napokra</button>';
   }
   $('pane').innerHTML=h;$('sheet').hidden=false;
 }
 function closeSheet(){$('sheet').hidden=true}
-function save(){
-  var k=S.cur,x=S.map[k],p=$('pane'),o={};
+function formVals(){
+  var p=$('pane'),o={};
   p.querySelectorAll('[data-k]').forEach(function(e){o[e.dataset.k]=e.value.trim()});
   p.querySelectorAll('[data-seg]').forEach(function(s){var b=s.querySelector('[aria-pressed="true"]');var v=b?b.dataset.val:'';o[s.dataset.seg]=(s.dataset.seg==='h')?v:(v?1:null)});
+  return o;
+}
+function putDay(r){
+  S.map[r.day.d]=r.day;var i=S.data.days.findIndex(function(z){return z.d===r.day.d});if(i>=0)S.data.days[i]=r.day;
+  S.data.robi=r.robi;S.data.krisz=r.krisz;
+}
+function call(fn,args){return new Promise(function(res,rej){var g=google.script.run.withSuccessHandler(res).withFailureHandler(rej);g[fn].apply(g,args)})}
+var CF=[['k','Kristóf'],['p','Panna'],['o','Oli'],['f','Családi program'],['R','Robi szabi'],['K','Krisz szabi'],['h','Robi hotline'],['n','Megjegyzés']];
+function openCopy(){
+  var o=formVals(),f={};CF.forEach(function(c){if(o[c[0]])f[c[0]]=true});
+  S.cp={src:S.cur,o:o,sel:{},m:S.cur.slice(0,7),f:f,busy:false};renderCopy();
+}
+function renderCopy(){
+  var c=S.cp,sd=pd(c.src),y=+c.m.slice(0,4),m=+c.m.slice(5)-1;
+  var h='<span class="grab"></span><div class="ph"><div style="display:flex;flex-direction:column;gap:4px"><b>Másolás más napokra</b><span style="font-size:13px;color:var(--mut)">Innen: '+HN[sd.getMonth()]+' '+sd.getDate()+'., '+NN[sd.getDay()]+'</span></div><button class="ib" data-close aria-label="Bezárás"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';
+  var any=CF.filter(function(q){return c.o[q[0]]});
+  if(!any.length){h+='<p class="empty">Ezen a napon még nincs mit másolni – előbb írj be valamit.</p><button class="sec" id="bBack">Vissza</button>';$('pane').innerHTML=h;return}
+  h+='<span class="sect">Mit másoljon?</span><div class="cf">'+any.map(function(q){var v=c.o[q[0]];var t=(q[0]==='R'||q[0]==='K')?'szabi':String(v);return '<button type="button" data-cf="'+q[0]+'" aria-pressed="'+!!c.f[q[0]]+'">'+q[1]+': '+esc(t.length>28?t.slice(0,27)+'…':t)+'</button>'}).join('')+'</div>';
+  h+='<span class="small" style="text-align:left">A kijelölt mezők felülírják a célnapokon lévőt, a többi mező marad.</span>';
+  h+='<span class="sect">Melyik napokra?</span><div class="nav"><button class="ib" data-cm="-1" aria-label="Előző hónap">'+chev(1)+'</button><div class="c"><b>'+y+'. '+HN[m]+'</b></div><button class="ib" data-cm="1" aria-label="Következő hónap">'+chev(0)+'</button></div>';
+  var first=new Date(y,m,1),len=new Date(y,m+1,0).getDate(),lead=(first.getDay()+6)%7;
+  h+='<div class="box pk"><div class="mgrid">'+['H','K','Sze','Cs','P','Szo','V'].map(function(q){return '<span class="mh">'+q+'</span>'}).join('');
+  for(var i=0;i<lead;i++)h+='<span class="mc blank"></span>';
+  for(var d=1;d<=len;d++){var k=kd(new Date(y,m,d)),x=S.map[k],w=(lead+d-1)%7;
+    if(!x){h+='<span class="mc blank"><span class="n" style="color:var(--mut)">'+d+'</span></span>';continue}
+    h+='<button type="button" class="mc'+(w>=5?' we':'')+(k===c.src?' src':'')+'" data-cd="'+k+'" aria-pressed="'+!!c.sel[k]+'"'+(k===c.src?' disabled':'')+' aria-label="'+HN[m]+' '+d+'"><span class="n">'+d+'</span></button>'}
+  h+='</div></div>';
+  var n=Object.keys(c.sel).length,nf=Object.keys(c.f).filter(function(q){return c.f[q]}).length;
+  h+='<button class="go" id="bDoCopy"'+(n&&nf&&!c.busy?'':' disabled')+'>'+(c.busy?c.busy:(n?'Másolás '+n+' napra':'Jelölj ki napokat'))+'</button><button class="sec" id="bBack"'+(c.busy?' disabled':'')+'>Vissza</button>';
+  $('pane').innerHTML=h;
+}
+function doCopy(){
+  var c=S.cp,ts=Object.keys(c.sel).sort(),i=0;
+  c.busy='Mentés…';renderCopy();
+  call('saveDay',[S.map[c.src].row,c.src,c.o]).then(function(r){putDay(r);
+    function next(){
+      if(i>=ts.length){var n=ts.length;S.cp=null;closeSheet();render();toast('Átmásolva '+n+' napra');return}
+      var t=ts[i++],x=S.map[t],b={k:x.k,p:x.p,o:x.o,f:x.f,R:x.R,K:x.K,h:x.h,n:x.n};
+      Object.keys(c.f).forEach(function(q){if(c.f[q])b[q]=c.o[q]});
+      c.busy='Másolás… '+i+'/'+ts.length;renderCopy();
+      return call('saveDay',[x.row,t,b]).then(function(r){putDay(r);return next()});
+    }
+    return next();
+  }).catch(function(e){c.busy=false;renderCopy();toast('Hiba: '+(e&&e.message||e))});
+}
+function save(){
+  var k=S.cur,x=S.map[k],o=formVals();
   var btn=$('bSave');btn.disabled=true;btn.textContent='Mentés…';
   google.script.run.withSuccessHandler(function(r){
-    S.map[k]=r.day;var i=S.data.days.findIndex(function(z){return z.d===k});if(i>=0)S.data.days[i]=r.day;
-    S.data.robi=r.robi;S.data.krisz=r.krisz;closeSheet();render();toast('Elmentve a táblázatba');
+    putDay(r);closeSheet();render();toast('Elmentve a táblázatba');
   }).withFailureHandler(function(e){btn.disabled=false;btn.textContent='Mentés a táblázatba';toast('Hiba: '+(e&&e.message||e))}).saveDay(x.row,k,o);
 }
 function openTheme(){
@@ -321,9 +381,10 @@ function openTheme(){
 }
 
 document.addEventListener('click',function(e){
-  var t=e.target.closest('button');
-  if(e.target.id==='sheet'){closeSheet();return}
-  if(!t)return;
+  if(e.target.closest('a.lnk'))return;
+  var t=e.target.closest('button,[data-day]');
+  if(e.target.id==='sheet'){if(!(S.cp&&S.cp.busy))closeSheet();return}
+  if(!t||t.disabled)return;
   if(t.dataset.v){S.view=t.dataset.v;ls('nt_view',S.view);render();window.scrollTo(0,0);return}
   if(t.dataset.mv){var n=add(S.cur,+t.dataset.mv);if(S.map[n]||S.map[add(n,-wd(n))]||S.map[add(n,6-wd(n))]){S.cur=S.map[n]?n:(+t.dataset.mv>0?add(n,-wd(n)):add(n,6-wd(n)));render()}return}
   if(t.dataset.mm){var c=pd(S.cur),m=new Date(c.getFullYear(),c.getMonth()+(+t.dataset.mm),1),k=kd(m);if(S.map[k]){S.cur=k;render()}return}
@@ -335,10 +396,17 @@ document.addEventListener('click',function(e){
   if(t.hasAttribute('data-close')){closeSheet();return}
   if(t.dataset.val!=null){t.parentNode.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',b===t)});return}
   if(t.id==='bSave'){save();return}
+  if(t.id==='bCopy'){openCopy();return}
+  if(t.id==='bBack'){var c=S.cp;S.cp=null;openDay(c.src,c.o);return}
+  if(t.id==='bDoCopy'){doCopy();return}
+  if(t.dataset.cf){S.cp.f[t.dataset.cf]=!S.cp.f[t.dataset.cf];renderCopy();return}
+  if(t.dataset.cd){if(S.cp.sel[t.dataset.cd])delete S.cp.sel[t.dataset.cd];else S.cp.sel[t.dataset.cd]=1;renderCopy();return}
+  if(t.dataset.cm){var cm=pd(S.cp.m+'-01');cm.setMonth(cm.getMonth()+(+t.dataset.cm));var mk=kd(cm).slice(0,7);if(S.data.days.some(function(z){return z.d.slice(0,7)===mk})){S.cp.m=mk;renderCopy()}return}
   if(t.dataset.themePick){setTheme(t.dataset.themePick);openTheme();return}
   if(t.id==='bTheme'){openTheme();return}
   if(t.id==='bRef'){toast('Frissítés…');load();return}
 });
+document.addEventListener('keydown',function(e){var t=e.target;if((e.key==='Enter'||e.key===' ')&&t&&t.dataset&&t.dataset.day&&t.getAttribute('role')==='button'){e.preventDefault();openDay(t.dataset.day)}});
 document.addEventListener('gesturestart',function(e){e.preventDefault()});
 load();
 })();
