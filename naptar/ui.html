@@ -126,6 +126,9 @@ textarea.tx{min-height:72px;resize:none}
  .box:not(.pk){max-width:900px;width:100%;margin-left:auto;margin-right:auto}
 }
 @media (orientation:landscape) and (max-height:500px){.tbl{max-height:none}}
+.pane>*{flex-shrink:0}
+.pane .go{min-height:58px;font-size:18px;border-radius:16px}
+.pane .sec{min-height:54px;font-size:17px;border-radius:16px}
 .pane input.tx,.pane textarea.tx{font-size:19px;min-height:52px;padding:12px 14px;line-height:1.3}
 .pane textarea.tx{min-height:84px}
 .pane .ui{font-size:16px!important;min-height:46px!important}
@@ -149,7 +152,7 @@ textarea.tx{min-height:72px;resize:none}
     <button data-v="het">Hét</button><button data-v="ho">Hónap</button><button data-v="ev">Év</button><button data-v="sor">Sorok</button>
   </div>
   <div id="main"><div class="msg">Betöltés…</div></div>
-  <p class="small">Felület v6 · 2026.11.07.</p>
+  <p class="small">Felület v7 · 2026.11.07.</p>
 </div>
 
 <div class="sheet" id="sheet" hidden><div class="pane" id="pane"></div></div>
