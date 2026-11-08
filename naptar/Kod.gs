@@ -55,11 +55,29 @@ function link_(rt) {
   return '';
 }
 
+// soronkénti linkek: [1. sor linkje, 2. sor linkje, ...]
+function sorLinkek_(rt) {
+  if (!rt) return [];
+  const t = rt.getText(), out = [];
+  rt.getRuns().forEach(function (run) {
+    const u = run.getLinkUrl();
+    if (!u) return;
+    const sor = t.slice(0, run.getStartIndex()).split('\n').length - 1;
+    if (!out[sor]) out[sor] = u;
+  });
+  for (let i = 0; i < out.length; i++) if (!out[i]) out[i] = '';
+  return out;
+}
+
 function napObj_(sor, r, tz, rich) {
-  const L = {};
-  if (rich) Object.keys(SZOVEG_MEZOK).forEach(function (m) { const u = link_(rich[SZOVEG_MEZOK[m]]); if (u) L[m] = u; });
+  const L = {}, LL = {};
+  if (rich) Object.keys(SZOVEG_MEZOK).forEach(function (m) {
+    const rt = rich[SZOVEG_MEZOK[m]];
+    const u = link_(rt); if (u) L[m] = u;
+    const ll = sorLinkek_(rt); if (ll.length) LL[m] = ll;
+  });
   return {
-    L: L,
+    L: L, LL: LL,
     row: sor,
     d: Utilities.formatDate(r[0], tz, 'yyyy-MM-dd'),
     u: szoveg_(r[4]), s: szoveg_(r[5]),
@@ -104,7 +122,23 @@ function saveDay(row, d, x) {
     }
     const u = function (v) { return v === null || v === undefined ? '' : v; };
     const L = x.L || {};
+    const E = x.E || {};
     const rt = function (m) {
+      if (Array.isArray(E[m])) {           // több program soronként, saját linkkel
+        const sorok = E[m].map(function (e) {
+          const ido = e.s ? e.s + (e.e ? '–' + e.e : '') + ' ' : '';
+          return { ido: ido, t: String(e.t || ''), u: /^https?:\/\//i.test(e.u || '') ? e.u : '' };
+        });
+        const szoveg = sorok.map(function (q) { return q.ido + q.t; }).join('\n');
+        const b = SpreadsheetApp.newRichTextValue().setText(szoveg);
+        let poz = 0;
+        sorok.forEach(function (q) {
+          const kezd = poz + q.ido.length, veg = poz + q.ido.length + q.t.length;
+          if (q.u && veg > kezd) b.setLinkUrl(kezd, veg, q.u);
+          poz += q.ido.length + q.t.length + 1;
+        });
+        return b.build();
+      }
       const t = String(u(x[m]));
       const url = /^https?:\/\//i.test(L[m] || '') ? L[m] : '';
       const b = SpreadsheetApp.newRichTextValue().setText(t || url);
@@ -235,4 +269,26 @@ function saveLists(l) {
     sh.getRange(2, 1, max, 4).setValues(sorok);
   }
   return listak_(ss);
+}
+
+// ---- Általános lap-olvasás/írás: így a későbbi újításokhoz nem kell kódot cserélni ----
+function lapOlvas(nev) {
+  const sh = tabla_().getSheetByName(nev);
+  if (!sh || sh.getLastRow() < 1) return [];
+  return sh.getRange(1, 1, sh.getLastRow(), Math.max(1, sh.getLastColumn())).getDisplayValues();
+}
+
+function lapIr(nev, ertekek) {
+  if (!tulajdonos_()) throw new Error('Csak a táblázat tulajdonosa szerkeszthet.');
+  if (nev === LAP) throw new Error('Az Évesterv lapot csak napokra bontva lehet írni.');
+  const ss = tabla_();
+  let sh = ss.getSheetByName(nev);
+  if (!sh) sh = ss.insertSheet(nev);
+  sh.clearContents();
+  if (ertekek && ertekek.length) {
+    const sz = Math.max.apply(null, ertekek.map(function (r) { return r.length; }));
+    const sorok = ertekek.map(function (r) { const o = r.slice(); while (o.length < sz) o.push(''); return o; });
+    sh.getRange(1, 1, sorok.length, sz).setValues(sorok);
+  }
+  return lapOlvas(nev);
 }
