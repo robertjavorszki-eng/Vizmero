@@ -138,6 +138,13 @@ textarea.tx{min-height:72px;resize:none}
 .hdr{position:sticky;top:0;z-index:10;background:var(--bg);margin:-16px -16px 0;padding:12px 16px 10px;display:flex;flex-direction:column;gap:12px;transition:box-shadow .2s}
 .hdr.sh{box-shadow:0 6px 12px -8px rgba(0,0,0,.25)}
 #sub{display:flex;flex-direction:column;gap:10px}#sub:empty{display:none}
+.dd{position:relative;flex:none;display:flex}
+.dd select{position:absolute;inset:0;width:100%;height:100%;opacity:0;font-size:16px;cursor:pointer}
+.le{display:flex;flex-direction:column;gap:6px}
+.lr{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:6px 6px 6px 12px;font-size:16px}
+.lr span{flex:1;min-width:0;overflow-wrap:anywhere}.lr small{color:var(--mut);font-size:12px;white-space:nowrap}
+.lr button{width:40px;height:40px;border-radius:10px;border:0;background:transparent;color:var(--mut);font-size:20px;flex:none}
+.lr.add{background:transparent;border-style:dashed}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;font-size:14px;z-index:30}
 .toast[hidden]{display:none}
 </style>
@@ -158,7 +165,7 @@ textarea.tx{min-height:72px;resize:none}
   <div id="sub"></div>
  </div>
   <div id="main"><div class="msg">Betöltés…</div></div>
-  <p class="small">Felület v8 · 2026.11.07.</p>
+  <p class="small">Felület v9 · 2026.11.08.</p>
 </div>
 
 <div class="sheet" id="sheet" hidden><div class="pane" id="pane"></div></div>
@@ -190,6 +197,18 @@ function isoW(k){var d=pd(k);d.setDate(d.getDate()+3-(d.getDay()+6)%7);var j=new
 var LI='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
 function lk(s){return esc(s).replace(/https?:\/\/[^\s<]+/g,function(u){var h=u.replace(/^https?:\/\/(www\.)?/,'').split(/[\/?#]/)[0];return '<a class="lnk" href="'+u+'" target="_blank" rel="noopener">'+LI+h+'</a>'})}
 function tl(x,key){var t=x[key],u=x.L&&x.L[key];if(!u)return lk(t);return '<a class="lnk" href="'+esc(u)+'" target="_blank" rel="noopener">'+LI+esc(t||u.replace(/^https?:\/\/(www\.)?/,'').split(/[\/?#]/)[0])+'</a>'}
+function freq(key){var m={};S.data.days.forEach(function(x){var t=String(x[key]||'').trim();if(!t)return;var k=t.toLowerCase();if(!m[k])m[k]={t:t,n:0,u:''};m[k].n++;if(x.L&&x.L[key])m[k].u=x.L[key]});return m}
+function sugg(key){var m=freq(key),list=(S.data.lists&&S.data.lists[key])||[],inL={};
+  var saved=list.map(function(t){var f=m[t.toLowerCase()]||{};inL[t.toLowerCase()]=1;return {t:t,n:f.n||0,u:f.u||''}}).sort(function(a,b){return b.n-a.n});
+  var others=Object.keys(m).filter(function(k){return !inL[k]&&!simOf(m[k].t,list)}).map(function(k){return m[k]}).sort(function(a,b){return b.n-a.n}).slice(0,15);
+  return {saved:saved,others:others}}
+var DDI='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M4 12h10M4 18h7"/><path d="M16 15l3 3 3-3"/></svg>';
+function ddHtml(key){var g=sugg(key);S.dd=S.dd||{};S.dd[key]=g;
+  var o='<option value="">Válassz a listából…</option>';
+  if(g.saved.length)o+='<optgroup label="Mentett lista">'+g.saved.map(function(x,i){return '<option value="s:'+i+'">'+esc(x.t)+(x.n?' ('+x.n+'×)':'')+'</option>'}).join('')+'</optgroup>';
+  if(g.others.length)o+='<optgroup label="Korábban beírtak">'+g.others.map(function(x,i){return '<option value="o:'+i+'">'+esc(x.t)+' ('+x.n+'×)</option>'}).join('')+'</optgroup>';
+  o+='<optgroup label="––––––"><option value="__edit">Lista szerkesztése…</option></optgroup>';
+  return '<span class="dd"><span class="lb" aria-hidden="true">'+DDI+'</span><select data-dd="'+key+'" aria-label="Választás a listából">'+o+'</select></span>'}
 function isHol(x){return x&&x.u&&!/munkanap/i.test(x.u)}
 function fmtN(v){return v==null?'':String(v).replace('.',',')}
 function toast(t){var e=$('toast');e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){e.hidden=true},2200)}
@@ -341,14 +360,14 @@ function openDay(k,ov){
     function fld(key,label,area){var u=L[key]||'';
       return '<div class="f" style="display:flex;flex-direction:column;gap:6px"><label for="in_'+key+'" style="font-size:13px;font-weight:700;color:var(--mut);display:flex;align-items:center;gap:6px">'+label+'</label><div class="fl">'+
       (area?'<textarea class="tx" id="in_'+key+'" data-k="'+key+'">'+esc(x[key])+'</textarea>':'<input class="tx" id="in_'+key+'" data-k="'+key+'" value="'+esc(x[key])+'" autocomplete="off">')+
-      '<button type="button" class="lb" data-lt="'+key+'" aria-pressed="'+!!u+'" aria-label="Link hozzáadása">'+LI.replace('width="14" height="14"','width="20" height="20"')+'</button></div>'+
+      (key!=='n'?ddHtml(key):'')+'<button type="button" class="lb" data-lt="'+key+'" aria-pressed="'+!!u+'" aria-label="Link hozzáadása">'+LI.replace('width="14" height="14"','width="20" height="20"')+'</button></div>'+
       '<input class="tx ui" data-u="'+key+'" type="url" inputmode="url" autocapitalize="off" placeholder="Link: https://…" value="'+esc(u)+'"'+(u?'':' hidden')+'></div>'}
     WHO.forEach(function(w){h+=fld(w[0],'<i class="dot" style="background:var(--c'+w[2]+')"></i>'+(w[0]==='f'?'Családi program':w[1]),false)});
     function seg(key,opts,cur){return '<div class="seg" data-seg="'+key+'" style="grid-template-columns:repeat('+opts.length+',minmax(0,1fr))">'+opts.map(function(o){return '<button type="button" data-val="'+o[0]+'" aria-pressed="'+(String(cur==null?'':cur)===o[0])+'">'+o[1]+'</button>'}).join('')+'</div>'}
     h+='<div class="two"><div class="f" style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--mut)">Robi szabi</span>'+seg('R',[['','–'],['1','Szabi']],x.R?'1':'')+'</div><div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--mut)">Krisz szabi</span>'+seg('K',[['','–'],['1','Szabi']],x.K?'1':'')+'</div></div>';
     h+='<div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--mut)">Robi hotline</span>'+seg('h',[['','nincs'],['H','H'],['H1','H1'],['H2','H2']],x.h)+'</div>';
     h+=fld('n','Megjegyzés / terv',true);
-    h+='<span class="small" style="text-align:left;margin-top:-6px">A lánc ikonnal linket adhatsz a beírt szöveghez – az appban és a táblázatban is kattintható lesz.</span>';
+    h+='<span class="small" style="text-align:left;margin-top:-6px">A lista ikonnal a gyakori bejegyzésekből választhatsz, a lánc ikonnal linket adhatsz a szöveghez.</span>';
     h+='<button class="go" id="bSave">Mentés a táblázatba</button><button class="sec" id="bCopy">Mentés és másolás más napokra</button>';
   }
   $('pane').innerHTML=h;$('sheet').hidden=false;
@@ -411,6 +430,39 @@ function save(){
     putDay(r);closeSheet();render();toast('Elmentve a táblázatba');
   }).withFailureHandler(function(e){btn.disabled=false;btn.textContent='Mentés a táblázatba';toast('Hiba: '+(e&&e.message||e))}).saveDay(x.row,k,o);
 }
+var LW=[['k','Kristóf'],['p','Panna'],['o','Oli'],['f','Család']];
+function openLists(ret,tab){
+  S.lret=ret||S.lret||null;
+  if(!S.data.lists){$('pane').innerHTML='<span class="grab"></span><div class="ph"><b>Mentett listák</b><button class="ib" data-close aria-label="Bezárás">✕</button></div><p>A listák mentéséhez frissíteni kell az Apps Script kódot (Kód.gs). Addig a korábban beírt bejegyzések közül tudsz választani.</p>'+(S.lret?'<button class="sec" id="bLback">Vissza</button>':'');$('sheet').hidden=false;return}
+  if(!S.ed)S.ed=JSON.parse(JSON.stringify(S.data.lists));
+  S.edTab=tab||S.edTab||'k';renderLists();$('sheet').hidden=false;
+}
+function renderLists(){
+  var key=S.edTab,list=S.ed[key]||[],m=freq(key),inL={};list.forEach(function(t){inL[t.toLowerCase()]=1});
+  if(S.lconf){var c=S.lconf,ex=list[c.i];
+    $('pane').innerHTML='<span class="grab"></span><div class="ph"><b>Hasonló bejegyzés</b></div><p style="margin:0">Már van a listán egy hasonló:</p><div class="lr"><span><b>'+esc(ex)+'</b></span><small>meglévő</small></div><div class="lr"><span><b>'+esc(c.t)+'</b></span><small>új</small></div><p style="margin:0;color:var(--mut);font-size:14px">Mi legyen?</p>'+
+    '<button class="sec" data-lc="keep">Egyesítés: „'+esc(ex)+'” marad</button><button class="sec" data-lc="new">Egyesítés: „'+esc(c.t)+'” legyen</button><button class="sec" data-lc="both">Mindkettő kell</button>'+((S.lq&&S.lq.length)?'<span class="small">Még '+S.lq.length+' bejegyzés vár a felvételre.</span>':'');return}
+  var h='<span class="grab"></span><div class="ph"><div style="display:flex;flex-direction:column;gap:4px"><b>Mentett listák</b><span style="font-size:13px;color:var(--mut)">A táblázat „Listák” lapján is szerkesztheted.</span></div><button class="ib" data-close aria-label="Bezárás"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';
+  h+='<div class="seg" style="grid-template-columns:repeat(4,minmax(0,1fr))">'+LW.map(function(w){return '<button type="button" data-lt2="'+w[0]+'" aria-pressed="'+(w[0]===key)+'">'+w[1]+'</button>'}).join('')+'</div>';
+  h+='<div class="le">'+(list.length?list.map(function(t,i){var n=(m[t.toLowerCase()]||{}).n||0;return '<div class="lr"><span>'+esc(t)+'</span><small>'+(n?n+'×':'')+'</small><button type="button" data-ld="'+i+'" aria-label="Törlés">✕</button></div>'}).join(''):'<p class="empty" style="margin:0">Még üres a lista.</p>');
+  h+='<div class="lr add"><input class="tx" id="lnew" placeholder="Új bejegyzés…" style="border:0;background:transparent;min-height:40px;padding:0;font-size:16px"><button type="button" id="bLadd" aria-label="Hozzáadás" style="color:var(--acc);font-weight:800">+</button></div></div>';
+  var oth=Object.keys(m).filter(function(k){return !inL[k]&&!simOf(m[k].t,list)}).map(function(k){return m[k]}).sort(function(a,b){return b.n-a.n}).slice(0,12);
+  if(oth.length)h+='<span class="sect">Eddig beírtak – koppints a felvételhez</span><button type="button" class="sec" id="bLall" style="min-height:44px">Mind felvétele a listára ('+Object.keys(m).filter(function(k){return !inL[k]&&!simOf(m[k].t,list)}).length+')</button><div class="cf">'+oth.map(function(x){return '<button type="button" data-la="'+esc(x.t)+'">+ '+esc(x.t)+' ('+x.n+'×)</button>'}).join('')+'</div>';
+  h+='<button class="go" id="bLsave">Listák mentése</button>'+(S.lret?'<button class="sec" id="bLback">Vissza a naphoz</button>':'');
+  $('pane').innerHTML=h;
+}
+function nz(s){return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'')}
+function lev(a,b){var m=a.length,n=b.length,d=[],i,j;for(i=0;i<=n;i++)d[i]=i;for(i=1;i<=m;i++){var pr=d[0];d[0]=i;for(j=1;j<=n;j++){var t=d[j];d[j]=Math.min(d[j]+1,d[j-1]+1,pr+(a[i-1]===b[j-1]?0:1));pr=t}}return d[n]}
+function simOf(t,l){var a=nz(t);if(!a)return null;for(var i=0;i<l.length;i++){var b=nz(l[i]);if(!b)continue;if(a===b)return {i:i,same:true};
+  if((a.length>=4&&b.indexOf(a)>=0)||(b.length>=4&&a.indexOf(b)>=0)||lev(a,b)/Math.max(a.length,b.length)<=0.2)return {i:i}}return null}
+function lNext(){var l=S.ed[S.edTab]=S.ed[S.edTab]||[];
+  while(S.lq&&S.lq.length){var t=String(S.lq.shift()||'').trim();if(!t)continue;
+    if(l.some(function(x){return x===t}))continue;
+    var sm=simOf(t,l);if(sm){S.lconf={t:t,i:sm.i};renderLists();return}
+    l.push(t)}
+  S.lconf=null;renderLists()}
+function lAdd(t){S.lq=[t];lNext()}
+function lBack(){var r=S.lret;S.lret=null;S.ed=null;if(r)openDay(r.k,r.o);else closeSheet()}
 function openTheme(){
   var cur=document.documentElement.getAttribute('data-theme');
   var h='<span class="grab"></span><div class="ph"><b>Téma</b><button class="ib" data-close aria-label="Bezárás"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><span class="small" style="text-align:left">Csak ezen a telefonon változik.</span><div class="th">';
@@ -435,6 +487,14 @@ document.addEventListener('click',function(e){
   if(t.dataset.val!=null){t.parentNode.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',b===t)});return}
   if(t.id==='bSave'){save();return}
   if(t.id==='bCopy'){openCopy();return}
+  if(t.dataset.lt2){S.edTab=t.dataset.lt2;renderLists();return}
+  if(t.dataset.ld!=null){S.ed[S.edTab].splice(+t.dataset.ld,1);renderLists();return}
+  if(t.dataset.la!=null){lAdd(t.dataset.la);return}
+  if(t.id==='bLadd'){lAdd($('lnew').value);return}
+  if(t.id==='bLall'){var mm=freq(S.edTab);S.lq=Object.keys(mm).map(function(k){return mm[k]}).sort(function(a,b){return b.n-a.n}).map(function(x){return x.t});lNext();return}
+  if(t.dataset.lc){var c=S.lconf,l=S.ed[S.edTab];if(t.dataset.lc==='new')l[c.i]=c.t;else if(t.dataset.lc==='both')l.push(c.t);S.lconf=null;lNext();return}
+  if(t.id==='bLback'){lBack();return}
+  if(t.id==='bLsave'){t.disabled=true;t.textContent='Mentés…';call('saveLists',[S.ed]).then(function(l){S.data.lists=l;toast('Listák elmentve');lBack()}).catch(function(e){t.disabled=false;t.textContent='Listák mentése';toast('Hiba: '+(e&&e.message||e))});return}
   if(t.dataset.lt){var ui=$('pane').querySelector('[data-u="'+t.dataset.lt+'"]');var on=ui.hidden;ui.hidden=!on;t.setAttribute('aria-pressed',on);if(on)ui.focus();return}
   if(t.id==='bBack'){var c=S.cp;S.cp=null;openDay(c.src,c.o);return}
   if(t.id==='bDoCopy'){doCopy();return}
@@ -445,7 +505,13 @@ document.addEventListener('click',function(e){
   if(t.id==='bTheme'){openTheme();return}
   if(t.id==='bRef'){toast('Frissítés…');load();return}
 });
-document.addEventListener('keydown',function(e){var t=e.target;if((e.key==='Enter'||e.key===' ')&&t&&t.dataset&&t.dataset.day&&t.getAttribute('role')==='button'){e.preventDefault();openDay(t.dataset.day)}});
+document.addEventListener('change',function(e){var sel=e.target;if(!sel.dataset||!sel.dataset.dd)return;var key=sel.dataset.dd,v=sel.value;sel.value='';if(!v)return;
+  if(v==='__edit'){var ret={k:S.cur,o:formVals()};S.ed=null;openLists(ret,key);return}
+  var g=S.dd[key],it=(v[0]==='s'?g.saved:g.others)[+v.slice(2)];if(!it)return;
+  var inp=$('pane').querySelector('[data-k="'+key+'"]');inp.value=it.t;
+  if(it.u){var ui=$('pane').querySelector('[data-u="'+key+'"]'),lb=$('pane').querySelector('[data-lt="'+key+'"]');ui.value=it.u;ui.hidden=false;lb.setAttribute('aria-pressed','true')}
+});
+document.addEventListener('keydown',function(e){if(e.target&&e.target.id==='lnew'&&e.key==='Enter'){e.preventDefault();lAdd(e.target.value);return}var t=e.target;if((e.key==='Enter'||e.key===' ')&&t&&t.dataset&&t.dataset.day&&t.getAttribute('role')==='button'){e.preventDefault();openDay(t.dataset.day)}});
 window.addEventListener('scroll',function(){var h=$('hdr');if(h)h.classList.toggle('sh',window.scrollY>4)},{passive:true});
 document.addEventListener('gesturestart',function(e){e.preventDefault()});
 load();

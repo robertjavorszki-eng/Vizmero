@@ -87,7 +87,7 @@ function getData() {
   const days = [];
   vals.forEach(function (r, i) { if (r[0] instanceof Date) days.push(napObj_(ELSO_SOR + i, r, tz, rich[i])); });
   const k = keretek_(sh);
-  return { owner: tulajdonos_(), days: days, robi: k.robi, krisz: k.krisz };
+  return { owner: tulajdonos_(), days: days, robi: k.robi, krisz: k.krisz, lists: listak_(ss) };
 }
 
 function saveDay(row, d, x) {
@@ -200,4 +200,39 @@ function honapok2026() {
     }
   }
   Logger.log('Kész: 2026. november–december beszúrva.');
+}
+
+// ---- Mentett listák (gyakori bejegyzések) a „Listák” lapon ----
+const LISTA_LAP = 'Listák';
+const LISTA_KULCSOK = ['k', 'p', 'o', 'f'];
+
+function listak_(ss) {
+  const out = { k: [], p: [], o: [], f: [] };
+  const sh = ss.getSheetByName(LISTA_LAP);
+  if (!sh || sh.getLastRow() < 2) return out;
+  const v = sh.getRange(2, 1, sh.getLastRow() - 1, 4).getDisplayValues();
+  v.forEach(function (r) {
+    LISTA_KULCSOK.forEach(function (key, i) { const t = String(r[i]).trim(); if (t) out[key].push(t); });
+  });
+  return out;
+}
+
+function saveLists(l) {
+  if (!tulajdonos_()) throw new Error('Csak a táblázat tulajdonosa szerkeszthet.');
+  const ss = tabla_();
+  let sh = ss.getSheetByName(LISTA_LAP);
+  if (!sh) sh = ss.insertSheet(LISTA_LAP);
+  sh.clearContents();
+  const fej = [['Kristóf', 'Panna', 'Oli', 'Család']];
+  sh.getRange(1, 1, 1, 4).setValues(fej).setFontWeight('bold');
+  sh.setFrozenRows(1);
+  const max = Math.max.apply(null, LISTA_KULCSOK.map(function (key) { return (l[key] || []).length; }).concat([0]));
+  if (max) {
+    const sorok = [];
+    for (let i = 0; i < max; i++) {
+      sorok.push(LISTA_KULCSOK.map(function (key) { return (l[key] || [])[i] || ''; }));
+    }
+    sh.getRange(2, 1, max, 4).setValues(sorok);
+  }
+  return listak_(ss);
 }
