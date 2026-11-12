@@ -181,7 +181,7 @@ textarea.tx{min-height:72px;resize:none}
   <div id="sub"></div>
  </div>
   <div id="main"><div class="msg">Betöltés…</div></div>
-  <p class="small">Felület v11 · 2026.11.12.</p>
+  <p class="small">Felület v12 · 2026.11.12.</p>
 </div>
 
 <div class="sheet" id="sheet" hidden><div class="pane" id="pane"></div></div>
@@ -266,7 +266,7 @@ function tagsOf(x){
   var t=[];if(!x)return t;
   if(x.u)t.push('<span class="tag '+(isHol(x)?'t-hol':'t-wd')+'">'+esc(x.u)+'</span>');
   if(x.s)t.push('<span class="tag t-brk">'+esc(x.s)+'</span>');
-  if(x.h)t.push('<span class="tag t-hot">Robi hotline '+esc(x.h)+'</span>');
+  if(x.h)t.push('<span class="tag t-hot">Robi hotline'+(x.h==='H'?'':' '+esc(x.h))+'</span>');
   if(x.R)t.push('<span class="tag t-r">Robi szabi</span>');
   if(x.K)t.push('<span class="tag t-k">Krisz szabi</span>');
   return t;
@@ -399,7 +399,7 @@ function openDay(k,ov){
     WHO.forEach(function(w){h+=entBlock(w)});
     function seg(key,opts,cur){return '<div class="seg" data-seg="'+key+'" style="grid-template-columns:repeat('+opts.length+',minmax(0,1fr))">'+opts.map(function(o){return '<button type="button" data-val="'+o[0]+'" aria-pressed="'+(String(cur==null?'':cur)===o[0])+'">'+o[1]+'</button>'}).join('')+'</div>'}
     h+='<div class="two"><div class="f" style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--mut)">Robi szabi</span>'+seg('R',[['','–'],['1','Szabi']],x.R?'1':'')+'</div><div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--mut)">Krisz szabi</span>'+seg('K',[['','–'],['1','Szabi']],x.K?'1':'')+'</div></div>';
-    h+='<div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--mut)">Robi hotline</span>'+seg('h',[['','nincs'],['H','H'],['H1','H1'],['H2','H2']],x.h)+'</div>';
+    h+='<div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--mut)">Robi hotline</span>'+seg('h',[['','–'],['H','Hotline']],x.h?'H':'')+'</div>';
     h+=fld('n','Megjegyzés / terv',true);
     h+='<span class="small" style="text-align:left;margin-top:-6px">A „+ Program” gombbal több programot is felvehetsz időponttal; a ✎ ikonnal módosíthatod.</span>';
     h+='<button class="go" id="bSave">Mentés a táblázatba</button><button class="sec" id="bCopy">Mentés és másolás más napokra</button>';
