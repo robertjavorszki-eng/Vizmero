@@ -161,6 +161,18 @@ textarea.tx{min-height:72px;resize:none}
 :root[data-theme="ejj"] .warn{background:#3E2A10;color:#FFD08A}
 @media (prefers-color-scheme:dark){:root[data-theme="auto"] .warn{background:#3E2A10;color:#FFD08A}}
 .it .tmv{font-variant-numeric:tabular-nums;font-weight:700}
+.szb{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:12px}
+.szh{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.szh b{font-size:17px}
+.yrs{display:flex;gap:4px}.yrs button{height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-weight:700;font-size:13px}
+.yrs button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:#fff}
+.szp{display:flex;flex-direction:column;gap:6px}
+.szt{display:flex;align-items:baseline;justify-content:space-between;gap:8px}.szt b{font-size:16px}.szt span{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+.szt small{font-size:13px;color:var(--mut);font-weight:600}
+.bar3{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--tab)}
+.bar3 i{display:block;height:100%}
+.szs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;font-size:12px;color:var(--mut);font-weight:600}
+.szs b{display:block;font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
+.szn{font-size:13px;color:var(--mut)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;font-size:14px;z-index:30}
 .toast[hidden]{display:none}
 </style>
@@ -181,7 +193,7 @@ textarea.tx{min-height:72px;resize:none}
   <div id="sub"></div>
  </div>
   <div id="main"><div class="msg">Betöltés…</div></div>
-  <p class="small">Felület v12 · 2026.11.12.</p>
+  <p class="small">Felület v13 · 2026.11.12.</p>
 </div>
 
 <div class="sheet" id="sheet" hidden><div class="pane" id="pane"></div></div>
@@ -251,6 +263,7 @@ var sv=ls('nt_view');if(sv)S.view=sv;
 function load(){
   google.script.run.withSuccessHandler(function(d){
     S.data=d;S.map={};d.days.forEach(function(x){S.map[x.d]=x});
+    loadCfg();
     var first=d.days.length?d.days[0].d:kd(new Date()),last=d.days.length?d.days[d.days.length-1].d:first;
     S.today=kd(new Date());
     if(!S.cur||!S.map[S.cur])S.cur=(S.today>=first&&S.today<=last)?S.today:first;
@@ -262,6 +275,31 @@ function load(){
   }).withFailureHandler(function(e){$('main').innerHTML='<div class="msg">Nem sikerült betölteni a táblázatot.<br><small>'+esc(e&&e.message||e)+'</small></div>'}).getData();
 }
 
+S.cfg={};S.cfgOk=false;
+function loadCfg(){try{call('lapOlvas',['Beállítások']).then(function(v){var c={};(v||[]).forEach(function(r){if(r[0])c[String(r[0]).trim()]=String(r[1]==null?'':r[1]).trim()});S.cfg=c;S.cfgOk=true;if(S.view==='ev')render()}).catch(function(){S.cfgOk=false})}catch(e){}}
+var SZW=[['robi','Robi','R','--rsI','--rs'],['krisz','Krisz','K','--ksI','--ks']];
+function keret(who,y){var v=S.cfg['szabi_keret_'+who+'_'+y];if(v!=null&&v!==''&&!isNaN(+v.replace(',','.')))return +v.replace(',','.');if(y===S.mainY&&S.data[who]&&S.data[who].keret!=null)return S.data[who].keret;return null}
+function szStat(f,y){var u=0,p=0;S.data.days.forEach(function(x){if(+x.d.slice(0,4)!==y||!x[f])return;var v=+x[f]||1;if(x.d<=S.today)u+=v;else p+=v});return {u:u,p:p}}
+function r1(n){return fmtN(Math.round(n*10)/10)}
+function szYears(){var ys={};S.data.days.forEach(function(x){ys[+x.d.slice(0,4)]=1});return Object.keys(ys).map(Number).sort()}
+function szCard(){var ys=szYears(),y=S.szY||S.mainY;if(ys.indexOf(y)<0)y=S.mainY;S.szY=y;
+  var h='<div class="szb"><div class="szh"><b>Szabadság '+y+'</b>'+(ys.length>1?'<div class="yrs">'+ys.map(function(q){return '<button type="button" data-szy="'+q+'" aria-pressed="'+(q===y)+'">'+q+'</button>'}).join('')+'</div>':'')+'</div>';
+  SZW.forEach(function(w){var k=keret(w[0],y),st=szStat(w[2],y),tot=st.u+st.p,mar=k!=null?k-tot:null,base=Math.max(k||0,tot)||1;
+    h+='<div class="szp"><div class="szt"><b>'+w[1]+'</b><span style="color:var('+(mar!=null&&mar<0?'--holI':w[3])+')">'+(mar!=null?r1(mar):'–')+' <small>'+(mar!=null?'nap maradt':'nincs keret')+'</small></span></div>';
+    h+='<div class="bar3" role="img" aria-label="Kivett '+r1(st.u)+', betervezett '+r1(st.p)+' nap"><i style="width:'+(st.u/base*100)+'%;background:var('+w[3]+')"></i><i style="width:'+(st.p/base*100)+'%;background:var('+w[4]+')"></i></div>';
+    h+='<div class="szs"><span>Keret<b>'+(k!=null?r1(k):'–')+'</b></span><span>Kivett<b>'+r1(st.u)+'</b></span><span>Betervezve<b>'+r1(st.p)+'</b></span><span>Maradt<b>'+(mar!=null?r1(mar):'–')+'</b></span></div></div>'});
+  h+='<span class="szn">Kivett = mai napig, betervezve = holnaptól. A napokat a nap szerkesztésénél jelölöd.</span>';
+  if(S.data.owner)h+='<button class="sec" id="bKeret">Éves keret beállítása</button>';
+  return h+'</div>'}
+function openKeret(){var y=S.szY||S.mainY;
+  var h='<span class="grab"></span><div class="ph"><b>Szabadságkeret '+y+'</b><button class="ib" data-close aria-label="Bezárás"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';
+  if(!S.cfgOk){h+='<p style="margin:0">A keret appból való mentéséhez a frissített Kód.gs kell (a GitHubról). Addig a táblázat Évesterv lapján, fent a sárga cellákban tudod beírni a '+S.mainY+'-es keretet.</p>';$('pane').innerHTML=h;$('sheet').hidden=false;return}
+  SZW.forEach(function(w){var k=keret(w[0],y);h+='<label class="f" style="display:flex;flex-direction:column;gap:6px;font-size:15px;font-weight:700;color:var(--mut)">'+w[1]+' – éves keret (nap)<input class="tx" type="number" inputmode="decimal" min="0" step="0.5" id="kr_'+w[0]+'" value="'+(k!=null?k:'')+'" style="font-size:22px;font-weight:700"></label>'});
+  h+='<button class="go" id="bKsave">Mentés</button>';$('pane').innerHTML=h;$('sheet').hidden=false}
+function saveKeret(){var y=S.szY||S.mainY,c=Object.assign({},S.cfg);SZW.forEach(function(w){var v=$('kr_'+w[0]).value.trim();c['szabi_keret_'+w[0]+'_'+y]=v});
+  var rows=[['Beállítás','Érték']];Object.keys(c).sort().forEach(function(k){if(k!=='Beállítás')rows.push([k,c[k]])});
+  var b=$('bKsave');b.disabled=true;b.textContent='Mentés…';
+  call('lapIr',['Beállítások',rows]).then(function(){S.cfg=c;closeSheet();render();toast('Keret elmentve')}).catch(function(e){b.disabled=false;b.textContent='Mentés';toast('Hiba: '+(e&&e.message||e))})}
 function tagsOf(x){
   var t=[];if(!x)return t;
   if(x.u)t.push('<span class="tag '+(isHol(x)?'t-hol':'t-wd')+'">'+esc(x.u)+'</span>');
@@ -317,9 +355,9 @@ function vMonth(){
   return '<div style="display:flex;flex-direction:column;gap:12px">'+h+'</div>';
 }
 function vYear(){
-  var D=S.data,days=D.days,hot=0;days.forEach(function(x){if(x.h&&+x.d.slice(0,4)===S.mainY)hot++});
+  var D=S.data,days=D.days,hot=0;var hy=S.szY||S.mainY;days.forEach(function(x){if(x.h&&+x.d.slice(0,4)===hy)hot++});
   function box(n,o,col){var mar=(o.keret!=null)?fmtN(Math.round((o.keret-(o.used||0))*10)/10):'–';return '<div><span>'+n+' szabi</span><b style="color:var('+col+')">'+mar+'</b><small>'+(o.keret!=null?'maradt / '+fmtN(o.keret):'nincs keret megadva')+'</small></div>'}
-  var h='<div class="sum">'+box('Robi',D.robi,'--rsI')+box('Krisz',D.krisz,'--ksI')+'<div><span>Robi hotline</span><b style="color:var(--hotI)">'+hot+'</b><small>nap '+S.mainY+'-ben</small></div></div>';
+  var h=szCard()+'<div class="sum" style="grid-template-columns:minmax(0,1fr)"><div><span>Robi hotline</span><b style="color:var(--hotI)">'+hot+'</b><small>nap '+hy+'-ben</small></div></div>';
   if(!days.length)return h;
   var ms=[],seen={};days.forEach(function(x){var k=x.d.slice(0,7);if(!seen[k]){seen[k]=1;ms.push(k)}});
   var multi=ms[0].slice(0,4)!==ms[ms.length-1].slice(0,4),curM=S.cur.slice(0,7);
@@ -589,6 +627,9 @@ document.addEventListener('click',function(e){
   if(t.id==='bEok'){entOk();return}
   if(t.id==='bEno'){S.ent=null;backToDay();return}
   if(t.id==='bMv'){openMove();return}
+  if(t.dataset.szy){S.szY=+t.dataset.szy;render();return}
+  if(t.id==='bKeret'){openKeret();return}
+  if(t.id==='bKsave'){saveKeret();return}
   if(t.id==='bMvOk'){doMove();return}
   if(t.id==='bMvBack'){S.mv=null;renderEnt();return}
   if(t.dataset.lt2){S.edTab=t.dataset.lt2;renderLists();return}
