@@ -181,7 +181,7 @@ textarea.tx{min-height:72px;resize:none}
   <div id="sub"></div>
  </div>
   <div id="main"><div class="msg">Betöltés…</div></div>
-  <p class="small">Felület v10 · 2026.11.08.</p>
+  <p class="small">Felület v11 · 2026.11.12.</p>
 </div>
 
 <div class="sheet" id="sheet" hidden><div class="pane" id="pane"></div></div>
@@ -422,7 +422,7 @@ function renderEnt(){var c=S.ent,e=c.e,w=WHO.filter(function(q){return q[0]===c.
   h+='<div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:15px;font-weight:700;color:var(--mut)">Időpont</span><div class="seg" style="grid-template-columns:repeat(3,minmax(0,1fr))"><button type="button" data-em="0" aria-pressed="'+(c.mode===0)+'">Nincs</button><button type="button" data-em="1" aria-pressed="'+(c.mode===1)+'">Kezdés</button><button type="button" data-em="2" aria-pressed="'+(c.mode===2)+'">Időtartam</button></div></div>';
   if(c.mode>0)h+='<div class="tms"><label>Kezdés<input class="tx" type="time" id="es" value="'+esc(e.s||'')+'"></label>'+(c.mode===2?'<label>Befejezés<input class="tx" type="time" id="ee2" value="'+esc(e.e||'')+'"></label>':'<span></span>')+'</div>';
   h+='<div class="f" style="display:flex;flex-direction:column;gap:6px"><label for="eu" style="font-size:15px;font-weight:700;color:var(--mut)">Link (nem kötelező)</label><input class="tx ui" id="eu" type="url" inputmode="url" autocapitalize="off" placeholder="https://…" value="'+esc(e.u||'')+'"></div>';
-  h+='<div id="ew"></div><button class="go" id="bEok">'+(c.ok?'Mentés így is':'Kész')+'</button><button class="sec" id="bEno">Mégse</button>';
+  h+='<div id="ew"></div><button class="go" id="bEok">'+(c.ok?'Mentés így is':'Kész')+'</button>'+(c.i!=null?'<button class="sec" id="bMv">Áthelyezés másik napra</button>':'')+'<button class="sec" id="bEno">Mégse</button>';
   $('pane').innerHTML=h;entCheck()}
 function entRead(){var c=S.ent,e=c.e;e.t=($('et')||{}).value||'';e.t=e.t.trim();
   e.s=c.mode>0?(($('es')||{}).value||''):'';e.e=c.mode===2?(($('ee2')||{}).value||''):'';
@@ -435,6 +435,31 @@ function entCheck(){var c=S.ent;if(!c)return;var e=entRead(),w=$('ew');if(!w)ret
   w.innerHTML=msg?'<div class="warn'+(err?' err':'')+'">'+esc(msg)+'</div>':'';
   if(!msg&&c.ok){c.ok=false;$('bEok').textContent='Kész'}
   c.err=err;c.warn=!!msg&&!err}
+function dLab(k){var d=pd(k);return HN[d.getMonth()]+' '+d.getDate()+'., '+NN[d.getDay()]}
+function payload(x,E){var b={R:x.R,K:x.K,h:x.h,n:x.n,L:Object.assign({},x.L||{}),E:E};
+  WHO.forEach(function(w){var l=E[w[0]]||[];b[w[0]]=l.map(eLine).join('\n');var fu=l.filter(function(e){return e.u})[0];if(fu)b.L[w[0]]=fu.u;else delete b.L[w[0]]});return b}
+function openMove(){var c=S.ent;entRead();if(!c.e.t){$('ew').innerHTML='<div class="warn err">Írd be, mi lesz a program.</div>';return}
+  S.mv={key:c.key,i:c.i,e:Object.assign({},c.e),to:S.cur,ok:false};renderMove()}
+function renderMove(){var m=S.mv,e=m.e,days=S.data.days;
+  var h='<span class="grab"></span><div class="ph"><div style="display:flex;flex-direction:column;gap:4px"><b>Áthelyezés másik napra</b><span style="font-size:13px;color:var(--mut)">Innen: '+dLab(S.cur)+'</span></div></div>';
+  h+='<div class="er"><span class="tm'+(e.s?'':' no')+'">'+(e.s?eTime(e):'–')+'</span><span class="et">'+esc(e.t)+'</span></div>';
+  h+='<label class="f" style="display:flex;flex-direction:column;gap:6px;font-size:15px;font-weight:700;color:var(--mut)">Új dátum<input class="tx" type="date" id="md" min="'+days[0].d+'" max="'+days[days.length-1].d+'" value="'+esc(m.to)+'" style="font-size:20px;font-weight:700"></label>';
+  h+='<div id="mw"></div><button class="go" id="bMvOk">'+(m.ok?'Áthelyezés így is':'Áthelyezés')+'</button><button class="sec" id="bMvBack">Vissza</button>';
+  $('pane').innerHTML=h;mvCheck()}
+function mvCheck(){var m=S.mv;if(!m)return;var t=($('md')||{}).value||'',w=$('mw'),msg='',err=false;m.to=t;
+  if(!t||!S.map[t]){msg='Válassz egy napot a táblázat időszakából.';err=true}
+  else if(t===S.cur){msg='Válaszd ki az új napot.';err=true}
+  else{var ov=entries(S.map[t],m.key).filter(function(o){return eOver(m.e,o)});
+    if(ov.length)msg='Átfedés azon a napon: '+ov.map(function(o){return eTime(o)+' '+o.t}).join(', ')}
+  if(w)w.innerHTML=msg?'<div class="warn'+(err?' err':'')+'">'+esc(msg)+'</div>':'';
+  m.err=err;m.warn=!!msg&&!err;if(!m.warn&&m.ok){m.ok=false;var b=$('bMvOk');if(b)b.textContent='Áthelyezés'}}
+function doMove(){var m=S.mv;mvCheck();if(m.err)return;if(m.warn&&!m.ok){m.ok=true;$('bMvOk').textContent='Áthelyezés így is';return}
+  var t=m.to,tx=S.map[t],src=Object.assign({},S.map[S.cur],S.efo||{});
+  var tE={};WHO.forEach(function(w){tE[w[0]]=entries(tx,w[0])});tE[m.key]=eSort(tE[m.key].concat([m.e]));
+  var sE=JSON.parse(JSON.stringify(S.ef));sE[m.key].splice(m.i,1);
+  var b=$('bMvOk');b.disabled=true;b.textContent='Áthelyezés…';$('bMvBack').disabled=true;
+  call('saveDay',[tx.row,t,payload(tx,tE)]).then(function(r){putDay(r);return call('saveDay',[S.map[S.cur].row,S.cur,payload(src,sE)])}).then(function(r){putDay(r);
+    S.mv=null;S.ent=null;closeSheet();render();toast('Áthelyezve: '+dLab(t))}).catch(function(e){b.disabled=false;b.textContent='Áthelyezés';$('bMvBack').disabled=false;toast('Hiba: '+(e&&e.message||e))})}
 function entOk(){var c=S.ent;entCheck();var e=c.e;
   if(!e.t){$('ew').innerHTML='<div class="warn err">Írd be, mi lesz a program.</div>';return}
   if(c.err)return;
@@ -563,6 +588,9 @@ document.addEventListener('click',function(e){
   if(t.dataset.em!=null){entRead();S.ent.mode=+t.dataset.em;if(S.ent.mode>0&&!S.ent.e.s)S.ent.e.s='';S.ent.ok=false;renderEnt();return}
   if(t.id==='bEok'){entOk();return}
   if(t.id==='bEno'){S.ent=null;backToDay();return}
+  if(t.id==='bMv'){openMove();return}
+  if(t.id==='bMvOk'){doMove();return}
+  if(t.id==='bMvBack'){S.mv=null;renderEnt();return}
   if(t.dataset.lt2){S.edTab=t.dataset.lt2;renderLists();return}
   if(t.dataset.ld!=null){S.ed[S.edTab].splice(+t.dataset.ld,1);renderLists();return}
   if(t.dataset.la!=null){lAdd(t.dataset.la);return}
@@ -581,6 +609,8 @@ document.addEventListener('click',function(e){
   if(t.id==='bTheme'){openTheme();return}
   if(t.id==='bRef'){toast('Frissítés…');load();return}
 });
+document.addEventListener('change',function(e){if(S.mv&&e.target&&e.target.id==='md')mvCheck()});
+document.addEventListener('input',function(e){if(S.mv&&e.target&&e.target.id==='md')mvCheck()});
 document.addEventListener('input',function(e){if(S.ent&&e.target&&/^(es|ee2|et)$/.test(e.target.id))entCheck()});
 document.addEventListener('change',function(e){if(S.ent&&e.target&&/^(es|ee2)$/.test(e.target.id))entCheck()});
 document.addEventListener('change',function(e){var sel=e.target;if(!sel.dataset||!sel.dataset.dd)return;var key=sel.dataset.dd,v=sel.value;sel.value='';if(!v)return;
